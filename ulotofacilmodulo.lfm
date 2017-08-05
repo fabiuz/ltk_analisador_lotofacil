@@ -1,0 +1,157 @@
+object dmLotofacil: TdmLotofacil
+  OldCreateOrder = False
+  Height = 613
+  HorizontalOffset = 248
+  VerticalOffset = 250
+  Width = 839
+  object sqlNovosRepetidos15Bolas: TSQLQuery
+    IndexName = 'DEFAULT_ORDER'
+    FieldDefs = <    
+      item
+        Name = 'novos'
+        DataType = ftBCD
+        Precision = -1
+        Size = 4
+      end    
+      item
+        Name = 'repetidos'
+        DataType = ftBCD
+        Precision = -1
+        Size = 4
+      end    
+      item
+        Name = 'ltf_qt'
+        DataType = ftBCD
+        Precision = -1
+        Size = 4
+      end    
+      item
+        Name = 'res_qt'
+        DataType = ftLargeint
+        Precision = -1
+      end    
+      item
+        Name = 'sqlNovosRepetidos15BolasSQLDB24'
+        DataType = ftBoolean
+      end>
+    Active = True
+    Database = pgLTK
+    Transaction = SQLTransaction1
+    SQL.Strings = (
+      'Select * from v_lotofacil_novo_repetiu_ainda_nao_saiu'
+      'order by res_qt desc, ltf_qt'
+    )
+    Options = []
+    Params = <>
+    left = 264
+    top = 289
+  end
+  object SQLTransaction1: TSQLTransaction
+    Active = True
+    Database = pgLTK
+    Options = []
+    left = 200
+    top = 144
+  end
+  object pgLTK: TPQConnection
+    Connected = True
+    LoginPrompt = False
+    DatabaseName = 'ltk'
+    KeepConnection = False
+    Password = 'ltk'
+    Transaction = SQLTransaction1
+    UserName = 'ltk'
+    HostName = '192.168.88.248'
+    Options = []
+    Role = 'ltk'
+    left = 408
+    top = 440
+  end
+  object PQTEventMonitor1: TPQTEventMonitor
+    Registered = False
+    left = 452
+    top = 289
+  end
+  object sqlNovosRepetidos16Bolas: TSQLQuery
+    FieldDefs = <>
+    SQL.Strings = (
+      'Select * v_lotofacil_resultado_b1_b15'
+      'order by res_qt desc, ltf_qt'
+    )
+    Options = []
+    Params = <>
+    left = 264
+    top = 344
+  end
+  object sqlNovosRepetidos17Bolas: TSQLQuery
+    FieldDefs = <>
+    Options = []
+    Params = <>
+    left = 264
+    top = 392
+  end
+  object sqlNovosRepetidos18Bolas: TSQLQuery
+    FieldDefs = <>
+    Options = []
+    Params = <>
+    left = 264
+    top = 448
+  end
+  object dsNovosRepetidos15Bolas: TDataSource
+    DataSet = sqlNovosRepetidos15Bolas
+    left = 104
+    top = 289
+  end
+  object dsNovosRepetidos16Bolas: TDataSource
+    Enabled = False
+    left = 104
+    top = 344
+  end
+  object dsNovosRepetidos17Bolas: TDataSource
+    Enabled = False
+    left = 96
+    top = 392
+  end
+  object dsNovosRepetidos18Bolas: TDataSource
+    Enabled = False
+    left = 104
+    top = 440
+  end
+  object sqlLotofacil: TSQLQuery
+    IndexName = 'DEFAULT_ORDER'
+    FieldDefs = <    
+      item
+        Name = 'novos'
+        DataType = ftBCD
+        Precision = -1
+        Size = 4
+      end    
+      item
+        Name = 'repetidos'
+        DataType = ftBCD
+        Precision = -1
+        Size = 4
+      end    
+      item
+        Name = 'ltf_qt'
+        DataType = ftBCD
+        Precision = -1
+        Size = 4
+      end    
+      item
+        Name = 'res_qt'
+        DataType = ftLargeint
+        Precision = -1
+      end>
+    Database = pgLTK
+    Transaction = SQLTransaction1
+    SQL.Strings = (
+      'Select * from v_lotofacil_novo_repetiu_ainda_nao_saiu'
+      'order by res_qt desc, ltf_qt'
+    )
+    Options = []
+    Params = <>
+    left = 592
+    top = 136
+  end
+end
