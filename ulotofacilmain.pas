@@ -746,6 +746,7 @@ begin
     sqlRegistro.ExecSQL;
     dmLotofacil.pgLTK.Transaction.Commit;
     sqlRegistro.Close;
+    dmLotofacil.pgLtk.Close(true);
 
   except
     on Exc: EDataBaseError do begin
