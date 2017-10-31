@@ -29,12 +29,7 @@ object dmLotofacil: TdmLotofacil
         Name = 'res_qt'
         DataType = ftLargeint
         Precision = -1
-      end    
-      item
-        Name = 'sqlNovosRepetidos15BolasSQLDB24'
-        DataType = ftBoolean
       end>
-    Active = True
     Database = pgLTK
     Transaction = SQLTransaction1
     SQL.Strings = (
@@ -47,7 +42,7 @@ object dmLotofacil: TdmLotofacil
     top = 289
   end
   object SQLTransaction1: TSQLTransaction
-    Active = True
+    Active = False
     Database = pgLTK
     Options = []
     left = 200
@@ -63,7 +58,7 @@ object dmLotofacil: TdmLotofacil
     UserName = 'ltk'
     HostName = '192.168.88.248'
     Options = []
-    Role = 'ltk'
+    Role = 'lotofacil'
     left = 408
     top = 440
   end
@@ -118,7 +113,6 @@ object dmLotofacil: TdmLotofacil
     top = 440
   end
   object sqlLotofacil: TSQLQuery
-    IndexName = 'DEFAULT_ORDER'
     FieldDefs = <    
       item
         Name = 'novos'

@@ -1,87 +1,104 @@
 object Form1: TForm1
   Left = 0
-  Height = 592
+  Height = 571
   Top = 0
-  Width = 1250
+  Width = 1274
   ActiveControl = PageControl1
   Caption = 'Form1'
-  ClientHeight = 592
-  ClientWidth = 1250
+  ClientHeight = 571
+  ClientWidth = 1274
   OnCreate = FormCreate
   LCLVersion = '1.6.4.0'
   Visible = False
   object PageControl1: TPageControl
     Left = 5
-    Height = 582
+    Height = 561
     Top = 5
-    Width = 1240
-    ActivePage = TabSheet1
+    Width = 1264
+    ActivePage = sheetFiltro
     Align = alClient
     BorderSpacing.Left = 5
     BorderSpacing.Top = 5
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
-    TabIndex = 5
+    TabIndex = 0
     TabOrder = 0
     object sheetFiltro: TTabSheet
       Caption = 'Filtros'
-      ClientHeight = 555
-      ClientWidth = 1236
+      ClientHeight = 534
+      ClientWidth = 1260
       OnResize = sheetFiltroResize
       object pageFiltros: TPageControl
         Left = 5
-        Height = 545
+        Height = 524
         Hint = 'Selecione grupos de 2, 3, 4 ou 5 bolas.'
         Top = 10
-        Width = 1226
-        ActivePage = tabBolasNasColunas
+        Width = 1250
+        ActivePage = tabFrequenciaConcurso
         Align = alClient
         BorderSpacing.Left = 5
         BorderSpacing.Top = 10
         BorderSpacing.Right = 5
-        TabIndex = 8
+        TabIndex = 10
         TabOrder = 0
         OnChange = pageFiltrosChange
         OnResize = pageFiltrosResize
         object TabSheet6: TTabSheet
           Caption = 'Novos x Repetidos'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           object GroupBox1: TGroupBox
-            Left = 8
-            Height = 49
-            Top = 0
+            Left = 368
+            Height = 96
+            Top = 56
             Width = 196
-            Caption = 'Relativo ao concurso:'
-            ClientHeight = 30
+            Caption = 'Atualizar para o concurso:'
+            ClientHeight = 77
             ClientWidth = 192
             TabOrder = 0
             object cmbConcursoNovosRepetidos: TComboBox
-              Left = 8
+              Left = 10
               Height = 29
               Top = 0
-              Width = 176
-              Anchors = [akTop, akLeft, akRight]
+              Width = 172
+              Align = alTop
+              BorderSpacing.Left = 10
+              BorderSpacing.Right = 10
+              BorderSpacing.Bottom = 5
               ItemHeight = 0
               Style = csDropDownList
               TabOrder = 0
             end
+            object btnAtualizarNovosRepetidos: TButton
+              Left = 10
+              Height = 33
+              Top = 39
+              Width = 172
+              Align = alBottom
+              BorderSpacing.Left = 10
+              BorderSpacing.Right = 10
+              BorderSpacing.Bottom = 5
+              Caption = '&Atualizar'
+              OnClick = btnAtualizarNovosRepetidosClick
+              TabOrder = 1
+            end
           end
           object grpNovosRepetidos15Bolas: TGroupBox
-            Left = 8
-            Height = 447
-            Top = 56
-            Width = 270
-            Anchors = [akTop, akLeft, akBottom]
+            Left = 5
+            Height = 487
+            Top = 5
+            Width = 350
+            Align = alLeft
+            BorderSpacing.Around = 5
             Caption = 'Novos x Repetidos: 15 bolas'
-            ClientHeight = 428
-            ClientWidth = 266
+            ClientHeight = 468
+            ClientWidth = 346
             TabOrder = 1
             object sgrNovosRepetidos15Bolas: TStringGrid
               Left = 0
-              Height = 390
+              Height = 430
               Top = 0
-              Width = 266
+              Width = 346
               Align = alClient
               ColCount = 0
               FixedCols = 0
@@ -94,14 +111,14 @@ object Form1: TForm1
             object pnGrupo2Bolas20: TPanel
               Left = 0
               Height = 38
-              Top = 390
-              Width = 266
+              Top = 430
+              Width = 346
               Align = alBottom
               ClientHeight = 38
-              ClientWidth = 266
+              ClientWidth = 346
               TabOrder = 1
               object btnGrupo2BolasDesmarcarTodos20: TButton
-                Left = 135
+                Left = 215
                 Height = 26
                 Top = 6
                 Width = 125
@@ -124,201 +141,46 @@ object Form1: TForm1
               end
             end
           end
-          object grpNovosRepetidos16Bolas: TGroupBox
-            Left = 320
-            Height = 447
-            Top = 56
-            Width = 240
-            Anchors = [akTop, akLeft, akBottom]
-            Caption = 'Novos x Repetidos: 16 bolas'
-            ClientHeight = 428
-            ClientWidth = 236
+          object GroupBox5: TGroupBox
+            Left = 368
+            Height = 41
+            Top = 8
+            Width = 196
+            Caption = 'Último concurso atualizado:'
+            ClientHeight = 22
+            ClientWidth = 192
             TabOrder = 2
-            object sgrNovosRepetidos16Bolas: TStringGrid
+            object lblNovosRepetidosUltimaAtualizacao: TLabel
               Left = 0
-              Height = 390
+              Height = 22
               Top = 0
-              Width = 236
+              Width = 192
               Align = alClient
-              ColCount = 0
-              FixedCols = 0
-              FixedRows = 0
-              RowCount = 0
-              TabOrder = 0
-              TitleStyle = tsNative
-              OnClick = sgrNovosRepetidos16BolasClick
-              OnSelectCell = sgrNovosRepetidos16BolasSelectCell
-            end
-            object pnGrupo2Bolas21: TPanel
-              Left = 0
-              Height = 38
-              Top = 390
-              Width = 236
-              Align = alBottom
-              ClientHeight = 38
-              ClientWidth = 236
-              TabOrder = 1
-              object btnGrupo2BolasDesmarcarTodos21: TButton
-                Left = 105
-                Height = 26
-                Top = 6
-                Width = 125
-                Align = alRight
-                BorderSpacing.Around = 5
-                Caption = 'Desmarcar todos'
-                OnClick = btnGrupo2BolasDesmarcarTodosClick
-                TabOrder = 0
-              end
-              object btnGrupo2BolasMarcarTodos21: TButton
-                Left = 6
-                Height = 26
-                Top = 6
-                Width = 125
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Marcar todos'
-                OnClick = btnGrupo2BolasDesmarcarTodosClick
-                TabOrder = 1
-              end
-            end
-          end
-          object grpNovosRepetidos17Bolas: TGroupBox
-            Left = 568
-            Height = 447
-            Top = 56
-            Width = 240
-            Anchors = [akTop, akLeft, akBottom]
-            Caption = 'Novos x Repetidos: 17 bolas'
-            ClientHeight = 428
-            ClientWidth = 236
-            TabOrder = 3
-            object sgrNovosRepetidos17Bolas: TStringGrid
-              Left = 0
-              Height = 390
-              Top = 0
-              Width = 236
-              Align = alClient
-              ColCount = 0
-              FixedCols = 0
-              FixedRows = 0
-              RowCount = 0
-              TabOrder = 0
-              TitleStyle = tsNative
-              OnClick = sgrNovosRepetidos17BolasClick
-              OnSelectCell = sgrNovosRepetidos16BolasSelectCell
-            end
-            object pnGrupo2Bolas22: TPanel
-              Left = 0
-              Height = 38
-              Top = 390
-              Width = 236
-              Align = alBottom
-              ClientHeight = 38
-              ClientWidth = 236
-              TabOrder = 1
-              object btnGrupo2BolasDesmarcarTodos22: TButton
-                Left = 105
-                Height = 26
-                Top = 6
-                Width = 125
-                Align = alRight
-                BorderSpacing.Around = 5
-                Caption = 'Desmarcar todos'
-                OnClick = btnGrupo2BolasDesmarcarTodosClick
-                TabOrder = 0
-              end
-              object btnGrupo2BolasMarcarTodos22: TButton
-                Left = 6
-                Height = 26
-                Top = 6
-                Width = 125
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Marcar todos'
-                OnClick = btnGrupo2BolasDesmarcarTodosClick
-                TabOrder = 1
-              end
-            end
-          end
-          object grpNovosRepetidos18Bolas: TGroupBox
-            Left = 816
-            Height = 447
-            Top = 56
-            Width = 240
-            Anchors = [akTop, akLeft, akBottom]
-            Caption = 'Novos x Repetidos: 18 bolas'
-            ClientHeight = 428
-            ClientWidth = 236
-            TabOrder = 4
-            object sgrNovosRepetidos18Bolas: TStringGrid
-              Left = 0
-              Height = 390
-              Top = 0
-              Width = 236
-              Align = alClient
-              ColCount = 0
-              FixedCols = 0
-              FixedRows = 0
-              RowCount = 0
-              TabOrder = 0
-              TitleStyle = tsNative
-              OnClick = sgrNovosRepetidos16BolasClick
-              OnSelectCell = sgrNovosRepetidos16BolasSelectCell
-            end
-            object pnGrupo2Bolas23: TPanel
-              Left = 0
-              Height = 38
-              Top = 390
-              Width = 236
-              Align = alBottom
-              ClientHeight = 38
-              ClientWidth = 236
-              TabOrder = 1
-              object btnGrupo2BolasDesmarcarTodos23: TButton
-                Left = 105
-                Height = 26
-                Top = 6
-                Width = 125
-                Align = alRight
-                BorderSpacing.Around = 5
-                Caption = 'Desmarcar todos'
-                OnClick = btnGrupo2BolasDesmarcarTodosClick
-                TabOrder = 0
-              end
-              object btnGrupo2BolasMarcarTodos23: TButton
-                Left = 6
-                Height = 26
-                Top = 6
-                Width = 125
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Marcar todos'
-                OnClick = btnGrupo2BolasDesmarcarTodosClick
-                TabOrder = 1
-              end
+              Alignment = taCenter
+              ParentColor = False
             end
           end
         end
         object tabParImpar: TTabSheet
           Caption = 'Par x Impar'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           object grpParImpar15Bolas: TGroupBox
             Left = 5
-            Height = 508
+            Height = 487
             Top = 5
-            Width = 270
+            Width = 350
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Par x Impar: 15 bolas'
-            ClientHeight = 489
-            ClientWidth = 266
+            ClientHeight = 468
+            ClientWidth = 346
             TabOrder = 0
             object sgrParImpar15Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
-              Width = 266
+              Width = 346
               Align = alClient
               ColCount = 0
               FixedCols = 0
@@ -331,14 +193,14 @@ object Form1: TForm1
             object pnGrupo2Bolas24: TPanel
               Left = 0
               Height = 38
-              Top = 451
-              Width = 266
+              Top = 430
+              Width = 346
               Align = alBottom
               ClientHeight = 38
-              ClientWidth = 266
+              ClientWidth = 346
               TabOrder = 1
               object btnGrupo2BolasDesmarcarTodos24: TButton
-                Left = 135
+                Left = 215
                 Height = 26
                 Top = 6
                 Width = 125
@@ -362,19 +224,19 @@ object Form1: TForm1
             end
           end
           object grpNovosRepetidos16Bolas1: TGroupBox
-            Left = 280
-            Height = 508
+            Left = 360
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Par x Impar: 16 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 1
             object sgrParImpar16Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -389,7 +251,7 @@ object Form1: TForm1
             object pnGrupo2Bolas25: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -420,19 +282,19 @@ object Form1: TForm1
             end
           end
           object grpNovosRepetidos17Bolas1: TGroupBox
-            Left = 555
-            Height = 508
+            Left = 635
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Par x Impar: 17 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 2
             object sgrParImpar17Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -447,7 +309,7 @@ object Form1: TForm1
             object pnGrupo2Bolas26: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -478,19 +340,19 @@ object Form1: TForm1
             end
           end
           object grpNovosRepetidos18Bolas1: TGroupBox
-            Left = 830
-            Height = 508
+            Left = 910
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Par x Impar: 18 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 3
             object sgrParImpar18Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -506,7 +368,7 @@ object Form1: TForm1
             object pnGrupo2Bolas27: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -539,22 +401,22 @@ object Form1: TForm1
         end
         object tabExternoInterno: TTabSheet
           Caption = 'Externo x Interno'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           object grpExternoInterno18Bolas: TGroupBox
-            Left = 830
-            Height = 508
+            Left = 910
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 18 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 0
             object sgrExternoInterno18Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -569,7 +431,7 @@ object Form1: TForm1
             object pnGrupo2Bolas31: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -600,19 +462,19 @@ object Form1: TForm1
             end
           end
           object grpExternoInterno17Bolas: TGroupBox
-            Left = 555
-            Height = 508
+            Left = 635
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 17 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 1
             object sgrExternoInterno17Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -628,7 +490,7 @@ object Form1: TForm1
             object pnGrupo2Bolas30: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -659,19 +521,19 @@ object Form1: TForm1
             end
           end
           object grpExternoInterno16Bolas: TGroupBox
-            Left = 280
-            Height = 508
+            Left = 360
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 16 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 2
             object sgrExternoInterno16Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -687,7 +549,7 @@ object Form1: TForm1
             object pnGrupo2Bolas29: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -719,20 +581,20 @@ object Form1: TForm1
           end
           object grpExternoInterno15Bolas: TGroupBox
             Left = 5
-            Height = 508
+            Height = 487
             Top = 5
-            Width = 270
+            Width = 350
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 15 bolas'
-            ClientHeight = 489
-            ClientWidth = 266
+            ClientHeight = 468
+            ClientWidth = 346
             TabOrder = 3
             object sgrExternoInterno15Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
-              Width = 266
+              Width = 346
               Align = alClient
               ColCount = 0
               FixedCols = 0
@@ -745,14 +607,14 @@ object Form1: TForm1
             object pnGrupo2Bolas28: TPanel
               Left = 0
               Height = 38
-              Top = 451
-              Width = 266
+              Top = 430
+              Width = 346
               Align = alBottom
               ClientHeight = 38
-              ClientWidth = 266
+              ClientWidth = 346
               TabOrder = 1
               object btnGrupo2BolasDesmarcarTodos28: TButton
-                Left = 135
+                Left = 215
                 Height = 26
                 Top = 6
                 Width = 125
@@ -776,38 +638,357 @@ object Form1: TForm1
             end
           end
         end
+        object tabPrimo: TTabSheet
+          Caption = 'Primos x Não-Primos'
+          ClientHeight = 497
+          ClientWidth = 1246
+          object grpPrimo15Bolas: TGroupBox
+            Left = 5
+            Height = 487
+            Top = 5
+            Width = 350
+            Align = alLeft
+            BorderSpacing.Around = 5
+            Caption = 'Externo x Interno: 15 bolas'
+            ClientHeight = 468
+            ClientWidth = 346
+            TabOrder = 0
+            object sgrPrimo15Bolas: TStringGrid
+              Left = 0
+              Height = 430
+              Top = 0
+              Width = 346
+              Align = alClient
+              ColCount = 0
+              FixedCols = 0
+              FixedRows = 0
+              RowCount = 0
+              TabOrder = 0
+              TitleStyle = tsNative
+              OnSelectCell = sgrExternoInterno15BolasSelectCell
+            end
+            object pnGrupo2Bolas36: TPanel
+              Left = 0
+              Height = 38
+              Top = 430
+              Width = 346
+              Align = alBottom
+              ClientHeight = 38
+              ClientWidth = 346
+              TabOrder = 1
+              object btnGrupo2BolasDesmarcarTodos36: TButton
+                Left = 215
+                Height = 26
+                Top = 6
+                Width = 125
+                Align = alRight
+                BorderSpacing.Around = 5
+                Caption = 'Desmarcar todos'
+                OnClick = btnGrupo2BolasDesmarcarTodosClick
+                TabOrder = 0
+              end
+              object btnGrupo2BolasMarcarTodos36: TButton
+                Left = 6
+                Height = 26
+                Top = 6
+                Width = 125
+                Align = alLeft
+                BorderSpacing.Around = 5
+                Caption = 'Marcar todos'
+                OnClick = btnGrupo2BolasDesmarcarTodosClick
+                TabOrder = 1
+              end
+            end
+          end
+        end
+        object tabBolasNasColunas: TTabSheet
+          Caption = 'Bolas nas colunas'
+          ClientHeight = 497
+          ClientWidth = 1246
+          object PageControl3: TPageControl
+            Left = 10
+            Height = 477
+            Top = 10
+            Width = 1226
+            ActivePage = tabBolasNasColunas15Bolas
+            Align = alClient
+            BorderSpacing.Around = 10
+            TabIndex = 0
+            TabOrder = 0
+            object tabBolasNasColunas15Bolas: TTabSheet
+              Caption = '15 Bolas'
+              ClientHeight = 450
+              ClientWidth = 1222
+              object grpBolasB1_15Bolas: TGroupBox
+                Left = 5
+                Height = 440
+                Top = 5
+                Width = 270
+                Align = alLeft
+                BorderSpacing.Around = 5
+                Caption = 'Coluna B_1:'
+                ClientHeight = 421
+                ClientWidth = 266
+                TabOrder = 0
+                object sgrColunaB1_15Bolas: TStringGrid
+                  Left = 0
+                  Height = 383
+                  Top = 0
+                  Width = 266
+                  Align = alClient
+                  ColCount = 0
+                  FixedCols = 0
+                  FixedRows = 0
+                  RowCount = 0
+                  TabOrder = 0
+                  TitleStyle = tsNative
+                  OnSelectCell = sgrColunaB1_15BolasSelectCell
+                end
+                object pnGrupo2Bolas4: TPanel
+                  Left = 0
+                  Height = 38
+                  Top = 383
+                  Width = 266
+                  Align = alBottom
+                  ClientHeight = 38
+                  ClientWidth = 266
+                  TabOrder = 1
+                  object btnGrupo2BolasDesmarcarTodos4: TButton
+                    Left = 135
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alRight
+                    BorderSpacing.Around = 5
+                    Caption = 'Desmarcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 0
+                  end
+                  object btnGrupo2BolasMarcarTodos4: TButton
+                    Left = 6
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alLeft
+                    BorderSpacing.Around = 5
+                    Caption = 'Marcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 1
+                  end
+                end
+              end
+              object grpColunaB1_B15_15Bolas: TGroupBox
+                Left = 280
+                Height = 440
+                Top = 5
+                Width = 270
+                Align = alLeft
+                BorderSpacing.Around = 5
+                Caption = 'Colunas B_1 e B_15:'
+                ClientHeight = 421
+                ClientWidth = 266
+                TabOrder = 1
+                object sgrColunaB1_B15_15Bolas: TStringGrid
+                  Left = 0
+                  Height = 383
+                  Top = 0
+                  Width = 266
+                  Align = alClient
+                  Anchors = [akTop, akRight, akBottom]
+                  ColCount = 0
+                  FixedCols = 0
+                  FixedRows = 0
+                  RowCount = 0
+                  TabOrder = 0
+                  TitleStyle = tsNative
+                  OnSelectCell = sgrColunaB1_B15_15BolasSelectCell
+                end
+                object pnGrupo2Bolas5: TPanel
+                  Left = 0
+                  Height = 38
+                  Top = 383
+                  Width = 266
+                  Align = alBottom
+                  ClientHeight = 38
+                  ClientWidth = 266
+                  TabOrder = 1
+                  object btnGrupo2BolasDesmarcarTodos5: TButton
+                    Left = 135
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alRight
+                    BorderSpacing.Around = 5
+                    Caption = 'Desmarcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 0
+                  end
+                  object btnGrupo2BolasMarcarTodos5: TButton
+                    Left = 6
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alLeft
+                    BorderSpacing.Around = 5
+                    Caption = 'Marcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 1
+                  end
+                end
+              end
+              object grpColunaB1_B8_B15_15Bolas: TGroupBox
+                Left = 555
+                Height = 440
+                Top = 5
+                Width = 280
+                Align = alLeft
+                BorderSpacing.Around = 5
+                Caption = 'Colunas: B_1, B_8 e B_15'
+                ClientHeight = 421
+                ClientWidth = 276
+                TabOrder = 2
+                object sgrColunaB1_B8_B15_15Bolas: TStringGrid
+                  Left = 0
+                  Height = 383
+                  Top = 0
+                  Width = 276
+                  Align = alClient
+                  ColCount = 0
+                  FixedCols = 0
+                  FixedRows = 0
+                  RowCount = 0
+                  TabOrder = 0
+                  TitleStyle = tsNative
+                  OnSelectCell = sgrColunaB1_B8_B15_15BolasSelectCell
+                end
+                object pnGrupo2Bolas6: TPanel
+                  Left = 0
+                  Height = 38
+                  Top = 383
+                  Width = 276
+                  Align = alBottom
+                  ClientHeight = 38
+                  ClientWidth = 276
+                  TabOrder = 1
+                  object btnGrupo2BolasDesmarcarTodos6: TButton
+                    Left = 145
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alRight
+                    BorderSpacing.Around = 5
+                    Caption = 'Desmarcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 0
+                  end
+                  object btnGrupo2BolasMarcarTodos6: TButton
+                    Left = 6
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alLeft
+                    BorderSpacing.Around = 5
+                    Caption = 'Marcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 1
+                  end
+                end
+              end
+              object grpColunaB1_B4_B8_B12_B15_15Bolas: TGroupBox
+                Left = 840
+                Height = 440
+                Top = 5
+                Width = 379
+                Align = alLeft
+                Anchors = [akTop, akLeft, akRight, akBottom]
+                BorderSpacing.Around = 5
+                Caption = 'Colunas: B_1, B_4, B_8, B_12 e B_15:'
+                ClientHeight = 421
+                ClientWidth = 375
+                TabOrder = 3
+                object sgrColunaB1_B4_B8_B12_B15_15Bolas: TStringGrid
+                  Left = 0
+                  Height = 383
+                  Top = 0
+                  Width = 375
+                  Align = alClient
+                  ColCount = 0
+                  FixedCols = 0
+                  FixedRows = 0
+                  RowCount = 0
+                  TabOrder = 0
+                  TitleStyle = tsNative
+                  OnClick = sgrNovosRepetidos16BolasClick
+                  OnSelectCell = sgrColunaB1_B4_B8_B12_B15_15BolasSelectCell
+                end
+                object pnGrupo2Bolas7: TPanel
+                  Left = 0
+                  Height = 38
+                  Top = 383
+                  Width = 375
+                  Align = alBottom
+                  ClientHeight = 38
+                  ClientWidth = 375
+                  TabOrder = 1
+                  object btnGrupo2BolasDesmarcarTodos7: TButton
+                    Left = 244
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alRight
+                    BorderSpacing.Around = 5
+                    Caption = 'Desmarcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 0
+                  end
+                  object btnGrupo2BolasMarcarTodos7: TButton
+                    Left = 6
+                    Height = 26
+                    Top = 6
+                    Width = 125
+                    Align = alLeft
+                    BorderSpacing.Around = 5
+                    Caption = 'Marcar todos'
+                    OnClick = btnGrupo2BolasDesmarcarTodosClick
+                    TabOrder = 1
+                  end
+                end
+              end
+            end
+          end
+        end
         object tabDiagonal: TTabSheet
           Caption = 'Diagonal'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           OnResize = tabDiagonalResize
           object pnDiagonal: TPanel
             Left = 0
-            Height = 518
+            Height = 497
             Top = 0
-            Width = 1222
+            Width = 1246
             Align = alClient
             AutoSize = True
-            ClientHeight = 518
-            ClientWidth = 1222
+            ClientHeight = 497
+            ClientWidth = 1246
             Color = clBackground
             ParentColor = False
             TabOrder = 0
             OnResize = pnDiagonalResize
             object grpDiagonal15Bolas: TGroupBox
               Left = 6
-              Height = 506
+              Height = 485
               Top = 6
               Width = 300
               Align = alLeft
               BorderSpacing.Around = 5
               Caption = 'Diagonal: 15 bolas'
-              ClientHeight = 487
+              ClientHeight = 466
               ClientWidth = 296
               TabOrder = 0
               object sgrDiagonal15Bolas: TStringGrid
                 Left = 0
-                Height = 449
+                Height = 428
                 Top = 0
                 Width = 296
                 Align = alClient
@@ -821,7 +1002,7 @@ object Form1: TForm1
               object pnGrupo2Bolas32: TPanel
                 Left = 0
                 Height = 38
-                Top = 449
+                Top = 428
                 Width = 296
                 Align = alBottom
                 ClientHeight = 38
@@ -853,18 +1034,18 @@ object Form1: TForm1
             end
             object grpDiagonal16Bolas: TGroupBox
               Left = 311
-              Height = 506
+              Height = 485
               Top = 6
               Width = 280
               Align = alLeft
               BorderSpacing.Around = 5
               Caption = 'Diagonal: 16 bolas'
-              ClientHeight = 487
+              ClientHeight = 466
               ClientWidth = 276
               TabOrder = 1
               object sgrDiagonal16Bolas: TStringGrid
                 Left = 0
-                Height = 449
+                Height = 428
                 Top = 0
                 Width = 276
                 Align = alClient
@@ -879,7 +1060,7 @@ object Form1: TForm1
               object pnGrupo2Bolas33: TPanel
                 Left = 0
                 Height = 38
-                Top = 449
+                Top = 428
                 Width = 276
                 Align = alBottom
                 ClientHeight = 38
@@ -911,18 +1092,18 @@ object Form1: TForm1
             end
             object grpDiagonal17Bolas: TGroupBox
               Left = 596
-              Height = 506
+              Height = 485
               Top = 6
               Width = 280
               Align = alLeft
               BorderSpacing.Around = 5
               Caption = 'Diagonal: 17 bolas'
-              ClientHeight = 487
+              ClientHeight = 466
               ClientWidth = 276
               TabOrder = 2
               object sgrDiagonal17Bolas: TStringGrid
                 Left = 0
-                Height = 449
+                Height = 428
                 Top = 0
                 Width = 276
                 Align = alClient
@@ -937,7 +1118,7 @@ object Form1: TForm1
               object pnGrupo2Bolas34: TPanel
                 Left = 0
                 Height = 38
-                Top = 449
+                Top = 428
                 Width = 276
                 Align = alBottom
                 ClientHeight = 38
@@ -969,18 +1150,18 @@ object Form1: TForm1
             end
             object grpDiagonal18Bolas: TGroupBox
               Left = 881
-              Height = 506
+              Height = 485
               Top = 6
               Width = 350
               Align = alLeft
               BorderSpacing.Around = 5
               Caption = 'Diagonal: 18 bolas'
-              ClientHeight = 487
+              ClientHeight = 466
               ClientWidth = 346
               TabOrder = 3
               object sgrDiagonal18Bolas: TStringGrid
                 Left = 0
-                Height = 449
+                Height = 428
                 Top = 0
                 Width = 346
                 Align = alClient
@@ -994,7 +1175,7 @@ object Form1: TForm1
               object pnGrupo2Bolas35: TPanel
                 Left = 0
                 Height = 38
-                Top = 449
+                Top = 428
                 Width = 346
                 Align = alBottom
                 ClientHeight = 38
@@ -1028,22 +1209,22 @@ object Form1: TForm1
         end
         object tabHorizontal: TTabSheet
           Caption = 'Horizontal'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           object grpExternoInterno15Bolas2: TGroupBox
             Left = 5
-            Height = 508
+            Height = 487
             Top = 5
             Width = 300
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 15 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 296
             TabOrder = 0
             object sgrExternoInterno15Bolas2: TStringGrid
               Left = 0
-              Height = 489
+              Height = 468
               Top = 0
               Width = 296
               Align = alClient
@@ -1057,18 +1238,18 @@ object Form1: TForm1
           end
           object grpExternoInterno16Bolas2: TGroupBox
             Left = 310
-            Height = 508
+            Height = 487
             Top = 5
             Width = 280
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 16 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 276
             TabOrder = 1
             object sgrExternoInterno16Bolas2: TStringGrid
               Left = 0
-              Height = 489
+              Height = 468
               Top = 0
               Width = 276
               Align = alClient
@@ -1083,18 +1264,18 @@ object Form1: TForm1
           end
           object grpExternoInterno17Bolas2: TGroupBox
             Left = 595
-            Height = 508
+            Height = 487
             Top = 5
             Width = 280
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 17 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 276
             TabOrder = 2
             object sgrExternoInterno17Bolas2: TStringGrid
               Left = 0
-              Height = 489
+              Height = 468
               Top = 0
               Width = 276
               Align = alClient
@@ -1109,18 +1290,18 @@ object Form1: TForm1
           end
           object grpExternoInterno18Bolas2: TGroupBox
             Left = 880
-            Height = 508
+            Height = 487
             Top = 5
             Width = 280
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 18 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 276
             TabOrder = 3
             object sgrExternoInterno18Bolas2: TStringGrid
               Left = 0
-              Height = 489
+              Height = 468
               Top = 0
               Width = 276
               Align = alClient
@@ -1133,24 +1314,128 @@ object Form1: TForm1
             end
           end
         end
+        object tabBolas: TTabSheet
+          Caption = 'Bolas'
+          ClientHeight = 497
+          ClientWidth = 1246
+          object grpBolasFixas15Bolas: TGroupBox
+            Left = 5
+            Height = 487
+            Top = 5
+            Width = 300
+            Align = alLeft
+            BorderSpacing.Around = 5
+            Caption = 'Devem sair ao mesmo tempo:'
+            ClientHeight = 468
+            ClientWidth = 296
+            TabOrder = 0
+            object sgrBolasDevemSair: TStringGrid
+              Left = 0
+              Height = 468
+              Top = 0
+              Width = 296
+              Align = alClient
+              ColCount = 0
+              FixedCols = 0
+              FixedRows = 0
+              RowCount = 0
+              TabOrder = 0
+              TitleStyle = tsNative
+            end
+          end
+          object grpBolasFixas18Bolas: TGroupBox
+            Left = 976
+            Height = 501
+            Top = 5
+            Width = 240
+            Anchors = [akTop, akLeft, akBottom]
+            Caption = 'Bolas fixas: 15 bolas'
+            ClientHeight = 482
+            ClientWidth = 236
+            TabOrder = 1
+            object sgrBolasFixas18Bolas: TStringGrid
+              Left = 0
+              Height = 482
+              Top = 0
+              Width = 236
+              Align = alClient
+              ColCount = 0
+              FixedCols = 0
+              FixedRows = 0
+              RowCount = 0
+              TabOrder = 0
+              TitleStyle = tsNative
+              OnClick = sgrNovosRepetidos16BolasClick
+            end
+          end
+          object grpBolasFixas17Bolas: TGroupBox
+            Left = 800
+            Height = 508
+            Top = 24
+            Width = 300
+            BorderSpacing.Around = 5
+            Caption = 'Não devem sair:'
+            ClientHeight = 489
+            ClientWidth = 296
+            TabOrder = 2
+            object sgrBolasFixas17Bolas: TStringGrid
+              Left = 0
+              Height = 489
+              Top = 0
+              Width = 296
+              Align = alClient
+              ColCount = 0
+              FixedCols = 0
+              FixedRows = 0
+              RowCount = 0
+              TabOrder = 0
+              TitleStyle = tsNative
+            end
+          end
+          object grpBolasFixas16Bolas: TGroupBox
+            Left = 310
+            Height = 487
+            Top = 5
+            Width = 300
+            Align = alLeft
+            BorderSpacing.Around = 5
+            Caption = 'Não devem sair:'
+            ClientHeight = 468
+            ClientWidth = 296
+            TabOrder = 3
+            object sgrBolasNaoDevemSair: TStringGrid
+              Left = 0
+              Height = 468
+              Top = 0
+              Width = 296
+              Align = alClient
+              ColCount = 0
+              FixedCols = 0
+              FixedRows = 0
+              RowCount = 0
+              TabOrder = 0
+              TitleStyle = tsNative
+            end
+          end
+        end
         object tabVertical: TTabSheet
           Caption = 'Vertical'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           object grpExternoInterno15Bolas3: TGroupBox
             Left = 5
-            Height = 508
+            Height = 487
             Top = 5
             Width = 300
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Externo x Interno: 15 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 296
             TabOrder = 0
             object sgrExternoInterno15Bolas3: TStringGrid
               Left = 0
-              Height = 489
+              Height = 468
               Top = 0
               Width = 296
               Align = alClient
@@ -1239,22 +1524,22 @@ object Form1: TForm1
         end
         object tabGrupos: TTabSheet
           Caption = 'Grupos'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           object grGrupo3Bolas: TGroupBox
             Left = 280
-            Height = 508
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Grupo: 3 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 0
             object sgrGrupo3Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -1270,7 +1555,7 @@ object Form1: TForm1
             object pnGrupo2Bolas1: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -1302,18 +1587,18 @@ object Form1: TForm1
           end
           object grGrupo2Bolas1: TGroupBox
             Left = 5
-            Height = 508
+            Height = 487
             Top = 5
             Width = 270
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Grupo: 2 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 266
             TabOrder = 1
             object sgrGrupo2Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 266
               Align = alClient
@@ -1329,7 +1614,7 @@ object Form1: TForm1
             object pnGrupo2Bolas: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 266
               Align = alBottom
               ClientHeight = 38
@@ -1361,18 +1646,18 @@ object Form1: TForm1
           end
           object grGrupo4Bolas: TGroupBox
             Left = 555
-            Height = 508
+            Height = 487
             Top = 5
             Width = 280
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Grupo: 4 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 276
             TabOrder = 2
             object sgrGrupo4Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 276
               Align = alClient
@@ -1388,7 +1673,7 @@ object Form1: TForm1
             object pnGrupo2Bolas2: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 276
               Align = alBottom
               ClientHeight = 38
@@ -1420,18 +1705,18 @@ object Form1: TForm1
           end
           object grGrupo5Bolas: TGroupBox
             Left = 840
-            Height = 508
+            Height = 487
             Top = 5
             Width = 375
             Align = alLeft
             BorderSpacing.Around = 5
             Caption = 'Grupo: 5 bolas'
-            ClientHeight = 489
+            ClientHeight = 468
             ClientWidth = 371
             TabOrder = 3
             object sgrGrupo5Bolas: TStringGrid
               Left = 0
-              Height = 451
+              Height = 430
               Top = 0
               Width = 371
               Align = alClient
@@ -1447,7 +1732,7 @@ object Form1: TForm1
             object pnGrupo2Bolas3: TPanel
               Left = 0
               Height = 38
-              Top = 451
+              Top = 430
               Width = 371
               Align = alBottom
               ClientHeight = 38
@@ -1478,26 +1763,26 @@ object Form1: TForm1
             end
           end
         end
-        object tabBolas: TTabSheet
-          Caption = 'Bolas'
-          ClientHeight = 518
-          ClientWidth = 1222
-          object grpBolasFixas15Bolas: TGroupBox
-            Left = 5
-            Height = 508
+        object tabFrequenciaConcurso: TTabSheet
+          Caption = 'Frequência'
+          ClientHeight = 497
+          ClientWidth = 1246
+          object grpFrequenciaBolas: TGroupBox
+            Left = 213
+            Height = 487
             Top = 5
-            Width = 300
+            Width = 267
             Align = alLeft
             BorderSpacing.Around = 5
-            Caption = 'Devem sair ao mesmo tempo:'
-            ClientHeight = 489
-            ClientWidth = 296
+            Caption = 'Bolas que DEVEM SAIR:'
+            ClientHeight = 468
+            ClientWidth = 263
             TabOrder = 0
-            object sgrBolasDevemSair: TStringGrid
+            object sgrFrequenciaBolas: TStringGrid
               Left = 0
-              Height = 489
-              Top = 0
-              Width = 296
+              Height = 370
+              Top = 38
+              Width = 263
               Align = alClient
               ColCount = 0
               FixedCols = 0
@@ -1505,23 +1790,118 @@ object Form1: TForm1
               RowCount = 0
               TabOrder = 0
               TitleStyle = tsNative
+              OnSelectCell = sgrExternoInterno15BolasSelectCell
+            end
+            object pnGrupo2Bolas37: TPanel
+              Left = 0
+              Height = 38
+              Top = 0
+              Width = 263
+              Align = alTop
+              ClientHeight = 38
+              ClientWidth = 263
+              TabOrder = 1
+              object cmbConcursoFrequenciaSair: TComboBox
+                Left = 141
+                Height = 26
+                Top = 6
+                Width = 106
+                Align = alRight
+                BorderSpacing.Left = 10
+                BorderSpacing.Right = 10
+                BorderSpacing.Around = 5
+                Color = clMenu
+                ItemHeight = 0
+                OnChange = cmbConcursoFrequenciaSairChange
+                Style = csDropDownList
+                TabOrder = 0
+              end
+              object Label3: TLabel
+                Left = 6
+                Height = 21
+                Top = 11
+                Width = 130
+                Align = alLeft
+                AutoSize = False
+                BorderSpacing.Top = 5
+                BorderSpacing.Around = 5
+                BorderSpacing.CellAlignHorizontal = ccaCenter
+                BorderSpacing.CellAlignVertical = ccaCenter
+                Caption = 'Relativo ao concurso:'
+                ParentColor = False
+              end
+            end
+            object pnFrequenciaNaoSair1: TPanel
+              Left = 0
+              Height = 60
+              Top = 408
+              Width = 263
+              Align = alBottom
+              ClientHeight = 60
+              ClientWidth = 263
+              TabOrder = 2
+              object GroupBox9: TGroupBox
+                Left = 1
+                Height = 58
+                Top = 1
+                Width = 129
+                Align = alLeft
+                Caption = 'Mínimo'
+                ClientHeight = 39
+                ClientWidth = 125
+                TabOrder = 0
+                object cmbFrequenciaMinimoSair: TComboBox
+                  Left = 5
+                  Height = 29
+                  Top = 5
+                  Width = 115
+                  Align = alClient
+                  BorderSpacing.Around = 5
+                  ItemHeight = 0
+                  Style = csDropDownList
+                  TabOrder = 0
+                end
+              end
+              object GroupBox10: TGroupBox
+                Left = 133
+                Height = 58
+                Top = 1
+                Width = 129
+                Align = alRight
+                Caption = 'Máximo'
+                ClientHeight = 39
+                ClientWidth = 125
+                TabOrder = 1
+                object cmbFrequenciaMaximoSair: TComboBox
+                  Left = 5
+                  Height = 29
+                  Top = 5
+                  Width = 115
+                  Align = alClient
+                  BorderSpacing.Around = 5
+                  ItemHeight = 0
+                  Style = csDropDownList
+                  TabOrder = 0
+                end
+              end
             end
           end
-          object grpBolasFixas18Bolas: TGroupBox
-            Left = 976
-            Height = 501
+          object grpFrequenciaBolaNaoSair: TGroupBox
+            Left = 930
+            Height = 487
             Top = 5
-            Width = 240
-            Anchors = [akTop, akLeft, akBottom]
-            Caption = 'Bolas fixas: 15 bolas'
-            ClientHeight = 482
-            ClientWidth = 236
+            Width = 267
+            Align = alLeft
+            BorderSpacing.Around = 5
+            Caption = 'Bolas que NÃO DEVEM SAIR:'
+            ClientHeight = 468
+            ClientWidth = 263
             TabOrder = 1
-            object sgrBolasFixas18Bolas: TStringGrid
+            object sgrFrequenciaBolasNaoSair: TStringGrid
               Left = 0
-              Height = 482
-              Top = 0
-              Width = 236
+              Height = 370
+              Top = 38
+              Width = 263
               Align = alClient
               ColCount = 0
               FixedCols = 0
@@ -1529,49 +1909,169 @@ object Form1: TForm1
               RowCount = 0
               TabOrder = 0
               TitleStyle = tsNative
-              OnClick = sgrNovosRepetidos16BolasClick
+              OnSelectCell = sgrExternoInterno15BolasSelectCell
             end
-          end
-          object grpBolasFixas17Bolas: TGroupBox
-            Left = 800
-            Height = 508
-            Top = 24
-            Width = 300
-            BorderSpacing.Around = 5
-            Caption = 'Não devem sair:'
-            ClientHeight = 489
-            ClientWidth = 296
-            TabOrder = 2
-            object sgrBolasFixas17Bolas: TStringGrid
+            object pnFrequenciaNaoSair: TPanel
               Left = 0
-              Height = 489
+              Height = 60
+              Top = 408
+              Width = 263
+              Align = alBottom
+              ClientHeight = 60
+              ClientWidth = 263
+              TabOrder = 1
+              object GroupBox7: TGroupBox
+                Left = 1
+                Height = 58
+                Top = 1
+                Width = 129
+                Align = alLeft
+                Caption = 'Mínimo'
+                ClientHeight = 39
+                ClientWidth = 125
+                TabOrder = 0
+                object cmbFrequenciaMinimoNaoSair: TComboBox
+                  Left = 5
+                  Height = 29
+                  Top = 5
+                  Width = 115
+                  Align = alClient
+                  BorderSpacing.Around = 5
+                  ItemHeight = 0
+                  Style = csDropDownList
+                  TabOrder = 0
+                end
+              end
+              object GroupBox8: TGroupBox
+                Left = 133
+                Height = 58
+                Top = 1
+                Width = 129
+                Align = alRight
+                Caption = 'Máximo'
+                ClientHeight = 39
+                ClientWidth = 125
+                TabOrder = 1
+                object cmbFrequenciaMaximoNaoSair: TComboBox
+                  Left = 5
+                  Height = 29
+                  Top = 5
+                  Width = 115
+                  Align = alClient
+                  BorderSpacing.Around = 5
+                  ItemHeight = 0
+                  Style = csDropDownList
+                  TabOrder = 0
+                end
+              end
+            end
+            object pnGrupo2Bolas38: TPanel
+              Left = 0
+              Height = 38
               Top = 0
-              Width = 296
-              Align = alClient
-              ColCount = 0
-              FixedCols = 0
-              FixedRows = 0
-              RowCount = 0
-              TabOrder = 0
-              TitleStyle = tsNative
+              Width = 263
+              Align = alTop
+              ClientHeight = 38
+              ClientWidth = 263
+              TabOrder = 2
+              object cmbConcursoFrequenciaNaoSair: TComboBox
+                Left = 141
+                Height = 26
+                Top = 6
+                Width = 106
+                Align = alRight
+                BorderSpacing.Left = 10
+                BorderSpacing.Right = 10
+                BorderSpacing.Around = 5
+                Color = clMenu
+                ItemHeight = 0
+                OnChange = cmbConcursoFrequenciaNaoSairChange
+                Style = csDropDownList
+                TabOrder = 0
+              end
+              object Label4: TLabel
+                Left = 6
+                Height = 21
+                Top = 11
+                Width = 130
+                Align = alLeft
+                AutoSize = False
+                BorderSpacing.Top = 5
+                BorderSpacing.Around = 5
+                BorderSpacing.CellAlignHorizontal = ccaCenter
+                BorderSpacing.CellAlignVertical = ccaCenter
+                Caption = 'Relativo ao concurso:'
+                ParentColor = False
+              end
             end
           end
-          object grpBolasFixas16Bolas: TGroupBox
-            Left = 310
-            Height = 508
+          object GroupBox6: TGroupBox
+            Left = 485
+            Height = 487
             Top = 5
-            Width = 300
+            Width = 232
             Align = alLeft
             BorderSpacing.Around = 5
-            Caption = 'Não devem sair:'
-            ClientHeight = 489
-            ClientWidth = 296
-            TabOrder = 3
-            object sgrBolasNaoDevemSair: TStringGrid
+            ClientHeight = 483
+            ClientWidth = 228
+            TabOrder = 2
+            object Memo1: TMemo
               Left = 0
-              Height = 489
+              Height = 411
+              Top = 72
+              Width = 228
+              Align = alClient
+              Enabled = False
+              Lines.Strings = (
+                'Selecione as bolas desejadas nos grupos "Bolas que DEVEM SAIR" e/ou "Bolas que NÃO DEVEM SAIR".'
+                'Em tais grupos, na parte inferior há dois campos "Mínimo" e "Máximo".'
+                'Se vc quiser que todas as bolas selecionadas, por exemplo, no grupo "Bolas que DEVEM SAIR", estejam ao '
+                'mesmo tempo no mesmo jogo, deve-se selecionar a mesma quantidade nos campos mínimo e máximo.'
+                'Se quiser retornar subconjuntos, deve-se selecionar valores pra os mínimos e máximo menor que a quantidade'
+                'de bolas selecionadas, devendo sempre o valor do mínimo ser menor ou igual ao valor do máximo.'
+              )
+              ReadOnly = True
+              TabOrder = 0
+            end
+            object GroupBox11: TGroupBox
+              Left = 0
+              Height = 72
               Top = 0
-              Width = 296
+              Width = 228
+              Align = alTop
+              Caption = 'Clique no botão abaixo pra atualizar'
+              ClientHeight = 53
+              ClientWidth = 224
+              TabOrder = 1
+              object btnFrequenciaAtualizar: TButton
+                Left = 10
+                Height = 33
+                Top = 10
+                Width = 204
+                Align = alClient
+                BorderSpacing.Around = 10
+                Caption = '&Atualizar Frequência'
+                OnClick = btnFrequenciaAtualizarClick
+                TabOrder = 0
+              end
+            end
+          end
+          object grpFrequenciaTotalSair: TGroupBox
+            Left = 5
+            Height = 487
+            Top = 5
+            Width = 203
+            Align = alLeft
+            BorderSpacing.Around = 5
+            Caption = 'Freq. DEVEM SAIR:'
+            ClientHeight = 468
+            ClientWidth = 199
+            TabOrder = 3
+            object sgrFrequenciaTotalSair: TStringGrid
+              Left = 0
+              Height = 430
+              Top = 0
+              Width = 199
               Align = alClient
               ColCount = 0
               FixedCols = 0
@@ -1579,985 +2079,56 @@ object Form1: TForm1
               RowCount = 0
               TabOrder = 0
               TitleStyle = tsNative
+              OnSelectCell = sgrExternoInterno15BolasSelectCell
+            end
+            object pnGrupo2Bolas39: TPanel
+              Left = 0
+              Height = 38
+              Top = 430
+              Width = 199
+              Align = alBottom
+              TabOrder = 1
             end
           end
-        end
-        object tabBolasNasColunas: TTabSheet
-          Caption = 'Bolas nas colunas'
-          ClientHeight = 518
-          ClientWidth = 1222
-          object PageControl3: TPageControl
-            Left = 10
-            Height = 498
-            Top = 10
-            Width = 1202
-            ActivePage = tabBolasNasColunas15Bolas
-            Align = alClient
-            BorderSpacing.Around = 10
-            TabIndex = 0
-            TabOrder = 0
-            object tabBolasNasColunas15Bolas: TTabSheet
-              Caption = '15 Bolas'
-              ClientHeight = 471
-              ClientWidth = 1198
-              object grpBolasB1_15Bolas: TGroupBox
-                Left = 5
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Coluna B_1:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 0
-                object sgrColunaB1_15Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_15BolasSelectCell
-                end
-                object pnGrupo2Bolas4: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos4: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos4: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B15_15Bolas: TGroupBox
-                Left = 280
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas B_1 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 1
-                object sgrColunaB1_B15_15Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  Anchors = [akTop, akRight, akBottom]
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B15_15BolasSelectCell
-                end
-                object pnGrupo2Bolas5: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos5: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos5: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B8_B15_15Bolas: TGroupBox
-                Left = 555
-                Height = 461
-                Top = 5
-                Width = 280
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_8 e B_15'
-                ClientHeight = 442
-                ClientWidth = 276
-                TabOrder = 2
-                object sgrColunaB1_B8_B15_15Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 276
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B8_B15_15BolasSelectCell
-                end
-                object pnGrupo2Bolas6: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 276
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 276
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos6: TButton
-                    Left = 145
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos6: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B4_B8_B12_B15_15Bolas: TGroupBox
-                Left = 840
-                Height = 461
-                Top = 5
-                Width = 355
-                Align = alLeft
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_4, B_8, B_12 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 351
-                TabOrder = 3
-                object sgrColunaB1_B4_B8_B12_B15_15Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 351
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnClick = sgrNovosRepetidos16BolasClick
-                  OnSelectCell = sgrColunaB1_B4_B8_B12_B15_15BolasSelectCell
-                end
-                object pnGrupo2Bolas7: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 351
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 351
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos7: TButton
-                    Left = 220
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos7: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
+          object grpFrequenciaTotalNaoSair: TGroupBox
+            Left = 722
+            Height = 487
+            Top = 5
+            Width = 203
+            Align = alLeft
+            BorderSpacing.Around = 5
+            Caption = 'Freq. NÃO DEVEM SAIR:'
+            ClientHeight = 468
+            ClientWidth = 199
+            TabOrder = 4
+            object sgrFrequenciaTotalNaoSair: TStringGrid
+              Left = 0
+              Height = 430
+              Top = 0
+              Width = 199
+              Align = alClient
+              ColCount = 0
+              FixedCols = 0
+              FixedRows = 0
+              RowCount = 0
+              TabOrder = 0
+              TitleStyle = tsNative
+              OnSelectCell = sgrExternoInterno15BolasSelectCell
             end
-            object tabBolasNasColunas16Bolas: TTabSheet
-              Caption = '16 Bolas'
-              ClientHeight = 471
-              ClientWidth = 1198
-              object grpColunaB1_B4_B8_B12_B15_16Bolas: TGroupBox
-                Left = 840
-                Height = 461
-                Top = 5
-                Width = 355
-                Align = alLeft
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_4, B_8, B_12 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 351
-                TabOrder = 0
-                object sgrColunaB1_B4_B8_B12_B15_16Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 351
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnClick = sgrNovosRepetidos16BolasClick
-                  OnSelectCell = sgrColunaB1_B4_B8_B12_B15_16BolasSelectCell
-                end
-                object pnGrupo2Bolas11: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 351
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 351
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos11: TButton
-                    Left = 220
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos11: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B8_B15_16Bolas: TGroupBox
-                Left = 555
-                Height = 461
-                Top = 5
-                Width = 280
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_8 e B_15'
-                ClientHeight = 442
-                ClientWidth = 276
-                TabOrder = 1
-                object sgrColunaB1_B8_B15_16Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 276
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B8_B15_16BolasSelectCell
-                end
-                object pnGrupo2Bolas10: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 276
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 276
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos10: TButton
-                    Left = 145
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos10: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B15_16Bolas: TGroupBox
-                Left = 280
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas B_1 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 2
-                object sgrColunaB1_B15_16Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B15_16BolasSelectCell
-                end
-                object pnGrupo2Bolas9: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos9: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos9: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpBolasB1_16Bolas: TGroupBox
-                Left = 5
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Coluna B_1:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 3
-                object sgrColunaB1_16Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_16BolasSelectCell
-                end
-                object pnGrupo2Bolas8: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos8: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos8: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-            end
-            object tabBolasNasColunas17Bolas: TTabSheet
-              Caption = '17 Bolas'
-              ClientHeight = 471
-              ClientWidth = 1198
-              object grpColunaB1_B4_B8_B12_B15_17Bolas: TGroupBox
-                Left = 840
-                Height = 461
-                Top = 5
-                Width = 355
-                Align = alLeft
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_4, B_8, B_12 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 351
-                TabOrder = 0
-                object sgrColunaB1_B4_B8_B12_B15_17Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 351
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B4_B8_B12_B15_17BolasSelectCell
-                end
-                object pnGrupo2Bolas15: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 351
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 351
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos15: TButton
-                    Left = 220
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos15: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B8_B15_17Bolas: TGroupBox
-                Left = 555
-                Height = 461
-                Top = 5
-                Width = 280
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_8 e B_15'
-                ClientHeight = 442
-                ClientWidth = 276
-                TabOrder = 1
-                object sgrColunaB1_B8_B15_17Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 276
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B8_B15_17BolasSelectCell
-                end
-                object pnGrupo2Bolas14: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 276
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 276
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos14: TButton
-                    Left = 145
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos14: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B15_17Bolas: TGroupBox
-                Left = 280
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas B_1 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 2
-                object sgrColunaB1_B15_17Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B15_17BolasSelectCell
-                end
-                object pnGrupo2Bolas13: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos13: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos13: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpBolasB1_17Bolas: TGroupBox
-                Left = 5
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Coluna B_1:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 3
-                object sgrColunaB1_17Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_17BolasSelectCell
-                end
-                object pnGrupo2Bolas12: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos12: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos12: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-            end
-            object tabBolasNasColunas18Bolas: TTabSheet
-              Caption = '18 Bolas'
-              ClientHeight = 471
-              ClientWidth = 1198
-              object grpColunaB1_B4_B8_B12_B15_15Bolas3: TGroupBox
-                Left = 840
-                Height = 461
-                Top = 5
-                Width = 355
-                Align = alLeft
-                Anchors = [akTop, akLeft, akRight, akBottom]
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_4, B_8, B_12 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 351
-                TabOrder = 0
-                object sgrColunaB1_B4_B8_B12_B15_18Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 351
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnClick = sgrNovosRepetidos16BolasClick
-                  OnSelectCell = sgrColunaB1_B4_B8_B12_B15_18BolasSelectCell
-                end
-                object pnGrupo2Bolas19: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 351
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 351
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos19: TButton
-                    Left = 220
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos19: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B8_B15_15Bolas3: TGroupBox
-                Left = 555
-                Height = 461
-                Top = 5
-                Width = 280
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas: B_1, B_8 e B_15'
-                ClientHeight = 442
-                ClientWidth = 276
-                TabOrder = 1
-                object sgrColunaB1_B8_B15_18Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 276
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B8_B15_18BolasSelectCell
-                end
-                object pnGrupo2Bolas18: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 276
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 276
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos18: TButton
-                    Left = 145
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos18: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpColunaB1_B15_15Bolas3: TGroupBox
-                Left = 280
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Colunas B_1 e B_15:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 2
-                object sgrColunaB1_B15_18Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_B15_18BolasSelectCell
-                end
-                object pnGrupo2Bolas17: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos17: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos17: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
-              object grpBolasB1_15Bolas3: TGroupBox
-                Left = 5
-                Height = 461
-                Top = 5
-                Width = 270
-                Align = alLeft
-                BorderSpacing.Around = 5
-                Caption = 'Coluna B_1:'
-                ClientHeight = 442
-                ClientWidth = 266
-                TabOrder = 3
-                object sgrColunaB1_18Bolas: TStringGrid
-                  Left = 0
-                  Height = 404
-                  Top = 0
-                  Width = 266
-                  Align = alClient
-                  ColCount = 0
-                  FixedCols = 0
-                  FixedRows = 0
-                  RowCount = 0
-                  TabOrder = 0
-                  TitleStyle = tsNative
-                  OnSelectCell = sgrColunaB1_18BolasSelectCell
-                end
-                object pnGrupo2Bolas16: TPanel
-                  Left = 0
-                  Height = 38
-                  Top = 404
-                  Width = 266
-                  Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 266
-                  TabOrder = 1
-                  object btnGrupo2BolasDesmarcarTodos16: TButton
-                    Left = 135
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alRight
-                    BorderSpacing.Around = 5
-                    Caption = 'Desmarcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 0
-                  end
-                  object btnGrupo2BolasMarcarTodos16: TButton
-                    Left = 6
-                    Height = 26
-                    Top = 6
-                    Width = 125
-                    Align = alLeft
-                    BorderSpacing.Around = 5
-                    Caption = 'Marcar todos'
-                    OnClick = btnGrupo2BolasDesmarcarTodosClick
-                    TabOrder = 1
-                  end
-                end
-              end
+            object pnGrupo2Bolas40: TPanel
+              Left = 0
+              Height = 38
+              Top = 430
+              Width = 199
+              Align = alBottom
+              TabOrder = 1
             end
           end
         end
         object tabGerarFiltros: TTabSheet
           Caption = 'Gerar filtros'
-          ClientHeight = 518
-          ClientWidth = 1222
+          ClientHeight = 497
+          ClientWidth = 1246
           object btnFiltroGerar: TButton
             Left = 720
             Height = 25
@@ -2567,38 +2138,18 @@ object Form1: TForm1
             OnClick = btnFiltroGerarClick
             TabOrder = 0
           end
-          object edFiltroConcursoDestino: TLabeledEdit
-            Left = 592
-            Height = 27
-            Top = 40
-            Width = 120
-            Alignment = taCenter
-            EditLabel.AnchorSideLeft.Control = edFiltroConcursoDestino
-            EditLabel.AnchorSideTop.Side = asrCenter
-            EditLabel.AnchorSideRight.Control = edFiltroConcursoDestino
-            EditLabel.AnchorSideRight.Side = asrBottom
-            EditLabel.AnchorSideBottom.Control = edFiltroConcursoDestino
-            EditLabel.Left = 592
-            EditLabel.Height = 17
-            EditLabel.Top = 20
-            EditLabel.Width = 120
-            EditLabel.Caption = 'Concurso Destino'
-            EditLabel.ParentColor = False
-            TabOrder = 1
-            Text = 'edFiltroConcursoDestino'
-          end
           object GroupBox4: TGroupBox
             Left = 8
-            Height = 353
-            Top = 160
+            Height = 281
+            Top = 232
             Width = 1208
             Caption = 'Sql Gerado:'
-            ClientHeight = 334
+            ClientHeight = 262
             ClientWidth = 1204
-            TabOrder = 2
+            TabOrder = 1
             object mmFiltroSql: TMemo
               Left = 0
-              Height = 334
+              Height = 262
               Top = 0
               Width = 1204
               Align = alClient
@@ -2606,18 +2157,71 @@ object Form1: TForm1
               TabOrder = 0
             end
           end
+          object CheckGroup1: TCheckGroup
+            Left = 8
+            Height = 112
+            Top = 8
+            Width = 176
+            AutoFill = True
+            Caption = 'EXCLUIR JOGOS COM:'
+            ChildSizing.LeftRightSpacing = 6
+            ChildSizing.TopBottomSpacing = 6
+            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.ShrinkHorizontal = crsScaleChilds
+            ChildSizing.ShrinkVertical = crsScaleChilds
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 1
+            ClientHeight = 93
+            ClientWidth = 172
+            Items.Strings = (
+              '15 bolas'
+              '16 bolas'
+              '17 bolas'
+              '18 bolas'
+            )
+            TabOrder = 2
+            Data = {
+              0400000002020202
+            }
+          end
+          object CheckGroup2: TCheckGroup
+            Left = 192
+            Height = 50
+            Top = 8
+            Width = 193
+            AutoFill = True
+            Caption = 'Jogos já sorteados:'
+            ChildSizing.LeftRightSpacing = 6
+            ChildSizing.TopBottomSpacing = 6
+            ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+            ChildSizing.EnlargeVertical = crsHomogenousChildResize
+            ChildSizing.ShrinkHorizontal = crsScaleChilds
+            ChildSizing.ShrinkVertical = crsScaleChilds
+            ChildSizing.Layout = cclLeftToRightThenTopToBottom
+            ChildSizing.ControlsPerLine = 1
+            ClientHeight = 31
+            ClientWidth = 189
+            Items.Strings = (
+              'Excluir jogos já sorteados'
+            )
+            TabOrder = 3
+            Data = {
+              0100000002
+            }
+          end
         end
       end
     end
     object tabFrequencia: TTabSheet
       Caption = 'Frequência'
-      ClientHeight = 555
-      ClientWidth = 1236
+      ClientHeight = 534
+      ClientWidth = 1260
       object sgrFrequencia: TStringGrid
         Left = 10
-        Height = 463
+        Height = 442
         Top = 82
-        Width = 1216
+        Width = 1240
         Align = alClient
         BorderSpacing.Around = 10
         TabOrder = 0
@@ -2627,10 +2231,10 @@ object Form1: TForm1
         Left = 0
         Height = 72
         Top = 0
-        Width = 1236
+        Width = 1260
         Align = alTop
         ClientHeight = 72
-        ClientWidth = 1236
+        ClientWidth = 1260
         Color = clBackground
         ParentColor = False
         TabOrder = 1
@@ -2682,8 +2286,8 @@ object Form1: TForm1
     end
     object tabConcurso: TTabSheet
       Caption = 'Concurso'
-      ClientHeight = 555
-      ClientWidth = 1236
+      ClientHeight = 534
+      ClientWidth = 1260
       object grpFrequenciaInicio1: TGroupBox
         Left = 448
         Height = 96
@@ -3150,14 +2754,44 @@ object Form1: TForm1
         end
       end
     end
-    object TabSheet4: TTabSheet
-      Caption = 'TabSheet4'
+    object tabBanco_de_dados: TTabSheet
+      Caption = 'Configurar Banco de dados'
+      ClientHeight = 534
+      ClientWidth = 1260
+      object ValueListEditor1: TValueListEditor
+        Left = 16
+        Height = 184
+        Top = 8
+        Width = 384
+        FixedCols = 0
+        RowCount = 7
+        TabOrder = 0
+        OnClick = ValueListEditor1Click
+        Strings.Strings = (
+          'Host='
+          'Porta='
+          'Banco de dados='
+          'Role='
+          'Usuario='
+          'Senha='
+        )
+        ColWidths = (
+          64
+          316
+        )
+      end
     end
     object TabSheet5: TTabSheet
       Caption = 'TabSheet5'
     end
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'TabSheet2'
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'TabSheet3'
     end
   end
 end
