@@ -64,8 +64,8 @@ type
     btnGrupo2BolasMarcarTodos : TButton;
     btnAtualizarNovosRepetidos : TButton;
     btnFrequenciaAtualizar : TButton;
-    CheckGroup1 : TCheckGroup;
-    CheckGroup2 : TCheckGroup;
+    chkExcluirJogos_LTF_QT : TCheckGroup;
+    chkExcluir_Jogos_Ja_Sorteados : TCheckGroup;
     cmbConcursoFrequenciaSair : TComboBox;
     cmbConcursoFrequenciaNaoSair : TComboBox;
     cmbConcursoNovosRepetidos : TComboBox;
@@ -1252,8 +1252,11 @@ var
   sqlNovosRepetidos : AnsiString;
   sqlParImpar: AnsiString;
   sqlExternoInterno : AnsiString;
-  sqlPrimoNaoPrimo , sqlColunaB: String;
+  sqlPrimoNaoPrimo , sqlColunaB, sqlTemp: String;
   sqlFrequencia : AnsiString;
+
+  sqlGerado : TStringList;
+  uA : Integer;
 begin
   sqlNovosRepetidos := GerarSqlNovosRepetidos;
   sqlParImpar := GerarSqlParImpar;
@@ -1262,13 +1265,118 @@ begin
   sqlColunaB := GerarSqlColunaB;
   sqlFrequencia := GerarSqlFrequencia;
 
+  // Gerar sql.
+  sqlGerado := TStringList.Create;
+  sqlGerado.Add('Insert into lotofacil.lotofacil_filtros');
+  sqlGerado.Add('(data, ltf_id, ltf_qt, concurso, acertos, concurso_bola_qt_vezes)');
+  sqlGerado.Add('Select now(), tb_ltf_num.ltf_id, tb_ltf_num.ltf_qt, ');
+  sqlGerado.Add( QuotedStr(cmbConcursoNovosRepetidos.Text)  + ',0, concurso_bola_qt_vezes');
+  sqlGerado.Add('from');
+  sqlGerado.Add('lotofacil.lotofacil_num tb_ltf_num,');
+  sqlGerado.Add('lotofacil.lotofacil_id tb_ltf_id,');
+  sqlGerado.Add('lotofacil.lotofacil_num_bolas_concurso tb_ltf_num_bolas');
+
+  // Se o usuário selecionou quer não quer exibir combinados já sorteadas, devemos
+  // listar a tabela.
+  if chkExcluir_Jogos_Ja_Sorteados.Checked[0] = true then begin
+     sqlGerado.Add(', lotofacil.v_lotofacil_num_nao_sorteado  tb_ltf_nao_sorteado');
+  end;
+
+  if sqlNovosRepetidos <> '' then begin
+    sqlGerado.Add(', lotofacil.lotofacil_novos_repetidos     tb_ltf_novos_repetidos');
+  end;
+
+  sqlGerado.Add('where');
+  // Wheres obrigatórios.
+  sqlGerado.Add('      tb_ltf_num.ltf_id = tb_ltf_id.ltf_id');
+  sqlGerado.Add('AND');
+  sqlGerado.Add('      tb_ltf_num.ltf_id = tb_ltf_num_bolas.ltf_id');
+  sqlGerado.Add('AND');
+  sqlGerado.Add('      tb_ltf_id.ltf_id = tb_ltf_num_bolas.ltf_id');
+
+  // Se o usuário deseja excluir combinações já sorteadas, devemos relacionar
+  // a tabela de novos e repetidos com as outras tabelas.
+  if chkExcluir_Jogos_Ja_Sorteados.Checked[0] = true then begin
+     sqlGerado.Add('---[Usuário escolheu excluir combinações já sorteadas]----');
+     sqlGerado.Add('AND');
+     sqlGerado.Add('      tb_ltf_num.ltf_id       = tb_ltf_nao_sorteado.ltf_id');
+     sqlGerado.Add('AND');
+     sqlGerado.Add('      tb_ltf_id.ltf_id = tb_ltf_nao_sorteado.ltf_id');
+     sqlGerado.Add('AND');
+     sqlGerado.Add('      tb_ltf_num_bolas.ltf_id = tb_ltf_nao_sorteado.ltf_id');
+  end;
+
+
+
+
+  // Insere os demais sql dinamicamente.'.
+  if sqlNovosRepetidos <> '' then begin
+     sqlGerado.Add('--[Ítens escolhidos da guia novos x repetidos, devemos relacionar');
+     sqlGerado.Add('--[as tabelas e pegar os íds dos ítens escolhidos]----');
+     sqlGerado.Add('AND');
+     sqlGerado.Add('tb_ltf_num.ltf_id = tb_ltf_novos_repetidos.ltf_id');
+     sqlGerado.Add('AND');
+     sqlGerado.Add('tb_ltf_id.ltf_id = tb_ltf_novos_repetidos.ltf_id');
+     sqlGerado.Add('AND');
+     sqlGerado.Add('tb_ltf_num_bolas.ltf_id = tb_ltf_novos_repetidos.ltf_id');
+     sqlGerado.Add('AND');
+     sqlGerado.Add('tb_ltf_nao_sorteado.ltf_id = tb_ltf_novos_repetidos.ltf_id');
+     sqlGerado.Add('AND');
+     sqlGerado.Add(sqlNovosRepetidos);
+  end;
+
+  if sqlParImpar <> '' then begin
+    sqlGerado.Add('AND');
+    sqlGerado.Add(sqlParImpar);
+  end;
+
+  if sqlPrimoNaoPrimo <> '' then begin
+     sqlGerado.Add('AND');
+     sqlGerado.Add(sqlPrimoNaoPrimo);
+  end;
+
+  if sqlExternoInterno <> '' then begin
+     sqlGerado.Add('AND');
+     sqlGerado.Add(sqlExternoInterno);
+  end;
+
+  if sqlColunaB <> '' then begin
+     sqlGerado.Add('AND');
+     sqlGerado.Add(sqlColunaB);
+  end;
+
+  if sqlFrequencia <> '' then begin
+     sqlGerado.Add('AND');
+     sqlGerado.Add(sqlFrequencia);
+  end;
+
+  // O controle 'chkExcluirJogo_LTF_QT' terá 4 checkbox, correspondendo a
+  // jogos que excluídos conforme a quantidade de bolas daquela combinação.
+  sqlTemp := '';
+  for uA := 0 to chkExcluirJogos_LTF_QT.Items.Count - 1 do begin
+        if chkExcluirJogos_LTF_QT.Checked[uA] = true then begin
+           if sqlTemp <> '' then begin
+              sqlTemp := sqlTemp + ', ';
+           end;
+           sqlTemp := sqlTemp + IntToStr(15 + uA);
+        end;
+        // Se sqlTemp é diferente de vazio, quer dizer, que devemos excluir algumas
+        // combinações baseado na quantidade de bolas.
+  end;
+  // Se houve algo selecionados, devemos retornar ao usuário.
+  if sqlTemp <> '' then begin
+    sqlTemp := 'And ltf_num.ltf_qt not in (' + sqlTemp + ')';
+    sqlGerado.Add(sqlTemp);
+  end;
+
+
+
+
+
+
+
   mmFiltroSql.Clear;
-  mmFiltroSql.Lines.Add(sqlNovosRepetidos);
-  mmFiltroSql.Lines.Add(sqlParImpar);
-  mmFiltroSql.Lines.Add(sqlExternoInterno);
-  mmFiltroSql.Lines.Add(sqlPrimoNaoPrimo);
-  mmFiltroSql.Lines.Add(sqlColunaB);
-  mmFiltroSql.Lines.Add(sqlFrequencia);
+  mmFiltroSql.Lines.AddStrings(sqlGerado);
 
 
   //sqlGrupo :=  TStringList.Create;
@@ -1803,13 +1911,13 @@ var
  sqlRegistro: TSqlQuery;
  qtRegistros, uLinha, uA: Integer;
  concursoAtualizar : LongInt;
+ concursoParametro : TParam;
 begin
      // Pega o concurso atual do combobox.
      concursoAtualizar := StrToInt(cmbConcursoNovosRepetidos.Items[cmbConcursoNovosRepetidos.ItemIndex]);
 
     strSql := TStringList.Create;
-    strSql.Add('Select lotofacil.fn_lotofacil_atualizar_novos_repetidos_3');
-    strSql.Add('(' + IntToStr(concursoAtualizar) + ')');
+    strSql.Add('select lotofacil.fn_lotofacil_atualizar_novos_repetidos_3($1)');
 
     if dmLotofacil = nil then begin
       dmLotofacil := TdmLotofacil.Create(Self);
@@ -1820,8 +1928,18 @@ begin
     sqlRegistro.DataBase := dmLotofacil.pgLtk;
     sqlRegistro.SQL.Text := strSql.Text;
     sqlRegistro.UniDirectional := true;
+
+    concursoParametro := sqlRegistro.Params.CreateParam(TFieldType.ftInteger, '$1', TParamType.ptInput);
+    concursoParametro.AsInteger := concursoAtualizar;
+
+    sqlRegistro.Prepare;
+
     sqlRegistro.ExecSQL;
+    dmLotofacil.pgLTK.Transaction.Commit;
+
     sqlRegistro.Close;
+
+    ;
 
     CarregarTodosControles;
 
@@ -2458,11 +2576,19 @@ begin
   AtualizarControleFrequenciaMinimoMaximo;
 end;
 
+{
+ Atualiza as 4 caixas de combinação.
+ Pois, pode haver alteração em amboos os controles sgrSequenciaBolas e
+ sgrFrequenciasBolasNaoSair.
+}
 procedure TForm1.AtualizarControleFrequenciaMinimoMaximo;
 var
   qt_marcado_valor_um_sair: Integer;
   qt_marcado_valor_um_nao_sair, uA, ultima_coluna_controle_sair,
-    ultima_coluna_controle_nao_sair, bolas_disponiveis: Integer;
+    ultima_coluna_controle_nao_sair, bolas_disponiveis,
+    indiceNovaPosicao: Integer;
+  valorAntigoMinimoSair , valorAntigoMaximoSair,
+    valorAntigoMinimoNaoSair, valorAntigoMaximoNaoSair: TCaption;
 begin
   ultima_coluna_controle_sair := sgrFrequenciaBolas.Columns.Count - 1;
   ultima_coluna_controle_nao_sair := sgrFrequenciaBolasNaoSair.Columns.Count - 1;
@@ -2478,6 +2604,19 @@ begin
          Inc(qt_marcado_valor_um_nao_sair);
       end;
   end;
+
+  // Devemos pegar os valores de mínimo e máximo, antes de atualizar a caixa de combinação.
+  // Iremos pegar a posição dos índices selecionados.
+  //valorAntigoMinimoSair := StrToInt(cmbFrequenciaMinimoSair.Items[cmbFrequenciaMinimoSair.ItemIndex]);
+  //valorAntigoMaximoSair := StrToInt(cmbFrequenciaMaximoSair.Items[cmbFrequenciaMaximoSair.ItemIndex]);
+  //valorAntigoMinimoNaoSair := StrToInt(cmbFrequenciaMinimoNaoSair.Items[cmbFrequenciaMinimoNaoSair.ItemIndex]);
+  //valorAntigoMaximoNaoSair := StrToInt(cmbFrequenciaMaximoNaoSair.Items[cmbFrequenciaMaximoNaoSair.ItemIndex]);
+
+  valorAntigoMinimoSair := '0' + cmbFrequenciaMinimoSair.Text;
+  valorAntigoMaximoSair := '0' + cmbFrequenciaMaximoSair.Text;
+  valorAntigoMinimoNaoSair := '0' + cmbFrequenciaMinimoNaoSair.Text;
+  valorAntigoMaximoNaoSair := '0' + cmbFrequenciaMaximoNaoSair.Text;
+
 
   // Preenche os controles com o mínimo e o máximo.
   cmbFrequenciaMinimoNaoSair.Clear;
@@ -2507,6 +2646,17 @@ begin
     // No controle que indica o máximo, a bola começa em ordem descrente.
     cmbFrequenciaMinimoNaoSair.ItemIndex := qt_marcado_valor_um_nao_sair - 1;
     cmbFrequenciaMaximoNaoSair.ItemIndex := 0;
+  end;
+
+  // Procura pelo valor antigo na caixa de combinação, se o encontra define a nova posição.
+  indiceNovaPosicao := cmbFrequenciaMinimoNaoSair.Items.IndexOf(valorAntigoMinimoNaoSair);
+  if indiceNovaPosicao <> -1 then begin
+     cmbFrequenciaMinimoNaoSair.ItemIndex := indiceNovaPosicao;
+  end;
+
+  indiceNovaPosicao := cmbFrequenciaMaximoNaoSair.Items.IndexOf(valorAntigoMaximoNaoSair);
+  if indiceNovaPosicao <> -1 then begin
+     cmbFrequenciaMaximoNaoSair.ItemIndex := indiceNovaPosicao;
   end;
 
   // Vamos verificar se há pelo menos 15 bolas pra serem filtradas, pois se o usuário

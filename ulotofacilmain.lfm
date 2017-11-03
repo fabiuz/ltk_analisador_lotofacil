@@ -34,12 +34,12 @@ object Form1: TForm1
         Hint = 'Selecione grupos de 2, 3, 4 ou 5 bolas.'
         Top = 10
         Width = 1250
-        ActivePage = tabFrequenciaConcurso
+        ActivePage = tabGerarFiltros
         Align = alClient
         BorderSpacing.Left = 5
         BorderSpacing.Top = 10
         BorderSpacing.Right = 5
-        TabIndex = 10
+        TabIndex = 11
         TabOrder = 0
         OnChange = pageFiltrosChange
         OnResize = pageFiltrosResize
@@ -2130,9 +2130,9 @@ object Form1: TForm1
           ClientHeight = 497
           ClientWidth = 1246
           object btnFiltroGerar: TButton
-            Left = 720
+            Left = 456
             Height = 25
-            Top = 16
+            Top = 72
             Width = 123
             Caption = '&Gerar Filtro'
             OnClick = btnFiltroGerarClick
@@ -2157,11 +2157,11 @@ object Form1: TForm1
               TabOrder = 0
             end
           end
-          object CheckGroup1: TCheckGroup
+          object chkExcluirJogos_LTF_QT: TCheckGroup
             Left = 8
             Height = 112
             Top = 8
-            Width = 176
+            Width = 193
             AutoFill = True
             Caption = 'EXCLUIR JOGOS COM:'
             ChildSizing.LeftRightSpacing = 6
@@ -2173,7 +2173,7 @@ object Form1: TForm1
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
             ClientHeight = 93
-            ClientWidth = 172
+            ClientWidth = 189
             Items.Strings = (
               '15 bolas'
               '16 bolas'
@@ -2185,10 +2185,10 @@ object Form1: TForm1
               0400000002020202
             }
           end
-          object CheckGroup2: TCheckGroup
-            Left = 192
-            Height = 50
-            Top = 8
+          object chkExcluir_Jogos_Ja_Sorteados: TCheckGroup
+            Left = 8
+            Height = 56
+            Top = 128
             Width = 193
             AutoFill = True
             Caption = 'Jogos já sorteados:'
@@ -2200,7 +2200,7 @@ object Form1: TForm1
             ChildSizing.ShrinkVertical = crsScaleChilds
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
-            ClientHeight = 31
+            ClientHeight = 37
             ClientWidth = 189
             Items.Strings = (
               'Excluir jogos já sorteados'
