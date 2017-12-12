@@ -6,8 +6,147 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, DateTimePicker, Forms, Controls, Graphics,
-  Dialogs, ComCtrls, ExtCtrls, StdCtrls, DBGrids, uLotofacilModulo, DB,
-  BufDataset, sqlDb, Grids, ButtonPanel, ValEdit, strings, strUtils, XMLConf;
+  Dialogs, ComCtrls, ExtCtrls, StdCtrls, DBGrids, uLotofacilModulo,
+  uLotofacilSeletor, DB, BufDataset, sqlDb, Grids, ButtonPanel, ValEdit,
+  CheckLst, MaskEdit, Buttons, strings, strUtils, eventlog;
+
+
+// Ao gerar o sql, iremos selecionar estes campos.
+const filtros_campos :array[0..59] of string = (
+      'FILTROS_ID',
+      'DATA',
+      'NV_RPT_ID_ALT',
+      'ACERTOS', 'LTF_ID', 'LTF_QT',
+      'B_1' , 'B_2' , 'B_3' , 'B_4' , 'B_5',
+      'B_6' , 'B_7' , 'B_8' , 'B_9' , 'B_10',
+      'B_11', 'B_12', 'B_13', 'B_14', 'B_15',
+      'B_16', 'B_17', 'B_18',
+      'PAR', 'IMPAR',
+      'EXTERNO', 'INTERNO',
+      'PRIMO', 'NAO_PRIMO',
+      'NOVOS', 'REPETIDOS',
+
+      'HRZ_1', 'HRZ_2', 'HRZ_3', 'HRZ_4', 'HRZ_5',
+      'VRT_1', 'VRT_2', 'VRT_3', 'VRT_4', 'VRT_5',
+      'DG_1', 'DG_2', 'DG_3', 'DG_4', 'DG_5',
+
+      'CONC_SOMA_FRQ_BOLAS',
+
+      'QT_ALT', 'QT_DIF_1', 'QT_DIF_2',
+      'QT_DIF_3', 'QT_DIF_4', 'QT_DIF_5',
+      'QT_DIF_6', 'QT_DIF_7', 'QT_DIF_8',
+      'QT_DIF_9', 'QT_DIF_10', 'QT_DIF_11');
+
+const lotofacil_filtro_campos: array[0..59] of string = (
+  'filtros_id',
+  'data',
+  'novos_repetidos_id_alternado',
+  'acertos',
+  'ltf_id',
+  'ltf_qt',
+  'b_1',
+  'b_2',
+  'b_3',
+  'b_4',
+  'b_5',
+  'b_6',
+  'b_7',
+  'b_8',
+  'b_9',
+  'b_10',
+  'b_11',
+  'b_12',
+  'b_13',
+  'b_14',
+  'b_15',
+  'b_16',
+  'b_17',
+  'b_18',
+
+  'par',
+  'impar',
+
+  'externo',
+  'interno',
+
+  'primo',
+  'nao_primo',
+
+  'novos',
+  'repetidos',
+
+  'hrz_1',
+  'hrz_2',
+  'hrz_3',
+  'hrz_4',
+  'hrz_5',
+
+  'vrt_1',
+  'vrt_2',
+  'vrt_3',
+  'vrt_4',
+  'vrt_5',
+
+  'dg_1',
+  'dg_2',
+  'dg_3',
+  'dg_4',
+  'dg_5',
+
+  'concurso_soma_frequencia_bolas',
+
+  'qt_alt',
+  'qt_dif_1',
+  'qt_dif_2',
+  'qt_dif_3',
+  'qt_dif_4',
+  'qt_dif_5',
+  'qt_dif_6',
+  'qt_dif_7',
+  'qt_dif_8',
+  'qt_dif_9',
+  'qt_dif_10',
+  'qt_dif_11');
+
+const
+   LTF_FILTROS_ID: Integer = 0;
+   LTF_DATA = 1;
+   LTF_NV_RPT_ID_ALT = 2;
+   LTF_ACERTOS = 3;
+   LTF_ID = 4;
+   LTF_QT = 5;
+   B_1 = 6;
+   B_2 = 7;
+   B_3 = 8;
+   B_4 = 9;
+   B_5 = 10;
+   B_6 = 11;
+   B_7 = 12;
+   B_8 = 13;
+   B_9 = 14;
+   B_10 = 15;
+   B_11 = 16;
+   B_12 = 17;
+   B_13 = 18;
+   B_14 = 19;
+   B_15 = 20;
+   B_16 = 21;
+   B_17 = 22;
+   B_18 = 23;
+   LTF_PAR = 24; LTF_IMPAR = 25;
+   LTF_EXTERNO = 26; LTF_INTERNO = 27;
+   LTF_PRIMO = 28; LTF_NAO_PRIMO = 29;
+   LTF_NOVOS = 30 ; LTF_REPETIDOS = 31;
+   HRZ_1 = 32; HRZ_2 = 33; HRZ_3 = 34; HRZ_4 = 35; HRZ_5 = 36;
+   VRT_1 = 37; VRT_2 = 38; VRT_3 = 39; VRT_4 = 40; VRT_5 = 41;
+   DG_1 = 42; DG_2 = 43; DG_3 = 44; DG_4 = 45; DG_5 = 46;
+
+   LTF_QT_ALT = 47;
+   LTF_QT_DIF_1 = 48;
+   LTF_QT_DIF_2 = 49;
+   LTF_QT_DIF_3 = 50;
+   QT_DIF_4 = 51; QT_DIF_5 = 52; QT_DIF_6 = 53; QT_DIF_7 = 54;
+   QT_DIF_8 = 55; QT_DIF_9 = 56; QT_DIF_10 = 57; QT_DIF_11 = 58;
 
 type
 
@@ -32,7 +171,14 @@ type
     btnGrupo2BolasDesmarcarTodos34 : TButton;
     btnGrupo2BolasDesmarcarTodos35 : TButton;
     btnGrupo2BolasDesmarcarTodos36 : TButton;
+    btnGrupo2BolasDesmarcarTodos37 : TButton;
+    btnGrupo2BolasDesmarcarTodos38 : TButton;
+    btnGrupo2BolasDesmarcarTodos39 : TButton;
     btnGrupo2BolasDesmarcarTodos4 : TButton;
+    btnGrupo2BolasDesmarcarTodos40 : TButton;
+    btnGrupo2BolasDesmarcarTodos41 : TButton;
+    btnGrupo2BolasDesmarcarTodos42 : TButton;
+    btnGrupo2BolasDesmarcarTodos43 : TButton;
     btnGrupo2BolasDesmarcarTodos5 : TButton;
     btnGrupo2BolasDesmarcarTodos6 : TButton;
     btnGrupo2BolasDesmarcarTodos7 : TButton;
@@ -53,7 +199,14 @@ type
     btnGrupo2BolasMarcarTodos34 : TButton;
     btnGrupo2BolasMarcarTodos35 : TButton;
     btnGrupo2BolasMarcarTodos36 : TButton;
+    btnGrupo2BolasMarcarTodos37 : TButton;
+    btnGrupo2BolasMarcarTodos38 : TButton;
+    btnGrupo2BolasMarcarTodos39 : TButton;
     btnGrupo2BolasMarcarTodos4 : TButton;
+    btnGrupo2BolasMarcarTodos40 : TButton;
+    btnGrupo2BolasMarcarTodos41 : TButton;
+    btnGrupo2BolasMarcarTodos42 : TButton;
+    btnGrupo2BolasMarcarTodos43 : TButton;
     btnGrupo2BolasMarcarTodos5 : TButton;
     btnGrupo2BolasMarcarTodos6 : TButton;
     btnGrupo2BolasMarcarTodos7 : TButton;
@@ -64,8 +217,12 @@ type
     btnGrupo2BolasDesmarcarTodos : TButton;
     btnGrupo2BolasMarcarTodos : TButton;
     btnAtualizarNovosRepetidos : TButton;
+    btnVerificarAcerto : TButton;
+    btnNovosFiltros : TButton;
+    btnSelecionar : TButton;
     chkExcluirJogos_LTF_QT : TCheckGroup;
     chkExcluir_Jogos_Ja_Sorteados : TCheckGroup;
+    chkExibirCampos : TCheckListBox;
     cmbConcursoFrequenciaNaoSair : TComboBox;
     cmbConcursoFrequenciaSair : TComboBox;
     cmbConcursoFrequenciaTotalSair : TComboBox;
@@ -90,6 +247,9 @@ type
     cmbFrequenciaMinimoDeixouDeSair : TComboBox;
     cmbFrequenciaMinimoSair1 : TComboBox;
     cmbFrequenciaMinimoSair2 : TComboBox;
+    cmbFiltroData : TComboBox;
+    cmbFiltroHora : TComboBox;
+    cmbConcursoVerificarAcerto : TComboBox;
     dtpConcursoData : TDateTimePicker;
     grGrupo3Bolas : TGroupBox;
     grGrupo2Bolas1 : TGroupBox;
@@ -108,9 +268,21 @@ type
     GroupBox21 : TGroupBox;
     GroupBox22 : TGroupBox;
     GroupBox23 : TGroupBox;
+    GroupBox24 : TGroupBox;
+    GroupBox25 : TGroupBox;
+    GroupBox26 : TGroupBox;
     GroupBox7 : TGroupBox;
     GroupBox8 : TGroupBox;
     grpConcursoFrequenciaTotalNaoSair : TGroupBox;
+    grpDiferenca_Qt_1 : TGroupBox;
+    grpDiferenca_Qt_1_Qt_2 : TGroupBox;
+    grpDiferenca_qt_alt : TGroupBox;
+    grpDiferenca_qt_alt1 : TGroupBox;
+    grpDiferenca_qt_alt2 : TGroupBox;
+    grpDiferenca_qt_alt3 : TGroupBox;
+    grpDiferenca_qt_alt4 : TGroupBox;
+    grpFiltroData : TGroupBox;
+    grpFiltroHora : TGroupBox;
     grpFrequenciaBolaNaoSair : TGroupBox;
     grpConcursoFrequenciaTotalSair : TGroupBox;
     grpFrequenciaDeixouDeSair : TGroupBox;
@@ -133,22 +305,15 @@ type
     grpFrequencialSair : TGroupBox;
     grpPrimo15Bolas : TGroupBox;
     grpFrequenciaInicio : TGroupBox;
-    grpBolasFixas15Bolas : TGroupBox;
     grpBolasB1_15Bolas : TGroupBox;
     grpColunaB1_B15_15Bolas : TGroupBox;
     grpColunaB1_B8_B15_15Bolas : TGroupBox;
-    grpBolasFixas18Bolas : TGroupBox;
-    grpBolasFixas17Bolas : TGroupBox;
-    grpBolasFixas16Bolas : TGroupBox;
     grpColunaB1_B4_B8_B12_B15_15Bolas : TGroupBox;
     grpExternoInterno15Bolas2 : TGroupBox;
     grpExternoInterno15Bolas3 : TGroupBox;
     grpExternoInterno16Bolas2 : TGroupBox;
-    grpExternoInterno16Bolas3 : TGroupBox;
     grpExternoInterno17Bolas2 : TGroupBox;
-    grpExternoInterno17Bolas3 : TGroupBox;
     grpExternoInterno18Bolas2 : TGroupBox;
-    grpExternoInterno18Bolas3 : TGroupBox;
     grpFrequenciaFim : TGroupBox;
     grpFrequenciaInicio1 : TGroupBox;
     grpNovosRepetidos16Bolas1 : TGroupBox;
@@ -163,18 +328,27 @@ type
     grpExternoInterno15Bolas : TGroupBox;
     edConcurso : TLabeledEdit;
     grpFrequenciaBolas : TGroupBox;
+    grpSelecionarCampos : TGroupBox;
     Label3 : TLabel;
     Label4 : TLabel;
     Label5 : TLabel;
     Label6 : TLabel;
     lblNovosRepetidosUltimaAtualizacao : TLabel;
+    mskTotalRegistros : TMaskEdit;
     Memo1 : TMemo;
     mmFiltroSql : TMemo;
     PageControl1: TPageControl;
+    PageControl4 : TPageControl;
     pageFiltros: TPageControl;
     PageControl3 : TPageControl;
     Panel1 : TPanel;
     Panel2 : TPanel;
+    Panel3 : TPanel;
+    Panel4 : TPanel;
+    pnGrupo2Bolas48 : TPanel;
+    pnGrupo2Bolas49 : TPanel;
+    pnVerificarAcertos : TPanel;
+    pnExibirCampos : TPanel;
     pnFrequenciaNaoSair : TPanel;
     pnFrequenciaNaoSair1 : TPanel;
     pnFrequenciaNaoSair2 : TPanel;
@@ -210,10 +384,21 @@ type
     pnGrupo2Bolas40 : TPanel;
     pnGrupo2Bolas41 : TPanel;
     pnGrupo2Bolas42 : TPanel;
+    pnGrupo2Bolas43 : TPanel;
+    pnGrupo2Bolas44 : TPanel;
+    pnGrupo2Bolas45 : TPanel;
+    pnGrupo2Bolas46 : TPanel;
+    pnGrupo2Bolas47 : TPanel;
     pnGrupo2Bolas5 : TPanel;
     pnGrupo2Bolas6 : TPanel;
     pnGrupo2Bolas7 : TPanel;
-    sgrBolasDevemSair : TStringGrid;
+    sgrDiferenca_Qt_1 : TStringGrid;
+    sgrDiferenca_Qt_1_Qt_2 : TStringGrid;
+    sgrDiferenca_qt_alt1 : TStringGrid;
+    sgrLotofacilSoma : TStringGrid;
+    sgrDiferenca_qt_alt_1 : TStringGrid;
+    sgrDiferenca_qt_alt : TStringGrid;
+    sgrDiferenca_qt_alt_2 : TStringGrid;
     sgrFrequenciaTotalSair : TStringGrid;
     sgrFrequenciaTotalNaoSair : TStringGrid;
     sgrFrequenciaBolasNaoSair : TStringGrid;
@@ -224,9 +409,6 @@ type
     sgrColunaB1_15Bolas : TStringGrid;
     sgrColunaB1_B15_15Bolas : TStringGrid;
     sgrColunaB1_B8_B15_15Bolas : TStringGrid;
-    sgrBolasFixas18Bolas : TStringGrid;
-    sgrBolasFixas17Bolas : TStringGrid;
-    sgrBolasNaoDevemSair : TStringGrid;
     sgrColunaB1_B4_B8_B12_B15_15Bolas : TStringGrid;
     sgrDiagonal15Bolas : TStringGrid;
     sgrDiagonal16Bolas : TStringGrid;
@@ -235,11 +417,8 @@ type
     sgrExternoInterno15Bolas2 : TStringGrid;
     sgrExternoInterno15Bolas3 : TStringGrid;
     sgrExternoInterno16Bolas2 : TStringGrid;
-    sgrExternoInterno16Bolas3 : TStringGrid;
     sgrExternoInterno17Bolas2 : TStringGrid;
-    sgrExternoInterno17Bolas3 : TStringGrid;
     sgrExternoInterno18Bolas2 : TStringGrid;
-    sgrExternoInterno18Bolas3 : TStringGrid;
     sgrGrupo2Bolas : TStringGrid;
     sgrGrupo4Bolas : TStringGrid;
     sgrGrupo5Bolas : TStringGrid;
@@ -255,6 +434,8 @@ type
     sgrFrequencia : TStringGrid;
     sgrFrequenciaBolasSair : TStringGrid;
     sheetFiltro: TTabSheet;
+    sgrFiltros : TStringGrid;
+    sgrVerificarAcertos : TStringGrid;
     tabBolasNasColunas: TTabSheet;
     tabHorizontal: TTabSheet;
     tabFrequencia: TTabSheet;
@@ -262,6 +443,7 @@ type
     tabGrupos : TTabSheet;
     TabSheet1 : TTabSheet;
     tabGerarFiltros : TTabSheet;
+    tabLotofacilSoma : TTabSheet;
     TabSheet2 : TTabSheet;
     TabSheet3 : TTabSheet;
     tabBanco_de_dados: TTabSheet;
@@ -271,11 +453,14 @@ type
     TabSheet6: TTabSheet;
     tabParImpar: TTabSheet;
     tabExternoInterno: TTabSheet;
-    tabBolas: TTabSheet;
+    tabDiferencaEntreBolas: TTabSheet;
     tabBolasNasColunas15Bolas : TTabSheet;
     tabDiagonal : TTabSheet;
     tabPrimo : TTabSheet;
     TabSheet7 : TTabSheet;
+    tabDiferenca_QT : TTabSheet;
+    TabSheet8 : TTabSheet;
+    TabSheet9 : TTabSheet;
     tabVertical : TTabSheet;
     tg1 : TToggleBox;
     tg10 : TToggleBox;
@@ -302,6 +487,9 @@ type
     tg7 : TToggleBox;
     tg8 : TToggleBox;
     tg9 : TToggleBox;
+    tgExibirCampos : TToggleBox;
+    tgVerificarAcertos : TToggleBox;
+    UpDown1 : TUpDown;
     ValueListEditor1 : TValueListEditor;
     procedure btnAtualizarNovosRepetidosClick(Sender : TObject);
     procedure btnFiltroGerarClick(Sender : TObject);
@@ -310,10 +498,15 @@ type
     procedure btnLotofacilResultadoExcluirClick(Sender : TObject);
     procedure btnLotofacilResultadoInserirClick(Sender : TObject);
     procedure btnGrupo2BolasDesmarcarTodosClick(Sender : TObject);
+    procedure btnNovosFiltrosClick(Sender : TObject);
+    procedure btnSelecionarClick(Sender : TObject);
+    procedure btnVerificarAcertoClick(Sender : TObject);
     procedure CheckBox1Change(Sender : TObject);
+    procedure chkExibirCamposClickCheck(Sender : TObject);
     procedure cmbConcursoFrequenciaNaoSairChange(Sender : TObject);
     procedure cmbConcursoFrequenciaSairChange(Sender : TObject);
     procedure cmbConcursoFrequenciaTotalSairChange(Sender : TObject);
+    procedure cmbFiltroDataChange(Sender : TObject);
     procedure cmbFrequenciaFimChange(Sender : TObject);
     procedure cmbFrequenciaInicioChange(Sender : TObject);
     procedure edConcursoKeyDown(Sender : TObject; var Key : Word;
@@ -394,24 +587,35 @@ type
     procedure tabDiagonalResize(Sender : TObject);
     procedure sheetFiltroResize(Sender : TObject);
     procedure tgBolaChange(Sender : TObject);
+    procedure tgExibirCamposChange(Sender : TObject);
+    procedure tgVerificarAcertosChange(Sender : TObject);
     procedure ValueListEditor1Click(Sender : TObject);
   private
     procedure AlterarMarcador(Sender : TObject; aCol, aRow : Integer;
       var CanSelect : Boolean);
+    procedure AtivarDesativarControles;
     procedure AtualizarColuna_B(objControle : TStringGrid);
     procedure AtualizarControleFrequencia(objControle : TStringGrid);
     procedure AtualizarControleFrequenciaMinimoMaximo;
     procedure AtualizarControleGrupo(objControle : TStringGrid);
+    procedure AtualizarFiltroData(strWhere : string);
     procedure AtualizarFrequencia;
     procedure AtualizarFrequenciaBolas;
     procedure AtualizarNovosRepetidos(concurso : Integer);
+    procedure Atualizar_Controle_sgrFiltro(strWhere_Data_Hora : string);
     procedure CarregarColuna_B(objControle : TStringGrid; strSql : string);
     procedure CarregarColuna_B;
     procedure CarregarConcursoFrequenciaTotalSair;
     procedure CarregarConcursos;
+    procedure CarregarControleDiferencaEntreBolas_qt_1;
+    procedure CarregarControleDiferencaEntreBolas_Qt_1_Qt_2(strWhere : string);
+    procedure CarregarControleDiferenca_qt_alt_1(strWhere : string);
+    procedure CarregarControleDiferenca_qt_alt_2(strWhere : string);
     procedure CarregarControlesTG;
     procedure CarregarDiagonal;
     procedure CarregarDiagonal(objControle : TStringGrid);
+    procedure CarregarControleDiferenca_qt_alt;
+    procedure CarregarDiferencaEntreBolas;
     //procedure CarregarExterno_Interno;
     procedure CarregarFrequencia;
     procedure CarregarFrequencia(strSqlWhere : string);
@@ -421,12 +625,19 @@ type
     procedure CarregarGrupo3Bolas(strSqlWhere : string);
     procedure CarregarGrupo4Bolas(strSqlWhere : string);
     procedure CarregarGrupo5Bolas(strSqlWhere : string);
+    procedure CarregarControleLotofacilSoma;
     procedure CarregarNovosRepetidosUltimaAtualizacao;
     procedure CarregarPrimo;
     procedure CarregarPrimo(objControle : TStringGrid);
     procedure CarregarTodosControles;
+    procedure Carregar_Controle_sgrFiltro(strWhere_Data_Hora : string);
     procedure ConfigurarControleConcursoFrequenciaTotalSair(
       objControle : TStringGrid);
+    procedure ConfigurarControleDiferencaEntreBolas_qt_1;
+    procedure ConfigurarControleDiferencaEntreBolas_qt_1_qt_2;
+    procedure ConfigurarControleDiferenca_qt_alt;
+    procedure ConfigurarControleDiferenca_qt_alt_1;
+    procedure ConfigurarControleDiferenca_qt_alt_2;
     procedure ConfigurarControleFrequenciaBolas(objControle : TStringGrid);
     procedure ConfigurarControleGrupo2Bolas;
     procedure ConfigurarControleDiagonal(objControle : TStringGrid);
@@ -435,6 +646,7 @@ type
     procedure ConfigurarControleGrupo3Bolas;
     procedure ConfigurarControleGrupo4Bolas;
     procedure ConfigurarControleGrupo5Bolas;
+    procedure ConfigurarControleLotofacilSoma;
     procedure ConfigurarControlesBolas_B(objControle : TStringGrid);
     procedure CarregarExternoInterno;
     procedure CarregarExternoInterno(objControle : TStringGrid);
@@ -454,15 +666,22 @@ type
     procedure ConfigurarControlesExternoInterno(objControle : TStringGrid);
     procedure ConfigurarControlesPrimo(objControle : TStringGrid);
     procedure ConfigurarFrequenciaPorConcurso(objControle : TStringGrid);
+    procedure Configurar_Controle_sgrFiltro;
+    procedure Controle_Diferenca_entre_Bolas_alterou(objControle : TStringGrid);
+    procedure Exibir_Ocultar_Filtro_Campos;
     function GerarSqlColunaB : string;
     procedure GerarSqlColuna_B(objControle : TStringGrid);
+    function GerarSqlDiferenca_qt_alt : string;
+    function GerarSqlDiferenca_qt_dif : string;
     function GerarSqlExternoInterno : string;
     function GerarSqlFrequencia : string;
     procedure GerarSqlGrupo(sqlGrupo : TStringList);
+    function GerarSqlLotofacilSoma : string;
     function GerarSqlNovosRepetidos : string;
     function GerarSqlParImpar : string;
     function GerarSqlPrimo : string;
     procedure Iniciar_Banco_de_Dados;
+    procedure InserirNovoFiltro(sqlFiltro : TStringList);
     procedure MarcarGrupo2Bolas;
     procedure RedimensionarControleDiagonal;
     //procedure tgBolaChange(Sender : TObject);
@@ -482,6 +701,7 @@ type
     concurso_frequencia_sair: array[1..25] of Integer;
     concurso_frequencia_nao_sair: array[1..25] of Integer;
 
+    filtro_campos_selecionados: array[0..59] of boolean;
 
   end;
 
@@ -500,6 +720,51 @@ var
 procedure TForm1.FormCreate(Sender: TObject);
 begin
      CarregarTodosControles;
+     AtivarDesativarControles;
+end;
+
+procedure TForm1.AtivarDesativarControles;
+begin
+     pnExibirCampos.Visible := false;
+     tgExibirCampos.Checked := false;
+
+     pnVerificarAcertos.Visible := false;
+     tgVerificarAcertos.Checked := false;
+
+     Exibir_Ocultar_Filtro_Campos;
+
+     tabFrequencia.Visible := false;
+
+
+end;
+
+procedure TForm1.Exibir_Ocultar_Filtro_Campos;
+var
+  uA : Integer;
+begin
+    // Marcar quais campos devem aparecer exibidos.
+    filtro_campos_selecionados[LTF_ID] := true;
+    filtro_campos_selecionados[LTF_QT] := true;
+    filtro_campos_selecionados[LTF_ACERTOS] := true;
+
+    for uA := B_1 to B_18 do begin
+     filtro_campos_selecionados[uA] := true;
+    end;
+
+    filtro_campos_selecionados[LTF_QT_ALT] := true;
+    filtro_campos_selecionados[LTF_QT_DIF_1] := true;
+    filtro_campos_selecionados[LTF_QT_DIF_2] := true;
+    filtro_campos_selecionados[LTF_QT_DIF_3] := true;
+
+    // Iniciar controle 'chkExibirCampos'
+    chkExibirCampos.Items.Clear;
+    for uA := 0 to High(filtro_campos_selecionados) do begin
+        chkExibirCampos.Items.Add(filtros_campos[uA]);
+    end;
+
+    for uA := 0 to High(filtro_campos_selecionados) do begin
+        chkExibirCampos.Checked[uA] := filtro_campos_selecionados[uA];
+    end;
 end;
 
 procedure TForm1.Iniciar_Banco_de_Dados;
@@ -507,8 +772,12 @@ begin
      //dmLotofacil.dbLotofacil.;
 end;
 
+{
+ Este procedure atualiza todos os controles, ao iniciar, esta procedure é chamada.
+}
 procedure TForm1.CarregarTodosControles;
 begin
+  dmLotofacil := nil;
   CarregarNovosRepetidos;
   CarregarParImpar;
   CarregarExternoInterno;
@@ -525,6 +794,749 @@ begin
   CarregarFrequenciaPorConcurso(sgrFrequenciaBolasNaoSair);
 
   CarregarConcursoFrequenciaTotalSair;
+
+  CarregarDiferencaEntreBolas;
+  CarregarControleDiferenca_qt_alt;
+
+  CarregarControleLotofacilSoma;
+end;
+
+procedure TForm1.CarregarControleLotofacilSoma;
+var
+  sqlRegistros: TSqlQuery;
+  uLinha, qt_registros: Integer;
+begin
+  if dmLotofacil = nil then
+     dmLotofacil := tDmLotofacil.Create(Self);
+
+  sqlRegistros := TSqlQuery.Create(Self);
+  sqlRegistros.UniDirectional := false;
+  sqlRegistros.Close;
+  sqlRegistros.DataBase := dmLotofacil.pgLTK;
+  sqlRegistros.SQL.Clear;
+  sqlRegistros.Sql.Add('Select bola_soma, ltf_qt_vezes, res_qt_vezes');
+  sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_resultado_soma');
+  sqlRegistros.Sql.Add('where ltf_qt = 15');
+  sqlRegistros.Sql.Add('order by res_qt_vezes desc, ltf_qt_vezes desc');
+  sqlRegistros.Open;
+
+  if sqlRegistros.Eof then begin
+    sgrLotofacilSoma.Columns.Clear;
+    sgrLotofacilSoma.Columns.Add;
+    sgrLotofacilSoma.RowCount := 1;
+    sgrLotofacilSoma.Cells[0,0] := 'Nenhum registro localizado';
+    sgrLotofacilSoma.AutoSizeColumns;
+    exit;
+  end;
+
+  // Pega a quantidade de registros.
+  sqlRegistros.First;
+  sqlRegistros.Last;
+  qt_registros := sqlRegistros.RecordCount;
+
+  ConfigurarControleLotofacilSoma;
+  sgrLotofacilSoma.RowCount := qt_registros + 1;
+
+  uLinha := 1;
+  sqlRegistros.First;
+  while (not sqlRegistros.EOF) and (qt_registros > 0) do begin
+    sgrLotofacilSoma.Cells[0, uLinha] := sqlRegistros.FieldByName('bola_soma').AsString;
+    sgrLotofacilSoma.Cells[1, uLinha] := sqlRegistros.FieldByName('ltf_qt_vezes').AsString;
+    sgrLotofacilSoma.Cells[2, uLinha] := sqlRegistros.FieldByName('res_qt_vezes').AsString;
+    sgrLotofacilSoma.Cells[3, uLinha] := '0';
+
+    Dec(qt_registros);
+    sqlRegistros.Next;
+    Inc(uLinha);
+  end;
+
+  sqlRegistros.Close;
+
+  sgrLotofacilSoma.AutoSizeColumns;
+
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+end;
+
+procedure TForm1.ConfigurarControleLotofacilSoma;
+const
+   campos: array[0..3] of string = ('bola_soma', 'ltf_qt_vezes', 'res_qt', 'Marcar');
+var
+  coluna_atual : TGridColumn;
+  ultimo_indice , uA: Integer;
+begin
+  ultimo_indice := High(campos);
+
+  sgrLotofacilSoma.Columns.Clear;
+  for uA := 0 to ultimo_indice do begin
+      coluna_atual := sgrLotofacilSoma.Columns.Add;
+      coluna_atual.Title.Caption := campos[uA];
+      coluna_atual.Title.Alignment := TAlignment.taCenter;
+  end;
+  // A última coluna, será um checkbox, pois iremos marcar.
+  sgrLotofacilSoma.Columns[ultimo_indice].ButtonStyle := cbsCheckboxColumn;
+
+  // A primeira linha terá o título.
+  sgrLotofacilSoma.FixedRows := 1;
+
+end;
+
+procedure TForm1.CarregarControleDiferenca_qt_alt_2(strWhere: string);
+var
+  strSql: TStringList;
+  sqlLotofacil: TSqlQuery;
+  uLinha , qt_registros: Integer;
+begin
+  if strWhere = '' then begin
+    sgrDiferenca_qt_alt_2.Columns.Clear;
+    exit;
+  end;
+
+  if dmLotofacil = nil then
+     dmLotofacil := TdmLotofacil.Create(Self);
+
+  strSql := TStringList.Create;
+  strSql.Add('Select qt_alt, qt_dif_1, qt_dif_2, qt_cmb, ltf_qt, res_qt');
+  strSql.Add('from lotofacil.v_lotofacil_resultado_diferenca_qt_alt_2');
+  strSql.Add('where ' + strWhere);
+  strSql.Add('order by res_qt desc, ltf_qt desc');
+
+  sqlLotofacil := dmLotofacil.sqlLotofacil;
+  sqlLotofacil.Close;
+  sqlLotofacil.DataBase := dmLotofacil.pgLtk;
+  sqlLotofacil.SQL.Text := strSql.Text;
+  // Na linha abaixo, se uniDirectional, ficar true, sempre vai retornar
+  // a propriedade RecordCount o valor 1.
+  sqlLotofacil.UniDirectional := false;
+  sqlLotofacil.Prepare;
+  sqlLotofacil.Open;
+
+  ConfigurarControleDiferenca_qt_alt_2;
+
+  qt_registros := 0;
+  sqlLotofacil.First;
+  while not sqlLotofacil.Eof do begin
+    Inc(qt_Registros);
+    sqlLotofacil.Next;
+  end;
+
+  if qt_Registros = 0 then begin
+    sgrDiferenca_qt_alt_2.Columns.Clear;
+    sgrDiferenca_qt_alt_2.Columns.Add;
+    sgrDiferenca_qt_alt_2.FixedRows := 0;
+    sgrDiferenca_qt_alt_2.RowCount := 1;
+    sgrDiferenca_qt_alt_2.Cells[0, 0] := 'Erro, Nao há registros';
+    sgrDiferenca_qt_alt_2.AutoSizeColumns;
+    Exit;
+  end;
+
+  // Define o número de linhas, conforme a quantidade de registro
+  // Haverá uma linha mais por causa do título.
+  sgrDiferenca_qt_alt_2.RowCount := qt_Registros + 1;
+
+  // Percorrer registro
+  uLinha := 1;
+  sqlLotofacil.First;
+  while (not sqlLotofacil.EOF) and (qt_Registros > 0) do begin
+    sgrDiferenca_qt_alt_2.Cells[0, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_alt').AsInteger);
+    sgrDiferenca_qt_alt_2.Cells[1, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_dif_1').AsInteger);
+    sgrDiferenca_qt_alt_2.Cells[2, uLinha] := sqlLotofacil.FieldByName('qt_dif_2').AsString;
+    sgrDiferenca_qt_alt_2.Cells[3, uLinha] := sqlLotofacil.FieldByName('qt_cmb').AsString;
+    sgrDiferenca_qt_alt_2.Cells[4, uLinha] := sqlLotofacil.FieldByName('ltf_qt').AsString;
+    sgrDiferenca_qt_alt_2.Cells[5, uLinha] := IntToSTr(sqlLotofacil.FieldByName('res_qt').AsInteger);
+    sgrDiferenca_qt_alt_2.Cells[6, uLinha] := '0';
+
+    Inc(uLinha);
+    Dec(qt_Registros);
+
+    sqlLotofacil.Next;
+  end;
+  sqlLotofacil.Close;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+  sgrDiferenca_qt_alt_2.AutoSizeColumns;
+end;
+
+procedure TForm1.ConfigurarControleDiferenca_qt_alt_2;
+var
+  qtColunas, indice_ultima_coluna, uA: Integer;
+  campos_do_controle: array[0..6] of string = (
+                      'qt_alt',
+                      'qt_dif_1',
+                      'qt_dif_2',
+                      'qt_cmb',
+                      'ltf_qt',
+                      'res_qt',
+                      'Marcar');
+  coluna_atual : TGridColumn;
+begin
+  qtColunas := Length(campos_do_controle);
+  indice_ultima_coluna := High(campos_do_controle);
+
+  // Cria os campos do controle.
+  sgrDiferenca_qt_alt_2.Columns.Clear;
+  for uA := 0 to indice_ultima_coluna do begin
+        coluna_atual := sgrDiferenca_qt_alt_2.Columns.Add;
+        coluna_atual.title.Alignment := TAlignment.taCenter;
+        coluna_atual.Alignment := TAlignment.taCenter;
+        coluna_atual.title.caption := campos_do_controle[uA];
+        sgrDiferenca_qt_alt_2.cells[uA, 0] := campos_do_controle[uA];
+  end;
+  sgrDiferenca_qt_alt_2.RowCount := 1;
+
+  // Ocultar a coluna 3, pois, ela é uma combinação dos campos 'qt_alt' e 'qt_dif_1' e 'qt_dif_2'
+  sgrDiferenca_qt_alt_2.Columns[3].Visible := false;
+
+  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
+  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  sgrDiferenca_qt_alt_2.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+
+  // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
+  sgrDiferenca_qt_alt_2.FixedCols := 0;
+  sgrDiferenca_qt_alt_2.FixedRows := 1;
+end;
+
+
+procedure TForm1.CarregarControleDiferenca_qt_alt_1(strWhere: string);
+var
+  strSql: TStringList;
+  sqlLotofacil: TSqlQuery;
+  uLinha , qt_registros: Integer;
+begin
+  if strWhere = '' then begin
+    sgrDiferenca_qt_alt_1.Columns.Clear;
+    exit;
+  end;
+
+  if dmLotofacil = nil then
+     dmLotofacil := TdmLotofacil.Create(Self);
+
+  strSql := TStringList.Create;
+  strSql.Add('Select qt_alt, qt_dif_1, qt_cmb, ltf_qt, res_qt');
+  strSql.Add('from lotofacil.v_lotofacil_resultado_diferenca_qt_alt_1');
+  strSql.Add('where ' + strWhere);
+  strSql.Add('order by res_qt desc, ltf_qt desc');
+
+  sqlLotofacil := dmLotofacil.sqlLotofacil;
+  sqlLotofacil.Close;
+  sqlLotofacil.DataBase := dmLotofacil.pgLtk;
+  sqlLotofacil.SQL.Text := strSql.Text;
+  // Na linha abaixo, se uniDirectional, ficar true, sempre vai retornar
+  // a propriedade RecordCount o valor 1.
+  sqlLotofacil.UniDirectional := false;
+  sqlLotofacil.Prepare;
+  sqlLotofacil.Open;
+
+  ConfigurarControleDiferenca_qt_alt_1;
+
+  qt_registros := 0;
+  sqlLotofacil.First;
+  while not sqlLotofacil.Eof do begin
+    Inc(qt_Registros);
+    sqlLotofacil.Next;
+  end;
+
+  if qt_Registros = 0 then begin
+    sgrDiferenca_qt_alt_1.Columns.Clear;
+    sgrDiferenca_qt_alt_1.Columns.Add;
+    sgrDiferenca_qt_alt_1.FixedRows := 0;
+    sgrDiferenca_qt_alt_1.RowCount := 1;
+    sgrDiferenca_qt_alt_1.Cells[0, 0] := 'Erro, Nao há registros';
+    sgrDiferenca_qt_alt_1.AutoSizeColumns;
+    Exit;
+  end;
+
+  // Define o número de linhas, conforme a quantidade de registro
+  // Haverá uma linha mais por causa do título.
+  sgrDiferenca_qt_alt_1.RowCount := qt_Registros + 1;
+
+  // Percorrer registro
+  uLinha := 1;
+  sqlLotofacil.First;
+  while (not sqlLotofacil.EOF) and (qt_Registros > 0) do begin
+    sgrDiferenca_qt_alt_1.Cells[0, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_alt').AsInteger);
+    sgrDiferenca_qt_alt_1.Cells[1, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_dif_1').AsInteger);
+    sgrDiferenca_qt_alt_1.Cells[2, uLinha] := sqlLotofacil.FieldByName('qt_cmb').AsString;
+    sgrDiferenca_qt_alt_1.Cells[3, uLinha] := sqlLotofacil.FieldByName('ltf_qt').AsString;
+    sgrDiferenca_qt_alt_1.Cells[4, uLinha] := IntToSTr(sqlLotofacil.FieldByName('res_qt').AsInteger);
+    sgrDiferenca_qt_alt_1.Cells[5, uLinha] := '0';
+
+    Inc(uLinha);
+    Dec(qt_Registros);
+
+    sqlLotofacil.Next;
+  end;
+  sqlLotofacil.Close;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+  sgrDiferenca_qt_alt_1.AutoSizeColumns;
+end;
+
+procedure TForm1.ConfigurarControleDiferenca_qt_alt_1;
+var
+  qtColunas, indice_ultima_coluna, uA: Integer;
+  campos_do_controle: array[0..5] of string = (
+                      'qt_alt',
+                      'qt_dif_1',
+                      'qt_cmb',
+                      'ltf_qt',
+                      'res_qt',
+                      'Marcar');
+  coluna_atual : TGridColumn;
+begin
+
+  sgrDiferenca_qt_alt_1.Columns.Clear;
+  indice_ultima_coluna := High(campos_do_controle);
+  for uA := 0 to indice_ultima_Coluna do begin
+      coluna_atual := sgrDiferenca_qt_alt_1.Columns.Add;
+      coluna_atual.title.Alignment := TAlignment.taCenter;
+      coluna_atual.Alignment := TAlignment.taCenter;
+      coluna_atual.title.Caption := campos_do_controle[uA];
+      sgrDiferenca_qt_alt_1.RowCount := 1;
+      sgrDiferenca_qt_alt_1.Cells[uA, 0] := campos_do_controle[uA];
+  end;
+  // Ocultar a coluna 2, pois, ela é uma combinação dos campos 'qt_alt' e 'qt_dif_1'
+  sgrDiferenca_qt_alt_1.Columns[2].Visible := false;
+
+  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
+  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  sgrDiferenca_qt_alt_1.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+
+  // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
+  sgrDiferenca_qt_alt_1.FixedCols := 0;
+  sgrDiferenca_qt_alt_1.FixedRows := 1;
+end;
+
+
+
+
+procedure TForm1.CarregarControleDiferenca_qt_alt;
+var
+  strSql: TStringList;
+  sqlLotofacil: TSqlQuery;
+  uLinha , qt_registros: Integer;
+begin
+  if dmLotofacil = nil then
+     dmLotofacil := TdmLotofacil.Create(Self);
+
+  strSql := TStringList.Create;
+  strSql.Add('Select qt_alt, ltf_qt, res_qt');
+  strSql.Add('from lotofacil.v_lotofacil_resultado_diferenca_qt_alt');
+  strSql.Add('order by res_qt desc, ltf_qt desc');
+
+  sqlLotofacil := dmLotofacil.sqlLotofacil;
+  sqlLotofacil.Close;
+  sqlLotofacil.DataBase := dmLotofacil.pgLtk;
+  sqlLotofacil.SQL.Text := strSql.Text;
+  // Na linha abaixo, se uniDirectional, ficar true, sempre vai retornar
+  // a propriedade RecordCount o valor 1.
+  sqlLotofacil.UniDirectional := false;
+  sqlLotofacil.Prepare;
+  sqlLotofacil.Open;
+
+  ConfigurarControleDiferenca_qt_alt;
+
+
+  sqlLotofacil.First;
+  sqlLotofacil.Last;
+  qt_registros := sqlLotofacil.RecordCount;
+
+  if qt_Registros = 0 then begin
+    sgrDiferenca_qt_alt.Columns.Clear;
+    sgrDiferenca_qt_alt.Columns.Add;
+    sgrDiferenca_qt_alt.FixedRows := 0;
+    sgrDiferenca_qt_alt.RowCount := 1;
+    sgrDiferenca_qt_alt.Cells[0, 0] := 'Erro, Nao há registros';
+    sgrDiferenca_qt_alt.AutoSizeColumns;
+    Exit;
+  end;
+
+  // Define o número de linhas, conforme a quantidade de registro
+  // Haverá uma linha mais por causa do título.
+  sgrDiferenca_qt_alt.RowCount := qt_Registros + 1;
+
+  // Percorrer registro
+  uLinha := 1;
+  sqlLotofacil.First;
+  while (not sqlLotofacil.EOF) and (qt_Registros > 0) do begin
+    sgrDiferenca_qt_alt.Cells[0, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_alt').AsInteger);
+    sgrDiferenca_qt_alt.Cells[1, uLinha] := sqlLotofacil.FieldByName('ltf_qt').AsString;
+    sgrDiferenca_qt_alt.Cells[2, uLinha] := IntToSTr(sqlLotofacil.FieldByName('res_qt').AsInteger);
+    sgrDiferenca_qt_alt.Cells[3, uLinha] := '0';
+
+    Inc(uLinha);
+    Dec(qt_Registros);
+
+    sqlLotofacil.Next;
+  end;
+  sqlLotofacil.Close;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+  sgrDiferenca_qt_alt.AutoSizeColumns;
+end;
+
+procedure TForm1.ConfigurarControleDiferenca_qt_alt;
+var
+  qtColunas, indice_ultima_coluna, uA: Integer;
+  campos_do_controle: array[0..3] of string = (
+                      'qt_alt',
+                      'ltf_qt',
+                      'res_qt',
+                      'Marcar');
+begin
+  qtColunas := Length(campos_do_controle);
+
+  // Cria os campos do controle.
+  sgrDiferenca_qt_alt.Columns.Clear;
+  while qtColunas > 0 do begin
+        sgrDiferenca_qt_alt.Columns.Add;
+        Dec(qtColunas);
+  end;
+  sgrDiferenca_qt_alt.RowCount := 1;
+
+  indice_ultima_coluna := High(campos_do_controle);
+
+  for uA := 0 to indice_ultima_Coluna do begin
+    sgrDiferenca_qt_alt.Columns[uA].title.Alignment := TAlignment.taCenter;
+    sgrDiferenca_qt_alt.Columns[uA].Alignment := TAlignment.taCenter;
+    sgrDiferenca_qt_alt.Columns[uA].title.Caption := campos_do_controle[uA];
+    sgrDiferenca_qt_alt.Cells[uA, 0] := campos_do_controle[uA];
+  end;
+
+  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
+  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  sgrDiferenca_qt_alt.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+
+  // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
+  sgrDiferenca_qt_alt.FixedCols := 0;
+  sgrDiferenca_qt_alt.FixedRows := 1;
+
+end;
+
+
+
+
+procedure TForm1.CarregarDiferencaEntreBolas;
+begin
+  CarregarControleDiferencaEntreBolas_qt_1;
+end;
+
+procedure TForm1.Controle_Diferenca_entre_Bolas_alterou(objControle: TStringGrid);
+var
+  ultima_coluna: Integer;
+  ultima_linha, linha: Integer;
+  strWhere : String;
+begin
+  ultima_linha := objControle.RowCount - 1;
+  ultima_coluna := objControle.ColCount - 1;
+
+  if objControle = sgrDiferenca_Qt_1 then begin
+    sgrDiferenca_Qt_1_Qt_2.Columns.Clear;
+
+    if ultima_linha = 0 then begin
+      exit;
+    end;
+
+    strWhere := '';
+    for linha := 1 to ultima_linha do begin
+      if objControle.Cells[ultima_coluna, linha] = '1' then begin
+         if strWhere <> '' then begin
+            strWhere := strWhere + ',';
+         end;
+         strWhere := strWhere + objControle.Cells[0, linha];
+      end;
+    end;
+    CarregarControleDiferencaEntreBolas_Qt_1_Qt_2(strWhere);
+    exit;
+  end;
+
+  if objControle = sgrDiferenca_qt_alt then begin
+    sgrDiferenca_qt_alt_1.Columns.Clear;
+    sgrDiferenca_qt_alt_2.Columns.Clear;
+
+    if ultima_linha = 0 then begin
+      exit;
+    end;
+
+    strWhere := '';
+    for linha := 1 to ultima_linha do begin
+      if objControle.Cells[ultima_coluna, linha] = '1' then begin
+         if strWhere <> '' then begin
+            strWhere := strWhere + ',';
+         end;
+         // Neste caso, iremos pegar a coluna qt_alt e interseparar com vírgula.
+         strWhere := strWhere + objControle.Cells[0, linha];
+      end;
+    end;
+    if strWhere <> '' then begin
+      strWhere := 'qt_alt in (' + strWhere + ') ';
+    end;
+    CarregarControleDiferenca_qt_alt_1(strWhere);
+    exit;
+  end;
+
+  if objControle = sgrDiferenca_qt_alt_1 then begin
+  sgrDiferenca_qt_alt_2.Columns.Clear;
+
+  if ultima_linha = 0 then begin
+    exit;
+  end;
+
+  strWhere := '';
+  for linha := 1 to ultima_linha do begin
+    if objControle.Cells[ultima_coluna, linha] = '1' then begin
+       if strWhere <> '' then begin
+          strWhere := strWhere + ',';
+       end;
+       // Neste caso, iremos pegar a coluna qt_alt e qt_dif_1, interseparadas
+       // pelo caractere '_', que está na coluna 2, no campo 'qt_cmb'
+       strWhere := strWhere + QuotedStr(objControle.Cells[2, linha]);
+    end;
+  end;
+  if strWhere <> '' then begin
+    strWhere := 'qt_alt || ''_'' || qt_dif_1 in (' + strWhere + ') ';
+  end;
+  CarregarControleDiferenca_qt_alt_2(strWhere);
+  exit;
+  end;
+
+end;
+
+procedure TForm1.ConfigurarControleDiferencaEntreBolas_qt_1_qt_2;
+var
+  qtColunas, indice_ultima_coluna, uA: Integer;
+  campos_do_controle: array[0..5] of string = (
+                      'qt_dif_1',
+                      'qt_dif_2',
+                      'qt_dif_cmb',
+                      'ltf_qt_vezes',
+                      'res_qt',
+                      'Marcar');
+begin
+  qtColunas := Length(campos_do_controle);
+
+  // Cria os campos do controle.
+  sgrDiferenca_Qt_1_Qt_2.Columns.Clear;
+  while qtColunas > 0 do begin
+        sgrDiferenca_Qt_1_Qt_2.Columns.Add;
+        Dec(qtColunas);
+  end;
+  sgrDiferenca_Qt_1_Qt_2.RowCount := 1;
+
+  indice_ultima_coluna := High(campos_do_controle);
+
+  for uA := 0 to indice_ultima_Coluna do begin
+    sgrDiferenca_Qt_1_Qt_2.Columns[uA].title.Alignment := TAlignment.taCenter;
+    sgrDiferenca_Qt_1_Qt_2.Columns[uA].Alignment := TAlignment.taCenter;
+    sgrDiferenca_Qt_1_Qt_2.Columns[uA].title.Caption := campos_do_controle[uA];
+    sgrDiferenca_Qt_1_Qt_2.Cells[uA, 0] := campos_do_controle[uA];
+  end;
+  // Ocultar a coluna qt_cmb pois esta coluna é utilizada pra concatenar pra
+  // concatenar os campos qt_1 e qt_2.
+  sgrDiferenca_Qt_1_Qt_2.Columns[2].Visible := false;
+
+  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
+  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  sgrDiferenca_Qt_1_Qt_2.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+
+  // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
+  sgrDiferenca_Qt_1_Qt_2.FixedCols := 0;
+  sgrDiferenca_Qt_1_Qt_2.FixedRows := 1;
+
+end;
+
+procedure TForm1.CarregarControleDiferencaEntreBolas_Qt_1_Qt_2(strWhere: string);
+var
+  strSql: TStringList;
+  sqlLotofacil: TSqlQuery;
+  uLinha , qt_registros: Integer;
+begin
+  if Trim(strWhere) = '' then begin
+    sgrDiferenca_Qt_1_Qt_2.Clear;
+    Exit;
+  end;
+
+  if dmLotofacil = nil then
+     dmLotofacil := TdmLotofacil.Create(Self);
+
+  strSql := TStringList.Create;
+  strSql.Add('Select qt_dif_1, qt_dif_2, qt_dif_cmb, ltf_qt_vezes, res_qt');
+  strSql.Add('from lotofacil.v_lotofacil_resultado_diferenca_Qt_dif_1_a_Qt_dif_2');
+  strSql.Add('where qt_dif_1');
+  strSql.Add('in (' + strWhere + ')');
+  strSql.Add('order by res_qt desc, ltf_qt_vezes desc');
+  Writeln('sql: ', strSql.Text);
+
+  sqlLotofacil := dmLotofacil.sqlLotofacil;
+  sqlLotofacil.Close;
+  sqlLotofacil.DataBase := dmLotofacil.pgLtk;
+  sqlLotofacil.SQL.Text := strSql.Text;
+  // Na linha abaixo, se uniDirectional, ficar true, sempre vai retornar
+  // a propriedade RecordCount o valor 1.
+  sqlLotofacil.UniDirectional := false;
+  sqlLotofacil.Prepare;
+  sqlLotofacil.Open;
+
+  ConfigurarControleDiferencaEntreBolas_Qt_1_Qt_2;
+
+  qt_registros := 0;
+  sqlLotofacil.First;
+  while not sqlLotofacil.Eof do begin
+    Inc(qt_Registros);
+    sqlLotofacil.Next;
+  end;
+
+  if qt_Registros = 0 then begin
+    sgrDiferenca_Qt_1_Qt_2.Columns.Clear;
+    sgrDiferenca_Qt_1_Qt_2.Columns.Add;
+    sgrDiferenca_Qt_1_Qt_2.FixedRows := 0;
+    sgrDiferenca_Qt_1_Qt_2.RowCount := 1;
+    sgrDiferenca_Qt_1_Qt_2.Cells[0, 0] := 'Erro, Nao há registros';
+    sgrDiferenca_Qt_1_Qt_2.AutoSizeColumns;
+    Exit;
+  end;
+
+  // Define o número de linhas, conforme a quantidade de registro
+  // Haverá uma linha mais por causa do título.
+  sgrDiferenca_Qt_1_Qt_2.RowCount := qt_Registros + 1;
+
+  // Percorrer registro
+  uLinha := 1;
+  sqlLotofacil.First;
+  while (not sqlLotofacil.EOF) and (qt_Registros > 0) do begin
+    sgrDiferenca_Qt_1_Qt_2.Cells[0, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_dif_1').AsInteger);
+    sgrDiferenca_Qt_1_Qt_2.Cells[1, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_dif_2').AsInteger);
+    sgrDiferenca_Qt_1_Qt_2.Cells[2, uLinha] := sqlLotofacil.FieldByName('qt_dif_cmb').AsString;
+    sgrDiferenca_Qt_1_Qt_2.Cells[3, uLinha] := sqlLotofacil.FieldByName('ltf_qt_vezes').AsString;
+    sgrDiferenca_Qt_1_Qt_2.Cells[4, uLinha] := IntToSTr(sqlLotofacil.FieldByName('res_qt').AsInteger);
+    sgrDiferenca_Qt_1_Qt_2.Cells[5, uLinha] := '0';
+
+    Inc(uLinha);
+    Dec(qt_Registros);
+
+    sqlLotofacil.Next;
+  end;
+
+  // Oculta a coluna qt_dif_cmb
+  sgrDiferenca_Qt_1_Qt_2.Columns[2].Visible := false;
+
+  sqlLotofacil.Close;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+  sgrDiferenca_Qt_1_Qt_2.AutoSizeColumns;
+end;
+
+
+
+procedure TForm1.CarregarControleDiferencaEntreBolas_qt_1;
+var
+  strSql: TStringList;
+  sqlLotofacil: TSqlQuery;
+  uLinha , qt_registros: Integer;
+begin
+  if dmLotofacil = nil then
+     dmLotofacil := TdmLotofacil.Create(Self);
+
+  strSql := TStringList.Create;
+  strSql.Add('Select qt_dif_1, ltf_qt_vezes, res_qt');
+  strSql.Add('from lotofacil.v_lotofacil_resultado_diferenca_qt_dif_1');
+  strSql.Add('order by res_qt desc, ltf_qt_vezes desc');
+
+  sqlLotofacil := dmLotofacil.sqlLotofacil;
+  sqlLotofacil.Close;
+  sqlLotofacil.DataBase := dmLotofacil.pgLtk;
+  sqlLotofacil.SQL.Text := strSql.Text;
+  // Na linha abaixo, se uniDirectional, ficar true, sempre vai retornar
+  // a propriedade RecordCount o valor 1.
+  sqlLotofacil.UniDirectional := false;
+  sqlLotofacil.Prepare;
+  sqlLotofacil.Open;
+
+  ConfigurarControleDiferencaEntreBolas_qt_1;
+
+  qt_registros := 0;
+  sqlLotofacil.First;
+  while not sqlLotofacil.Eof do begin
+    Inc(qt_Registros);
+    sqlLotofacil.Next;
+  end;
+
+  if qt_Registros = 0 then begin
+    sgrDiferenca_Qt_1.Columns.Clear;
+    sgrDiferenca_Qt_1.Columns.Add;
+    sgrDiferenca_Qt_1.FixedRows := 0;
+    sgrDiferenca_Qt_1.RowCount := 1;
+    sgrDiferenca_Qt_1.Cells[0, 0] := 'Erro, Nao há registros';
+    sgrDiferenca_Qt_1.AutoSizeColumns;
+    Exit;
+  end;
+
+  // Define o número de linhas, conforme a quantidade de registro
+  // Haverá uma linha mais por causa do título.
+  sgrDiferenca_Qt_1.RowCount := qt_Registros + 1;
+
+  // Percorrer registro
+  uLinha := 1;
+  sqlLotofacil.First;
+  while (not sqlLotofacil.EOF) and (qt_Registros > 0) do begin
+    sgrDiferenca_Qt_1.Cells[0, uLinha] := IntToSTr(sqlLotofacil.FieldByName('qt_dif_1').AsInteger);
+    sgrDiferenca_Qt_1.Cells[1, uLinha] := sqlLotofacil.FieldByName('ltf_qt_vezes').AsString;
+    sgrDiferenca_Qt_1.Cells[2, uLinha] := IntToSTr(sqlLotofacil.FieldByName('res_qt').AsInteger);
+    sgrDiferenca_Qt_1.Cells[3, uLinha] := '0';
+
+    Inc(uLinha);
+    Dec(qt_Registros);
+
+    sqlLotofacil.Next;
+  end;
+  sqlLotofacil.Close;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+  sgrDiferenca_Qt_1.AutoSizeColumns;
+end;
+
+procedure TForm1.ConfigurarControleDiferencaEntreBolas_qt_1;
+var
+  qtColunas, indice_ultima_coluna, uA: Integer;
+  campos_do_controle: array[0..3] of string = (
+                      'qt_dif_1',
+                      'ltf_qt_vezes',
+                      'res_qt',
+                      'Marcar');
+begin
+  qtColunas := Length(campos_do_controle);
+
+  // Cria os campos do controle.
+  sgrDiferenca_Qt_1.Columns.Clear;
+  while qtColunas > 0 do begin
+        sgrDiferenca_Qt_1.Columns.Add;
+        Dec(qtColunas);
+  end;
+  sgrDiferenca_Qt_1.RowCount := 1;
+
+  indice_ultima_coluna := High(campos_do_controle);
+
+  for uA := 0 to indice_ultima_Coluna do begin
+    sgrDiferenca_Qt_1.Columns[uA].title.Alignment := TAlignment.taCenter;
+    sgrDiferenca_Qt_1.Columns[uA].Alignment := TAlignment.taCenter;
+    sgrDiferenca_Qt_1.Columns[uA].title.Caption := campos_do_controle[uA];
+    sgrDiferenca_Qt_1.Cells[uA, 0] := campos_do_controle[uA];
+  end;
+
+  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
+  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  sgrDiferenca_Qt_1.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+
+  // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
+  sgrDiferenca_Qt_1.FixedCols := 0;
+  sgrDiferenca_Qt_1.FixedRows := 1;
+
 end;
 
 {
@@ -638,6 +1650,7 @@ procedure TForm1.CarregarConcursos;
 var
  strSql : TStringList;
  sqlLotofacil : TSqlquery;
+ strConcurso : String;
 begin
  // Carrega o módulo, se não está carregado.
  if dmLotofacil = nil then begin
@@ -667,24 +1680,23 @@ begin
  //cmbConcursoDeletar.Clear;
  cmbConcursoFrequenciaSair.Clear;
  cmbConcursoFrequenciaNaoSair.Clear;
-
  cmbConcursoFrequenciaTotalSair.Clear;
-
-
+ cmbConcursoVerificarAcerto.Clear;
 
  // Achamos registros, inserir então.
  sqlLotofacil.First;
+ strConcurso := '';
  while sqlLotofacil.EOF = false do begin
      //cmbConcursoNovosRepetidos.Items.Add(sqlLotofacil.FieldByName('concurso').AsString);
 
      // Aqui, vamos aproveitar o código e carregar o controle 'cmbConcursoDeletar';
      //cmbConcursoDeletar.Items.Add(sqlLotofacil.FieldByName('concurso').AsString);
+     strConcurso := sqlLotofacil.FieldByName('concurso').AsString;
 
-     cmbConcursoFrequenciaSair.Items.Add(sqlLotofacil.FieldByName('concurso').AsString);
-     cmbConcursoFrequenciaNaoSair.Items.Add(sqlLotofacil.FieldByName('concurso').AsString);
-
-     cmbConcursoFrequenciaTotalSair.Items.Add(sqlLotofacil.FieldByName('concurso').AsString);
-
+     cmbConcursoFrequenciaSair.Items.Add(strConcurso);
+     cmbConcursoFrequenciaNaoSair.Items.Add(strConcurso);
+     cmbConcursoFrequenciaTotalSair.Items.Add(strConcurso);
+     cmbConcursoVerificarAcerto.Items.Add(strConcurso);
 
      sqlLotofacil.Next;
  end;
@@ -697,6 +1709,7 @@ begin
  cmbConcursoFrequenciaSair.ItemIndex := 0;
  cmbConcursoFrequenciaNaoSair.ItemIndex := 0;
  cmbConcursoFrequenciaTotalSair.ItemIndex := 0;
+ cmbConcursoVerificarAcerto.ItemIndex := 0;
 end;
 
 procedure TForm1.CarregarFrequenciaBolas;
@@ -992,6 +2005,8 @@ begin
   btnLotofacilResultadoInserir.Enabled := false;
   btnLotofacilResultadoAtualizar.Enabled := false;
   dtpConcursoData.Enabled := false;
+
+
 end;
 
 {
@@ -1092,6 +2107,31 @@ begin
     edConcurso.Enabled := false;
     grConcursoData.Enabled := false;
     dtpConcursoData.Enabled := false;
+  end;
+
+end;
+
+procedure TForm1.tgExibirCamposChange(Sender : TObject);
+begin
+  pnExibirCampos.Visible := tgExibirCampos.Checked;
+  if tgExibirCampos.Checked then begin
+     tgExibirCampos.Color := clGreen;
+     tgExibirCampos.Font.Color := clWhite;
+  end else begin
+      tgExibirCampos.Color := clDefault;
+      tgExibirCampos.Font.Color := clDefault;
+  end;
+end;
+
+procedure TForm1.tgVerificarAcertosChange(Sender : TObject);
+begin
+  pnVerificarAcertos.Visible := tgVerificarAcertos.Checked;
+  if tgVerificarAcertos.Checked then begin
+     tgVerificarAcertos.Color := clGreen;
+     tgVerificarAcertos.Font.Color := clWhite;
+  end else begin
+      tgVerificarAcertos.Color := clDefault;
+      tgVerificarAcertos.Font.Color := clDefault;
   end;
 
 end;
@@ -1262,9 +2302,452 @@ begin
 
 end;
 
+{
+ Atualiza os controles comboBox: cmbFiltroData, cmbFiltroHora
+}
+procedure TForm1.btnNovosFiltrosClick(Sender : TObject);
+var
+   sqlRegistro: TSqlQuery;
+   qt_registros : Integer;
+begin
+  // Apaga os controles 'cmbFiltroData' e 'cmbFiltroHora'.
+  cmbFiltroData.Items.Clear;
+  cmbFiltroHora.Items.Clear;
+
+  if dmLotofacil = nil then begin
+     dmLotofacil := TdmLotofacil.Create(Self);
+  end;
+
+  sqlRegistro := TSqlQuery.Create(Self);
+  sqlRegistro.DataBase := dmLotofacil.pgLTK;
+  sqlRegistro.UniDirectional := false;
+  sqlRegistro.Active := false;
+
+  sqlRegistro.SQL.Add('Select data_1 from lotofacil.v_lotofacil_filtros_por_data');
+  sqlRegistro.Sql.Add('order by data_2 desc');
+
+  sqlRegistro.Open;
+  // Verifica o total de registros.
+  qt_registros := 0;
+  while not sqlRegistro.EOF do begin
+      Inc(qt_registros);
+      cmbFiltroData.Items.Add(sqlRegistro.FieldByName('data_1').AsString);
+      sqlRegistro.Next;
+  end;
+  sqlRegistro.Close;
+  sqlRegistro.Sql.Clear;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+  if qt_registros = 0 then begin
+     exit;
+  end;
+
+  cmbFiltroData.ItemIndex := 0;
+
+  // Agora, iremos selecionar a hora baseado na seleção atual.
+  AtualizarFiltroData(cmbFiltroData.Items[0]);
+
+
+end;
+
+{
+ Ao clicar neste botão, iremos atualizar o controle 'sgrFiltros', conforme
+ a data e hora do filtro selecionado, e depois iremos ocultar os campos
+ que o usuário escolheu.
+}
+procedure TForm1.btnSelecionarClick(Sender : TObject);
+var
+  indice_data_selecionado , indice_hora_selecionado: Integer;
+  strFiltroData , strFiltroHora, strFiltroDataHora: String;
+begin
+  indice_data_selecionado := cmbFiltroData.ItemIndex;
+  indice_hora_selecionado := cmbFiltroHora.ItemIndex;
+
+  if (indice_data_selecionado <= -1) or
+     (indice_hora_selecionado <= -1) then begin
+     sgrFiltros.Columns.Clear;
+     sgrFiltros.Columns.Add;
+     sgrFiltros.RowCount := 1;
+     sgrFiltros.Cells[0, 0] := 'Nenhum filtro selecionado';
+     sgrFiltros.AutoSizeColumns;
+     exit;
+  end;
+
+  strFiltroData := cmbFiltroData.Items[indice_data_selecionado];
+  strFiltroHora := cmbFiltroHora.Items[indice_hora_selecionado];
+  strFiltroDataHora := strFiltroData + ' ' + strFiltroHora;
+
+  Atualizar_Controle_sgrFiltro(strFiltroDataHora);
+end;
+
+procedure TForm1.Atualizar_Controle_sgrFiltro(strWhere_Data_Hora: string);
+begin
+  Configurar_Controle_sgrFiltro;
+  Carregar_Controle_sgrFiltro(strWhere_Data_Hora);
+end;
+
+procedure TForm1.Carregar_Controle_sgrFiltro(strWhere_Data_Hora: string);
+var
+  sqlRegistros: TSqlQuery;
+  qt_registros, uA, linha: Integer;
+  campo_nome : String;
+begin
+  if dmLotofacil = nil then begin
+     dmLotofacil := tDmLotofacil.Create(Self);
+  end;
+
+  sqlRegistros := TSqlQuery.Create(Self);
+  sqlRegistros.DataBase := DmLotofacil.pgLTK;
+  sqlRegistros.Active := false;
+  sqlRegistros.Close;
+
+  sqlRegistros.Sql.Clear;
+  sqlRegistros.Sql.Add('Select');
+  for uA := 0 to High(lotofacil_filtro_campos) do begin
+      if uA <> 0 then begin
+         sqlRegistros.Sql.Add(', ');
+      end;
+      sqlRegistros.Sql.Add(lotofacil_filtro_campos[uA]);
+  end;
+  sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_filtros');
+  sqlRegistros.sql.Add('Where to_char(data,');
+  sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+  sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_Data_Hora));
+  sqlRegistros.SQL.Add('order by');
+  sqlRegistros.SQL.Add('filtros_id asc,');
+  sqlRegistros.Sql.Add('ltf_qt asc,');
+  sqlRegistros.Sql.Add('qt_alt asc,');
+  sqlRegistros.Sql.Add('qt_dif_1 asc,');
+  sqlRegistros.Sql.Add('qt_dif_2 asc,');
+  sqlRegistros.Sql.Add('qt_dif_3 asc,');
+  sqlRegistros.Sql.Add('qt_dif_4 asc,');
+  sqlRegistros.Sql.Add('qt_dif_5 asc,');
+  sqlRegistros.Sql.Add('qt_dif_6 asc,');
+  sqlRegistros.Sql.Add('qt_dif_7 asc,');
+  sqlRegistros.Sql.Add('qt_dif_8 asc,');
+  sqlRegistros.Sql.Add('qt_dif_9 asc,');
+  sqlRegistros.Sql.Add('qt_dif_10 asc,');
+  sqlRegistros.Sql.Add('qt_dif_11 asc');
+
+  // Vamos abrir a consulta, e ir pra o primeiro registro e
+  // em seguida, pra o último pra conseguirmos determinar
+  // a quantidade de registros.
+  sqlRegistros.Open;
+  sqlRegistros.First;
+  sqlRegistros.Last;
+  qt_registros := sqlRegistros.RecordCount;
+
+  if qt_registros = 0 then begin
+    sgrFiltros.Columns.Clear;
+    sgrFiltros.Columns.Add;
+    sgrFiltros.RowCount := 1;
+    sgrFiltros.Cells[0, 0] := 'Nenhum registro localizado';
+    sgrFiltros.AutoSizeColumns;
+    exit;
+  end;
+
+  // Um registro a mais, pois a primeira linha é o cabeçalho.
+  sgrFiltros.RowCount := qt_registros + 1;
+
+  // A variável lotofacil
+  for uA := 0 to High(filtro_campos_selecionados) do begin
+      sgrFiltros.Columns[uA].Visible := filtro_campos_selecionados[uA];
+  end;
+
+  linha := 1;
+  sqlRegistros.First;
+  while (not sqlRegistros.EOF) and (qt_registros > 0) do begin
+      // Vamos percorrer todos os campos e também ocultar o campo
+      // se o usuário não selecionou aquele campo.
+      for uA := 0 to High(lotofacil_filtro_campos) do begin
+          campo_nome := lotofacil_filtro_campos[uA];
+          sgrFiltros.Cells[uA, linha] :=
+          sqlRegistros.FieldByName(campo_nome).AsString;
+      end;
+
+      sqlRegistros.Next;
+      Dec(qt_Registros);
+      Inc(linha);
+  end;
+  sqlRegistros.Close;
+  dmLotofacil.Free;
+  dmLotofacil := Nil;
+
+  sgrFiltros.AutoSizeColumns;
+  sgrFiltros.FixedRows := 1;
+end;
+
+procedure TForm1.Configurar_Controle_sgrFiltro;
+var
+  qt_colunas, uA: Integer;
+  coluna_atual : TGridColumn;
+begin
+  // Apaga as colunas.
+  sgrFiltros.Columns.Clear;
+  sgrFiltros.RowCount := 1;
+
+  qt_colunas := High(filtros_campos);
+  for uA := 0 to qt_colunas do begin
+      coluna_atual := sgrFiltros.Columns.Add;
+      coluna_atual.Title.Caption := filtros_campos[uA];
+      coluna_atual.Title.Alignment := TAlignment.taCenter;
+      coluna_atual.Visible := filtro_campos_selecionados[uA];
+  end;
+  sgrFiltros.FixedRows := 1;
+  sgrFiltros.AutoSizeColumns;
+end;
+
+{
+ Toda vez que o controle 'cmbFiltroData', for atualizado, devemos
+ atualizar o controle 'cmbFiltroHora'.
+}
+procedure TForm1.AtualizarFiltroData(strWhere: string);
+var
+   sqlRegistro: TSqlQuery;
+   qt_registros : Integer;
+begin
+  cmbFiltroHora.Items.Clear;
+
+  // Sempre haverá um parte da hora, senão, indica erro.
+  if strWhere = '' then begin
+     cmbFiltroData.Items.Clear;
+     exit;
+  end;
+
+  if dmLotofacil = nil then begin
+     dmLotofacil := TDmLotofacil.Create(Self);
+  end;
+
+  sqlRegistro := TSqlQuery.Create(Self);
+  sqlRegistro.DataBase := dmLotofacil.pgLTK;
+  sqlRegistro.UniDirectional := false;
+  sqlRegistro.Active := false;
+  sqlRegistro.Close;
+
+  sqlRegistro.SQL.Clear;
+  sqlRegistro.Sql.Add('Select hora_1 from lotofacil.v_lotofacil_filtros_por_data_hora');
+  sqlRegistro.Sql.Add('where to_char(data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
+  sqlRegistro.Sql.Add('order by data desc');
+
+  sqlRegistro.Open;
+
+  qt_registros := 0;
+  while not sqlRegistro.Eof do begin
+      cmbFiltroHora.Items.Add(sqlRegistro.FieldByName('hora_1').AsString);
+
+      Inc(qt_registros);
+      sqlRegistro.Next;
+  end;
+  sqlRegistro.Close;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+
+  if qt_registros = 0 then begin
+     cmbFiltroData.Items.Clear;
+     cmbFiltroHora.Items.Clear;
+     exit;
+  end;
+
+  // Seleciona o primeiro ítem.
+  cmbFiltroHora.ItemIndex := 0;
+
+end;
+
+{
+ Aqui, iremos verificar o número de acertos baseado no concurso selecionado.
+}
+procedure TForm1.btnVerificarAcertoClick(Sender : TObject);
+var
+   strFiltroData, strFiltroHora, strWhere, bola_concurso,
+     strInsert_Set_Acerto, strWhere_data_hora, concursoSelecionado: String;
+   indiceSelecionado, totalItens: Integer;
+   b_ha_itens , b_indice_selecionado: boolean;
+   indice_data_selecionado: Integer;
+   indice_hora_selecionado: Integer;
+
+   sqlRegistros : TSQLQuery;
+   qt_registros , uA, linha: Integer;
+begin
+     // Vamos validar todas as entradas, afinal, não queremos erro em nossa
+     // aplicação.
+     b_ha_itens :=  cmbFiltroData.Items.Count > 0;
+     b_ha_itens := (cmbFiltroHora.Items.Count > 0) and b_ha_itens;
+
+     if not b_ha_itens then begin
+       sgrVerificarAcertos.Columns.Clear;
+       sgrVerificarAcertos.Columns.Add;
+       sgrVerificarAcertos.RowCount := 1;
+       sgrVerificarAcertos.Cells[0,0] := 'Nenhum filtro disponível';
+       sgrVerificarAcertos.AutoSizeColumns;
+       exit;
+     end;
+
+     indice_data_selecionado := cmbFiltroData.ItemIndex;
+     indice_hora_selecionado := cmbFiltroHora.ItemIndex;
+     b_indice_selecionado := (indice_data_selecionado >= 0) and
+                             (indice_hora_selecionado >= 0);
+
+     if not b_indice_selecionado then begin
+       sgrVerificarAcertos.Columns.Clear;
+       sgrVerificarAcertos.Columns.Add;
+       sgrVerificarAcertos.RowCount := 1;
+       sgrVerificarAcertos.Cells[0,0] := 'Data e hora não selecionados';
+       sgrVerificarAcertos.AutoSizeColumns;
+       exit;
+     end;
+
+     strFiltroData := cmbFiltroData.Items[indice_data_selecionado];
+     strFiltroHora := cmbFiltroHora.Items[indice_hora_selecionado];
+
+     strWhere_data_hora := strFiltroData + ' ' + strFiltroHora;
+
+     // Vamos primeira recuperar as bolas que foram selecionadas
+     // no concurso atual e em seguida, iremos atualizar somente
+     // o filtro que está selecionado no momento.
+     indiceSelecionado := cmbConcursoVerificarAcerto.ItemIndex;
+     if indiceSelecionado < 0 then begin
+       sgrVerificarAcertos.Columns.Clear;
+       sgrVerificarAcertos.Columns.Add;
+       sgrVerificarAcertos.RowCount := 1;
+        sgrVerificarAcertos.Cells[0,0] := 'Nenhum concurso disponível';
+        sgrVerificarAcertos.AutoSizeColumns;
+     end;
+
+     concursoSelecionado := cmbConcursoVerificarAcerto.Items[indiceSelecionado];
+
+     // Iremos pegar as bolas deste concurso.
+     if dmLotofacil = nil then begin
+        dmLotofacil := TDmLotofacil.Create(Self);
+     end;
+
+     sqlRegistros := TSqlQuery.Create(Self);
+     sqlRegistros.DataBase := dmLotofacil.pgLTK;
+     sqlRegistros.Active := false;
+     sqlRegistros.Close;
+
+     sqlRegistros.Sql.Clear;
+     sqlRegistros.SQL.Add('Select b_1, b_2, b_3, b_4, b_5,');
+     sqlRegistros.Sql.Add('b_6, b_7, b_8, b_9, b_10,');
+     sqlRegistros.Sql.Add('b_11, b_12, b_13, b_14, b_15');
+     sqlRegistros.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
+     sqlRegistros.Sql.Add('where concurso = ' + concursoSelecionado);
+
+     sqlRegistros.Open;
+     if sqlRegistros.EOF = true then begin
+        sgrVerificarAcertos.Columns.Clear;
+        sgrVerificarAcertos.Columns.Add;
+        sgrVerificarAcertos.RowCount := 1;
+        sgrVerificarAcertos.Cells[0,0] := 'Concurso não localizado!!!';
+        sgrVerificarAcertos.AutoSizeColumns;
+        exit;
+     end;
+
+     // Pra atualizar o campo 'acertos', devemos pegar as bolas do concurso
+     // selecionados, e no nosso caso, iremos prefixar a palavra
+     // 'num_' pois iremos
+     strInsert_Set_Acerto := '';
+     for uA := 1 to 15 do begin
+         bola_concurso := sqlRegistros.FieldByName('b_' + IntToStr(uA)).AsString;
+         if uA <> 1 then begin
+            strInsert_Set_Acerto := strInsert_Set_Acerto + ' + ';
+         end;
+         strInsert_Set_Acerto := strInsert_Set_Acerto + 'num_' + bola_concurso;
+     end;
+     sqlRegistros.Close;
+
+     // Agora, iremos atualizar o campo acerto somente do filtro atual selecionado.
+     sqlRegistros.Sql.Clear;
+     sqlRegistros.Sql.Add('Update lotofacil.lotofacil_filtros');
+     sqlRegistros.Sql.Add('set acertos = ');
+     sqlRegistros.Sql.Add(strInsert_Set_Acerto);
+     sqlRegistros.Sql.Add('from lotofacil.lotofacil_num');
+     sqlRegistros.sql.Add('where lotofacil.lotofacil_filtros.ltf_id = ');
+     sqlRegistros.Sql.Add('lotofacil.lotofacil_num.ltf_id');
+     sqlRegistros.sql.Add('And to_char(data,');
+     sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+     sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+     Writeln(sqlRegistros.SQL.Text);
+
+     // Vamos executar e realizar o commit.
+     try
+        sqlRegistros.ExecSQL;
+        dmLotofacil.pgLTK.Transaction.Commit;
+        sqlRegistros.Close;
+     except
+       On exc : EDataBaseError do begin
+          sgrVerificarAcertos.Columns.Clear;
+          sgrVerificarAcertos.Columns.Add;
+          sgrVerificarAcertos.RowCount := 1;
+          sgrVerificarAcertos.Cells[0,0] := Exc.Message;
+          sgrVerificarAcertos.AutoSizeColumns;
+          exit;
+       end;
+     end;
+
+     // Agora, exibe o registro atualizado.
+     sqlRegistros.SQL.Clear;
+     sqlRegistros.SQL.Add('Select acertos, qt_vezes');
+     sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_filtros_acertos_por_data_hora');
+     sqlRegistros.SQL.Add('where to_char(data,');
+     sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+     sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+     sqlRegistros.Sql.Add('order by acertos asc');
+     sqlRegistros.Open;
+
+     Writeln(sqlRegistros.sql.Text);
+
+     sqlRegistros.First;
+     if sqlRegistros.EOF = true then begin
+       sgrVerificarAcertos.Columns.Clear;
+       sgrVerificarAcertos.Columns.Add;
+       sgrVerificarAcertos.RowCount := 1;
+       sgrVerificarAcertos.Cells[0,0] := 'Não há registros.';
+       sgrVerificarAcertos.AutoSizeColumns;
+       exit;
+     end;
+
+     qt_registros := 0;
+     sgrVerificarAcertos.Columns.Clear;
+     sgrVerificarAcertos.Columns.Add;
+     sgrVerificarAcertos.Columns.Add;
+     sgrVerificarAcertos.RowCount := 1;
+     sgrVerificarAcertos.Columns[0].Title.Caption := 'Acertos';
+     sgrVerificarAcertos.Columns[1].Title.Caption := 'Qt_vezes';
+     sgrVerificarAcertos.FixedRows := 1;
+
+
+     linha := 1;
+     while not sqlRegistros.Eof do begin
+         sgrVerificarAcertos.RowCount := sgrVerificarAcertos.RowCount + 1;
+         sgrVerificarAcertos.Cells[0, linha] := sqlRegistros.FieldByName('acertos').AsString;
+         sgrVerificarAcertos.Cells[1, linha] := sqlRegistros.FieldByName('qt_vezes').AsString;
+
+         sqlRegistros.Next;
+         Inc(linha);
+     end;
+
+     sqlRegistros.Close;
+     dmLotofacil.Free;
+     dmLotofacil := nil;
+end;
+
 procedure TForm1.CheckBox1Change(Sender : TObject);
 begin
   //sgrNovosRepetidos15Bolas.Columns[0].Visible := CheckBox1.Checked;
+end;
+
+procedure TForm1.chkExibirCamposClickCheck(Sender : TObject);
+var
+  indiceSelecionado : Integer;
+begin
+     indiceSelecionado := chkExibirCampos.ItemIndex;
+     if indiceSelecionado >= 0 then begin
+       filtro_campos_selecionados[indiceSelecionado] := chkExibirCampos.Checked[indiceSelecionado];
+       if sgrFiltros.Columns.Count = Length(filtro_campos_selecionados) then begin
+          sgrFiltros.Columns[indiceSelecionado].Visible := filtro_campos_selecionados[indiceSelecionado];
+       end;
+     end;
 end;
 
 {
@@ -1388,6 +2871,20 @@ begin
 
 end;
 
+{
+}
+procedure TForm1.cmbFiltroDataChange(Sender : TObject);
+var
+  strData: AnsiString;
+  indiceSelecionado : Integer;
+begin
+  indiceSelecionado := cmbFiltroData.ItemIndex;
+  if indiceSelecionado >= 0 then begin
+    strData := cmbFiltroData.Items[indiceSelecionado];
+    AtualizarFiltroData(strData);
+  end;
+end;
+
 procedure TForm1.btnGrupo2BolasMarcarTodosClick(Sender : TObject);
 begin
   MarcarGrupo2Bolas;
@@ -1482,11 +2979,14 @@ var
   sqlNovosRepetidos : AnsiString;
   sqlParImpar: AnsiString;
   sqlExternoInterno : AnsiString;
-  sqlPrimoNaoPrimo , sqlColunaB, sqlTemp: String;
+  sqlPrimoNaoPrimo , sqlColunaB, sqlTemp, sqlLotofacilSoma: String;
   sqlFrequencia : AnsiString;
+  sqlDiferenca_qt_dif: AnsiString;
+  sqlDiferenca_qt_alt: AnsiString;
 
   sqlGerado : TStringList;
   uA : Integer;
+  total_registros : LongInt;
 begin
   sqlNovosRepetidos := GerarSqlNovosRepetidos;
   sqlParImpar := GerarSqlParImpar;
@@ -1494,17 +2994,40 @@ begin
   sqlPrimoNaoPrimo := GerarSqlPrimo;
   sqlColunaB := GerarSqlColunaB;
   sqlFrequencia := GerarSqlFrequencia;
+  sqlDiferenca_qt_dif := GerarSqlDiferenca_qt_dif;
+  sqlDiferenca_qt_alt := GerarSqlDiferenca_qt_alt;
+  sqlLotofacilSoma := GerarSqlLotofacilSoma;
 
   // Gerar sql.
   sqlGerado := TStringList.Create;
   sqlGerado.Add('Insert into lotofacil.lotofacil_filtros');
-  sqlGerado.Add('(data, ltf_id, ltf_qt, concurso, acertos, concurso_bola_qt_vezes)');
-  sqlGerado.Add('Select now(), tb_ltf_num.ltf_id, tb_ltf_num.ltf_qt, ');
-  sqlGerado.Add( QuotedStr(cmbConcursoNovosRepetidos.Text)  + ',0, concurso_bola_qt_vezes');
+  sqlGerado.Add('(data,');
+  sqlGerado.Add('ltf_id,');
+  sqlGerado.Add('ltf_qt,');
+  sqlGerado.Add('concurso,');
+  sqlGerado.Add('acertos,');
+  sqlGerado.Add('novos_repetidos_id_alternado,');
+  sqlGerado.Add('novos_repetidos_id,');
+  sqlGerado.Add('qt_alt_seq,');
+  sqlGerado.Add('concurso_soma_frequencia_bolas)');
+  sqlGerado.Add('Select now(),');
+  sqlGerado.Add('tb_ltf_num.ltf_id,');
+  sqlGerado.Add('tb_ltf_num.ltf_qt,');
+  sqlGerado.Add( QuotedStr(cmbConcursoNovosRepetidos.Text) + ',');
+  sqlGerado.Add('0,');
+  sqlGerado.Add('novos_repetidos_id_alternado,');
+  sqlGerado.Add('novos_repetidos_id,');
+  sqlGerado.Add('qt_alt_seq,');
+  sqlGerado.Add('concurso_soma_frequencia_bolas');
   sqlGerado.Add('from');
-  sqlGerado.Add('lotofacil.lotofacil_num tb_ltf_num,');
-  sqlGerado.Add('lotofacil.lotofacil_id tb_ltf_id,');
-  sqlGerado.Add('lotofacil.lotofacil_num_bolas_concurso tb_ltf_num_bolas');
+  sqlGerado.Add('lotofacil.lotofacil_num                   tb_ltf_num,');
+  sqlGerado.Add('lotofacil.lotofacil_id                    tb_ltf_id,');
+  sqlGerado.Add('lotofacil.lotofacil_num_bolas_concurso    tb_num_bolas_concurso,');
+  sqlGerado.Add('lotofacil.lotofacil_diferenca_entre_bolas tb_ltf_dif');
+
+  if sqlLotofacilSoma <> '' then begin;
+     sqlGerado.Add(', lotofacil.lotofacil_soma tb_ltf_soma');
+  end;
 
   // Se o usuário selecionou quer não quer exibir combinados já sorteadas, devemos
   // listar a tabela.
@@ -1516,68 +3039,61 @@ begin
     sqlGerado.Add(', lotofacil.lotofacil_novos_repetidos     tb_ltf_novos_repetidos');
   end;
 
+  // Devemos relacionar as tabelas
+  // lotofacil_num, lotofacil_id, lotofacil_diferenca_entre_bolas,
+  // lotofacil_novos_repetidos e v_lotofacil_num_nao_sorteado.
+
   sqlGerado.Add('where');
-  // Wheres obrigatórios.
-  sqlGerado.Add('      tb_ltf_num.ltf_id = tb_ltf_id.ltf_id');
-  sqlGerado.Add('AND');
-  sqlGerado.Add('      tb_ltf_num.ltf_id = tb_ltf_num_bolas.ltf_id');
-  sqlGerado.Add('AND');
-  sqlGerado.Add('      tb_ltf_id.ltf_id = tb_ltf_num_bolas.ltf_id');
+  sqlGerado.Add('    tb_ltf_num.ltf_id = tb_ltf_id.ltf_id');
+  sqlGerado.Add('AND tb_ltf_num.ltf_id = tb_ltf_dif.ltf_id');
+  sqlGerado.add('AND tb_ltf_id.ltf_id = tb_ltf_dif.ltf_id');
+
+  sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_num.ltf_id');
+  sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_id.ltf_id');
+  sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_dif.ltf_id');
 
   // Se o usuário deseja excluir combinações já sorteadas, devemos relacionar
   // a tabela de novos e repetidos com as outras tabelas.
   if chkExcluir_Jogos_Ja_Sorteados.Checked[0] = true then begin
      sqlGerado.Add('---[Usuário escolheu excluir combinações já sorteadas]----');
-     sqlGerado.Add('AND');
-     sqlGerado.Add('      tb_ltf_num.ltf_id       = tb_ltf_nao_sorteado.ltf_id');
-     sqlGerado.Add('AND');
-     sqlGerado.Add('      tb_ltf_id.ltf_id = tb_ltf_nao_sorteado.ltf_id');
-     sqlGerado.Add('AND');
-     sqlGerado.Add('      tb_ltf_num_bolas.ltf_id = tb_ltf_nao_sorteado.ltf_id');
+     sqlGerado.Add('AND tb_ltf_num.ltf_id  = tb_ltf_nao_sorteado.ltf_id');
+     sqlGerado.Add('AND tb_ltf_id.ltf_id   = tb_ltf_nao_sorteado.ltf_id');
+     sqlGerado.Add('AND tb_ltf_dif.ltf_id  = tb_ltf_nao_sorteado.ltf_id');
+     sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_nao_sorteado.ltf_id');
+
+     if sqlNovosRepetidos <> '' then begin
+        sqlGerado.Add('AND tb_ltf_novos_repetidos.ltf_id = tb_ltf_nao_sorteado.ltf_id');
+     end;
   end;
-
-
-
 
   // Insere os demais sql dinamicamente.'.
   if sqlNovosRepetidos <> '' then begin
      sqlGerado.Add('--[Ítens escolhidos da guia novos x repetidos, devemos relacionar');
      sqlGerado.Add('--[as tabelas e pegar os íds dos ítens escolhidos]----');
-     sqlGerado.Add('AND');
-     sqlGerado.Add('tb_ltf_num.ltf_id = tb_ltf_novos_repetidos.ltf_id');
-     sqlGerado.Add('AND');
-     sqlGerado.Add('tb_ltf_id.ltf_id = tb_ltf_novos_repetidos.ltf_id');
-     sqlGerado.Add('AND');
-     sqlGerado.Add('tb_ltf_num_bolas.ltf_id = tb_ltf_novos_repetidos.ltf_id');
-     sqlGerado.Add('AND');
-     sqlGerado.Add('tb_ltf_nao_sorteado.ltf_id = tb_ltf_novos_repetidos.ltf_id');
-     sqlGerado.Add('AND');
-     sqlGerado.Add(sqlNovosRepetidos);
+     sqlGerado.Add('AND tb_ltf_num.ltf_id       = tb_ltf_novos_repetidos.ltf_id');
+     sqlGerado.Add('AND tb_ltf_id.ltf_id        = tb_ltf_novos_repetidos.ltf_id');
+     sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_novos_repetidos.ltf_id');
+     sqlGerado.Add('AND ' + sqlNovosRepetidos);
   end;
 
   if sqlParImpar <> '' then begin
-    sqlGerado.Add('AND');
-    sqlGerado.Add(sqlParImpar);
+     sqlGerado.Add('AND ' + sqlParImpar);
   end;
 
   if sqlPrimoNaoPrimo <> '' then begin
-     sqlGerado.Add('AND');
-     sqlGerado.Add(sqlPrimoNaoPrimo);
+     sqlGerado.Add('AND ' + sqlPrimoNaoPrimo);
   end;
 
   if sqlExternoInterno <> '' then begin
-     sqlGerado.Add('AND');
-     sqlGerado.Add(sqlExternoInterno);
+     sqlGerado.Add('AND ' + sqlExternoInterno);
   end;
 
   if sqlColunaB <> '' then begin
-     sqlGerado.Add('AND');
-     sqlGerado.Add(sqlColunaB);
+     sqlGerado.Add('AND ' + sqlColunaB);
   end;
 
   if sqlFrequencia <> '' then begin
-     sqlGerado.Add('AND');
-     sqlGerado.Add(sqlFrequencia);
+     sqlGerado.Add('AND ' + sqlFrequencia);
   end;
 
   // O controle 'chkExcluirJogo_LTF_QT' terá 4 checkbox, correspondendo a
@@ -1595,22 +3111,106 @@ begin
   end;
   // Se houve algo selecionados, devemos retornar ao usuário.
   if sqlTemp <> '' then begin
-    sqlTemp := 'And ltf_num.ltf_qt not in (' + sqlTemp + ')';
-    sqlGerado.Add(sqlTemp);
+    sqlGerado.Add('And tb_ltf_num.ltf_qt not in (' + sqlTemp + ')');
   end;
 
+  if sqlDiferenca_qt_alt <> '' then begin
+    sqlGerado.Add('And ' + sqlDiferenca_qt_alt);
+  end;
+
+  if sqlDiferenca_qt_dif <> '' then begin
+    sqlGerado.Add('And ' + sqlDiferenca_qt_dif);
+  end;
+
+  if sqlLotofacilSoma <> '' then begin
+    sqlGerado.Add('AND tb_ltf_num.ltf_id = tb_ltf_soma.ltf_id');
+    sqlGerado.Add('AND tb_ltf_id.ltf_id = tb_ltf_soma.ltf_id');
+    sqlGerado.Add('AND tb_ltf_dif.ltf_id = tb_ltf_soma.ltf_id');
+    sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_soma.ltf_id');
+
+    if sqlNovosRepetidos <> '' then begin
+      sqlGerado.add('AND tb_ltf_novos_repetidos.ltf_id = tb_ltf_soma.ltf_id');
+    end;
+
+    sqlGerado.Add('And ' + sqlLotofacilSoma);
+  end;
+
+  // Ordenar sempre pelo campos abaixo.
+  sqlGerado.Add('order by');
+  sqlGerado.Add('ltf_qt asc,');
+  sqlGerado.Add('qt_alt desc,');
+  sqlGerado.Add('concurso_soma_frequencia_bolas desc,');
+  sqlGerado.Add('qt_dif_1 asc,');
+  sqlGerado.Add('qt_dif_2 asc,');
+  sqlGerado.Add('qt_dif_3 asc,');
+  sqlGerado.Add('qt_dif_4 asc,');
+  sqlGerado.Add('qt_dif_5 asc');
 
 
+  //sqlGerado.Add('qt_alt_seq desc, ');
+  //sqlGerado.Add('ltf_id asc,');
+  //sqlGerado.Add('novos_repetidos_id_alternado,');
+  //sqlGerado.Add('random()');
+  {
+  sqlGerado.Add('qt_alt desc,');
+  sqlGerado.Add('novos_repetidos_id asc');
+  sqlGerado.Add('qt_dif_1 asc,');
+  sqlGerado.Add('qt_dif_2 asc,');
+  sqlGerado.Add('qt_dif_3 asc,');
+  sqlGerado.Add('qt_dif_4 asc,');
+  sqlGerado.Add('qt_dif_5 asc,');
+  sqlGerado.Add('qt_dif_6 asc,');
+  sqlGerado.Add('qt_dif_7 asc,');
+  sqlGerado.Add('qt_dif_8 desc,');
+  sqlGerado.Add('qt_dif_9 asc,');
+  sqlGerado.Add('qt_dif_10 asc,');
+  sqlGerado.Add('qt_dif_11 asc');
+  }
 
+  try
+     total_registros := StrToInt(Trim(mskTotalRegistros.Text));
+     if total_registros > 0 then begin
+       sqlGerado.Add('LIMIT ' + IntToStr(total_registros));
+     end;
+  except
 
-
+        ;
+  end;
 
   mmFiltroSql.Clear;
   mmFiltroSql.Lines.AddStrings(sqlGerado);
 
+  InserirNovoFiltro(sqlGerado);
+end;
 
-  //sqlGrupo :=  TStringList.Create;
-  //GerarSqlGrupo(sqlGrupo);
+procedure TForm1.InserirNovoFiltro(sqlFiltro: TStringList);
+var
+  sqlRegistros: TSqlQuery;
+begin
+  if dmLotofacil = nil then begin
+    dmLotofacil := TDmLotofacil.Create(Self);
+  end;
+
+  sqlRegistros := TSqlQuery.Create(Self);
+  sqlRegistros.Database := dmLotofacil.pgLTK;
+
+  sqlRegistros.Active := false;
+  sqlRegistros.Close;
+  sqlRegistros.SQL.Clear;
+  sqlRegistros.Sql.Text := sqlFiltro.Text;
+
+  try
+     sqlRegistros.ExecSQL;
+     dmLotofacil.pgLTK.Transaction.Commit;
+     sqlRegistros.Close;
+  except
+    on Exc: EDatabaseError do begin
+       MessageDlg('Erro', Exc.Message, TMsgDlgType.mtError, [mbOk], 0);
+       exit;
+    end;
+  end;
+
+  MessageDlg('', 'Filtros gerados com sucesso!!!', TMsgDlgType.mtError, [mbOk], 0);
 end;
 
 procedure TForm1.btnFrequenciaAtualizarClick(Sender : TObject);
@@ -1655,6 +3255,37 @@ begin
   // Atualiza todos os controles que recupera informações do banco de dados.
   CarregarTodosControles;
 
+end;
+
+function TForm1.GerarSqlLotofacilSoma: string;
+var
+  ultima_linha , indice_ultima_coluna, uA: Integer;
+  strSql : String;
+begin
+  if sgrLotofacilSoma.Columns.Count <> 4 then begin
+     exit('');
+  end;
+
+  strSql := '';
+
+  ultima_linha := sgrLotofacilSoma.RowCount - 1;
+
+  // Coluna com o título 'Marcar' é a última coluna.
+  indice_ultima_coluna := sgrLotofacilSoma.ColCount - 1;
+
+  for uA := 1 to ultima_linha do begin
+      if sgrLotofacilSoma.Cells[indice_ultima_coluna, uA] = '1' then begin
+         if strSql <> '' then begin
+            strSql := strSql + ', ';
+         end;
+         strSql := strSql + sgrLotofacilSoma.Cells[0, uA];
+      end;
+  end;
+
+  if strSql <> '' then begin
+     strSql := 'tb_ltf_soma.bola_soma in(' + strSql + ')';
+  end;
+  exit(strSql);
 end;
 
 {
@@ -2132,6 +3763,149 @@ begin
   Result := sqlResultado;
 end;
 
+function TForm1.GerarSqlDiferenca_qt_dif: string;
+var
+  uA, indice_ultima_coluna, indice_ultima_linha: Integer;
+  sqlResultado: AnsiString;
+begin
+  // Primeiro verifica o controle sgrDiferencia_qt_1_qt_2
+  // Se houver algo marcado, não iremos verificar o próximo controle.
+  indice_ultima_coluna := sgrDiferenca_Qt_1_Qt_2.ColCount - 1;
+  indice_ultima_linha := sgrDiferenca_Qt_1_Qt_2.RowCount - 1;
+
+  // Se a coluna marcar, estiver com o valor 1, quer dizer
+  // que foi selecionada, devemos pegar o campo
+  // qt_cmb, que está no índice de número 2.
+  sqlResultado := '';
+  for uA := 1 to indice_ultima_linha do begin
+    if sgrDiferenca_Qt_1_Qt_2.Cells[indice_ultima_coluna, uA] = '1' then begin
+      if sqlResultado <> '' then begin
+        sqlResultado := sqlResultado + ', ';
+      end;
+      sqlResultado := sqlResultado + QuotedStr(sgrDiferenca_Qt_1_Qt_2.Cells[2, uA]);
+    end;
+  end;
+
+  if sqlResultado <> '' then begin
+    sqlResultado := 'qt_dif_1 || ''_'' || qt_dif_2 in (' + sqlResultado + ')';
+    Exit(sqlResultado);
+  end;
+
+end;
+
+{
+ Gera o sql para a quantidade de alternadores de diferenças que o usuário selecionou.
+ Há 3 controles:
+ //    sgrDiferenca_qt_alt_2
+ //    sgrDiferenca_qt_alt_1
+ //    sgrDiferenca_qt_alt
+
+ // Os 3 controles:
+ //    sgrDiferenca_qt_alt_2
+ //    sgrDiferenca_qt_alt_1
+ //    sgrDiferenca_qt_alt
+ // Serão analisados nesta ordem:
+ //    sgrDiferenca_qt_alt_2
+ //    sgrDiferenca_qt_alt_1
+ //    sgrDiferenca_qt_alt
+ // Pois, o controle sgrDiferenca_qt_alt_2 depende do controle sgrDiferenca_qt_alt_1,
+ // e o controle sgrDiferenca_qt_alt_1 depende do controle sgrDiferenca_qt_alt;
+ // Ou seja, quando o usuário clica no controle: sgrDiferenca_qt_alt, automaticamente,
+ // o controles sgrDiferenca_qt_alt_1 e sgrDiferenca_qt_alt_2 são atualizados.;
+}
+function TForm1.GerarSqlDiferenca_qt_alt: string;
+var
+  uA, indice_ultima_coluna, indice_ultima_linha: Integer;
+  sqlResultado: AnsiString;
+begin
+  // Primeiro verifica o controle sgrDiferencia_qt_1_qt_2
+  // Se houver algo marcado, não iremos verificar o próximo controle.
+  indice_ultima_coluna := sgrDiferenca_qt_alt_2.ColCount - 1;
+  indice_ultima_linha := sgrDiferenca_qt_alt_2.RowCount - 1;
+
+  // Se a coluna marcar, estiver com o valor 1, quer dizer
+  // que foi selecionada, devemos pegar o campo
+  // qt_cmb, que está no índice de número 3.
+  sqlResultado := '';
+  for uA := 1 to indice_ultima_linha do begin
+    if sgrDiferenca_qt_alt_2.Cells[indice_ultima_coluna, uA] = '1' then begin
+      if sqlResultado <> '' then begin
+        sqlResultado := sqlResultado + ', ';
+      end;
+      // Pega o valor do tipo string no campo 'qt_cmb':
+      sqlResultado := sqlResultado + QuotedStr(sgrDiferenca_qt_alt_2.Cells[3, uA]);
+    end;
+  end;
+
+  // Se houve alguma linha selecionada pelo usuário devemos gerar o sql dinamicamente
+  // e em seguida, retornar o string selecionado e não iremos analisar mais
+  // nenhum controle
+  if sqlResultado <> '' then begin
+    sqlResultado := 'qt_alt || ''_'' || qt_dif_1 || ''_'' || qt_dif_2 in (' + sqlResultado + ')';
+    Exit(sqlResultado);
+  end;
+
+  // Se chegamos aqui, quer dizer, que o controle anterior: sgrDiferenca_qt_alt_2
+  // não foi selecionado nenhuma combinação.
+  // Então, devemos analisar o próximo controle.
+  indice_ultima_coluna := sgrDiferenca_qt_alt_1.ColCount - 1;
+  indice_ultima_linha := sgrDiferenca_qt_alt_1.RowCount - 1;
+
+  // Se a coluna marcar, estiver com o valor 1, quer dizer
+  // que foi selecionado algo, devemos pegar o campo
+  // qt_cmb, que está no índice de número 2.
+  sqlResultado := '';
+  for uA := 1 to indice_ultima_linha do begin
+    if sgrDiferenca_qt_alt_1.Cells[indice_ultima_coluna, uA] = '1' then begin
+      if sqlResultado <> '' then begin
+        sqlResultado := sqlResultado + ', ';
+      end;
+      // O controle sgrDiferenca_qt_alt_1 tem estes campos:
+      // qt_alt, qt_dif_1, qt_cmb, ltf_qt, res_qt,
+      // Iremos pegar o campo 'qt_cmb', que está no índice 2.
+      sqlResultado := sqlResultado + QuotedStr(sgrDiferenca_qt_alt_1.Cells[2, uA]);
+    end;
+  end;
+
+  if sqlResultado <> '' then begin
+    sqlResultado := 'qt_alt || ''_'' || qt_dif_1 in (' + sqlResultado + ')';
+    Exit(sqlResultado);
+  end;
+
+  // Se chegarmos aqui, que dizer, que no controle 'sgrDiferenca_qt_alt_1'
+  // nenhuma combinação foi escolhida.
+  // Devemos verificar o próximo controle.
+  indice_ultima_coluna := sgrDiferenca_qt_alt.ColCount - 1;
+  indice_ultima_linha := sgrDiferenca_qt_alt.RowCount - 1;
+
+  // Se a coluna marcar, estiver com o valor 1, quer dizer
+  // que foi selecionado algo, devemos pegar o campo
+  // qt_cmb, que está no índice de número 2.
+  sqlResultado := '';
+  for uA := 1 to indice_ultima_linha do begin
+    if sgrDiferenca_qt_alt.Cells[indice_ultima_coluna, uA] = '1' then begin
+      if sqlResultado <> '' then begin
+        sqlResultado := sqlResultado + ', ';
+      end;
+      // O controle sgrDiferenca_qt_alt tem estes campos:
+      // qt_alt, ltf_qt, res_qt,
+      // Iremos pegar o campo 'qt_alt', que está no índice 0.
+      sqlResultado := sqlResultado + QuotedStr(sgrDiferenca_qt_alt_1.Cells[0, uA]);
+    end;
+  end;
+
+  if sqlResultado <> '' then begin
+    sqlResultado := 'qt_alt in (' + sqlResultado + ')';
+    Exit(sqlResultado);
+  end;
+
+  // Se chegarmos aqui, quer dizer, que nada foi selecionado retornar um
+  // string vazio.
+  Exit('');
+
+end;
+
+
 {
  Atualizar lista de novos x repetidos.
 }
@@ -2147,7 +3921,7 @@ begin
      concursoAtualizar := StrToInt(cmbConcursoNovosRepetidos.Items[cmbConcursoNovosRepetidos.ItemIndex]);
 
     strSql := TStringList.Create;
-    strSql.Add('select lotofacil.fn_lotofacil_atualizar_novos_repetidos_3($1)');
+    strSql.Add('select lotofacil.fn_lotofacil_atualizar_novos_repetidos_4($1)');
 
     if dmLotofacil = nil then begin
       dmLotofacil := TdmLotofacil.Create(Self);
@@ -2617,25 +4391,6 @@ begin
     if (gradeTemp = sgrColunaB1_15Bolas) or
        (gradeTemp = sgrColunaB1_B15_15Bolas) or
        (gradeTemp = sgrColunaB1_B8_B15_15Bolas)
-
-
-       //or
-       //(gradeTemp = sgrColunaB1_16Bolas) or
-       //(gradeTemp = sgrColunaB1_17Bolas) or
-       //(gradeTemp = sgrColunaB1_18Bolas) or
-       //(gradeTemp = sgrColunaB1_B15_15Bolas) or
-       //(gradeTemp = sgrColunaB1_B15_16Bolas) or
-       //(gradeTemp = sgrColunaB1_B15_17Bolas) or
-       //(gradeTemp = sgrColunaB1_B15_18Bolas) or
-       //(gradeTemp = sgrColunaB1_B8_B15_15Bolas) or
-       //(gradeTemp = sgrColunaB1_B8_B15_16Bolas) or
-       //(gradeTemp = sgrColunaB1_B8_B15_17Bolas) or
-       //(gradeTemp = sgrColunaB1_B8_B15_18Bolas) or
-       //(gradeTemp = sgrColunaB1_B4_B8_B12_B15_15Bolas) then
-       //or
-       //(gradeTemp = sgrColunaB1_B4_B8_B12_B15_16Bolas) or
-       //(gradeTemp = sgrColunaB1_B4_B8_B12_B15_17Bolas) or
-       //(gradeTemp = sgrColunaB1_B4_B8_B12_B15_18Bolas)
     then
     begin
         AtualizarColuna_B(gradeTemp);
@@ -2665,21 +4420,23 @@ begin
                   AtualizarControleFrequencia(gradeTemp);
     end;
 
-
-    {
-    if (gradeTemp = sgrFrequenciaSair) then begin
-       AtualizarControleFrequencia(sgrFrequenciaBolasSair);
-
-    end else if (gradeTemp = sgrFrequenciaBolasSair) then begin
-        AtualizarControleFrequencia(sgrFrequenciaSair);
-
-    end else if (gradeTemp = sgrFrequenciaNaoSair) then begin
-        ATualizarControleFrequencia(sgrFrequenciaBolasNaoSair);
-
-    end else if (gradeTemp = sgrFrequenciaBolasNaoSair) then begin
-        AtualizarControleFrequencia(sgrFrequenciaNaoSair);
+    // Se o controle é um dos controles de diferença entre bolas, atualmente,
+    // o próximo controle.
+    if (gradeTemp = sgrDiferenca_Qt_1) then begin
+       Controle_Diferenca_entre_Bolas_alterou(sgrDiferenca_QT_1);
+       exit;
     end;
-    }
+
+    if (gradeTemp = sgrDiferenca_qt_alt) then begin
+       Controle_Diferenca_entre_Bolas_alterou(sgrDiferenca_qt_alt);
+       exit;
+    end;
+
+    if (gradeTemp = sgrDiferenca_qt_alt_1) then begin
+       Controle_Diferenca_entre_Bolas_alterou(sgrDiferenca_qt_alt_1);
+    end;
+
+
   end;
 end;
 
@@ -5104,6 +6861,9 @@ begin
 
   // Redimensiona as colunas.
   objControle.AutoSizeColumns;
+
+  dmLotofacil.Free;
+  dmLotofacil := nil;
 end;
 
 procedure TForm1.AtualizarNovosRepetidos(concurso: Integer);
@@ -5133,7 +6893,9 @@ begin
  // estão corrompidos, devemos apagar.
  // Deve há um único concurso, e um total de 6.874.010 registros.
  strSql := TStringList.Create;
- strSql.Add('Select concurso, count(concurso) as qt_vezes from lotofacil.lotofacil_novos_repetidos');
+ strSql.Add('Select concurso, ');
+ strSql.Add('  count(concurso) as qt_vezes');
+ strSql.Add('  from lotofacil.lotofacil_novos_repetidos');
  strSql.Add('group by concurso');
  strSql.Add('order by concurso desc');
 
@@ -5174,6 +6936,9 @@ begin
 
  // Informa ao usuário o último concurso atualizado.
  lblNovosRepetidosUltimaAtualizacao.Caption := IntToStr(concurso);
+
+ dmLotofacil.Free;
+ dmLotofacil := nil;
 end;
 
 
@@ -5202,6 +6967,7 @@ begin
  // Verifica se há registros
  if sqlLotofacil.RecordCount = 0 then begin
    cmbConcursoNovosRepetidos.Clear;
+   cmbConcursoDeletar.Clear;
    exit;
  end;
 
@@ -5238,9 +7004,6 @@ end;
 procedure TForm1.CarregarParImpar;
 begin
   CarregarParImpar(sgrParImpar15Bolas);
-  // CarregarParImpar(sgrParImpar16Bolas);
-  // CarregarParImpar(sgrParImpar17Bolas);
-  // CarregarParImpar(sgrParImpar18Bolas);
 end;
 
 procedure TForm1.ConfigurarControlesParImpar(objControle: TStringGrid);
@@ -5269,7 +7032,7 @@ begin
   if objControle = sgrParImpar15Bolas then begin
      qtColunas := 6;
   end else begin
-     qtColunas := 4;
+     exit;
   end;
 
   // Nos controles stringGrid, devemos criar títulos, se queremos configurar
@@ -5309,7 +7072,9 @@ var
   qtRegistros : LongInt;
 begin
   // Inicia o módulo de dados.
-  dmLotofacil := TdmLotofacil.Create(Self);
+  if dmLotofacil = nil then begin
+     dmLotofacil := TdmLotofacil.Create(Self);
+  end;
 
   strSql := TStringList.Create;
 
@@ -5317,6 +7082,8 @@ begin
     strSql.add('Select par_impar_id, par, impar, ltf_qt, res_qt from');
     strSql.add('lotofacil.v_lotofacil_resultado_par_impar');
     strSql.add('order by res_qt desc, ltf_qt desc');
+  end else begin
+    exit;
   end;
 
   dsLotofacil := dmLotofacil.sqlLotofacil;
@@ -5381,6 +7148,9 @@ begin
 
   // Redimensiona as colunas.
   objControle.AutoSizeColumns;
+
+  dmLotofacil.Free;
+  dmLotofacil := nil;
 end;
 {
  PAR X IMPAR: FIM
@@ -5388,155 +7158,157 @@ end;
 {
 INICIO: EXTERNO X INTERNO
 }
- procedure TForm1.CarregarExternoInterno;
-  begin
-    CarregarExternoInterno(sgrExternoInterno15Bolas);
-    // CarregarExternoInterno(sgrExterno_Interno16Bolas);
-    // CarregarExternoInterno(sgrExterno_Interno17Bolas);
-    // CarregarExternoInterno(sgrExterno_Interno18Bolas);
+procedure TForm1.CarregarExternoInterno;
+begin
+  CarregarExternoInterno(sgrExternoInterno15Bolas);
+end;
+
+procedure TForm1.ConfigurarControlesExternoInterno(objControle: TStringGrid);
+var
+  qtColunas , indice_ultima_coluna, uA: Integer;
+  externo_interno_campos: array[0..5] of string = (
+                    'ext_int_id',
+                    'Externo',
+                    'Interno',
+                    'ltf_qt',
+                    'res_qt',
+                    'marcar');
+begin
+  // No controle par x impar, haverá as colunas:
+  // ext_int_id      -> identificador de combinação Externo x Interno.
+  // externo         -> Quantidade de bolas na seção externa
+  // interno         -> Quantidade de bolas na seção interna
+  // ltf_qt
+  // res_qt
+  // marcar
+
+  // Na descrição acima, haverá 6 colunas, no controle stringGrid, ao exibir,
+  // a primeira coluna com o id da combinação estará oculta, pois, não é necessário
+  // para o usuário, entretanto, ao filtrar será necessário.
+
+  if objControle = sgrExternoInterno15Bolas then begin
+     qtColunas := 6;
+  end else begin
+     exit;
   end;
 
-  procedure TForm1.ConfigurarControlesExternoInterno(objControle: TStringGrid);
-  var
-    qtColunas , indice_ultima_coluna, uA: Integer;
-    externo_interno_campos: array[0..5] of string = (
-                      'ext_int_id',
-                      'Externo',
-                      'Interno',
-                      'ltf_qt',
-                      'res_qt',
-                      'marcar');
-  begin
-    // No controle par x impar, haverá as colunas:
-    // ext_int_id      -> identificador de combinação Externo x Interno.
-    // externo
-    // interno
-    // ltf_qt
-    // res_qt
-    // marcar
-
-    // Na descrição acima, haverá 6 colunas, no controle stringGrid, ao exibir,
-    // a primeira coluna com o id da combinação estará oculta, pois, não é necessário
-    // para o usuário, entretanto, ao filtrar será necessário.
-
-    if objControle = sgrExternoInterno15Bolas then begin
-       qtColunas := 6;
-    end else begin
-       qtColunas := 4;
-    end;
-
-    // Nos controles stringGrid, devemos criar títulos, se queremos configurar
-    // as colunas, como por exemplo, centralizá-la.
-    objControle.Columns.Clear;
-    while qtColunas > 0 do begin
-      objControle.Columns.Add;
-      dec(qtColunas);
-    end;
-
-    indice_ultima_coluna := High(externo_interno_campos);
-
-    for uA := 0 to indice_ultima_Coluna do begin
-      objControle.Columns[uA].title.Alignment := TAlignment.taCenter;
-      objControle.Columns[uA].Alignment := TAlignment.taCenter;
-      objControle.Columns[uA].title.Caption := externo_interno_campos[uA];
-      objControle.Cells[uA, 0] := externo_interno_campos[uA];
-    end;
-
-    // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
-    // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
-    objControle.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
-
-    // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
-    objControle.FixedCols := 0;
-    objControle.FixedRows := 1;
+  // Nos controles stringGrid, devemos criar títulos, se queremos configurar
+  // as colunas, como por exemplo, centralizá-la.
+  objControle.Columns.Clear;
+  while qtColunas > 0 do begin
+    objControle.Columns.Add;
+    dec(qtColunas);
   end;
 
-  {
-   Este procedimento carrega todas as combinações possíveis de Externo_Interno x não Externo_Interno
-   da lotofacil, os registros correspondentes a quantas vezes a combinação saiu
-   até hoje nos concursos sorteados.
-   }
-  procedure TForm1.CarregarExternoInterno(objControle: TStringGrid);
-  var
-    strSql: TStrings;
-    dsLotofacil: TSqlQuery;
-    uLinha: integer;
-    qtRegistros : LongInt;
-  begin
-    // Inicia o módulo de dados.
-    dmLotofacil := TdmLotofacil.Create(Self);
+  indice_ultima_coluna := High(externo_interno_campos);
 
-    strSql := TStringList.Create;
+  for uA := 0 to indice_ultima_Coluna do begin
+    objControle.Columns[uA].title.Alignment := TAlignment.taCenter;
+    objControle.Columns[uA].Alignment := TAlignment.taCenter;
+    objControle.Columns[uA].title.Caption := externo_interno_campos[uA];
+    objControle.Cells[uA, 0] := externo_interno_campos[uA];
+  end;
 
-    if objControle = sgrExternoInterno15Bolas then begin
-      strSql.add('Select ext_int_id, externo, interno, ltf_qt, res_qt from');
-      strSql.add('lotofacil.v_lotofacil_resultado_Externo_Interno');
-      strSql.add('order by res_qt desc, ltf_qt desc');
-    end;
+  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
+  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  objControle.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
 
-    dsLotofacil := dmLotofacil.sqlLotofacil;
+  // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
+  objControle.FixedCols := 0;
+  objControle.FixedRows := 1;
+end;
 
-    dsLotofacil.Active := False;
-    dmLotofacil.sqlLotofacil.DataBase := dmLotofacil.pgLtk;
-    dmLotofacil.sqlLotofacil.SQL.Text := strSql.Text;
-    dmLotofacil.sqlLotofacil.UniDirectional := true;
-    dmLotofacil.sqlLotofacil.Prepare;
-    dsLotofacil.Open;
+{
+ Este procedimento carrega todas as combinações possíveis de Externo_Interno x não Externo_Interno
+ da lotofacil, os registros correspondentes a quantas vezes a combinação saiu
+ até hoje nos concursos sorteados.
+ }
+procedure TForm1.CarregarExternoInterno(objControle: TStringGrid);
+var
+  strSql: TStrings;
+  dsLotofacil: TSqlQuery;
+  uLinha: integer;
+  qtRegistros : LongInt;
+begin
+  // Inicia o módulo de dados.
+  if dmLotofacil = nil then begin
+     dmLotofacil := TdmLotofacil.Create(Self);
+  end;
 
-    // RecordCount está retornando menos registros que a quantidade atual, segue-se
-    // contorno.
-    qtRegistros := 0;
-    dsLotofacil.First;
-    while not dsLotofacil.Eof do begin
-        Inc(qtRegistros);
-        dsLotofacil.Next;
-    end;
+  strSql := TStringList.Create;
 
-    if qtRegistros = 0 then
-    begin
-      objControle.ColCount := 1;
-      objControle.RowCount := 1;
-      objControle.Cells[0, 0] := 'Não há registros...';
-      // Redimensiona as colunas.
-      objControle.AutoSizeColumns;
-      exit;
-    end;
+  if objControle = sgrExternoInterno15Bolas then begin
+    strSql.add('Select ext_int_id, externo, interno, ltf_qt, res_qt from');
+    strSql.add('lotofacil.v_lotofacil_resultado_Externo_Interno');
+    strSql.add('order by res_qt desc, ltf_qt desc');
+  end;
 
-    // Devemos, 1 registro a mais por causa do cabeçalho.
-    objControle.RowCount := qtRegistros + 1;
+  dsLotofacil := dmLotofacil.sqlLotofacil;
 
-    ConfigurarControlesExternoInterno(objControle);
+  dsLotofacil.Active := False;
+  dmLotofacil.sqlLotofacil.DataBase := dmLotofacil.pgLtk;
+  dmLotofacil.sqlLotofacil.SQL.Text := strSql.Text;
+  dmLotofacil.sqlLotofacil.UniDirectional := true;
+  dmLotofacil.sqlLotofacil.Prepare;
+  dsLotofacil.Open;
 
-    // Agora, iremos percorrer o registro e inserir na grade de strings.
-    // A primeira linha, de índice zero, é o nome dos campos, devemos começar
-    // na linha 1.
-    uLinha := 1;
-    dsLotofacil.First;
-    while dsLotofacil.EOF = False do
-    begin
-      // As células são strings, entretanto, não iremos atribuir o string diretamente,
-      // iremos pegar o valor do campo como inteiro e em seguida, converter pra
-      // string, assim, se o campo for zero, não aparece nulo, em branco.
-      objControle.Cells[0, uLinha] := IntToSTr(dsLotofacil.FieldByName('ext_int_id').AsInteger);
-      objControle.Cells[1, uLinha] := IntToStr(dsLotofacil.FieldByName('externo').AsInteger);
-      objControle.Cells[2, uLinha] := IntToSTr(dsLotofacil.FieldByName('interno').AsInteger);
-      objControle.Cells[3, uLinha] := IntToStr(dsLotofacil.FieldByName('ltf_qt').AsInteger);
-      objControle.Cells[4, uLinha] := IntToSTr(dsLotofacil.FieldByName('res_qt').AsInteger);
-      objControle.Cells[5, uLinha] := '0';
-
+  // RecordCount está retornando menos registros que a quantidade atual, segue-se
+  // contorno.
+  qtRegistros := 0;
+  dsLotofacil.First;
+  while not dsLotofacil.Eof do begin
+      Inc(qtRegistros);
       dsLotofacil.Next;
-      Inc(uLinha);
-    end;
+  end;
 
-    // Oculta a primeira coluna
-    objControle.Columns[0].Visible := false;
-
-    // Fecha o dataset.
-    dsLotofacil.Close;
-
+  if qtRegistros = 0 then
+  begin
+    objControle.ColCount := 1;
+    objControle.RowCount := 1;
+    objControle.Cells[0, 0] := 'Não há registros...';
     // Redimensiona as colunas.
     objControle.AutoSizeColumns;
+    exit;
   end;
+
+  // Devemos, 1 registro a mais por causa do cabeçalho.
+  objControle.RowCount := qtRegistros + 1;
+
+  ConfigurarControlesExternoInterno(objControle);
+
+  // Agora, iremos percorrer o registro e inserir na grade de strings.
+  // A primeira linha, de índice zero, é o nome dos campos, devemos começar
+  // na linha 1.
+  uLinha := 1;
+  dsLotofacil.First;
+  while dsLotofacil.EOF = False do
+  begin
+    // As células são strings, entretanto, não iremos atribuir o string diretamente,
+    // iremos pegar o valor do campo como inteiro e em seguida, converter pra
+    // string, assim, se o campo for zero, não aparece nulo, em branco.
+    objControle.Cells[0, uLinha] := IntToSTr(dsLotofacil.FieldByName('ext_int_id').AsInteger);
+    objControle.Cells[1, uLinha] := IntToStr(dsLotofacil.FieldByName('externo').AsInteger);
+    objControle.Cells[2, uLinha] := IntToSTr(dsLotofacil.FieldByName('interno').AsInteger);
+    objControle.Cells[3, uLinha] := IntToStr(dsLotofacil.FieldByName('ltf_qt').AsInteger);
+    objControle.Cells[4, uLinha] := IntToSTr(dsLotofacil.FieldByName('res_qt').AsInteger);
+    objControle.Cells[5, uLinha] := '0';
+
+    dsLotofacil.Next;
+    Inc(uLinha);
+  end;
+
+  // Oculta a primeira coluna
+  objControle.Columns[0].Visible := false;
+
+  // Fecha o dataset.
+  dsLotofacil.Close;
+
+  // Redimensiona as colunas.
+  objControle.AutoSizeColumns;
+
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+end;
 {
 FIM: EXTERNO X INTERNO
 }
@@ -5548,9 +7320,6 @@ FIM: EXTERNO X INTERNO
  procedure TForm1.CarregarPrimo;
  begin
    CarregarPrimo(sgrPrimo15Bolas);
-   // CarregarPrimo(sgrPrimo16Bolas);
-   // CarregarPrimo(sgrPrimo17Bolas);
-   // CarregarPrimo(sgrPrimo18Bolas);
  end;
 
  procedure TForm1.ConfigurarControlesPrimo(objControle: TStringGrid);
@@ -5579,7 +7348,7 @@ FIM: EXTERNO X INTERNO
    if objControle = sgrPrimo15Bolas then begin
       qtColunas := 6;
    end else begin
-      qtColunas := 4;
+       exit;
    end;
 
    // Nos controles stringGrid, devemos criar títulos, se queremos configurar
@@ -5621,7 +7390,9 @@ FIM: EXTERNO X INTERNO
    qtRegistros : LongInt;
  begin
    // Inicia o módulo de dados.
-   dmLotofacil := TdmLotofacil.Create(Self);
+   if dmLotofacil = nil then begin
+      dmLotofacil := TdmLotofacil.Create(Self);
+   end;
 
    strSql := TStringList.Create;
 
@@ -5629,6 +7400,8 @@ FIM: EXTERNO X INTERNO
      strSql.add('Select prm_id, primo, nao_primo, ltf_qt, res_qt from');
      strSql.add('lotofacil.v_lotofacil_resultado_primo');
      strSql.add('order by res_qt desc, ltf_qt desc');
+   end else begin
+     exit;
    end;
 
    dsLotofacil := dmLotofacil.sqlLotofacil;
@@ -5693,6 +7466,9 @@ FIM: EXTERNO X INTERNO
 
    // Redimensiona as colunas.
    objControle.AutoSizeColumns;
+
+   dmLotofacil.Free;
+   dmLotofacil := nil;
  end;
  {
   FIM: PRIMO X NÃO PRIMO

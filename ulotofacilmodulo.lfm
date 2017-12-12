@@ -4,8 +4,8 @@ object dmLotofacil: TdmLotofacil
   HorizontalOffset = 248
   VerticalOffset = 250
   Width = 839
+  PPI = 96
   object sqlNovosRepetidos15Bolas: TSQLQuery
-    IndexName = 'DEFAULT_ORDER'
     FieldDefs = <    
       item
         Name = 'novos'
@@ -36,7 +36,6 @@ object dmLotofacil: TdmLotofacil
       'Select * from v_lotofacil_novo_repetiu_ainda_nao_saiu'
       'order by res_qt desc, ltf_qt'
     )
-    Options = []
     Params = <>
     left = 264
     top = 289
@@ -44,7 +43,6 @@ object dmLotofacil: TdmLotofacil
   object SQLTransaction1: TSQLTransaction
     Active = False
     Database = pgLTK
-    Options = []
     left = 200
     top = 144
   end
@@ -57,7 +55,6 @@ object dmLotofacil: TdmLotofacil
     Transaction = SQLTransaction1
     UserName = 'ltk'
     HostName = '192.168.88.248'
-    Options = []
     Role = 'lotofacil'
     left = 408
     top = 440
@@ -73,21 +70,18 @@ object dmLotofacil: TdmLotofacil
       'Select * v_lotofacil_resultado_b1_b15'
       'order by res_qt desc, ltf_qt'
     )
-    Options = []
     Params = <>
     left = 264
     top = 344
   end
   object sqlNovosRepetidos17Bolas: TSQLQuery
     FieldDefs = <>
-    Options = []
     Params = <>
     left = 264
     top = 392
   end
   object sqlNovosRepetidos18Bolas: TSQLQuery
     FieldDefs = <>
-    Options = []
     Params = <>
     left = 264
     top = 448
@@ -143,7 +137,6 @@ object dmLotofacil: TdmLotofacil
       'Select * from v_lotofacil_novo_repetiu_ainda_nao_saiu'
       'order by res_qt desc, ltf_qt'
     )
-    Options = []
     Params = <>
     left = 592
     top = 136
