@@ -47,7 +47,7 @@ object dmLotofacil: TdmLotofacil
     top = 144
   end
   object pgLTK: TPQConnection
-    Connected = True
+    Connected = False
     LoginPrompt = False
     DatabaseName = 'ltk'
     KeepConnection = False

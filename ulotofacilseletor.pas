@@ -217,6 +217,7 @@ begin
   fQuantidadeMaximaSelecionada := 15;
   fBotaoAtivadoCor := clGreen;
   fTotal_de_bolas_selecionadas := 0;
+  ;
 
 
 

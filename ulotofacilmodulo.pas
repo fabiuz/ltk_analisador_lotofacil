@@ -5,7 +5,7 @@ unit uLotofacilModulo;
 interface
 
 uses
-  Classes, SysUtils, sqldb, sqlite3conn, db, pqconnection, FileUtil,
+  Classes, SysUtils, sqldb, db, pqconnection, FileUtil,
   PQTEventMonitor;
 
 type

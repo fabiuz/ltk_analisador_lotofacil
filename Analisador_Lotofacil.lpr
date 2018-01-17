@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, datetimectrls, uLotofacilMain, uLotofacilModulo, uLotofacilSeletor;
+  Forms, indylaz, datetimectrls, uLotofacilMain, uLotofacilModulo,
+  uLotofacilSeletor, uGeradorAleatorio, uLotofacil_Gerador_id;
 
 {$R *.res}
 

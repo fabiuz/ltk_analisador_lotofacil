@@ -24,21 +24,24 @@
         <FormatVersion Value="1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="4">
+    <RequiredPackages Count="5">
       <Item1>
-        <PackageName Value="DateTimeCtrls"/>
+        <PackageName Value="indylaz"/>
       </Item1>
       <Item2>
-        <PackageName Value="FCL"/>
+        <PackageName Value="DateTimeCtrls"/>
       </Item2>
       <Item3>
-        <PackageName Value="SQLDBLaz"/>
+        <PackageName Value="FCL"/>
       </Item3>
       <Item4>
-        <PackageName Value="LCL"/>
+        <PackageName Value="SQLDBLaz"/>
       </Item4>
+      <Item5>
+        <PackageName Value="LCL"/>
+      </Item5>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="10">
       <Unit0>
         <Filename Value="Analisador_Lotofacil.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -78,6 +81,26 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="uLotofacilSeletor"/>
       </Unit5>
+      <Unit6>
+        <Filename Value="ugeradoraleatorio.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uGeradorAleatorio"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="uhtml_tokenizador.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uHtml_Tokenizador"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="uhtml_parser.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uHtml_Parser"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="ulotofacil_gerador_id.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uLotofacil_Gerador_id"/>
+      </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

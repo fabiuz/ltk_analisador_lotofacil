@@ -8,7 +8,14 @@ uses
   Classes, SysUtils, FileUtil, DateTimePicker, Forms, Controls, Graphics,
   Dialogs, ComCtrls, ExtCtrls, StdCtrls, DBGrids, uLotofacilModulo,
   uLotofacilSeletor, DB, BufDataset, sqlDb, Grids, ButtonPanel, ValEdit,
-  CheckLst, MaskEdit, Buttons, strings, strUtils, eventlog;
+  CheckLst, MaskEdit, Buttons, JSONPropStorage, Spin, IdHTTP, strings, strUtils,
+  eventlog, fgl, IdHeaderList, IdAuthentication, zipper,
+  uHtml_Tokenizador,
+  SAX_HTML, dom_html,dom
+
+  ;
+
+
 
 
 // Ao gerar o sql, iremos selecionar estes campos.
@@ -148,12 +155,38 @@ const
    QT_DIF_4 = 51; QT_DIF_5 = 52; QT_DIF_6 = 53; QT_DIF_7 = 54;
    QT_DIF_8 = 55; QT_DIF_9 = 56; QT_DIF_10 = 57; QT_DIF_11 = 58;
 
+// Registro pra armazena os dados da lotofacil.
+type
+  TLotofacil_Resultado = record
+    concurso: Integer;
+    data_dia, data_mes, data_ano: Integer;
+    bolas: array[1..15] of Integer;
+    arrecadacao_total: Single;
+    ganhadores: array[11..15] of Integer;
+    rateio: array[11..15] of Single;
+    acumulado_15_numeros: Single;
+    estimativa_premio: Single;
+    acumulado_especial: Single;
+end;
+
+type
+  TAleatorio_Resultado = array of array of Integer;
+
+
+operator = (ltf_a, ltf_b: TLotofacil_Resultado): boolean;
+
+type
+  TLista_TStrings = specialize TFPGList<TStringList>;
+
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    btnAleatorioAplicarFiltro : TButton;
     btnFrequenciaAtualizar : TButton;
+    btnGeradorAleatorioSemFiltro : TButton;
+    btnGeradorAleatorioComFiltro : TButton;
     btnGrupo2BolasDesmarcarTodos1 : TButton;
     btnGrupo2BolasDesmarcarTodos2 : TButton;
     btnGrupo2BolasDesmarcarTodos20 : TButton;
@@ -166,10 +199,6 @@ type
     btnGrupo2BolasDesmarcarTodos3 : TButton;
     btnGrupo2BolasDesmarcarTodos30 : TButton;
     btnGrupo2BolasDesmarcarTodos31 : TButton;
-    btnGrupo2BolasDesmarcarTodos32 : TButton;
-    btnGrupo2BolasDesmarcarTodos33 : TButton;
-    btnGrupo2BolasDesmarcarTodos34 : TButton;
-    btnGrupo2BolasDesmarcarTodos35 : TButton;
     btnGrupo2BolasDesmarcarTodos36 : TButton;
     btnGrupo2BolasDesmarcarTodos37 : TButton;
     btnGrupo2BolasDesmarcarTodos38 : TButton;
@@ -194,10 +223,6 @@ type
     btnGrupo2BolasMarcarTodos3 : TButton;
     btnGrupo2BolasMarcarTodos30 : TButton;
     btnGrupo2BolasMarcarTodos31 : TButton;
-    btnGrupo2BolasMarcarTodos32 : TButton;
-    btnGrupo2BolasMarcarTodos33 : TButton;
-    btnGrupo2BolasMarcarTodos34 : TButton;
-    btnGrupo2BolasMarcarTodos35 : TButton;
     btnGrupo2BolasMarcarTodos36 : TButton;
     btnGrupo2BolasMarcarTodos37 : TButton;
     btnGrupo2BolasMarcarTodos38 : TButton;
@@ -217,34 +242,44 @@ type
     btnGrupo2BolasDesmarcarTodos : TButton;
     btnGrupo2BolasMarcarTodos : TButton;
     btnAtualizarNovosRepetidos : TButton;
+    btnAleatorioNovo : TButton;
+    btnExibirAleatorio : TButton;
     btnVerificarAcerto : TButton;
     btnNovosFiltros : TButton;
     btnSelecionar : TButton;
+    btnAleatorio_Verificar_Acerto : TButton;
+    btnObterResultados : TButton;
+    btnAtualizar_Combinacao_Complementar : TButton;
+    chkComplementar_Bolas_por_combinacao : TCheckGroup;
     chkExcluirJogos_LTF_QT : TCheckGroup;
     chkExcluir_Jogos_Ja_Sorteados : TCheckGroup;
     chkExibirCampos : TCheckListBox;
+    chkExibirCampos1 : TCheckListBox;
     cmbConcursoFrequenciaNaoSair : TComboBox;
     cmbConcursoFrequenciaSair : TComboBox;
     cmbConcursoFrequenciaTotalSair : TComboBox;
     cmbConcursoFrequenciaTotalNaoSair : TComboBox;
     cmbConcursoNovosRepetidos : TComboBox;
+    cmbConcurso_Aleatorio_Verificar_Acerto : TComboBox;
+    cmbAleatorioFiltroData : TComboBox;
+    cmbAleatorioFiltroHora : TComboBox;
     cmbFrequenciaInicio : TComboBox;
     cmbFrequenciaFim : TComboBox;
     cmbConcursoDeletar : TComboBox;
-    cmbFrequenciaMaximoDeixouDeSair1 : TComboBox;
-    cmbFrequenciaMaximoDeixouDeSair2 : TComboBox;
-    cmbFrequenciaMaximoDeixouDeSair3 : TComboBox;
-    cmbFrequenciaMaximoNaoSair : TComboBox;
-    cmbFrequenciaMaximoSair : TComboBox;
+    cmbAinda_Nao_Saiu_Maximo : TComboBox;
+    cmbDeixou_de_Sair_Maximo : TComboBox;
+    cmbRepetindo_Maximo : TComboBox;
+    cmbFrequencia_Maximo_Nao_Sair : TComboBox;
+    cmbFrequencia_Maximo_Sair : TComboBox;
     cmbFrequenciaMaximoSair1 : TComboBox;
     cmbFrequenciaMaximoSair2 : TComboBox;
-    cmbFrequenciaMinimoDeixouDeSair1 : TComboBox;
-    cmbFrequenciaMinimoDeixouDeSair2 : TComboBox;
-    cmbFrequenciaMinimoDeixouDeSair3 : TComboBox;
-    cmbFrequenciaMinimoNaoSair : TComboBox;
-    cmbFrequenciaMinimoSair : TComboBox;
-    cmbFrequenciaMaximoDeixouDeSair : TComboBox;
-    cmbFrequenciaMinimoDeixouDeSair : TComboBox;
+    cmbAinda_Nao_Saiu_Minimo : TComboBox;
+    cmbDeixou_de_Sair_Minimo : TComboBox;
+    cmbRepetindo_Minimo : TComboBox;
+    cmbFrequencia_Minimo_Nao_Sair : TComboBox;
+    cmbFrequencia_Minimo_Sair : TComboBox;
+    cmbNovo_Maximo : TComboBox;
+    cmbNovo_Minimo : TComboBox;
     cmbFrequenciaMinimoSair1 : TComboBox;
     cmbFrequenciaMinimoSair2 : TComboBox;
     cmbFiltroData : TComboBox;
@@ -271,6 +306,11 @@ type
     GroupBox24 : TGroupBox;
     GroupBox25 : TGroupBox;
     GroupBox26 : TGroupBox;
+    GroupBox27 : TGroupBox;
+    GroupBox28 : TGroupBox;
+    GroupBox29 : TGroupBox;
+    GroupBox30 : TGroupBox;
+    GroupBox31 : TGroupBox;
     GroupBox7 : TGroupBox;
     GroupBox8 : TGroupBox;
     grpConcursoFrequenciaTotalNaoSair : TGroupBox;
@@ -282,9 +322,11 @@ type
     grpDiferenca_qt_alt3 : TGroupBox;
     grpDiferenca_qt_alt4 : TGroupBox;
     grpFiltroData : TGroupBox;
+    grpFiltroData1 : TGroupBox;
     grpFiltroHora : TGroupBox;
-    grpFrequenciaBolaNaoSair : TGroupBox;
+    grpFiltroHora1 : TGroupBox;
     grpConcursoFrequenciaTotalSair : TGroupBox;
+    grpFrequenciaBolaNaoSair : TGroupBox;
     grpFrequenciaDeixouDeSair : TGroupBox;
     GroupBox13 : TGroupBox;
     GroupBox14 : TGroupBox;
@@ -294,15 +336,11 @@ type
     GroupBox5 : TGroupBox;
     GroupBox6 : TGroupBox;
     GroupBox9 : TGroupBox;
-    grpDiagonal15Bolas : TGroupBox;
-    grpDiagonal16Bolas : TGroupBox;
-    grpDiagonal17Bolas : TGroupBox;
-    grpDiagonal18Bolas : TGroupBox;
     grpFrequenciaDeixouDeSair1 : TGroupBox;
     grpFrequenciaDeixouDeSair2 : TGroupBox;
     grpFrequenciaDeixouDeSair3 : TGroupBox;
-    grpFrequenciaTotalNaoSair : TGroupBox;
     grpFrequencialSair : TGroupBox;
+    grpFrequenciaTotalNaoSair : TGroupBox;
     grpPrimo15Bolas : TGroupBox;
     grpFrequenciaInicio : TGroupBox;
     grpBolasB1_15Bolas : TGroupBox;
@@ -329,8 +367,11 @@ type
     edConcurso : TLabeledEdit;
     grpFrequenciaBolas : TGroupBox;
     grpSelecionarCampos : TGroupBox;
-    Label3 : TLabel;
+    grpSelecionarCampos1 : TGroupBox;
     Label4 : TLabel;
+    objHttp : TIdHTTP;
+    JSONPropStorage1 : TJSONPropStorage;
+    Label3 : TLabel;
     Label5 : TLabel;
     Label6 : TLabel;
     lblNovosRepetidosUltimaAtualizacao : TLabel;
@@ -338,18 +379,26 @@ type
     Memo1 : TMemo;
     mmFiltroSql : TMemo;
     PageControl1: TPageControl;
+    PageControl2 : TPageControl;
     PageControl4 : TPageControl;
+    PageControl5 : TPageControl;
     pageFiltros: TPageControl;
     PageControl3 : TPageControl;
     Panel1 : TPanel;
     Panel2 : TPanel;
     Panel3 : TPanel;
     Panel4 : TPanel;
+    Panel5 : TPanel;
+    Panel6 : TPanel;
+    pnFrequenciaNaoSair : TPanel;
+    pnGerador_Opcoes : TPanel;
+    pnExibirCampos1 : TPanel;
+    pnGrupo2Bolas38 : TPanel;
+    pnGrupo2Bolas39 : TPanel;
     pnGrupo2Bolas48 : TPanel;
     pnGrupo2Bolas49 : TPanel;
     pnVerificarAcertos : TPanel;
     pnExibirCampos : TPanel;
-    pnFrequenciaNaoSair : TPanel;
     pnFrequenciaNaoSair1 : TPanel;
     pnFrequenciaNaoSair2 : TPanel;
     pnFrequenciaNaoSair3 : TPanel;
@@ -359,7 +408,6 @@ type
     pn1a7 : TPanel;
     pn1a8 : TPanel;
     pn1a9 : TPanel;
-    pnDiagonal : TPanel;
     pnGrupo2Bolas1 : TPanel;
     pnGrupo2Bolas2 : TPanel;
     pnGrupo2Bolas20 : TPanel;
@@ -372,14 +420,8 @@ type
     pnGrupo2Bolas3 : TPanel;
     pnGrupo2Bolas30 : TPanel;
     pnGrupo2Bolas31 : TPanel;
-    pnGrupo2Bolas32 : TPanel;
-    pnGrupo2Bolas33 : TPanel;
-    pnGrupo2Bolas34 : TPanel;
-    pnGrupo2Bolas35 : TPanel;
     pnGrupo2Bolas36 : TPanel;
     pnGrupo2Bolas37 : TPanel;
-    pnGrupo2Bolas38 : TPanel;
-    pnGrupo2Bolas39 : TPanel;
     pnGrupo2Bolas4 : TPanel;
     pnGrupo2Bolas40 : TPanel;
     pnGrupo2Bolas41 : TPanel;
@@ -392,28 +434,28 @@ type
     pnGrupo2Bolas5 : TPanel;
     pnGrupo2Bolas6 : TPanel;
     pnGrupo2Bolas7 : TPanel;
+    pnVerificarAcertos1 : TPanel;
+    rdGerador_Quantidade_de_Bolas : TRadioGroup;
     sgrDiferenca_Qt_1 : TStringGrid;
     sgrDiferenca_Qt_1_Qt_2 : TStringGrid;
     sgrDiferenca_qt_alt1 : TStringGrid;
+    sgrFrequenciaBolasNaoSair : TStringGrid;
+    sgrFrequenciaSair : TStringGrid;
+    sgrGeradorAleatorio : TStringGrid;
+    sgrGeradorEspelho : TStringGrid;
     sgrLotofacilSoma : TStringGrid;
     sgrDiferenca_qt_alt_1 : TStringGrid;
     sgrDiferenca_qt_alt : TStringGrid;
     sgrDiferenca_qt_alt_2 : TStringGrid;
     sgrFrequenciaTotalSair : TStringGrid;
     sgrFrequenciaTotalNaoSair : TStringGrid;
-    sgrFrequenciaBolasNaoSair : TStringGrid;
     sgrFrequenciaNaoSair : TStringGrid;
-    sgrFrequenciaSair : TStringGrid;
     sgrPrimo15Bolas : TStringGrid;
     sgrGrupo3Bolas : TStringGrid;
     sgrColunaB1_15Bolas : TStringGrid;
     sgrColunaB1_B15_15Bolas : TStringGrid;
     sgrColunaB1_B8_B15_15Bolas : TStringGrid;
     sgrColunaB1_B4_B8_B12_B15_15Bolas : TStringGrid;
-    sgrDiagonal15Bolas : TStringGrid;
-    sgrDiagonal16Bolas : TStringGrid;
-    sgrDiagonal17Bolas : TStringGrid;
-    sgrDiagonal18Bolas : TStringGrid;
     sgrExternoInterno15Bolas2 : TStringGrid;
     sgrExternoInterno15Bolas3 : TStringGrid;
     sgrExternoInterno16Bolas2 : TStringGrid;
@@ -433,9 +475,14 @@ type
     sgrExternoInterno18Bolas : TStringGrid;
     sgrFrequencia : TStringGrid;
     sgrFrequenciaBolasSair : TStringGrid;
+    sgrAleatorioVerificarAcertos : TStringGrid;
     sheetFiltro: TTabSheet;
     sgrFiltros : TStringGrid;
     sgrVerificarAcertos : TStringGrid;
+    spinGerador_Combinacoes : TSpinEdit;
+    Splitter1 : TSplitter;
+    Splitter2 : TSplitter;
+    sgrResultado_Importacao : TStringGrid;
     tabBolasNasColunas: TTabSheet;
     tabHorizontal: TTabSheet;
     tabFrequencia: TTabSheet;
@@ -444,7 +491,7 @@ type
     TabSheet1 : TTabSheet;
     tabGerarFiltros : TTabSheet;
     tabLotofacilSoma : TTabSheet;
-    TabSheet2 : TTabSheet;
+    TabSheet10 : TTabSheet;
     TabSheet3 : TTabSheet;
     tabBanco_de_dados: TTabSheet;
     tabFrequenciaConcurso : TTabSheet;
@@ -455,11 +502,9 @@ type
     tabExternoInterno: TTabSheet;
     tabDiferencaEntreBolas: TTabSheet;
     tabBolasNasColunas15Bolas : TTabSheet;
-    tabDiagonal : TTabSheet;
     tabPrimo : TTabSheet;
     TabSheet7 : TTabSheet;
     tabDiferenca_QT : TTabSheet;
-    TabSheet8 : TTabSheet;
     TabSheet9 : TTabSheet;
     tabVertical : TTabSheet;
     tg1 : TToggleBox;
@@ -488,27 +533,44 @@ type
     tg8 : TToggleBox;
     tg9 : TToggleBox;
     tgExibirCampos : TToggleBox;
+    tgExibirCampos1 : TToggleBox;
+    tgGeradorOpcoes : TToggleBox;
     tgVerificarAcertos : TToggleBox;
+    tgAleatorioVerificarAcertos : TToggleBox;
     UpDown1 : TUpDown;
     ValueListEditor1 : TValueListEditor;
+    procedure btnAleatorioNovoClick(Sender : TObject);
     procedure btnAtualizarNovosRepetidosClick(Sender : TObject);
+    procedure btnAtualizar_Combinacao_ComplementarClick(Sender : TObject);
     procedure btnFiltroGerarClick(Sender : TObject);
     procedure btnFrequenciaAtualizarClick(Sender : TObject);
+    procedure btnGeradorAleatorioComFiltroClick(Sender : TObject);
+    procedure btnGeradorAleatorioSemFiltroClick(Sender : TObject);
     procedure btnGrupo2BolasMarcarTodosClick(Sender : TObject);
     procedure btnLotofacilResultadoExcluirClick(Sender : TObject);
     procedure btnLotofacilResultadoInserirClick(Sender : TObject);
     procedure btnGrupo2BolasDesmarcarTodosClick(Sender : TObject);
     procedure btnNovosFiltrosClick(Sender : TObject);
+    procedure btnObterResultadosClick(Sender : TObject);
     procedure btnSelecionarClick(Sender : TObject);
     procedure btnVerificarAcertoClick(Sender : TObject);
     procedure CheckBox1Change(Sender : TObject);
     procedure chkExibirCamposClickCheck(Sender : TObject);
+    procedure cmbAinda_Nao_Saiu_MaximoChange(Sender : TObject);
+    procedure cmbAinda_Nao_Saiu_MinimoChange(Sender : TObject);
+    procedure cmbAleatorioFiltroDataChange(Sender : TObject);
     procedure cmbConcursoFrequenciaNaoSairChange(Sender : TObject);
     procedure cmbConcursoFrequenciaSairChange(Sender : TObject);
     procedure cmbConcursoFrequenciaTotalSairChange(Sender : TObject);
+    procedure cmbDeixou_de_Sair_MaximoChange(Sender : TObject);
+    procedure cmbDeixou_de_Sair_MinimoChange(Sender : TObject);
     procedure cmbFiltroDataChange(Sender : TObject);
     procedure cmbFrequenciaFimChange(Sender : TObject);
     procedure cmbFrequenciaInicioChange(Sender : TObject);
+    procedure cmbNovo_MaximoChange(Sender : TObject);
+    procedure cmbNovo_MinimoChange(Sender : TObject);
+    procedure cmbRepetindo_MaximoChange(Sender : TObject);
+    procedure cmbRepetindo_MinimoChange(Sender : TObject);
     procedure edConcursoKeyDown(Sender : TObject; var Key : Word;
       Shift : TShiftState);
     procedure edConcursoKeyPress(Sender : TObject; var Key : char);
@@ -517,6 +579,7 @@ type
     procedure pageFiltrosChange(Sender : TObject);
     procedure pageFiltrosResize(Sender : TObject);
     procedure pnDiagonalResize(Sender : TObject);
+    procedure rdGerador_Quantidade_de_BolasSelectionChanged(Sender : TObject);
     procedure sgrColunaB1_15BolasSelectCell(Sender : TObject; aCol,
       aRow : Integer; var CanSelect : Boolean);
     procedure sgrColunaB1_16BolasSelectCell(Sender : TObject; aCol,
@@ -588,6 +651,7 @@ type
     procedure sheetFiltroResize(Sender : TObject);
     procedure tgBolaChange(Sender : TObject);
     procedure tgExibirCamposChange(Sender : TObject);
+    procedure tgGeradorOpcoesChange(Sender : TObject);
     procedure tgVerificarAcertosChange(Sender : TObject);
     procedure ValueListEditor1Click(Sender : TObject);
   private
@@ -598,10 +662,12 @@ type
     procedure AtualizarControleFrequencia(objControle : TStringGrid);
     procedure AtualizarControleFrequenciaMinimoMaximo;
     procedure AtualizarControleGrupo(objControle : TStringGrid);
-    procedure AtualizarFiltroData(strWhere : string);
+    procedure AtualizarFiltroData(Sender : TObject; strWhere : string);
     procedure AtualizarFrequencia;
     procedure AtualizarFrequenciaBolas;
     procedure AtualizarNovosRepetidos(concurso : Integer);
+    procedure Atualizar_Combinacao_Complementar(bolas_por_combinacao : Integer);
+    function Atualizar_Controle_Lotofacil_Resultado : boolean;
     procedure Atualizar_Controle_sgrFiltro(strWhere_Data_Hora : string);
     procedure CarregarColuna_B(objControle : TStringGrid; strSql : string);
     procedure CarregarColuna_B;
@@ -666,6 +732,7 @@ type
     procedure ConfigurarControlesExternoInterno(objControle : TStringGrid);
     procedure ConfigurarControlesPrimo(objControle : TStringGrid);
     procedure ConfigurarFrequenciaPorConcurso(objControle : TStringGrid);
+    procedure ConfigurarGeradorOpcoes;
     procedure Configurar_Controle_sgrFiltro;
     procedure Controle_Diferenca_entre_Bolas_alterou(objControle : TStringGrid);
     procedure Exibir_Ocultar_Filtro_Campos;
@@ -680,10 +747,26 @@ type
     function GerarSqlNovosRepetidos : string;
     function GerarSqlParImpar : string;
     function GerarSqlPrimo : string;
+    function Gerar_Combinacao_Complementar(lotofacil_bolas : array of Integer;
+      bolas_por_combinacao : Integer; out
+  lotofacil_aleatorio : TAleatorio_Resultado) : boolean;
+    function Gerar_Complementar_15_Numeros : boolean;
+    function Gerar_Lotofacil_Aleatorio(
+      var lotofacil_aleatorio : TAleatorio_Resultado;
+  bolas_por_combinacao : Integer; qt_de_combinacoes : Integer) : boolean;
     procedure Iniciar_Banco_de_Dados;
     procedure InserirNovoFiltro(sqlFiltro : TStringList);
+    function Inserir_Aleatorio_Temporario(ltf_aleatorio : TAleatorio_Resultado;
+      bolas_por_combinacao : Integer) : boolean;
+    function Inserir_Lotofacil_Resultado_Importacao(lista_concurso : TStringList
+      ) : boolean;
     procedure MarcarGrupo2Bolas;
+    procedure obterNovosFiltros(Sender : TObject);
+    function Obter_Lotofacil_Resultado(arquivo_html : AnsiString) : boolean;
+    function Obter_Lotofacil_Resultado : boolean;
     procedure RedimensionarControleDiagonal;
+    procedure Verificar_Acertos(Sender : TObject);
+    procedure Verificar_Controle_Frequencia_Minimo_Maximo(Sender : TObject);
     //procedure tgBolaChange(Sender : TObject);
     { private declarations }
   public
@@ -698,20 +781,37 @@ type
     lotofacil_resultado_botoes: array[1..25] of TToggleBox;
     lotofacil_qt_bolas_escolhidas : integer;
 
+    {
+     Os arranjos
+    }
     concurso_frequencia_sair: array[1..25] of Integer;
     concurso_frequencia_nao_sair: array[1..25] of Integer;
 
     filtro_campos_selecionados: array[0..59] of boolean;
 
+    lotofacil_num : array of array of array of Integer;
+
+    strErro: AnsiString;
+
   end;
+const
+  LOTOFACIL_ULTIMO_INDICE = 6874010;
+
 
 var
   Form1: TForm1;
 
 implementation
+uses
+  uLotofacil_Gerador_id;
 
 var
   dmLotofacil: TdmLotofacil;
+
+operator = (ltf_a, ltf_b : TLotofacil_Resultado) : boolean;
+begin
+  Result := ltf_a.concurso = ltf_b.concurso;
+end;
 
 {$R *.lfm}
 
@@ -721,6 +821,13 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
      CarregarTodosControles;
      AtivarDesativarControles;
+     ConfigurarGeradorOpcoes;
+end;
+
+procedure TForm1.ConfigurarGeradorOpcoes;
+begin
+     // Padrão 15 bolas.
+     rdGerador_Quantidade_de_Bolas.ItemIndex := 0;
 end;
 
 procedure TForm1.AtivarDesativarControles;
@@ -775,9 +882,11 @@ end;
 {
  Este procedure atualiza todos os controles, ao iniciar, esta procedure é chamada.
 }
+
 procedure TForm1.CarregarTodosControles;
 begin
   dmLotofacil := nil;
+
   CarregarNovosRepetidos;
   CarregarParImpar;
   CarregarExternoInterno;
@@ -789,9 +898,13 @@ begin
   CarregarControlesTG;
 
   CarregarConcursos;
-  CarregarFrequenciaBolas;
+
+  // Não carregar a frequencia por enquanto.
+  // CarregarFrequenciaBolas;
+
+
   CarregarFrequenciaPorConcurso(sgrFrequenciaBolasSair);
-  CarregarFrequenciaPorConcurso(sgrFrequenciaBolasNaoSair);
+  //CarregarFrequenciaPorConcurso(sgrFrequenciaBolasNaoSair);
 
   CarregarConcursoFrequenciaTotalSair;
 
@@ -1549,7 +1662,9 @@ var
   sqlLotofacil: TSqlQuery;
   concurso: AnsiString;
   qtRegistros , uLinha: Integer;
+  bola_numero : Integer;
 begin
+
   if objControle = sgrFrequenciaBolasSair then begin
     concurso := cmbConcursoFrequenciaSair.Items[cmbConcursoFrequenciaSair.ItemIndex];
   end else if objControle = sgrFrequenciaBolasNaoSair then begin
@@ -1571,75 +1686,123 @@ begin
   sqlLotofacil.SQL.Text := strSql.Text;
   sqlLotofacil.UniDirectional := false;
   sqlLotofacil.Prepare;
-  sqlLotofacil.Open;
+
+  try
+     sqlLotofacil.Open;
+  Except
+    On exc: Exception do
+    begin
+      strErro := exc.Message;
+      exit;
+    end;
+  end;
 
   ConfigurarFrequenciaPorConcurso(objControle);
 
-  qtRegistros := 0;
-  uLinha := 1;
-  sqlLotofacil.First;
-  while not sqlLotofacil.Eof do begin
-    Inc(qtRegistros);
+  try
+    qtRegistros := 0;
+    sqlLotofacil.First;
+    sqlLotofacil.Last;
+    qtRegistros := sqlLotofacil.RecordCount;
+
+    if qtRegistros <> 25 then
+    begin
+      objControle.Columns.Clear;
+      objControle.Columns.Add;
+      objControle.FixedRows := 0;
+      objControle.RowCount := 1;
+
+      if qtRegistros = 0 then
+      begin
+           objControle.Cells[0,0] := 'Erro, não há registros, atualize a frequencia.';
+      end else
+      begin
+        objControle.Cells[0,0] := 'Erro, não há 25 registros, atualize a frequencia.';
+      end;
+      objControle.AutoSizeColumns;
+      exit;
+    end;
+
+    uLinha := 1;
+    sqlLotofacil.First;
     objControle.RowCount := qtRegistros + 1;
+    while not sqlLotofacil.Eof do
+    begin
+      bola_numero := sqlLotofacil.FieldByName('bola').AsInteger;
 
-    objControle.Cells[0, uLinha] := IntToSTr(sqlLotofacil.FieldByName('bola').AsInteger);
-    objControle.Cells[1, uLinha] := sqlLotofacil.FieldByName('frequencia_status').AsString;
-    objControle.Cells[2, uLinha] := IntToSTr(sqlLotofacil.FieldByName('frequencia').AsInteger);
-    objControle.Cells[3, uLinha] := '0';
+      objControle.Cells[0, uLinha] := IntToStr(bola_numero);
+      objControle.Cells[1, uLinha] := sqlLotofacil.FieldByName('frequencia_status').AsString;
+      objControle.Cells[2, uLinha] := IntToSTr(sqlLotofacil.FieldByName('frequencia').AsInteger);
+      objControle.Cells[3, uLinha] := IntToStr(concurso_frequencia_sair[bola_numero]);
+      objControle.Cells[4, uLinha] := IntToStr(concurso_frequencia_nao_sair[bola_numero]);
 
-    Inc(uLinha);
+      Inc(uLinha);
 
-    sqlLotofacil.Next;
-  end;
-  sqlLotofacil.close;
-
-  if qtRegistros = 0 then
-  begin
-    objControle.Columns.Clear;
-    objControle.Columns.Add;
-    objControle.RowCount := 2;
-    objControle.Columns[0].Title.Caption := 'Erro';
-    objControle.Cells[0, 1] := 'Não há registros, atualiza a frequência...';
-    // Redimensiona as colunas.
-    objControle.AutoSizeColumns;
-    exit;
+      sqlLotofacil.Next;
+    end;
+    sqlLotofacil.close;
+  except
+    ON exc: Exception do
+    begin
+      strErro := Exc.Message;
+      Exit;
+    end
   end;
 
   objControle.AutoSizeColumns;
+
+  AtualizarControleFrequenciaMinimoMaximo;
 
 end;
 
 procedure TForm1.ConfigurarFrequenciaPorConcurso(objControle: TStringGrid);
 var
   qtColunas , indice_ultima_coluna, uA: Integer;
-  frequencia_bolas_campo: array[0..3] of string = (
+  frequencia_bolas_campo: array[0..4] of string = (
                     'Bola',
                     'Frequencia_Status',
                     'Freq.',
-                    'Marcar');
+                    'Deve_Sair',
+                    'Nao_Deve_Sair');
+  coluna_atual : TGridColumn;
 begin
   qtColunas := Length(frequencia_bolas_campo);
 
   // Nos controles stringGrid, devemos criar títulos, se queremos configurar
   // as colunas, como por exemplo, centralizá-la.
+  uA := 0;
   objControle.Columns.Clear;
   while qtColunas > 0 do begin
-    objControle.Columns.Add;
+    coluna_atual := objControle.Columns.Add;
+    coluna_atual.title.Alignment := TAlignment.taCenter;
+    coluna_atual.Alignment := TAlignment.taCenter;
+    coluna_atual.title.Caption := frequencia_bolas_campo[uA];
+    objControle.Cells[uA, 0] := frequencia_bolas_campo[uA];
+
     dec(qtColunas);
+    Inc(uA);
   end;
 
   indice_ultima_coluna := High(frequencia_bolas_campo);
 
+  {
   for uA := 0 to indice_ultima_Coluna do begin
     objControle.Columns[uA].title.Alignment := TAlignment.taCenter;
     objControle.Columns[uA].Alignment := TAlignment.taCenter;
     objControle.Columns[uA].title.Caption := frequencia_bolas_campo[uA];
     objControle.Cells[uA, 0] := frequencia_bolas_campo[uA];
   end;
+  }
 
   // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
   // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  //objControle.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+
+  // As duas últimas colunas, 'DEVE_SAIR', 'NAO_DEVE_SAIR' deverá ter o estilo
+  // checkbox, pois, o usuário deve marcar pra indicar se deve sair ou não.
   objControle.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+  objControle.Columns[indice_ultima_coluna-1].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+
 
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
   objControle.FixedCols := 0;
@@ -1682,6 +1845,7 @@ begin
  cmbConcursoFrequenciaNaoSair.Clear;
  cmbConcursoFrequenciaTotalSair.Clear;
  cmbConcursoVerificarAcerto.Clear;
+ cmbConcurso_Aleatorio_Verificar_Acerto.Clear;
 
  // Achamos registros, inserir então.
  sqlLotofacil.First;
@@ -1697,6 +1861,7 @@ begin
      cmbConcursoFrequenciaNaoSair.Items.Add(strConcurso);
      cmbConcursoFrequenciaTotalSair.Items.Add(strConcurso);
      cmbConcursoVerificarAcerto.Items.Add(strConcurso);
+     cmbConcurso_Aleatorio_Verificar_Acerto.Items.Add(strConcurso);
 
      sqlLotofacil.Next;
  end;
@@ -1710,6 +1875,7 @@ begin
  cmbConcursoFrequenciaNaoSair.ItemIndex := 0;
  cmbConcursoFrequenciaTotalSair.ItemIndex := 0;
  cmbConcursoVerificarAcerto.ItemIndex := 0;
+ cmbConcurso_Aleatorio_Verificar_Acerto.ItemIndex := 0;
 end;
 
 procedure TForm1.CarregarFrequenciaBolas;
@@ -1840,9 +2006,9 @@ end;
 procedure TForm1.CarregarConcursoFrequenciaTotalSair;
 var
   strSql: TStrings;
-  dsLotofacil: TSqlQuery;
+  sql_registro: TSqlQuery;
   uLinha: integer;
-  qtRegistros : LongInt;
+  qtRegistros , bola_numero: LongInt;
   concursoFrequenciaTotalSair : String;
 begin
   // Inicia o módulo de dados.
@@ -1863,31 +2029,41 @@ begin
   strSql.Add('where concurso = ' + concursoFrequenciaTotalSair);
   strSql.Add('order by frequencia desc, bola asc');
 
-  dsLotofacil := dmLotofacil.sqlLotofacil;
+  sql_registro := dmLotofacil.sqlLotofacil;
 
-  dsLotofacil.Active := False;
+  sql_registro.Active := False;
   dmLotofacil.sqlLotofacil.DataBase := dmLotofacil.pgLtk;
   dmLotofacil.sqlLotofacil.SQL.Text := strSql.Text;
-  dmLotofacil.sqlLotofacil.UniDirectional := true;
+  dmLotofacil.sqlLotofacil.UniDirectional := false;
   dmLotofacil.sqlLotofacil.Prepare;
-  dsLotofacil.Open;
+  sql_registro.Open;
 
   // RecordCount está retornando menos registros que a quantidade atual, segue-se
   // contorno.
   qtRegistros := 0;
-  dsLotofacil.First;
-  while not dsLotofacil.Eof do begin
-      Inc(qtRegistros);
-      dsLotofacil.Next;
-  end;
+  sql_registro.First;
+  sql_registro.Last;
+  qtRegistros := sql_registro.RecordCount;
 
   if qtRegistros = 0 then
   begin
     sgrFrequenciaTotalSair.Columns.Clear;
     sgrFrequenciaTotalSair.Columns.Add;
-    // sgrFrequenciaTotalSair.ColCount := 1;
+    sgrFrequenciaTotalSair.FixedRows := 0;
     sgrFrequenciaTotalSair.RowCount := 1;
     sgrFrequenciaTotalSair.Cells[0, 0] := 'Não há registros...';
+    // Redimensiona as colunas.
+    sgrFrequenciaTotalSair.AutoSizeColumns;
+    exit;
+  end;
+
+  if qtRegistros <> 25 then
+  begin
+    sgrFrequenciaTotalSair.Columns.Clear;
+    sgrFrequenciaTotalSair.Columns.Add;
+    sgrFrequenciaTotalSair.FixedRows := 0;
+    sgrFrequenciaTotalSair.RowCount := 1;
+    sgrFrequenciaTotalSair.Cells[0, 0] := 'Erro, Não há 25 registros...';
     // Redimensiona as colunas.
     sgrFrequenciaTotalSair.AutoSizeColumns;
     exit;
@@ -1902,61 +2078,63 @@ begin
   // A primeira linha, de índice zero, é o nome dos campos, devemos começar
   // na linha 1.
   uLinha := 1;
-  dsLotofacil.First;
-  while dsLotofacil.EOF = False do
+  sql_registro.First;
+  while sql_registro.EOF = False do
   begin
+    bola_numero := sql_registro.FieldByName('bola').AsInteger;
+
     // As células são strings, entretanto, não iremos atribuir o string diretamente,
     // iremos pegar o valor do campo como inteiro e em seguida, converter pra
     // string, assim, se o campo for zero, não aparece nulo, em branco.
-    sgrFrequenciaTotalSair.Cells[0, uLinha] := IntToSTr(dsLotofacil.FieldByName('bola').AsInteger);
-    sgrFrequenciaTotalSair.Cells[1, uLinha] := IntToStr(dsLotofacil.FieldByName('frequencia').AsInteger);
-    sgrFrequenciaTotalSair.Cells[2, uLinha] := '0';
+    sgrFrequenciaTotalSair.Cells[0, uLinha] := IntToSTr(bola_numero);
+    sgrFrequenciaTotalSair.Cells[1, uLinha] := IntToStr(sql_registro.FieldByName('frequencia').AsInteger);
+    sgrFrequenciaTotalSair.Cells[2, uLinha] := IntToStr(concurso_frequencia_sair[bola_numero]);
+    sgrFrequenciaTotalSair.Cells[3, uLinha] := IntToStr(concurso_frequencia_nao_sair[bola_numero]);
 
-    dsLotofacil.Next;
+    sql_registro.Next;
     Inc(uLinha);
   end;
+
 
   // Oculta a primeira coluna
   //objControle.Columns[0].Visible := false;
 
   // Fecha o dataset.
-  dsLotofacil.Close;
+  sql_registro.Close;
 
   // Redimensiona as colunas.
   sgrFrequenciaTotalSair.AutoSizeColumns;
 
 end;
 
+{
+ Configura o controle, pra ter o layout antes de inserir os dados.
+}
 procedure TForm1.ConfigurarControleConcursoFrequenciaTotalSair(objControle: TStringGrid);
 var
   qtColunas , indice_ultima_coluna, uA: Integer;
-  frequencia_bolas_campo: array[0..2] of string = (
+  frequencia_bolas_campo: array[0..3] of string = (
                     'Bola',
                     'qt_vezes',
-                    'Marcar');
+                    'Deve_sair',
+                    'Nao_deve_sair');
+  coluna_atual : TGridColumn;
 begin
-  qtColunas := Length(frequencia_bolas_campo);
-
-  // Nos controles stringGrid, devemos criar títulos, se queremos configurar
-  // as colunas, como por exemplo, centralizá-la.
-  objControle.Columns.Clear;
-  while qtColunas > 0 do begin
-    objControle.Columns.Add;
-    dec(qtColunas);
-  end;
-
   indice_ultima_coluna := High(frequencia_bolas_campo);
 
+  objControle.Columns.Clear;
   for uA := 0 to indice_ultima_Coluna do begin
-    objControle.Columns[uA].title.Alignment := TAlignment.taCenter;
-    objControle.Columns[uA].Alignment := TAlignment.taCenter;
-    objControle.Columns[uA].title.Caption := frequencia_bolas_campo[uA];
+    coluna_atual := objControle.Columns.Add;
+    coluna_atual.title.Alignment := TAlignment.taCenter;
+    coluna_atual.Alignment := TAlignment.taCenter;
+    coluna_atual.title.Caption := frequencia_bolas_campo[uA];
     objControle.Cells[uA, 0] := frequencia_bolas_campo[uA];
   end;
 
-  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
-  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  // As duas últimas colunas terá um checkbox, pois, o usuário pode selecionar
+  // se a bola deve ou não aparecer em todas as combinações.
   objControle.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
+  objControle.Columns[indice_ultima_coluna -1 ].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
 
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
   objControle.FixedCols := 0;
@@ -2123,6 +2301,20 @@ begin
   end;
 end;
 
+procedure TForm1.tgGeradorOpcoesChange(Sender : TObject);
+begin
+     pnGerador_Opcoes.Visible := tgGeradorOpcoes.Checked;
+     if tgGeradorOpcoes.Checked then
+     begin
+       tgGeradorOpcoes.Color := clGreen;
+       tgGeradorOpcoes.Font.Color := clWhite;
+     end else
+     begin
+       tgGeradorOpcoes.Color := clDefault;
+       tgGeradorOpcoes.Font.Color := clDefault;
+     end;
+end;
+
 procedure TForm1.tgVerificarAcertosChange(Sender : TObject);
 begin
   pnVerificarAcertos.Visible := tgVerificarAcertos.Checked;
@@ -2161,10 +2353,41 @@ begin
   RedimensionarControleDiagonal;
 end;
 
+procedure TForm1.rdGerador_Quantidade_de_BolasSelectionChanged(Sender : TObject
+  );
+begin
+  case rdGerador_Quantidade_de_Bolas.ItemIndex of
+    0: spinGerador_Combinacoes.MaxValue := 3268760;
+    1: spinGerador_Combinacoes.MaxValue := 2042975;
+    2: spinGerador_Combinacoes.MaxValue := 1081575;
+    3: spinGerador_Combinacoes.MaxValue := 480700;
+  end;
+end;
+
 // Indica que o valor do concurso de ínicio alterou.
 procedure TForm1.cmbFrequenciaInicioChange(Sender : TObject);
 begin
   AtualizarFrequencia;
+end;
+
+procedure TForm1.cmbNovo_MaximoChange(Sender : TObject);
+begin
+       Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
+end;
+
+procedure TForm1.cmbNovo_MinimoChange(Sender : TObject);
+begin
+     Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
+end;
+
+procedure TForm1.cmbRepetindo_MaximoChange(Sender : TObject);
+begin
+     Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
+end;
+
+procedure TForm1.cmbRepetindo_MinimoChange(Sender : TObject);
+begin
+     Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
 end;
 
 procedure TForm1.edConcursoKeyDown(Sender : TObject; var Key : Word;
@@ -2303,6 +2526,110 @@ begin
 end;
 
 {
+ Esta procedure será utilizada pelos botões: btnNovosFiltros e btnAleatorioNovo.
+ Pois, praticamente, o código é o mesmo.
+ Novos, iremos obter novos filtros e/ou novos aleatorios.
+}
+procedure TForm1.obterNovosFiltros(Sender: TObject);
+var
+  objButton: TButton;
+  objData: TComboBox;
+
+  sql_registro: TSqlQuery;
+  qt_registros : Integer;
+begin
+  if Sender is TButton then begin
+     objButton := TButton(Sender);
+  end else begin
+      exit;
+  end;
+
+  // Apaga o conteúdo dos controles 'cmbFiltroData' e 'cmbFiltroHora'
+  // se o controle clicado foi btnNovosFiltros, ou,
+  // Apaga o contéudo dos controles 'cmbFiltroAleatorioData' e 'cmbFiltroAleatorioHora'
+  // se o controle clicado foi btnAleatorioNovo.
+  if objButton = btnNovosFiltros then
+  begin
+
+       cmbFiltroData.Items.Clear;
+       cmbFiltroHora.Items.Clear;
+       objData := cmbFiltroData;
+
+  end else
+  if objButton = btnAleatorioNovo then
+  begin
+
+       cmbAleatorioFiltroData.Items.Clear;
+       cmbAleatorioFiltroHora.Items.Clear;
+       objData := cmbAleatorioFiltroData;
+
+  end else
+  begin
+     exit;
+  end;
+
+  if dmLotofacil = nil then
+  begin
+     dmLotofacil := TdmLotofacil.Create(Self);
+  end;
+
+  sql_registro := TSqlQuery.Create(Self);
+  sql_registro.DataBase := dmLotofacil.pgLTK;
+  sql_registro.UniDirectional := false;
+  sql_registro.Active := false;
+
+  // Aqui, iremos recuperar as datas, em ordem decrescente.
+  if objButton =  btnNovosFiltros then
+  begin
+       sql_registro.SQL.Add('Select data_1 from lotofacil.v_lotofacil_filtros_por_data');
+       sql_registro.Sql.Add('order by data_1 desc');
+  end else
+  if objButton = btnAleatorioNovo then
+  begin
+      sql_registro.SQL.Add('Select data_1 from lotofacil.v_lotofacil_aleatorio_por_data');
+      sql_registro.Sql.Add('order by data_1 desc');
+  end;
+
+  try
+     sql_registro.Open;
+     sql_registro.First;
+
+    // Iremos sempre definir a quantidade de registro igual a zero
+    // e em seguida, percorrer se houver registro, somente após saberemos
+    // a quantidade de registros que há, bem mais prático e eficiente do que
+    // realizar 'first' e 'last', pra saber a quantidade de registros.
+    qt_registros := 0;
+    while not sql_registro.EOF do begin
+        Inc(qt_registros);
+        objData.Items.Add(sql_registro.FieldByName('data_1').AsString);
+        sql_registro.Next;
+    end;
+    sql_registro.Close;
+    sql_registro.Sql.Clear;
+    dmLotofacil.Free;
+    dmLotofacil := nil;
+
+  except
+    ON exc: Exception do
+    begin
+      MessageDlg('Erro', Exc.Message, mtError, [mbOk], 0);
+      Exit;
+    end;
+  end;
+
+  if qt_registros = 0 then begin
+     MessageDlg('', 'Nenhum registro localizado', mtError, [mbOk], 0);
+     exit;
+  end;
+
+  // Aponta pra o primeiro item do comboBox, terá a data mais recente.
+  objData.ItemIndex := 0;
+
+  // Agora, iremos selecionar a hora baseado na seleção atual.
+  AtualizarFiltroData(objData, objData.Items[0]);
+end;
+
+{
  Atualiza os controles comboBox: cmbFiltroData, cmbFiltroHora
 }
 procedure TForm1.btnNovosFiltrosClick(Sender : TObject);
@@ -2310,6 +2637,11 @@ var
    sqlRegistro: TSqlQuery;
    qt_registros : Integer;
 begin
+  obterNovosFiltros(Sender);
+  exit;
+
+
+
   // Apaga os controles 'cmbFiltroData' e 'cmbFiltroHora'.
   cmbFiltroData.Items.Clear;
   cmbFiltroHora.Items.Clear;
@@ -2346,8 +2678,839 @@ begin
   cmbFiltroData.ItemIndex := 0;
 
   // Agora, iremos selecionar a hora baseado na seleção atual.
-  AtualizarFiltroData(cmbFiltroData.Items[0]);
+  AtualizarFiltroData(cmbFiltroData, cmbFiltroData.Items[0]);
 
+end;
+
+procedure TForm1.btnObterResultadosClick(Sender : TObject);
+const
+   diretorio_download = '.' + DirectorySeparator + 'lotofacil_resultado';
+var
+  arquivo_lotofacil_zip : TMemoryStream;
+  arquivo_unzip : TUnZipper;
+  arquivo_zip , zip_extraido_no_diretorio, arquivo_conteudo_html,
+  nome_arquivo_htm: AnsiString;
+  conteudo_html
+  : TStrings;
+
+begin
+
+  if Obter_Lotofacil_Resultado = false then
+  begin
+     MessageDlg('Erro', strErro, mtError, [mbOk], 0);
+     Exit;
+  end;
+
+  MessageDlg('', 'Importado com sucesso!!!', mtConfirmation, [mbOk], 0);
+
+
+end;
+
+function TForm1.Obter_Lotofacil_Resultado: boolean;
+const
+   diretorio_download = '.' + DirectorySeparator + 'lotofacil_resultado';
+var
+  arquivo_lotofacil_zip : TMemoryStream;
+  arquivo_unzip : TUnZipper;
+  arquivo_zip , zip_extraido_no_diretorio, arquivo_conteudo_html,
+  nome_arquivo_htm: AnsiString;
+  conteudo_html
+  : TStrings;
+
+begin
+  // Cria o diretório se não existe.
+  try
+     if DirectoryExists(diretorio_download) = false then
+     begin
+          CreateDir(diretorio_download);
+     end;
+  except
+    On exc: Exception do
+    begin
+        MessageDlg('Erro', Exc.Message, mtError, [mbok], 0);
+        Exit;
+    end;
+  end;
+
+  // Gera um nome de arquivo, pra ser gravado.
+  arquivo_zip := 'lotofacil_resultado_' + FormatDateTime('yyyy_mm_dd_hh_nn_ss', now) + '.zip';
+  arquivo_zip := diretorio_download + DirectorySeparator + arquivo_zip;
+
+  // Baixa o arquivo, se nenhum erro ocorrer.
+  arquivo_lotofacil_zip := TMemoryStream.Create;
+  try
+     objHttp.AllowCookies := true;
+     objHttp.HandleRedirects := true;
+     objHttp.Get('http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_lotfac.zip', arquivo_lotofacil_zip);
+     arquivo_lotofacil_zip.SaveToFile(arquivo_zip);
+  except
+    On exc: Exception do
+    begin
+        MessageDlg('', Exc.Message, mtError, [mbOK], 0);
+        Exit(False);
+    end;
+  end;
+
+  // Vamos criar um diretório baseado no nome do arquivo zip.
+  zip_extraido_no_diretorio := ExtractFileNameWithoutExt(arquivo_zip);
+  try
+     if DirectoryExists(zip_extraido_no_diretorio) = false then
+     begin
+          CreateDir(zip_extraido_no_diretorio);
+     end;
+  except
+    On exc: Exception do
+    begin
+        strErro := Exc.Message;
+        Exit;
+    end;
+  end;
+
+  // Unzip o arquivo zip e em seguida, vamos analisar o arquivo.
+  arquivo_unzip := TUnZipper.Create;
+  arquivo_unzip.FileName := arquivo_zip;
+  arquivo_unzip.OutputPath := zip_extraido_no_diretorio;
+  arquivo_unzip.UnZipAllFiles;
+
+  FreeAndNil(arquivo_unzip);
+
+  // Agora, pega o conteúdo do arquivo html que foi extraído do arquivo zip.
+  arquivo_conteudo_html := '';
+  nome_arquivo_htm := zip_extraido_no_diretorio + DirectorySeparator + 'D_LOTFAC.HTM';
+
+  conteudo_html := TStringList.Create;
+
+  try
+     conteudo_html.LoadFromFile(nome_arquivo_htm);
+     arquivo_conteudo_html := conteudo_html.Text;
+  Except
+    On exc: Exception do
+    begin
+        MessageDlg('Erro', Exc.Message, mtError, [mbOk], 0);
+        Exit(False);
+    end;
+  end;
+
+  if Obter_Lotofacil_Resultado(nome_arquivo_htm) = false then
+  begin
+     Exit(False);
+  end;
+
+  if Atualizar_Controle_Lotofacil_Resultado = false then
+  begin
+     Exit(false);
+  end;
+
+end;
+
+function TForm1.Atualizar_Controle_Lotofacil_Resultado: boolean;
+const
+   campos_cabecalho : array[0..32] of string = (
+                    'status', 'status_ja_inserido',
+                    'concurso', 'data',
+                    'b_1','b_2','b_3','b_4','b_5',
+                    'b_6','b_7','b_8','b_9','b_10',
+                    'b_11','b_12','b_13','b_14','b_15',
+                    'arrecadacao_total','g_15_numeros',
+                    'g_14_numeros','g_13_numeros',
+                    'g_12_numeros','g_11_numeros',
+                    'rateio_15_numeros','rateio_14_numeros',
+                    'rateio_13_numeros','rateio_12_numeros',
+                    'rateio_11_numeros','acumulado_15_numeros',
+                    'estimativa_premio','valor_acum_especial'
+   );
+var
+  sql_registro : TSQLQuery;
+  lista_campos : TStringList;
+  uA , qt_registros, linha_controle: Integer;
+  coluna_atual : TGridColumn;
+  obj_fonte : TFont;
+begin
+  sql_registro := TSqlQuery.Create(Self);
+
+  if not Assigned(dmLotofacil) then
+  begin
+     dmLotofacil := TDmLotofacil.Create(Self);
+  end;
+
+  sql_registro.DataBase := dmLotofacil.pgLTK;
+
+  // Gera o sql dinamicamente.
+  lista_campos := TStringList.Create;
+  lista_campos.SkipLastLineBreak := true;
+  for uA := 0 to High(campos_cabecalho) do
+  begin
+      lista_campos.Add(campos_cabecalho[uA]);
+  end;
+  lista_campos.Delimiter := ',';
+
+  sql_registro.SQL.Clear;
+  sql_registro.SQl.Add('Select');
+  sql_registro.Sql.Add(lista_campos.DelimitedText);
+  sql_registro.Sql.Add('from lotofacil.v_lotofacil_resultado_importacao');
+  sql_registro.Close;
+  sql_registro.Open;
+
+  // Quantidade de registros.
+  qt_registros := 0;
+  sql_registro.First;
+  sql_registro.Last;
+  qt_registros := sql_registro.RecordCount;
+
+  // Configura o controle sgrResultado_Importacao;
+  sgrResultado_Importacao.Columns.Clear;
+  for uA := 0 to High(campos_cabecalho) do
+  begin
+      coluna_atual := sgrResultado_Importacao.Columns.Add;
+      coluna_atual.Title.Caption := campos_cabecalho[uA];
+      coluna_atual.Title.Alignment := taCenter;
+      coluna_atual.Alignment := taCenter;
+  end;
+
+  // Define a quantidade de linhas e indica uma linha fixa.
+  sgrResultado_Importacao.FixedRows := 1;
+  sgrResultado_Importacao.RowCount := qt_registros + 1;
+
+  // Agora, vamos inserir os dados.
+  linha_controle := 1;
+  sql_registro.First;
+  while (sql_registro.Eof = false) and (linha_controle <= qt_registros) do
+  begin
+      for uA := 0 to High(campos_cabecalho) do
+      begin
+          case uA of
+               0..1: // Status, Status_ja_inserido
+               begin
+                   sgrResultado_Importacao.Cells[uA, linha_controle] := sql_registro.Fields[uA].AsString;
+               end;
+               2, 4..18, 20..24 :
+               begin
+                   sgrResultado_Importacao.Cells[uA, linha_controle] := IntToStr(sql_registro.Fields[uA].AsInteger);
+               end;
+
+               3:  // Data
+               begin
+                   sgrResultado_Importacao.Cells[uA, linha_controle] := DateToStr(sql_registro.Fields[uA].AsDateTime);
+               end;
+
+               19, 25..32:
+               begin
+                   sgrResultado_Importacao.Cells[uA, linha_controle] := FloatToStr(sql_registro.Fields[uA].AsFloat);
+               end;
+
+          end;
+      end;
+      Inc(linha_controle);
+      sql_registro.Next;
+  end;
+
+  sgrResultado_Importacao.AutoSizeColumns;
+
+
+end;
+
+{
+ Analisa o arquivo html e recupera todos os dados referentes aos concursos.
+}
+function TForm1.Obter_Lotofacil_Resultado(arquivo_html: AnsiString): boolean;
+const
+   {$ifdef WINDOWS}
+           NEW_LINE = #10#13;
+   {$ELSE}
+           {$IFDEF LINUX}
+                   NEW_LINE = #10;
+           {$ELSE}
+                  NEW_LINE = #13;
+           {$ENDIF}
+   {$ENDIF}
+var
+  lotofacil_html_doc: THTMLDocument;
+  lotofacil_tabela_nodes,
+    lotofacil_tabela_linhas, tabela_colunas: TDOMNodeList;
+    lotofacil_tabela_node,
+    lotofacil_linha_atual,
+    tabela_coluna_atual, coluna_atual, coluna_atributo: TDOMNode;
+  total_de_linhas_na_tabela : LongWord;
+  strTexto , valor_coluna_atual, concurso_sql: String;
+  uA , uB, rowspan: Integer;
+  coluna_atributos : TDOMNamedNodeMap;
+  rowspan_temp : LongInt;
+  lista_concurso, lista_concurso_sql: TStringList;
+
+  lista_resultado : TLista_TStrings;
+begin
+  // Ler arquivo, html.
+  lotofacil_html_doc := nil;
+  ReadHTMLFile(lotofacil_html_doc, arquivo_html);
+
+  // Verifica se há uma única tabela dentro do arquivo html.
+  lotofacil_tabela_nodes := lotofacil_html_doc.GetElementsByTagName('table');
+
+  // Não há tabela, retornar.
+  if 0 = lotofacil_tabela_nodes.Count then
+  begin
+     Exit(False);
+  end;
+
+  // No nó tabela, os nós secundários, corresponde, a linhas da tabela
+  // Vamos verificar se há nós.
+  lotofacil_tabela_node := lotofacil_tabela_nodes[0];
+  lotofacil_tabela_linhas := lotofacil_tabela_node.ChildNodes;
+
+  if lotofacil_tabela_linhas.Count = 0 then
+  begin
+     Exit(False);
+  end;
+
+  // O nó 'lotofacil_tabela_linhas', contém todas as linhas da tabela,
+  // Agora, iremos, percorrer cada linha e extrair os dados.
+  total_de_linhas_na_tabela := lotofacil_tabela_linhas.Count;
+
+  // A primeira linha é o cabeçalho, não precisa analisar.
+  // O cabeçalho está desta forma:
+  // concurso, data, bola1 até bola15
+  // Arrecadação total
+  // ganhadores_15_numeros;
+  // cidade;
+  // uf;
+  // ganhadores_14_numeros;
+  // ganhadores_13_numeros;
+  // ganhadores_12_numeros;
+  // ganhadores_11_numeros;
+  // valor_rateio_15_numeros;
+  // valor_rateio_14_numeros;
+  // valor_rateio_13_numeros;
+  // valor_rateio_12_numeros;
+  // valor_rateio_11_numeros;
+  // Acumulado_15_numeros;
+  // Estimativa_premio
+  // Valor_acumulado_especial
+  strTexto := 'Concurso;Data';
+
+  for uA := 1 to 15 do begin
+      strTexto := strTexto + ';Bola' + IntToStr(uA);
+  end;
+
+  strTexto := strTexto +
+  ';Arrecadacao_Total'+
+  ';ganhadores_15_numeros'+
+  ';Cidade'+
+  ';UF'+
+  ';ganhadores_14_numeros'+
+  ';ganhadores_13_numeros'+
+  ';ganhadores_12_numeros'+
+  ';ganhadores_11_numeros'+
+  ';valor_rateio_15_numeros'+
+  ';valor_rateio_14_numeros'+
+  ';valor_rateio_13_numeros'+
+  ';valor_rateio_12_numeros'+
+  ';valor_rateio_11_numeros'+
+  ';Acumulado_15_numeros'+
+  ';Estimativa_premio'+
+  ';Valor_acumulado_especial';
+
+  lista_concurso := TStringList.Create;
+  lista_concurso.Clear;
+  lista_concurso.Add(strTexto);
+
+
+  lista_concurso_sql := TSTringList.Create;
+  concurso_sql := 'insert into lotofacil.lotofacil_resultado_importacao (' +
+                'concurso,' +
+                'data, b_1, b_2, b_3, b_4, b_5,' +
+                'b_6, b_7, b_8, b_9, b_10,' +
+                'b_11, b_12, b_13, b_14, b_15,' +
+                'arrecadacao_total, g_15_numeros,' +
+                'g_14_numeros, g_13_numeros, g_12_numeros,' +
+                'g_11_numeros, rateio_15_numeros,' +
+                'rateio_14_numeros, rateio_13_numeros,' +
+                'rateio_12_numeros, rateio_11_numeros,' +
+                'acumulado_15_numeros, estimativa_premio, valor_acum_especial)values';
+
+  uA := 1;
+  while uA <= Pred(total_de_linhas_na_tabela) do
+  begin
+      lotofacil_linha_atual := lotofacil_tabela_linhas.Item[uA];
+
+      // Obtém todos os nós secundários da linha, atual, neste caso, nó 'th'.
+      tabela_colunas := lotofacil_linha_atual.GetChildNodes;
+
+      // Cada tag pode ter um atributo, estamos interessado no atributo
+      // rowspan, isto quer dizer, que uma coluna pode expandir pra
+      // mais de uma linha, então, haverá mais linhas pra indicar aquela coluna
+      // específica.
+      // Então, segue-se exemplo, se rowspan="2", quer dizer, que há duas linhas
+      // pra aquela coluna ou mais coluna, neste caso, haverá 1 linha após a linha
+      // atual.
+      // Então, no nosso caso, estas colunas, corresponde a nome de cidades e/ou
+      // de estados, então, no nosso caso, não estamos interessados nestas informações,
+      // simplesmente, iremos pular tais linhas desnecessárias.
+      rowspan := 0;
+
+      // Agora, iremos percorrer cada coluna da linha atual.
+      strTexto := '';
+
+      // Na lotofacil, há 33 colunas pra informações sobre o concurso da lotofacil
+      // Devemos garantir que há estas colunas.
+      if tabela_colunas.Count <> 33 then
+      begin
+         MessageDlg('', 'Lotofacil deve ter 33 colunas, pra cada resultado, entretanto,' +
+                        ' quantidade de colunas é diferente de 33', mtError, [mbok], 0);
+         Exit(False);
+      end;
+
+      // Neste for, iremos percorrer todas as colunas da linha atual
+      // Na lotofacil, há 33 colunas.
+      for uB := 0 to Pred(tabela_colunas.Count) do
+      begin
+          tabela_coluna_atual := tabela_colunas.Item[uB];
+          valor_coluna_atual := Trim(tabela_coluna_atual.TextContent);
+
+          // Verifica se tem atributo, se sim, verifica se tem um rowspan.
+          if tabela_coluna_atual.HasAttributes then begin
+             coluna_atributos := tabela_coluna_atual.Attributes;
+             coluna_atributo := nil;
+             coluna_atributo := coluna_atributos.GetNamedItem('rowspan');
+
+             if coluna_atributo <> nil then
+             begin
+                try
+                   rowspan_temp := 0;
+                   rowspan_temp := StrToInt(coluna_atributo.NodeValue);
+                except
+                  rowspan_temp := 0;
+                end;
+                if rowspan_temp <> 0 then
+                begin
+                   // Se rowspan for maior que o rowspan atual, devemos
+                   // atualizar.
+                   if rowspan_temp > rowspan then
+                   begin
+                      rowspan := rowspan_temp;
+                   end;
+                end;
+             end;
+          end;
+
+          // A propriedade 'TextContent', contém o valor que queremos,
+          // entretanto, pode haver outras tags, que formatam este valor
+          // Então, vamos percorrer, até chegar no nós mais profundo.
+          coluna_atual := tabela_coluna_atual;
+
+          while coluna_atual.HasChildNodes do
+          begin
+            Writeln('Coluna: ', coluna_atual.NodeName, ', valor = ',
+                             coluna_atual.nodeValue, ', conteudo: ', coluna_atual.TextContent);
+            coluna_atual := coluna_atual.ChildNodes[0];
+            valor_coluna_atual := coluna_atual.TextContent;
+          end;
+
+          if strTexto <> '' then
+          begin
+            strTexto := strTexto + ';';
+          end;
+
+          strTexto := strTexto + Trim(valor_coluna_atual);
+      end;
+      lista_concurso.Add(strTexto);
+
+      // Rowspan, indica a quantidade de linhas, que fazem parte do mesmo concurso
+      // Então, como analisamos uma linha, devemos considerar uma linha a menos
+      if rowspan > 0 then
+      begin
+        Dec(rowspan, 1);
+      end;
+
+      // Aqui, iremos pra última linha, do mesmo concurso, entretanto,
+      // não precisamos analisar, esta linha
+      Inc(uA, rowspan);
+
+      // Sempre, iremos pra o próximo concurso, nunca, iremos pra a próxima
+      // linha do mesmo concurso, por isso, incrementamos em 1.
+      Inc(uA, 1);
+  end;
+
+  // Evitar quebra de linha no final do arquivo
+  lista_concurso.SkipLastLineBreak := true;
+  lista_concurso.SaveToFile('resultado_lotofacil.csv');
+
+  // Agora, vamos importar os dados pra a tabela 'lotofacil.lotofacil_resultado_importacao'
+  if Inserir_Lotofacil_Resultado_Importacao(lista_concurso) = false then
+  begin
+    MessageDlg('Erro', strErro, mtError, [mbOk], 0);
+    Exit(False);
+  end;
+
+
+  FreeAndNil(lista_concurso);
+  FreeAndNil(lotofacil_html_doc);
+
+  Exit(True);
+end;
+
+{
+ Ler o conteúdo que foi obtido do arquivo html e formata pra ser inserido
+ na tabela 'lotofacil.lotofacil_resultado_importacao'
+}
+function TForm1.Inserir_Lotofacil_Resultado_Importacao(lista_concurso: TStringList): boolean;
+var
+  texto_atual , sql_insert,
+    bolas_repetidas, valor_arrecadacao_total, valor_coluna: String;
+  texto_colunas , data_concurso: TStringArray;
+  uA , uB, uC, qt_bolas_sorteadas: Integer;
+  lista_sql_insert : TStringList;
+  numero_do_concurso , bola_numero, numero_bola, dia_concurso,
+    mes_concurso, ano_concurso: LongInt;
+  lotofacil_bolas: array[0..25] of Integer;
+  bolas_sorteadas : AnsiString;
+  ponto_decimal_anterior , ponto_milhar_anterior: Char;
+  arrecadacao , arrecadacao_total, valor_float: Extended;
+
+  numero_formato_brasileiro, numero_formato_americano: TFormatSettings;
+  sql_lotofacil : TSQLQuery;
+
+begin
+  lista_sql_insert := TStringList.Create;
+  sql_insert := 'insert into lotofacil.lotofacil_resultado_importacao (' +
+                'concurso,' +
+                'data, b_1, b_2, b_3, b_4, b_5,' +
+                'b_6, b_7, b_8, b_9, b_10,' +
+                'b_11, b_12, b_13, b_14, b_15,' +
+                'arrecadacao_total, g_15_numeros,' +
+                'g_14_numeros, g_13_numeros, g_12_numeros,' +
+                'g_11_numeros, rateio_15_numeros,' +
+                'rateio_14_numeros, rateio_13_numeros,' +
+                'rateio_12_numeros, rateio_11_numeros,' +
+                'acumulado_15_numeros, estimativa_premio, valor_acum_especial) values';
+  lista_sql_insert.Add(sql_insert);
+
+  // Cada linha, tem estes campos, os índices de cada coluna entre colchetes.
+  // Concurso,                [0]
+  // Data,                    [1]
+  // Bola1 até Bola15         [2..16]
+  // Arrecadacao_Total         [17]
+  // Ganhadores_15_numeros     [18]
+  // Cidade                    [19]
+  // UF                        [20]
+  // Ganhadores_14_numeros     [21]
+  // Ganhadores_13_numeros     [22]
+  // Ganhadores_12_numeros     [23]
+  // Ganhadores_11_numeros     [24]
+  // Valor_Rateio_15_numeros   [25]
+  // Valor_Rateio_14_numeros   [26]
+  // Valor_Rateio_13_numeros   [27]
+  // Valor_Rateio_12_numeros   [28]
+  // Valor_Rateio_15_numeros   [29]
+  // Acumulado_15_numeros      [30]
+  // Estimativa_Premio         [31]
+  // Valor_acumulado_premio    [32]
+
+  {
+  ';Arrecadacao_Total'+
+  ';ganhadores_15_numeros'+
+  ';Cidade'+
+  ';UF'+
+  ';ganhadores_14_numeros'+
+  ';ganhadores_13_numeros'+
+  ';ganhadores_12_numeros'+
+  ';ganhadores_11_numeros'+
+  ';valor_rateio_15_numeros'+
+  ';valor_rateio_14_numeros'+
+  ';valor_rateio_13_numeros'+
+  ';valor_rateio_12_numeros'+
+  ';valor_rateio_11_numeros'+
+  ';Acumulado_15_numeros'+
+  ';Estimativa_premio'+
+  ';Valor_acumulado_especial';
+  }
+
+  // Índice 0, é o cabeçalho, desnecessário analisar.
+  for uA := 1 to Pred(lista_concurso.Count) do
+  begin
+      texto_atual := lista_concurso.Strings[uA];
+      texto_colunas := texto_atual.Split(';');
+
+      // Verifica se há 33 colunas, se não houver indicar erro.
+      // Há, estes campos:
+      //
+
+      if Length(texto_colunas) <> 33 then
+      begin
+        strErro := Format(    'Erro, Linha: %i, colunas: %i, entretanto, na lotofacil ' +
+                              'deve haver 33 colunas', [uA + 1, Length(texto_colunas)]);
+        Exit(FAlse);
+      end;
+
+      if uA = 1 then
+      begin
+        sql_insert := '(';
+      end else
+      begin
+          sql_insert := ',(';
+      end;
+
+      // Zera este arranjo, pois, será usado quando precisarmos ordenar
+      // as bolas do concurso.
+      FillChar(lotofacil_bolas, sizeof(Integer) * 26, 0);
+
+      // Pra ficar melhor, iremos mostrar todas as bolas repetidas,
+      // ao invés de parar na primeira bola repetida.
+      bolas_repetidas := '';
+
+      for uB := 0 to High(texto_colunas) do
+      begin
+          case uB of
+               // Número do concurso.
+               0:
+               begin
+                   try
+                      numero_do_concurso := StrToInt(texto_colunas[uB]);
+                   except
+                     on Exc: Exception do
+                     begin
+                         strErro := Exc.Message;
+                         Exit(False);
+                     end;
+                   end;
+                   sql_insert := sql_insert + IntToStr(numero_do_concurso);
+               end;
+
+               // Data do concurso
+               // A data do concurso está em formato brasileiro, devemos
+               // colocar a data em formato americano.
+               1:
+               begin
+                   data_concurso := texto_colunas[uB].Split('/');
+                   if Length(data_concurso) <> 3 then
+                   begin
+                     strErro := 'Data inválida, deve haver 3 números, separados por ''/''';
+                     Exit(False);
+                   end;
+
+                   try
+                     dia_concurso := StrToInt(data_concurso[0]);
+                     mes_concurso := StrToInt(data_concurso[1]);
+                     ano_concurso := StrToInt(data_concurso[2]);
+
+                   except
+                     On exc: Exception do
+                     begin
+
+                     end;
+                   end;
+
+                   // Não iremos validar a data, iremos passar diretamente, pra o banco.
+                   sql_insert := sql_insert + ', ' + QuotedStr(Format('%d-%d-%d',
+                                                    [ano_concurso, mes_concurso, dia_concurso]));
+               end;
+
+               // Bolas do concurso
+               // No concurso, as bolas do resultado podem estar disposta sfora da ordem
+               // ou repetidas, ao inserir no banco, não pode haver bolas repetidas e
+               // tais bolas devem estar dispostas em ordem crescente, devemos validar
+               // isto.
+               // Pra isto, iremos utilizar o arranjo 'lotofacil_bolas', todos os ítens
+               // tem o valor zero, então ao inserir, incrementa o valor daquela célula
+               // do arranjo. Se houver alguma bola repetida, ao verificar o valor
+               // da célula daquela bola, ela terá o valor 1, quer dizer que a bola já saiu,
+               // então, devemos sair com um erro de bola repetida.
+               2..16:
+               // Do índice 2 ao 16, corresponde as 15 bolas, então, quando chegarmos
+               // ao último índice, 16, iremos ordenar as bolas pra inserir.
+               begin
+                   // Verifica se é uma número inteiro válido.
+                   try
+                      bola_numero := StrToInt(texto_colunas[uB]);
+                   except
+                     on Exc: Exception do
+                     begin
+                         strErro := Exc.Message;
+                         Exit(False);
+                     end;
+                   end;
+                   // Verifica se a bola está no intervalo entre 1 e 25.
+                   if not ((bola_numero >= 1) and (bola_numero <= 25)) then
+                   begin
+                     strErro := Format('Erro, Linha: %i, Intervalo inválido: %i, ' +
+                                'A faixa válida deve ser entre 1 e 25.', [uA + 1, bola_numero]);
+                     Exit(False);
+                   end;
+
+                   // Verifica se este número já foi encontrado.
+                   if lotofacil_bolas[bola_numero] >= 1 then
+                   begin
+                     if bolas_repetidas <> '' then
+                     begin
+                       bolas_repetidas := bolas_repetidas + ', ';
+                     end;
+                     bolas_repetidas := bolas_repetidas + IntToStr(bola_numero);
+                   end;
+
+                   lotofacil_bolas[bola_numero] := lotofacil_bolas[bola_numero] + 1;
+
+                   if uB <> 16 then
+                   begin
+                      Continue;
+                   end;
+
+                   // Verifica se há bolas repetidas.
+                   if bolas_repetidas <> '' then
+                   begin
+                     strErro := 'Há bolas repetidas: ' + bolas_repetidas;
+                     Exit(False);
+                   end;
+
+                   // Vamos pegar as bolas em ordem crescente, bem simples isto
+                   // é só percorrer o arranjo sequencialmente do menor pra o maior
+                   // e ao encontrar um arranjo com a célula com valor 1, pegar
+                   // este número.
+                   bolas_sorteadas := '';
+                   qt_bolas_sorteadas := 0;
+                   for uC := 1 to 25 do
+                   begin
+                       if lotofacil_bolas[uC] = 1 then
+                       begin
+                         bolas_sorteadas := bolas_sorteadas + ', ' + IntToStr(uC);
+                         Inc(qt_bolas_sorteadas);
+                       end;
+                   end;
+
+                   // Verifica se realmente, há 15 bolas sorteadas
+                   if qt_bolas_sorteadas <> 15 then
+                   begin
+                     strErro := Format('Erro, linha: %i, bolas encontradas: %i', [uA + 1, qt_bolas_sorteadas]);
+                     Exit(False);
+                   end;
+
+                   sql_insert := sql_insert + bolas_sorteadas;
+               end;
+
+               // Analisar os campos:
+               //     Campo                Índice
+               // Arrecadacao_Total         [17]
+               // Valor_Rateio_15_numeros   [25]
+               // Valor_Rateio_14_numeros   [26]
+               // Valor_Rateio_13_numeros   [27]
+               // Valor_Rateio_12_numeros   [28]
+               // Valor_Rateio_15_numeros   [29]
+               // Acumulado_15_numeros      [30]
+               // Estimativa_Premio         [31]
+               // Valor_acumulado_premio    [32]
+               17, 25..32:
+               begin
+                   // Altera o ponto decimal pra o formato brasileiro
+                   numero_formato_brasileiro := DefaultFormatSettings;
+                   numero_formato_brasileiro.DecimalSeparator := ',';
+                   numero_formato_brasileiro.ThousandSeparator := '.';
+
+                   valor_coluna := AnsiReplaceText(texto_colunas[uB], '.', '');
+
+                   try
+                      valor_float := StrToFloat(valor_coluna, numero_formato_brasileiro);
+
+                   except
+                     On exc: EConvertError do
+                     begin
+                       // Altera o ponto decimal e milhar pra o formato definido anteriormente.
+                       strErro := Format('Erro: %s, linha: %i, Coluna: %i', [Exc.Message, uA+1, uB + 1]);
+                       Exit(False);
+                     end;
+                   end;
+
+                   // Altera o ponto decimal e milhar pra o formato americano, pois
+                   // precisamos inserir o numero decimal no sql com o formato americano.
+                   numero_formato_americano := DefaultFormatSettings;
+                   numero_formato_americano.DecimalSeparator := '.';
+                   numero_formato_americano.ThousandSeparator := ',';
+
+                   // Insere o sql.
+                   sql_insert := sql_insert + ', ' + FloatToStr(valor_float, numero_formato_americano);
+               end;
+
+                // Analisar estes campos:
+                // Ganhadores_15_numeros     [18]
+                // Cidade                    [19]
+                // UF                        [20]
+                // Ganhadores_14_numeros     [21]
+                // Ganhadores_13_numeros     [22]
+                // Ganhadores_12_numeros     [23]
+                // Ganhadores_11_numeros     [24]
+                18, 21..24:
+                begin
+                    try
+                       numero_bola := StrToInt(texto_colunas[uB]);
+                    except
+                      On exc: Exception do
+                      begin
+                          strErro := Exc.Message;
+                          Exit(False);
+                      end;
+                    end;
+                    sql_insert := sql_insert + ', ' + IntToStr(numero_bola);
+                end;
+          end;
+      end;
+      // Coloca o fecha parênteses.
+      sql_insert := sql_insert + ')';
+
+      // Após isto, iremos inserir no string
+      lista_sql_insert.Add(sql_insert);
+  end;
+  lista_concurso.Clear;
+
+  // Evitar quebra de linha no final do arquivo.
+  lista_sql_insert.SkipLastLineBreak := true;
+  lista_sql_insert.SaveToFile('lotofacil_resultado.sql');
+
+  // Agora, iremos inserir os dados recebidos na tabela
+  // 'lotofacil.lotofacil_resultado_importacao'.
+  sql_lotofacil := TSqlQuery.Create(Self);
+
+  // Apaga, a tabela primeiro.
+  sql_lotofacil.Clear;
+  sql_lotofacil.SQL.Text := 'Delete from lotofacil.lotofacil_resultado_importacao';
+
+  if not Assigned(dmLotofacil) then
+  begin
+     dmLotofacil := TdmLotofacil.Create(Self);
+  end;
+
+  try
+     sql_lotofacil.DataBase := dmLotofacil.pgLTK;
+     sql_lotofacil.ExecSQL;
+     dmLotofacil.pgLTK.Transaction.Commit;
+     sql_lotofacil.Close;
+     dmLotofacil.pgLtk.Close(true);
+  except
+    on Exc: EDataBaseError do begin
+        strErro := Exc.Message;
+        Exit(False);
+    end;
+  end;
+
+
+  // Agora, inserir os dados.
+  sql_lotofacil.Close;
+  sql_lotofacil.SQL.Text := lista_sql_insert.Text;
+
+  try
+     sql_lotofacil.DataBase := dmLotofacil.pgLTK;
+     sql_lotofacil.ExecSQL;
+     dmLotofacil.pgLTK.Transaction.Commit;
+     sql_lotofacil.Close;
+     dmLotofacil.pgLtk.Close(true);
+  except
+    on Exc: EDataBaseError do begin
+        strErro := Exc.Message;
+        Exit(False);
+    end;
+  end;
+
+
+  lista_sql_insert.Clear;
+  FreeAndNil(lista_sql_insert);
+
+  Exit(True);
 
 end;
 
@@ -2502,16 +3665,28 @@ end;
  Toda vez que o controle 'cmbFiltroData', for atualizado, devemos
  atualizar o controle 'cmbFiltroHora'.
 }
-procedure TForm1.AtualizarFiltroData(strWhere: string);
+procedure TForm1.AtualizarFiltroData(Sender: TObject; strWhere: string);
 var
    sqlRegistro: TSqlQuery;
    qt_registros : Integer;
+   objHora: TComboBox;
+   objData: TComboBox;
 begin
-  cmbFiltroHora.Items.Clear;
+  if Sender = cmbFiltroData then
+  begin
+    objData := cmbFiltroData;
+    objHora := cmbFiltroHora;
+  end else
+  if Sender = cmbAleatorioFiltroData then
+  begin
+    objData := cmbAleatorioFiltroData;
+    objHora := cmbAleatorioFiltroHora;
+  end;
+  objHora.Items.Clear;
 
   // Sempre haverá um parte da hora, senão, indica erro.
   if strWhere = '' then begin
-     cmbFiltroData.Items.Clear;
+     objData.Items.Clear;
      exit;
   end;
 
@@ -2526,22 +3701,40 @@ begin
   sqlRegistro.Close;
 
   sqlRegistro.SQL.Clear;
-  sqlRegistro.Sql.Add('Select hora_1 from lotofacil.v_lotofacil_filtros_por_data_hora');
-  sqlRegistro.Sql.Add('where to_char(data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
-  sqlRegistro.Sql.Add('order by data desc');
 
-  sqlRegistro.Open;
-
-  qt_registros := 0;
-  while not sqlRegistro.Eof do begin
-      cmbFiltroHora.Items.Add(sqlRegistro.FieldByName('hora_1').AsString);
-
-      Inc(qt_registros);
-      sqlRegistro.Next;
+  if sender = cmbFiltroData then
+  begin
+    sqlRegistro.Sql.Add('Select hora_1 from lotofacil.v_lotofacil_filtros_por_data_hora');
+    sqlRegistro.Sql.Add('where to_char(data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
+    sqlRegistro.Sql.Add('order by hora_1 desc');
+  end else
+  begin
+    sqlRegistro.Sql.Add('Select hora_1 from lotofacil.v_lotofacil_aleatorio_por_data_hora');
+    sqlRegistro.Sql.Add('where to_char(aleatorio_data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
+    sqlRegistro.Sql.Add('order by hora_1 desc');
   end;
-  sqlRegistro.Close;
-  dmLotofacil.Free;
-  dmLotofacil := nil;
+
+  try
+     sqlRegistro.Open;
+
+    sqlRegistro.First;
+    while not sqlRegistro.Eof do begin
+        objHora.Items.Add(sqlRegistro.FieldByName('hora_1').AsString);
+
+        Inc(qt_registros);
+        sqlRegistro.Next;
+    end;
+    sqlRegistro.Close;
+    dmLotofacil.Free;
+    dmLotofacil := nil;
+
+  except
+    On Exc: Exception DO
+    Begin
+        MessageDlg('Erro', Exc.Message, mtError, [mbOk], 0);
+        Exit;
+    end;
+  end;
 
   if qt_registros = 0 then begin
      cmbFiltroData.Items.Clear;
@@ -2549,10 +3742,293 @@ begin
      exit;
   end;
 
-  // Seleciona o primeiro ítem.
-  cmbFiltroHora.ItemIndex := 0;
+  objHora.ItemIndex := 0;
 
 end;
+
+{
+ Esta procedura é utilizada pelos controles 'btnVerificarAcertos' e
+ 'btnAleatorio_Verificar_Acertos'.
+}
+procedure TForm1.Verificar_Acertos(Sender: TObject);
+var
+   strFiltroData, strFiltroHora, strWhere, bola_concurso,
+     strInsert_Set_Acerto, strWhere_data_hora, concursoSelecionado: String;
+   indiceSelecionado, totalItens: Integer;
+   b_ha_itens , b_indice_selecionado: boolean;
+   indice_data_selecionado: Integer;
+   indice_hora_selecionado: Integer;
+
+   sqlRegistros : TSQLQuery;
+   qt_registros , uA, linha: Integer;
+
+   objData, objHora: TComboBox;
+   obj_sgr_acertos: TStringGrid;
+   obj_cmb_concurso: TComboBox;
+begin
+  if Sender = btnVerificarAcerto then begin
+    objData := cmbFiltroData;
+    objHora := cmbFiltroHora;
+    obj_sgr_acertos := sgrVerificarAcertos;
+    obj_cmb_concurso := cmbConcursoVerificarAcerto;
+  end else
+  if Sender = btnAleatorio_Verificar_Acerto then
+  begin
+    objData := cmbAleatorioFiltroData;
+    objHora := cmbAleatorioFiltroHora;
+    obj_sgr_acertos := sgrAleatorioVerificarAcertos;
+    obj_cmb_concurso := cmbConcurso_Aleatorio_Verificar_Acerto;
+  end;
+
+
+  b_ha_itens := (objData.Items.Count > 0) and
+                (objHora.Items.Count > 0);
+
+  if not b_ha_itens then begin
+   obj_sgr_acertos.Columns.Clear;
+   obj_sgr_acertos.Columns.Add;
+   obj_sgr_acertos.RowCount := 1;
+   obj_sgr_acertos.Cells[0,0] := 'Nenhum filtro disponível';
+   obj_sgr_acertos.AutoSizeColumns;
+   exit;
+  end;
+
+  indice_data_selecionado := objData.ItemIndex;
+  indice_hora_selecionado := objHora.ItemIndex;
+  b_indice_selecionado := (indice_data_selecionado >= 0) and
+                         (indice_hora_selecionado >= 0);
+
+  if not b_indice_selecionado then begin
+   obj_sgr_acertos.Columns.Clear;
+   obj_sgr_acertos.Columns.Add;
+   obj_sgr_acertos.RowCount := 1;
+   obj_sgr_acertos.Cells[0,0] := 'Data e hora não selecionados';
+   obj_sgr_acertos.AutoSizeColumns;
+   exit;
+  end;
+
+  strFiltroData := objData.Items[indice_data_selecionado];
+  strFiltroHora := objHora.Items[indice_hora_selecionado];
+
+  strWhere_data_hora := strFiltroData + ' ' + strFiltroHora;
+
+  // Verificar se há concursos
+  if obj_cmb_concurso.Items.Count = 0 then
+  begin
+    obj_sgr_acertos.Columns.Clear;
+    obj_sgr_acertos.Columns.Add;
+    obj_sgr_acertos.RowCount := 1;
+    obj_sgr_acertos.Cells[0,0] := 'Nenhum concurso disponível.';
+    obj_sgr_acertos.AutoSizeColumns; ;
+    Exit;
+  end;
+
+  // Vamos primeira recuperar as bolas que foram selecionadas
+  // no concurso atual e em seguida, iremos atualizar somente
+  // o filtro que está selecionado no momento.
+  indiceSelecionado := obj_cmb_concurso.ItemIndex;
+  if indiceSelecionado < 0 then
+  begin
+    obj_sgr_acertos.Columns.Clear;
+    obj_sgr_acertos.Columns.Add;
+    obj_sgr_acertos.RowCount := 1;
+    obj_sgr_acertos.Cells[0,0] := 'Nenhum concurso selecionado.';
+    obj_sgr_acertos.AutoSizeColumns;
+  end;
+
+  concursoSelecionado := obj_cmb_concurso.Items[indiceSelecionado];
+
+  if dmLotofacil = nil then
+  begin
+    dmLotofacil := TdmLotofacil.Create(Self);
+  end;
+
+  sqlRegistros := TSqlQuery.Create(Self);
+  sqlRegistros.DataBase := dmLotofacil.pgLTK;
+  sqlRegistros.Active := false;
+  sqlRegistros.Close;
+
+  sqlRegistros.Sql.Clear;
+  sqlRegistros.SQL.Add('Select b_1, b_2, b_3, b_4, b_5,');
+  sqlRegistros.Sql.Add('b_6, b_7, b_8, b_9, b_10,');
+  sqlRegistros.Sql.Add('b_11, b_12, b_13, b_14, b_15');
+  sqlRegistros.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
+  sqlRegistros.Sql.Add('where concurso = ' + concursoSelecionado);
+
+  try
+    sqlRegistros.Open;
+    if sqlRegistros.EOF = true then begin
+      sgrVerificarAcertos.Columns.Clear;
+      sgrVerificarAcertos.Columns.Add;
+      sgrVerificarAcertos.RowCount := 1;
+      sgrVerificarAcertos.Cells[0,0] := 'Concurso não localizado!!!';
+      sgrVerificarAcertos.AutoSizeColumns;
+      exit;
+    end;
+  except
+    On Exc: Exception do
+    begin
+        MessageDlg('Erro', Exc.Message, mtError, [mbOk], 0);
+        Exit;
+    end;
+  end;
+
+  // Agora, iremos gerar o sql que realizará a contabilização de acertos
+  // Isto, é bem simples, no banco de dados existe uma tabela chamada
+  // lotofacil_num, nela cada bola, é identificada por um campo, por exemplo,
+  // a bola 1, pelo campo num_1, a bola 25, pelo campo num_25.
+  // Então, se aquela bola está na combinação, ela terá o valor 1, senão o valor 0.
+  // Lógico que não podemos somar todos os campos pois sempre dar 15, 16, 17 ou 18,
+  // conforme a quantidade de bolas.
+  // Então, o que faremos é somar somente os campos das bolas correspondentes.
+  // Por exemplo, se o concurso, saiu as bolas:
+  // 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+  // então, iremos somar os campos
+  // num_1 + num_2 + num_3 + num_4 + num_5 +
+  // num_6 + num_7 + num_8 + num_9 + num_10 +
+  // num_11 + num_12 + num_13 + num_14 + num_15
+  // de todas as combinações.
+  // Assim, conseguimos saber a quantidade de acertos.
+
+  // Pra atualizar o campo 'acertos', devemos pegar as bolas do concurso
+  // selecionados, e no nosso caso, iremos prefixar a palavra
+  // 'num_' pois iremos
+  strInsert_Set_Acerto := '';
+  for uA := 1 to 15 do begin
+     bola_concurso := sqlRegistros.FieldByName('b_' + IntToStr(uA)).AsString;
+     if uA <> 1 then begin
+        strInsert_Set_Acerto := strInsert_Set_Acerto + ' + ';
+     end;
+     strInsert_Set_Acerto := strInsert_Set_Acerto + 'num_' + bola_concurso;
+  end;
+  sqlRegistros.Close;
+
+  // Agora, iremos atualizar o campo acerto somente do filtro atual selecionado.
+  if Sender = btnVerificarAcerto then
+  begin
+
+    sqlRegistros.Sql.Clear;
+    sqlRegistros.Sql.Add('Update lotofacil.lotofacil_filtros');
+    sqlRegistros.Sql.Add('set acertos = ');
+    sqlRegistros.Sql.Add(strInsert_Set_Acerto);
+    sqlRegistros.Sql.Add('from lotofacil.lotofacil_num');
+    sqlRegistros.sql.Add('where lotofacil.lotofacil_filtros.ltf_id = ');
+    sqlRegistros.Sql.Add('lotofacil.lotofacil_num.ltf_id');
+    sqlRegistros.sql.Add('And to_char(data,');
+    sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+    sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+    Writeln(sqlRegistros.SQL.Text);
+
+  end else
+  begin
+
+    sqlRegistros.Sql.Clear;
+    sqlRegistros.Sql.Add('Update lotofacil.lotofacil_aleatorio');
+    sqlRegistros.Sql.Add('set acertos = ');
+    sqlRegistros.Sql.Add(strInsert_Set_Acerto);
+    sqlRegistros.Sql.Add('from lotofacil.lotofacil_num');
+    sqlRegistros.sql.Add('where lotofacil.lotofacil_aleatorio.ltf_id = ');
+    sqlRegistros.Sql.Add('lotofacil.lotofacil_num.ltf_id');
+    sqlRegistros.sql.Add('And to_char(aleatorio_data,');
+    sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+    sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+    Writeln(sqlRegistros.SQL.Text);
+
+  end;
+
+  // Vamos executar e realizar o commit.
+  try
+    sqlRegistros.ExecSQL;
+    dmLotofacil.pgLTK.Transaction.Commit;
+    sqlRegistros.Close;
+  except
+   On exc : EDataBaseError do begin
+      sgrVerificarAcertos.Columns.Clear;
+      sgrVerificarAcertos.Columns.Add;
+      sgrVerificarAcertos.RowCount := 1;
+      sgrVerificarAcertos.Cells[0,0] := Exc.Message;
+      sgrVerificarAcertos.AutoSizeColumns;
+      exit;
+   end;
+  end;
+
+  if Sender = btnVerificarAcerto then
+  begin
+
+    // Agora, exibe o registro atualizado.
+    sqlRegistros.SQL.Clear;
+    sqlRegistros.SQL.Add('Select acertos, qt_vezes');
+    sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_filtros_acertos_por_data_hora');
+    sqlRegistros.SQL.Add('where to_char(data,');
+    sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+    sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+    sqlRegistros.Sql.Add('order by acertos asc');
+
+  end else
+  if Sender = btnAleatorio_Verificar_Acerto then
+  begin
+
+    // Agora, exibe o registro atualizado.
+    sqlRegistros.SQL.Clear;
+    sqlRegistros.SQL.Add('Select acertos, qt_vezes');
+    sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_aleatorio_acertos_por_data_hora');
+    sqlRegistros.SQL.Add('where to_char(aleatorio_data,');
+    sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+    sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+    sqlRegistros.Sql.Add('order by acertos asc');
+
+  end else
+  begin
+     MessageDlg('Erro', 'Este controle não está configurado pra esta função',
+                        mtError, [mbOk], 0);
+     Exit;
+  end;
+
+  try
+    sqlRegistros.Open;
+    sqlRegistros.First;
+    if sqlRegistros.EOF = true then begin
+      sgrVerificarAcertos.Columns.Clear;
+      sgrVerificarAcertos.Columns.Add;
+      sgrVerificarAcertos.RowCount := 1;
+      sgrVerificarAcertos.Cells[0,0] := 'Não há registros.';
+      sgrVerificarAcertos.AutoSizeColumns;
+      exit;
+    end;
+  except
+    On Exc: Exception Do
+    begin
+      MessageDlg('Erro', Exc.Message, mtError, [mbOk], 0);
+      Exit;
+    end;
+  end;
+
+  // Configura o controle pra receber dados.
+  obj_sgr_acertos.Columns.Clear;
+  obj_sgr_acertos.Columns.Add;
+  obj_sgr_acertos.Columns.Add;
+  obj_sgr_acertos.RowCount := 1;
+  obj_sgr_acertos.Columns[0].Title.Caption := 'Acertos';
+  obj_sgr_acertos.Columns[1].Title.Caption := 'Qt_vezes';
+  obj_sgr_acertos.FixedRows := 1;
+
+
+  linha := 1;
+  qt_registros := 0;
+  while not sqlRegistros.Eof do begin
+     obj_sgr_acertos.RowCount := obj_sgr_acertos.RowCount + 1;
+     obj_sgr_acertos.Cells[0, linha] := sqlRegistros.FieldByName('acertos').AsString;
+     obj_sgr_acertos.Cells[1, linha] := sqlRegistros.FieldByName('qt_vezes').AsString;
+
+     sqlRegistros.Next;
+     Inc(linha);
+  end;
+
+  sqlRegistros.Close;
+  dmLotofacil.Free;
+  dmLotofacil := nil;
+end;
+
 
 {
  Aqui, iremos verificar o número de acertos baseado no concurso selecionado.
@@ -2569,6 +4045,10 @@ var
    sqlRegistros : TSQLQuery;
    qt_registros , uA, linha: Integer;
 begin
+  Verificar_Acertos(Sender);
+  Exit;
+
+
      // Vamos validar todas as entradas, afinal, não queremos erro em nossa
      // aplicação.
      b_ha_itens :=  cmbFiltroData.Items.Count > 0;
@@ -2750,6 +4230,105 @@ begin
      end;
 end;
 
+procedure TForm1.cmbAinda_Nao_Saiu_MaximoChange(Sender : TObject);
+begin
+     Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
+end;
+
+procedure TForm1.cmbAinda_Nao_Saiu_MinimoChange(Sender : TObject);
+begin
+     Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
+end;
+
+{
+ Valida a entrada do usuário.
+}
+procedure TForm1.Verificar_Controle_Frequencia_Minimo_Maximo(Sender: TObject);
+var
+  qt_ainda_nao_saiu_minimo , qt_ainda_nao_saiu_maximo,
+    qt_deixou_de_sair_minimo, qt_deixou_de_sair_maximo, qt_novo_minimo,
+    qt_novo_maximo, qt_repetindo_minimo, qt_repetindo_maximo,
+    indice_minimo, indice_maximo: Integer;
+  objControle_Minimo : TComboBox;
+  objControle_Maximo : TComboBox;
+  valor_minimo , valor_maximo: Integer;
+begin
+  qt_ainda_nao_saiu_minimo := 0;
+  qt_ainda_nao_saiu_maximo := 0;
+  qt_deixou_de_sair_minimo := 0;
+  qt_deixou_de_sair_maximo := 0;
+  qt_novo_minimo := 0;
+  qt_novo_maximo := 0;
+  qt_repetindo_minimo := 0;
+  qt_repetindo_maximo := 0;
+
+  if (Sender = cmbAinda_Nao_Saiu_Minimo) or
+     (Sender = cmbAinda_Nao_Saiu_Maximo) then
+  begin
+    objControle_Minimo := cmbAinda_Nao_Saiu_Minimo;
+    objControle_Maximo := cmbAinda_Nao_Saiu_Maximo;
+  end else
+  if (Sender = cmbDeixou_de_Sair_Minimo) or
+     (Sender = cmbDeixou_de_Sair_Maximo) then
+  begin
+    objControle_Minimo := cmbDeixou_de_Sair_Minimo;
+    objControle_Maximo := cmbDeixou_de_Sair_Maximo;
+  end else
+  if (Sender = cmbNovo_Minimo) or
+     (Sender = cmbNovo_Maximo) then
+  begin
+    objControle_Minimo := cmbNovo_Minimo;
+    objControle_Maximo := cmbNovo_Maximo;
+  end else
+  if (Sender = cmbRepetindo_Minimo) or
+     (Sender = cmbRepetindo_Maximo) then
+  begin
+    objControle_Minimo := cmbRepetindo_Minimo;
+    objControle_Maximo := cmbRepetindo_Maximo;
+  end;
+
+  // Em seguida, verifica se o valor mínimo é maior que o valor máximo.
+  indice_minimo := objControle_Minimo.ItemIndex;
+  indice_maximo := objControle_Maximo.ItemIndex;
+
+  if (indice_minimo > -1) and (indice_maximo > -1) then
+  begin
+    valor_minimo := StrToInt(objControle_Minimo.Items[indice_minimo]);
+    valor_maximo := StrToInt(objControle_Maximo.Items[indice_maximo]);
+
+    // Verifica se valor mínimo é maior que máximo, se sim, fazer
+    // com que máximo seja igual a mínimo.
+    if valor_minimo > valor_maximo then
+    begin
+      // Localizar o índice onde está o valor mínimo dentro da caixa de combinação
+      // máximo e define este índice como o índice selecionado.
+      indice_maximo := objControle_Maximo.Items.IndexOf(IntToStr(valor_minimo));
+      objControle_Maximo.ItemIndex := indice_maximo;
+    end;
+    {
+    if valor_minimo < valor_maximo then
+    begin
+      // Localizar o índice onde está o valor mínimo dentro da caixa de combinação
+      // máximo e define este índice como o índice selecionado.
+      indice_minimo := objControle_Minimo.Items.IndexOf(IntToStr(valor_maximo));
+      objControle_Minimo.ItemIndex := indice_minimo;
+    end;
+    }
+  end;
+end;
+
+procedure TForm1.cmbAleatorioFiltroDataChange(Sender : TObject);
+var
+  strData: AnsiString;
+  indiceSelecionado : Integer;
+begin
+  indiceSelecionado := cmbAleatorioFiltroData.ItemIndex;
+  if indiceSelecionado >= 0 then begin
+    strData := cmbAleatorioFiltroData.Items[indiceSelecionado];
+    AtualizarFiltroData(cmbAleatorioFiltroData, strData);
+  end;
+end;
+
 {
  Neste caso, o controle sgrFrequenciaNaoSair, terá as bolas marcadas que não
  devem sair nos jogos.
@@ -2761,13 +4340,12 @@ var
   frequencia_antes_de_atualizar: array[1..25] of AnsiString;
   ultimaColuna , uA: Integer;
 begin
+  {
     // Se não há 25 linhas + 1 linha de cabeçalho, devemos atualizar o controle.
   if sgrFrequenciaBolasNaoSair.RowCount < 26 then begin
     CarregarFrequenciaPorConcurso(sgrFrequenciaBolasNaoSair);
     exit;
   end;
-
-
 
   // Pega a frequência das bolas antes de atualizar, pois ao atualizar o controle,
   // a frequência será perdida.
@@ -2792,8 +4370,14 @@ begin
       sgrFrequenciaBolasNaoSair.Cells[ultimaColuna, uA] :=
       frequencia_antes_de_atualizar[StrToInt(sgrFrequenciaBolasNaoSair.Cells[0, uA])];
   end;
+  }
 end;
 
+{
+ Toda vez que o usuário altera o número do concurso devemos pegar
+ quais foram as bolas selecionadas, antes de atualizar o controle, em seguida,
+ devemos atualizar o controle com as novas bolas.
+}
 procedure TForm1.cmbConcursoFrequenciaSairChange(Sender : TObject);
 var
   frequencia_antes_de_atualizar: array[1..25] of AnsiString;
@@ -2804,7 +4388,6 @@ begin
     CarregarFrequenciaPorConcurso(sgrFrequenciaBolasSair);
     exit;
   end;
-
 
   // Pega a frequência das bolas antes de atualizar, pois ao atualizar o controle,
   // a frequência será perdida.
@@ -2826,6 +4409,8 @@ begin
       sgrFrequenciaBolasSair.Cells[ultimaColuna, uA] :=
       frequencia_antes_de_atualizar[StrToInt(sgrFrequenciaBolasSair.Cells[0, uA])];
   end;
+
+  AtualizarControleFrequenciaMinimoMaximo;
 end;
 
 {
@@ -2857,21 +4442,39 @@ begin
 
   CarregarConcursoFrequenciaTotalSair;
 
+
   // Atualizar o controle com a frequência que havia antes.
-  for uA := 1 to 25 do begin
-      // Agora, iremos atualizar a última coluna com o valor que foi armazenado
-      // no arranjo frequencia_antes_de_atualizar.
-      // Pra isto devemos saber qual é a bola da primeira coluna, em seguida,
-      // acessar o arranjo 'frequencia_antes_de_atualizar' com o valor desta bola
-      // como índice.;
-      bolaAtual := StrToInt(sgrFrequenciaTotalSair.Cells[0, uA]);
-      sgrFrequenciaTotalSair.Cells[ultimaColuna, uA] :=
-      frequencia_antes_de_atualizar[bolaAtual];
+  // Só iremos atualizar, se houver dados.
+  // Quando há dados, deve haver, 1 linha pra o cabeçalho e mais 1 linha pra
+  // cada bola.
+  if sgrFrequenciaTotalSair.RowCount = 26 then
+  begin
+    for uA := 1 to 25 do begin
+        // Agora, iremos atualizar a última coluna com o valor que foi armazenado
+        // no arranjo frequencia_antes_de_atualizar.
+        // Pra isto devemos saber qual é a bola da primeira coluna, em seguida,
+        // acessar o arranjo 'frequencia_antes_de_atualizar' com o valor desta bola
+        // como índice.;
+        bolaAtual := StrToInt(sgrFrequenciaTotalSair.Cells[0, uA]);
+        sgrFrequenciaTotalSair.Cells[ultimaColuna, uA] :=
+        frequencia_antes_de_atualizar[bolaAtual];
+    end;
   end;
 
 end;
 
+procedure TForm1.cmbDeixou_de_Sair_MaximoChange(Sender : TObject);
+begin
+     Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
+end;
+
+procedure TForm1.cmbDeixou_de_Sair_MinimoChange(Sender : TObject);
+begin
+     Verificar_Controle_Frequencia_Minimo_Maximo(Sender);
+end;
+
 {
+ Toda vez que o usuário alterar o valor da data, devemos atualizar o campo de hora.
 }
 procedure TForm1.cmbFiltroDataChange(Sender : TObject);
 var
@@ -2881,7 +4484,7 @@ begin
   indiceSelecionado := cmbFiltroData.ItemIndex;
   if indiceSelecionado >= 0 then begin
     strData := cmbFiltroData.Items[indiceSelecionado];
-    AtualizarFiltroData(strData);
+    AtualizarFiltroData(cmbFiltroData, strData);
   end;
 end;
 
@@ -2988,6 +4591,9 @@ var
   uA : Integer;
   total_registros : LongInt;
 begin
+  // Se ocorrer um erro dentro de alguma das funções, indicar pra o usuário.
+  strErro := '';
+
   sqlNovosRepetidos := GerarSqlNovosRepetidos;
   sqlParImpar := GerarSqlParImpar;
   sqlExternoInterno := GerarSqlExternoInterno;
@@ -2997,6 +4603,13 @@ begin
   sqlDiferenca_qt_dif := GerarSqlDiferenca_qt_dif;
   sqlDiferenca_qt_alt := GerarSqlDiferenca_qt_alt;
   sqlLotofacilSoma := GerarSqlLotofacilSoma;
+
+  if strErro <> '' then
+  begin
+    MessageDlg('Erro', 'Erro: ' + strErro, mtError, [mbOk], 0);
+    Exit;
+  end;
+
 
   // Gerar sql.
   sqlGerado := TStringList.Create;
@@ -3138,6 +4751,9 @@ begin
   // Ordenar sempre pelo campos abaixo.
   sqlGerado.Add('order by');
   sqlGerado.Add('ltf_qt asc,');
+  sqlGerado.Add('tb_ltf_novos_repetidos.novos_repetidos_id_alternado');
+
+  {
   sqlGerado.Add('qt_alt desc,');
   sqlGerado.Add('concurso_soma_frequencia_bolas desc,');
   sqlGerado.Add('qt_dif_1 asc,');
@@ -3145,6 +4761,7 @@ begin
   sqlGerado.Add('qt_dif_3 asc,');
   sqlGerado.Add('qt_dif_4 asc,');
   sqlGerado.Add('qt_dif_5 asc');
+  }
 
 
   //sqlGerado.Add('qt_alt_seq desc, ');
@@ -3217,6 +4834,547 @@ procedure TForm1.btnFrequenciaAtualizarClick(Sender : TObject);
 begin
   AtualizarFrequenciaBolas;
 end;
+
+procedure TForm1.btnGeradorAleatorioComFiltroClick(Sender : TObject);
+var
+  lotofacil_ltf_id : Integer;
+begin
+  lotofacil_ltf_id := identificador_grupo_16_bolas(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+  Writeln('id: ', lotofacil_ltf_id);
+
+  lotofacil_ltf_id := identificador_grupo_17_bolas(9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25);
+  Writeln('id: ', lotofacil_ltf_id);
+
+
+end;
+
+procedure TForm1.btnGeradorAleatorioSemFiltroClick(Sender : TObject);
+type
+  TGerador_Etapa = (    ANTES_DE_GERAR,
+                        ETAPA_ZERO,
+                        ETAPA_UM,
+                        ETAPA_DOIS,
+                        ETAPA_TRES,
+                        ETAPA_QUATRO,
+                        ETAPA_CINCO,
+                        ETAPA_SEIS,
+                        ETAPA_SETE,
+                        ETAPA_OITO,
+                        ETAPA_NOVE,
+                        ETAPA_DEZ
+                        );
+var
+  lotofacil_numeros: array[0..25] of Integer;
+
+  lista_sql , lista_lotofacil: TStringList;
+
+  bolas_por_combinacao : Integer;
+  bolas_fixas: Integer;
+  bolas_nao_fixas, uA, indice_combinacao_principal,
+    indice_combinacao, indice_coluna, indice_coluna_controle,
+    indice_linha_controle, uC, indice_combinacao_2, qt_repetidos,
+    indice_linha_controle_2, qt_de_combinacoes: Integer;
+
+  gerador_etapa: TGerador_Etapa;
+
+  lotofacil_combinacoes: array of array of Integer;
+  indice_lista , bola_numero: LongInt;
+  coluna_atual : TGridColumn;
+
+  lista_nao_fixa_origem_str, lista_nao_fixa_destino_str,
+  lista_fixa_str, lista_numeros: TStringList;
+begin
+  // Obtém a quantidade de bolas por combinacao
+  if rdGerador_Quantidade_de_Bolas.ItemIndex < 0 then begin
+    MessageDlg('Vc deve escolher uma quantidadade de bolas: [15 a 18]', mtError, [mbOk], 0);
+    Exit;
+  end;
+
+  bolas_por_combinacao := 15 + rdGerador_Quantidade_de_Bolas.ItemIndex;
+  if bolas_por_combinacao > 18 then begin
+    MessageDlg('Vc deve escolher uma quantidadade de bolas: [15 a 18]', mtError, [mbOk], 0);
+    Exit;
+  end;
+
+  qt_de_combinacoes := spinGerador_Combinacoes.Value;
+
+  if Gerar_Lotofacil_Aleatorio(lotofacil_combinacoes, bolas_por_combinacao, qt_de_combinacoes) = false then
+  begin
+    MessageDlg('Erro', strErro, mtError, [mbok], 0);
+    Exit;
+  end;
+
+  // Agora, gravar, no banco de dados, na tabela 'lotofacil_aleatorio_temporario';
+  Inserir_Aleatorio_Temporario(lotofacil_combinacoes, bolas_por_combinacao);
+  Exit;
+
+  {
+  lista_lotofacil.SkipLastLineBreak := True;
+  lista_lotofacil.SaveToFile('teste_lotofacil.csv');
+
+  sgrGeradorAleatorio.Columns.Clear;
+  coluna_atual := sgrGeradorAleatorio.Columns.Add;
+  coluna_atual.Title.Caption := '#';
+  coluna_atual.Title.Alignment := taCenter;
+  coluna_atual.Alignment := taCenter;
+
+  for uA := 1 to bolas_por_combinacao do begin
+    coluna_atual := sgrGeradorAleatorio.Columns.Add;
+    coluna_atual.Title.Caption := 'b' + IntToStr(uA);
+    coluna_atual.Title.Alignment := taCenter;
+    coluna_atual.Alignment := taCenter;
+  end;
+
+  indice_linha_controle := 1;
+  sgrGeradorAleatorio.FixedRows := 1;
+  sgrGeradorAleatorio.RowCount := qt_combinacoes + 1;
+
+  for indice_combinacao := 0 to Pred(qt_combinacoes) do
+  begin
+    for indice_coluna_controle := 1 to bolas_por_combinacao do
+    begin
+      sgrGeradorAleatorio.Cells[indice_coluna_controle, indice_linha_controle] := IntToStr(lotofacil_combinacoes[indice_combinacao, indice_coluna_controle]);
+    end;
+    Inc(indice_linha_controle);
+  end;
+
+  indice_linha_controle := 1;
+  for indice_combinacao := 0 to Pred(qt_combinacoes) do
+  begin
+    indice_linha_controle := indice_combinacao + 1;
+    indice_linha_controle_2 := indice_linha_controle + 1;
+    for indice_combinacao_2 := indice_combinacao + 1 to Pred(qt_combinacoes) do
+    begin
+      qt_repetidos := 0;
+      for indice_coluna_controle := 1 to bolas_por_combinacao do
+      begin
+        if sgrGeradorAleatorio.Cells[indice_coluna_controle, indice_linha_controle] =
+           sgrGeradorAleatorio.Cells[indice_coluna_controle, indice_linha_controle_2] then
+        begin
+          Inc(qt_repetidos);
+        end;
+      end;
+      if qt_repetidos = bolas_por_combinacao then
+      begin
+        sgrGeradorAleatorio.Cells[0, indice_linha_controle_2] := 'REPETIDOS';
+      end;
+      Inc(indice_linha_controle_2);
+    end;
+    Inc(indice_linha_controle);
+  end;
+
+  sgrGeradorAleatorio.AutoSizeColumns;
+
+  }
+end;
+
+
+{
+ Retorna true, se dados estão corretos.
+}
+function TForm1.Gerar_Lotofacil_Aleatorio(var lotofacil_aleatorio: TAleatorio_Resultado;
+bolas_por_combinacao: Integer; qt_de_combinacoes: Integer): boolean;
+const
+   lotofacil_qualquer : array[1..15] of Integer = (
+   1,2,3,5,6,9,10,14,17,18,20,21,22,23,25
+   );
+type
+  TGerador_Etapa = (    ANTES_DE_GERAR,
+                        ETAPA_ZERO,
+                        ETAPA_UM,
+                        ETAPA_DOIS,
+                        ETAPA_TRES,
+                        ETAPA_QUATRO,
+                        ETAPA_CINCO,
+                        ETAPA_SEIS,
+                        ETAPA_SETE,
+                        ETAPA_OITO,
+                        ETAPA_NOVE,
+                        ETAPA_DEZ
+                        );
+var
+  bolas_fixas , bolas_nao_fixas, indice_combinacao, uA, indice_coluna: Integer;
+  lista_numeros, lista_fixa, lista_nao_fixa_origem, lista_nao_fixa_destino: TStringList;
+  lotofacil_numeros: array[0..25] of Integer;
+  gerador_etapa : TGerador_Etapa;
+  indice_lista , bola_numero: LongInt;
+begin
+  // Validar entrada.
+  if not bolas_por_combinacao in [15..18] then
+  begin
+    strErro := Format('Erro, bolas_por_combinacao: %d.' + #1013 +
+            'Intervalo válido é: [15 a 18]', [bolas_por_combinacao]);
+    Exit(False);
+  end;
+  if qt_de_combinacoes <= 0 then
+  begin
+    strErro := Format('Erro, qt_de_combinacoes: %d. ' + #1013 +
+               'Valor deve ser maior que zero.', [qt_de_combinacoes]);
+    Exit(False);
+  end;
+  if Not Assigned(lotofacil_aleatorio) then
+  begin
+    SetLength(lotofacil_aleatorio, qt_de_combinacoes, 26);
+  end;
+
+  // Define a quantidade de bolas fixas e não_fixas conforme a quantidade de
+  // bolas por combinação.
+  case bolas_por_combinacao of
+       15:
+       begin
+           bolas_fixas := 10;
+           bolas_nao_fixas := 5;
+       end;
+       16:
+       begin
+           bolas_fixas := 9;
+           bolas_nao_fixas := 7;
+       end;
+       17:
+       begin
+           bolas_fixas := 8;
+           bolas_nao_fixas := 9;
+       end;
+       18:
+       begin
+           bolas_fixas := 7;
+           bolas_nao_fixas := 11;
+       end;
+  end;
+
+  lista_numeros := TSTringList.Create;
+  lista_fixa := TStringList.Create;
+  lista_nao_fixa_origem := TStringList.Create;
+  lista_nao_fixa_destino := TStringList.Create;
+
+
+  gerador_etapa := ANTES_DE_GERAR;
+  indice_combinacao := 0;
+  while indice_combinacao  <= Pred(qt_de_combinacoes) do begin
+
+      case gerador_etapa of
+           ANTES_DE_GERAR:
+           // Nesta etapa, iremos gerar aleatoriamente, a primeira combinação
+           // Esta estapa, é iterada somente uma vez.
+           begin
+               // Adiciona os números à lista, pra posterior sorteio.
+               lista_numeros.Clear;
+               for uA := 1 to 25 do begin
+                   lista_numeros.Add(IntToStr(uA));
+               end;
+
+               lista_numeros.Clear;
+               for uA := 1 to bolas_por_combinacao do
+               begin
+                   lista_numeros.Add(IntToStr(uA));
+               end;
+
+               // Zera a variável.
+               FillChar(lotofacil_numeros, 26 * sizeof(Integer), 0);
+
+               // Vamos gerar aleatoriamente, a primeira combinação,
+               // O número do índice do arranjo lotofacil_numeros é igual ao
+               // número da bola, então, se a bola for escolhida, a célula
+               // deste arranjo terá o valor 1, senão zero.
+               for uA := 1 to bolas_por_combinacao do begin
+
+                   indice_lista := Random(lista_numeros.Count);
+                   bola_numero := StrToInt(lista_numeros.Strings[indice_lista]);
+                   lista_numeros.Delete(indice_lista);
+
+                   lotofacil_numeros[bola_numero] := 1;
+               end;
+
+               // Em seguida, devemos pegar as bolas sorteadas aleatoriamente
+               // e posicionar as bolas em ordem crescente dentro do arranjo
+               // lotofacil_aleatorio.
+               indice_coluna := 1;
+               for uA := 1 to 25 do
+               begin
+                   if lotofacil_numeros[uA] = 1 then
+                   begin
+                     lotofacil_aleatorio[0, indice_coluna] := uA;
+                     Inc(indice_coluna);
+                   end;
+               end;
+               gerador_etapa := ETAPA_ZERO;
+               continue;
+           end;
+
+           // Na etapa zero, obtermos a lista de fixo e não fixo.
+           // Pra isto, iremos considerar a última combinação gerada
+           // pra basear a lista de fixa e não fixo.
+           ETAPA_ZERO:
+           begin
+               lista_fixa.Clear;
+               lista_nao_fixa_origem.Clear;
+               lista_nao_fixa_destino.Clear;
+
+               // Zera sempre a variável.
+               FillChar(lotofacil_numeros, 26 * sizeof(Integer), 0);
+
+               // Percorre a última combinação gerada e obtém os números sorteados.
+               for uA := 1 to bolas_por_combinacao do
+               begin
+                 bola_numero := lotofacil_aleatorio[indice_combinacao, uA];
+                 lotofacil_numeros[bola_numero] := 1;
+               end;
+
+               // Obtém a lista fixa e não fixa.
+               for uA := 1 to 25 do
+               begin
+                   if lotofacil_numeros[uA] = 1 then
+                   begin
+                     lista_nao_fixa_origem.Add(IntToStr(uA));
+                   end else
+                   begin
+                       lista_fixa.Add(IntToStr(uA));
+                   end;
+               end;
+
+               gerador_etapa := ETAPA_UM;
+               continue;
+           end;
+
+           // Na etapa 1, geramos o derivado da combinação principal.
+           ETAPA_UM, ETAPA_DOIS, ETAPA_TRES, ETAPA_QUATRO, ETAPA_CINCO,
+           ETAPA_SEIS, ETAPA_SETE, ETAPA_OITO, ETAPA_NOVE, ETAPA_DEZ:
+           begin
+               Inc(indice_combinacao);
+               if indice_combinacao >= qt_de_combinacoes then
+                  break;
+
+               Randomize;
+
+               // A próxima combinação é composta da lista fixa e não-fixa,
+               // entretanto, pode ocorrer da lista não-fixa, ser menor
+               // que a quantidade de bolas nao fixas, neste caso, devemos
+               // completá-la.
+               // Pra resolver isto, pegas as bolas que faltam da lista
+               // não-fixa destino, pois, toda vez que retiramos um ítem
+               // da lista não-fixa origem, ela é enviada pra lista não-fixa destino.
+               // Por este motivo, que existe duas lista de não-fixas, uma de origem
+               // e uma de destino.
+               while lista_nao_fixa_origem.Count < bolas_nao_fixas do
+               begin
+                   indice_lista := Random(lista_nao_fixa_destino.Count);
+                   bola_numero := StrToInt(lista_nao_fixa_destino.Strings[indice_lista]);
+
+                   // Move a bola da lista de destino pra lista de origem.
+                   lista_nao_fixa_destino.Delete(indice_lista);
+                   lista_nao_fixa_origem.add(IntToStr(bola_numero));
+               end;
+
+               // Zera o arranjo.
+               FillChar(lotofacil_numeros, 26 * SizeOf(Integer), 0);
+
+               // Pega as bolas fixas.
+               for uA := 0 to Pred(bolas_fixas) do begin
+                   bola_numero := StrToint(lista_fixa.Strings[uA]);
+                   lotofacil_numeros[bola_numero] := 1;
+               end;
+
+               // Pega as bolas não-fixas.
+               for uA := 0 to Pred(bolas_nao_fixas) do begin
+
+                   indice_lista := Random(lista_nao_fixa_origem.Count);
+                   bola_numero := StrToInt(lista_nao_fixa_origem.Strings[indice_lista]);
+
+                   // Move a bola da lista não-fixa origem pra lista não-fixa destino.
+                   lista_nao_fixa_origem.Delete(indice_lista);
+                   lista_nao_fixa_destino.Add(IntToSTr(bola_numero));
+
+                   lotofacil_numeros[bola_numero] := 1;
+               end;
+
+               indice_coluna := 1;
+               for uA := 1 to 25 do
+               begin
+                   if lotofacil_numeros[uA] = 1 then
+                   begin
+                     lotofacil_aleatorio[indice_combinacao, indice_coluna] := uA;
+                     Inc(indice_coluna);
+                   end;
+               end;
+
+               case gerador_etapa of
+                    ETAPA_UM: gerador_etapa := ETAPA_DOIS;
+                    ETAPA_DOIS: gerador_etapa := ETAPA_TRES;
+                    ETAPA_TRES: gerador_etapa := ETAPA_ZERO;
+                    {
+                    ETAPA_TRES: gerador_etapa := ETAPA_QUATRO;
+                    ETAPA_QUATRO : gerador_etapa := ETAPA_CINCO;
+                    ETAPA_CINCO  : gerador_etapa := ETAPA_SEIS;
+                    ETAPA_SEIS   : gerador_etapa := ETAPA_SETE;
+                    ETAPA_SETE   : gerador_etapa := ETAPA_OITO;
+                    ETAPA_OITO   : gerador_etapa := ETAPA_NOVE;
+                    ETAPA_NOVE   : gerador_etapa := ETAPA_DEZ;
+                    ETAPA_DEZ    : gerador_etapa := ANTES_DE_GERAR;
+                    }
+               end;
+               continue;
+           end;
+      end;
+  end
+
+end;
+
+{
+ Iremos capturar as combinações que foram geradas aleatoriamente, e iremos
+ inserir na tabela 'lotofacil_aleatorio_temporario', em seguida, iremos
+ recuperar os valores para o campo ltf_id.
+ Pra isto, iremos relacionar os campos b_1, até b_18, com a tabela 'lotofacil_bolas'
+ com isto, conseguirmos recuperar o campo 'ltf_id'.
+ Em seguida, iremos inserir os dados desta tabela temporaria 'lotofacil_aleatorio_temporario'
+ na tabela 'lotofacil_aleatorio', utilizando os campos
+ 'ltf_id', 'ltf_qt', 'data_aleatorio', 'aleatorio_sequencial'.
+}
+function TForm1.Inserir_Aleatorio_Temporario(ltf_aleatorio: TAleatorio_Resultado;
+          bolas_por_combinacao: Integer): boolean;
+var
+  sql_registro : TSQLQuery;
+  id_aleatorio_sequencial , uA, uB: Integer;
+  data_hora , sql_texto: String;
+  lista_sql : TStringList;
+begin
+  sql_registro := TSqlQuery.Create(Self);
+
+  if Not Assigned(dmLotofacil) then
+  begin
+    dmLotofacil := TDmLotofacil.Create(Self);
+  end;
+  sql_registro.DataBase := dmLotofacil.pgLTK;
+
+  // Valores que estarão em todos os registros, ao ser inserido.
+  lista_sql := TStringList.Create;
+  data_hora := FormatDateTime('YYYY-mm-dd hh:nn:ss.zzz', Now);
+  id_aleatorio_sequencial := 1;
+  sql_texto := '';
+
+  lista_sql.Clear;
+  lista_sql.Add('Insert into lotofacil.lotofacil_aleatorio_temporario');
+  lista_sql.Add('(ltf_qt, aleatorio_data, aleatorio_sequencial,');
+  lista_sql.Add('b_1, b_2, b_3, b_4, b_5, b_6, b_7, b_8, b_9, b_10, b_11, b_12, b_13, b_14, b_15');
+
+  // Se há mais de 15 bolas, devemos, selecionar também.
+  case bolas_por_combinacao of
+       16: lista_sql.Add(', b_16');
+       17: lista_sql.Add(', b_16, b_17');
+       18: lista_sql.Add(', b_16, b_17, b_18');
+  end;
+  lista_sql.Add(')values');
+  Writeln(lista_sql.Text);
+
+  for uA := 0 to High(ltf_aleatorio) do
+  begin
+    if uA > 0 then
+    begin
+      sql_texto := ',(';
+    end else
+    begin
+      sql_texto := '(';
+    end;
+
+    sql_texto := sql_texto + IntToStr(bolas_por_combinacao) + ', ';
+    sql_texto := sql_texto + QuotedStr(data_hora) + ', ';
+    sql_texto := sql_texto + IntToStr(id_aleatorio_sequencial);
+
+    // A primeira bola começa no índice 1.
+    for uB := 1 to bolas_por_combinacao do
+    begin
+      sql_texto := sql_texto + ', ' + IntToStr(ltf_aleatorio[uA, uB]);
+    end;
+    sql_texto := sql_texto + ')';
+    lista_sql.Add(sql_texto);
+    Inc(id_aleatorio_sequencial);
+  end;
+  // Evitar linhas em branco no final.
+  lista_sql.SkipLastLineBreak :=  true;
+
+  // Antes de inserir no banco de dados, devemos apagar a tabela temporaria.
+  try
+     sql_registro.Sql.Clear;
+     sql_registro.Sql.Add('Delete from lotofacil.lotofacil_aleatorio_temporario');
+     sql_registro.ExecSql;
+     dmLotofacil.pgLTK.Transaction.Commit;
+     sql_registro.Close;
+  except
+    on Exc: EDataBaseError do
+    begin
+       strErro := Exc.Message;
+       Exit(False);
+    end;
+  end;
+
+  // Agora, inserir os dados.
+  try
+     sql_registro.Sql.Clear;
+     sql_registro.Sql.Text := lista_sql.Text;
+     sql_registro.ExecSql;
+     dmLotofacil.pgLTK.Transaction.Commit;
+     sql_registro.Close;
+  except
+    on Exc: EDataBaseError do
+    begin
+       strErro := Exc.Message;
+       Exit(False);
+    end;
+  end;
+
+  // Em seguida, iremos 'capturar' o valor do campo ltf_id
+  try
+     sql_registro.Sql.Clear;
+     sql_registro.Sql.Add('Update lotofacil.lotofacil_aleatorio_temporario ltf_temp');
+     sql_registro.Sql.Add('set ltf_id = ltf_bolas.ltf_id');
+     sql_registro.Sql.Add('from lotofacil.lotofacil_bolas ltf_bolas');
+     sql_registro.SQL.Add('where ltf_bolas.ltf_qt = ' + IntToStr(bolas_por_combinacao));
+
+     for uA := 1 to bolas_por_combinacao do
+     begin
+       sql_registro.Sql.Add('and ltf_temp.b_' + IntToStr(uA) + ' = ');
+       sql_registro.Sql.Add('ltf_bolas.b_' + IntToStr(uA));
+     end;
+
+     Writeln(sql_registro.Sql.Text);
+
+     sql_registro.ExecSql;
+     dmLotofacil.pgLTK.Transaction.Commit;
+     sql_registro.Close;
+  except
+    on Exc: EDataBaseError do
+    begin
+       strErro := Exc.Message;
+       Exit(False);
+    end;
+  end;
+
+  // Em seguida, iremos inserir os valores de todos os campos 'ltf_id', 'ltf_qt',
+  // 'aleatorio_data', 'aleatorio_sequencial', de cada registro da tabela
+  // 'lotofacil_aleatorio_temporario' na tabela 'lotofacil_aleatorio'.
+  try
+     sql_registro.Sql.Clear;
+     sql_registro.Sql.Add('Insert into lotofacil.lotofacil_aleatorio');
+     sql_registro.Sql.Add('(ltf_id, ltf_qt, aleatorio_data, aleatorio_sequencial, acertos)');
+     sql_registro.Sql.Add('Select ltf_id, ltf_qt, aleatorio_data, aleatorio_sequencial, 0');
+     sql_registro.Sql.Add('from lotofacil.lotofacil_aleatorio_temporario');
+     sql_registro.Sql.Add('where ltf_qt = ' + IntToStr(bolas_por_combinacao));
+     sql_registro.Sql.Add('and aleatorio_data = ' + QuotedStr(data_hora));
+     sql_registro.ExecSQL;
+     dmLotofacil.pgLTK.Transaction.Commit;
+     dmLotofacil.pgLTK.CloseDataSets;
+     sql_registro.Close;
+  except
+    on Exc: EDataBaseError do
+    begin
+       strErro := Exc.Message;
+       Exit(False);
+    end;
+  end;
+
+
+  Exit(True);
+end;
+
 
 {
  Quando inserimos novos concursos, devemos sempre atualizar a tabela
@@ -3291,46 +5449,350 @@ end;
 {
  Iremos percorrer os controles sgrFrequenciaBolasSair e sgrFrequenciaBolasNaoSair
  e gerar uma parte do sql.
+
+ Nesta function, iremos gerar sql, baseado nas bolas que escolhermos, neste caso,
+ além de temos as bolas selecionadas e um intervalo, iremos também
+ selecionar por categoria.
+
+ Nesta função, também, há os controles mínimo e máximo que indica a quantidade
+ mínima e máxima que cada conjunto de bolas deve sair.
 }
 function TForm1.GerarSqlFrequencia: string;
 var
   sql_bolas_sair: AnsiString;
   sql_bolas_nao_sair: AnsiString;
-  ultima_coluna_controle_sair , ultima_coluna_controle_nao_sair, uA: Integer;
-  minimo_sair , maximo_sair, minimo_nao_sair, maximo_nao_sair: String;
+  ultima_coluna_controle_sair , ultima_coluna_controle_nao_sair, uA,
+    indice_minimo, indice_maximo: Integer;
+  minimo_sair , maximo_sair, minimo_nao_sair, maximo_nao_sair,
+    bola_numero, sql_bolas_ainda_nao_saiu, sql_bolas_deixou_de_sair,
+    sql_bolas_novo, sql_bolas_repetindo, frequencia_status,
+    minimo_ainda_nao_saiu, maximo_ainda_nao_saiu, minimo_novo,
+    maximo_novo, minimo_deixou_de_sair, maximo_deixou_de_sair,
+    minimo_repetindo, maximo_repetindo: String;
+  lista_bola_sair , lista_bola_nao_sair, lista_ainda_nao_saiu,
+    lista_deixou_de_sair, lista_novo, lista_repetindo, lista_sql: TStringList;
 begin
   sql_bolas_sair := '';
   sql_bolas_nao_sair := '';
 
+  sql_bolas_ainda_nao_saiu := '';
+  sql_bolas_deixou_de_sair := '';
+  sql_bolas_novo := '';
+  sql_bolas_repetindo := '';
+
+
   ultima_coluna_controle_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
   ultima_coluna_controle_nao_sair := sgrFrequenciaBolasNaoSair.Columns.Count - 1;
 
-  for uA := 1 to 25 do begin
-      // Pega as bolas que devem sair.
+  // Iremos percorrer todas as linhas do controle: sgrFrequenciaBolasSair e
+  // sgrFrequenciaBolasNaoSair, e verificar se o usuário marcou a bola pra sair
+  // e a bola pra não sair.
+  // E também iremos gerar o sql por categoria, iremos identificar de qual
+  // categoria a bola se encontra no momento, por exemplo: ainda_nao_saiu,
+  // deixou_de_sair, novo e repetindo.
+
+  lista_bola_sair := TStringList.Create;
+  lista_bola_nao_sair := TStringList.Create;
+
+  lista_ainda_nao_saiu := TStringList.Create;
+  lista_deixou_de_sair := TStringList.Create;
+  lista_novo := TStringList.Create;
+  lista_repetindo := TStringList.Create;
+
+  lista_bola_sair.Clear;
+  lista_bola_nao_sair.Clear;
+  lista_ainda_nao_saiu.Clear;
+  lista_deixou_de_sair.Clear;
+  lista_novo.Clear;
+  lista_repetindo.Clear;
+
+  for uA := 1 to 25 do
+  begin
+      // Vamos pegar somente bolas que usuário marcou que devem sair na combinação.
       if sgrFrequenciaBolasSair.Cells[ultima_coluna_controle_sair, uA] = '1' then begin
-        if sql_bolas_sair <> '' then begin
-          sql_bolas_sair := sql_bolas_sair + ' + ';
-        end;
-        sql_bolas_sair := sql_bolas_sair + 'num_' + sgrFrequenciaBolasSair.Cells[0, uA];
+         bola_numero := sgrFrequenciaBolasSair.Cells[0, uA];
+         lista_bola_sair.Add('num_' + bola_numero);
+
+         // Na coluna 1, temos o tipo da categoria de frequência.
+         frequencia_status := sgrFrequenciaBolasSair.Cells[1, uA];
+         frequencia_status := LowerCase(frequencia_status);
+         if frequencia_status = 'ainda_nao_saiu' then begin
+            lista_ainda_nao_saiu.Add('num_' + bola_numero);
+         end else
+         if frequencia_status = 'deixou_de_sair' then begin
+            lista_deixou_de_sair.Add('num_' + bola_numero);
+         end else
+         if frequencia_status = 'novo' then begin
+            lista_novo.Add('num_' + bola_numero);
+         end else
+         if frequencia_status = 'repetindo' then begin
+            lista_repetindo.Add('num_' + bola_numero);
+         end;
+
       end;
       // Pega as bolas que não devem sair.
       if sgrFrequenciaBolasNaoSair.Cells[ultima_coluna_controle_nao_sair, uA] = '1' then begin
-        if sql_bolas_nao_sair <> '' then begin
-          sql_bolas_nao_sair := sql_bolas_nao_sair + ' + ';
-        end;
-        sql_bolas_nao_sair := sql_bolas_nao_sair + 'num_' + sgrFrequenciaBolasNaoSair.Cells[0, uA];
+         bola_numero := sgrFrequenciaBolasNaoSair.Cells[0, uA];
+         lista_bola_nao_sair.Add('num_' + bola_numero);
       end;
   end;
 
-  if sql_bolas_sair <> '' then begin
-    minimo_sair := cmbFrequenciaMinimoSair.Items[cmbFrequenciaMinimoSair.ItemIndex];
-    maximo_sair := cmbFrequenciaMaximoSair.Items[cmbFrequenciaMaximoSair.ItemIndex];
+  // ==================== BOLAS SAIR =========================
+  {
+  // Não precisamos mais disto, pois iremos basear nossos valores
+  // das bolas categorizadas.
+
+  sql_bolas_sair := '';
+  if lista_bola_sair.Count <> 0 then
+  begin
+    for uA := 0 to Pred(lista_bola_sair.Count) do
+    begin
+      if uA <> 0 then begin
+        sql_bolas_sair := sql_bolas_sair + ' + ';
+      end;
+      sql_bolas_sair := sql_bolas_sair + lista_bola_sair.Strings[uA];
+    end;
+    indice_minimo := cmbFrequencia_Minimo_Sair.ItemIndex;
+    indice_maximo := cmbFrequencia_Maximo_Sair.ItemIndex;
+
+    if (indice_minimo = -1) or (indice_maximo = -1) then
+    begin
+      strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
+      Exit('');
+    end;
+    minimo_sair := cmbFrequencia_Minimo_Sair.Items[indice_minimo];
+    maximo_sair := cmbFrequencia_Maximo_Sair.Items[indice_maximo];
+
+    sql_bolas_sair := '(' + sql_bolas_sair + ' between ' + minimo_sair + ' and ' + maximo_sair + ')';
+  end;
+  }
+
+  // ==================== BOLAS NAO SAIR =========================
+  sql_bolas_nao_sair := '';
+  if lista_bola_nao_sair.Count <> 0 then
+  begin
+    for uA := 0 to Pred(lista_bola_nao_sair.Count) do
+    begin
+      if uA <> 0 then begin
+        sql_bolas_nao_sair := sql_bolas_nao_sair + ' + ';
+      end;
+      sql_bolas_nao_sair := sql_bolas_nao_sair + lista_bola_nao_sair.Strings[uA];
+    end;
+    indice_minimo := cmbFrequencia_Minimo_Nao_sair.ItemIndex;
+    indice_maximo := cmbFrequencia_Maximo_Nao_sair.ItemIndex;
+
+    if (indice_minimo = -1) or (indice_maximo = -1) then
+    begin
+      strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
+      Exit('');
+    end;
+    minimo_nao_sair := cmbFrequencia_Minimo_Nao_sair.Items[indice_minimo];
+    maximo_nao_sair := cmbFrequencia_Maximo_Nao_sair.Items[indice_maximo];
+
+    // No caso, das bolas que não devem sair, a soma dos campos corresponentes deve
+    // ser igual a zero.
+    //sql_bolas_nao_sair := '(' + sql_bolas_nao_sair + ' between ' + minimo_nao_sair + ' and ' + maximo_nao_sair + ')';
+    sql_bolas_nao_sair := '(' + sql_bolas_nao_sair + ' = 0)';
+  end;
+
+
+    // ==================== BOLAS AINDA NAO SAIU =========================
+    sql_bolas_ainda_nao_saiu := '';
+    if lista_ainda_nao_saiu.Count <> 0 then
+    begin
+      for uA := 0 to Pred(lista_ainda_nao_saiu.Count) do
+      begin
+        if uA <> 0 then begin
+          sql_bolas_ainda_nao_saiu := sql_bolas_ainda_nao_saiu + ' + ';
+        end;
+        sql_bolas_ainda_nao_saiu := sql_bolas_ainda_nao_saiu + lista_ainda_nao_saiu.Strings[uA];
+      end;
+      indice_minimo := cmbAinda_nao_saiu_minimo.ItemIndex;
+      indice_maximo := cmbAinda_nao_saiu_maximo.ItemIndex;
+
+      if (indice_minimo = -1) or (indice_maximo = -1) then
+      begin
+        strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
+        Exit('');
+      end;
+      minimo_ainda_nao_saiu := cmbAinda_nao_saiu_minimo.Items[indice_minimo];
+      maximo_ainda_nao_saiu := cmbAinda_nao_saiu_maximo.Items[indice_maximo];
+
+      sql_bolas_ainda_nao_saiu := '(' + sql_bolas_ainda_nao_saiu + ' between ' + minimo_ainda_nao_saiu + ' and ' + maximo_ainda_nao_saiu + ')';
+    end;
+
+
+    // ==================== BOLAS DEIXOU DE SAIR =========================
+    sql_bolas_deixou_de_sair := '';
+    if lista_deixou_de_sair.Count <> 0 then
+    begin
+      for uA := 0 to Pred(lista_deixou_de_sair.Count) do
+      begin
+        if uA <> 0 then begin
+          sql_bolas_deixou_de_sair := sql_bolas_deixou_de_sair + ' + ';
+        end;
+        sql_bolas_deixou_de_sair := sql_bolas_deixou_de_sair + lista_deixou_de_sair.Strings[uA];
+      end;
+      indice_minimo := cmbdeixou_de_sair_minimo.ItemIndex;
+      indice_maximo := cmbdeixou_de_sair_maximo.ItemIndex;
+
+      if (indice_minimo = -1) or (indice_maximo = -1) then
+      begin
+        strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
+        Exit('');
+      end;
+      minimo_deixou_de_sair := cmbdeixou_de_sair_minimo.Items[indice_minimo];
+      maximo_deixou_de_sair := cmbdeixou_de_sair_maximo.Items[indice_maximo];
+
+      sql_bolas_deixou_de_sair := '(' + sql_bolas_deixou_de_sair + ' between ' + minimo_deixou_de_sair + ' and ' + maximo_deixou_de_sair + ')';
+    end;
+
+    // ==================== BOLAS AINDA NAO SAIU =========================
+    sql_bolas_novo := '';
+    if lista_novo.Count <> 0 then
+    begin
+      for uA := 0 to Pred(lista_novo.Count) do
+      begin
+        if uA <> 0 then begin
+          sql_bolas_novo := sql_bolas_novo + ' + ';
+        end;
+        sql_bolas_novo := sql_bolas_novo + lista_novo.Strings[uA];
+      end;
+      indice_minimo := cmbnovo_minimo.ItemIndex;
+      indice_maximo := cmbnovo_maximo.ItemIndex;
+
+      if (indice_minimo = -1) or (indice_maximo = -1) then
+      begin
+        strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
+        Exit('');
+      end;
+      minimo_novo := cmbnovo_minimo.Items[indice_minimo];
+      maximo_novo := cmbnovo_maximo.Items[indice_maximo];
+
+      sql_bolas_novo := '(' + sql_bolas_novo + ' between ' + minimo_novo + ' and ' + maximo_novo + ')';
+    end;
+
+    // ==================== BOLAS REPETINDO =========================
+    sql_bolas_repetindo := '';
+    if lista_repetindo.Count <> 0 then
+    begin
+      for uA := 0 to Pred(lista_repetindo.Count) do
+      begin
+        if uA <> 0 then begin
+          sql_bolas_repetindo := sql_bolas_repetindo + ' + ';
+        end;
+        sql_bolas_repetindo := sql_bolas_repetindo + lista_repetindo.Strings[uA];
+      end;
+      indice_minimo := cmbrepetindo_minimo.ItemIndex;
+      indice_maximo := cmbrepetindo_maximo.ItemIndex;
+
+      if (indice_minimo = -1) or (indice_maximo = -1) then
+      begin
+        strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
+        Exit('');
+      end;
+      minimo_repetindo := cmbrepetindo_minimo.Items[indice_minimo];
+      maximo_repetindo := cmbrepetindo_maximo.Items[indice_maximo];
+
+      sql_bolas_repetindo := '(' + sql_bolas_repetindo + ' between ' + minimo_repetindo + ' and ' + maximo_repetindo + ')';
+    end;
+
+    // Cada bola em uma frequência pode estar nestes status:
+    // Ainda não saiu
+    // Deixou de sair
+    // Novo
+    // Repetindo
+    //
+    // Antes, eu pegava todas as bolas e gerava o sql dinamicamente.
+    // Nesta abordagem, a quantidade mínima e máxima era baseada em todas as bolas
+    // e não no status da frequência, agora, posso definir a quantidade mínima
+    // e máxima conforme o status da frequência que a bola pertence, assim,
+    // provavelmente, conseguirei realizar uma melhor filtragem das combinações
+    // e ser mais preciso.
+    lista_sql := TStringList.Create;
+    lista_sql.Clear;
+
+    if sql_bolas_nao_sair <> '' then
+    begin
+      lista_sql.Add(sql_bolas_nao_sair);
+    end;
+
+    // ======== AINDA NAO SAIU ===========
+    if sql_bolas_ainda_nao_saiu <> '' then
+    begin
+
+      // Coloca o operador 'and' entre os sql.
+      if lista_sql.Count > 0 then
+      begin
+        lista_sql.Add('And');
+      end;
+
+      lista_sql.Add(sql_bolas_ainda_nao_saiu);
+    end;
+
+    // ======== DEIXOU DE SAIR ===========
+    if sql_bolas_deixou_de_sair <> '' then
+    begin
+
+      // Coloca o operador 'and' entre os sql.
+      if lista_sql.Count > 1 then
+      begin
+        lista_sql.Add('And');
+      end;
+
+      lista_sql.Add(sql_bolas_deixou_de_sair);
+    end;
+
+    // ======== NOVO ===========
+    if sql_bolas_novo <> '' then
+    begin
+
+      // Coloca o operador 'and' entre os sql.
+      if lista_sql.Count > 1 then
+      begin
+        lista_sql.Add('And');
+      end;
+
+      lista_sql.Add(sql_bolas_novo);
+    end;
+
+    if sql_bolas_repetindo <> '' then
+    begin
+
+      // Coloca o operador 'and' entre os sql.
+      if lista_sql.Count > 1 then
+      begin
+        lista_sql.Add('And');
+      end;
+
+      lista_sql.Add(sql_bolas_repetindo);
+    end;
+
+    // Em seguida, se a lista não está vazia, devemos
+    // circundar tudo com o '(' + ')'.
+    if lista_sql.Count > 0 then
+    begin
+      lista_sql.Insert(0, '(');
+      lista_sql.Append(')');
+    end;
+
+    Writeln(lista_sql.Text);
+    Exit(lista_sql.Text);
+
+
+
+
+
+   {
+   if sql_bolas_sair <> '' then begin
+    minimo_sair := cmbFrequencia_Minimo_Sair.Items[cmbFrequencia_Minimo_Sair.ItemIndex];
+    maximo_sair := cmbFrequencia_Maximo_Sair.Items[cmbFrequencia_Maximo_Sair.ItemIndex];
 
     sql_bolas_sair := '(' + sql_bolas_sair + ' between ' + minimo_sair + ' and ' + maximo_sair + ')'
   end;
   if sql_bolas_nao_sair <> '' then begin
-    minimo_nao_sair := cmbFrequenciaMinimoNaoSair.Items[cmbFrequenciaMinimoNaoSair.ItemIndex];
-    maximo_nao_sair := cmbFrequenciaMaximoNaoSair.Items[cmbFrequenciaMaximoNaoSair.ItemIndex];
+    minimo_nao_sair := cmbFrequencia_Minimo_Nao_Sair.Items[cmbFrequencia_Minimo_Nao_Sair.ItemIndex];
+    maximo_nao_sair := cmbFrequencia_Maximo_Nao_Sair.Items[cmbFrequencia_Maximo_Nao_Sair.ItemIndex];
 
     sql_bolas_nao_sair := '(' + sql_bolas_nao_sair + ' between ' + minimo_sair + ' and ' + maximo_sair + ')';
   end;
@@ -3345,6 +5807,8 @@ begin
   end else begin
     exit('');
   end;
+  }
+
 end;
 
 {
@@ -3949,6 +6413,656 @@ begin
 
 end;
 
+{
+ Obtém novas combinações aleatórias do banco de dados.
+ E atualiza os controles 'cmbAleatorioFiltroData', 'cmbAleatorioFiltroHora'.
+}
+procedure TForm1.btnAleatorioNovoClick(Sender : TObject);
+begin
+  obterNovosFiltros(Sender);
+end;
+
+procedure TForm1.btnAtualizar_Combinacao_ComplementarClick(Sender : TObject);
+var
+  uA : Integer;
+begin
+
+  if Gerar_Complementar_15_Numeros = false then begin
+    MessageDlg('Erro', 'Erro: ' + strErro, mtError, [mbOk], 0);
+    exit;
+  end else
+  begin
+    MessageDlg('', 'Combinação complementares com 15 bolas gerado com sucesso.',
+                   mtError, [mbOk], 0);
+  end;
+
+
+  {
+  for uA := 0 to Pred(chkComplementar_Bolas_por_combinacao.Items.Count) do
+  begin
+    if chkComplementar_Bolas_por_combinacao.Checked[uA] then begin
+      Atualizar_Combinacao_Complementar(15 + uA);
+    end;
+  end;
+  }
+
+end;
+
+{
+ Atualizar a tabela 'lotofacil_complementar'.
+}
+procedure TForm1.Atualizar_Combinacao_Complementar(bolas_por_combinacao: Integer);
+var
+  sql_registro , sql_atualizar: TSQLQuery;
+  id_complementar_sequencia , id_complementar_sequencial, uA, uB: Integer;
+  lotofacil_ltf_id , bola_numero: LongInt;
+  lotofacil_bolas : array[0..26] of Integer;
+  lotofacil_aleatorio: array of array of Integer;
+  sql_texto : AnsiString;
+  lista_ltf_id : TStringList;
+  qt_registros_afetados : TRowsCount;
+
+  lotofacil_id: array of Integer;
+  lista_de_ltf_id: TStringList;
+begin
+
+
+
+
+
+
+
+  if (bolas_por_combinacao < 15) and
+     (bolas_por_combinacao > 18) then
+  begin
+    strErro := Format('Erro, bolas_por_combinacao, fora do intervalo: %d', [bolas_por_combinacao]);
+    Exit;
+  end;
+
+  // Zera o campo id_complementar_sequencial
+  sql_registro := TSqlQuery.Create(Self);
+
+  if not Assigned(dmLotofacil) then
+  begin
+    dmLotofacil := TdmLotofacil.Create(Self);
+  end;
+  sql_registro.DataBase := dmLotofacil.pgLTK;
+  sql_registro.Sql.Clear;
+
+  try
+    sql_registro.Sql.Add('Update lotofacil.lotofacil_complementar');
+    sql_registro.Sql.Add('set id_complementar_sequencial = 0');
+    sql_registro.ExecSql;
+    dmLotofacil.pgLTK.Transaction.Commit;
+  except
+    On exc: EDatabaseError do
+    begin
+      strErro := exc.Message;
+      Exit;
+    end;
+  end;
+
+  sql_atualizar := TSqlQuery.Create(Self);
+  sql_atualizar.DataBase := dmLotofacil.pgLtk;
+
+  id_complementar_sequencial := 0;
+
+  lista_ltf_id := TStringList.Create;
+
+  // Agora, vamos atualizar os complementares.
+  while true do
+  begin
+    sql_registro.Sql.Clear;
+    sql_registro.Sql.Add('Select ltf_id from lotofacil.lotofacil_complementar');
+    sql_registro.Sql.Add('where id_complementar_sequencial = 0');
+    sql_registro.Sql.Add('and ltf_qt = ' + IntToStr(bolas_por_combinacao));
+    sql_registro.Sql.Add('order by random() limit 1');
+    try
+      sql_registro.Open;
+    except
+      On exc: EDataBaseError do
+      begin
+        strErro := exc.Message;
+        Exit;
+      end;
+    end;
+    sql_registro.First;
+    sql_registro.Last;
+    if sql_registro.RecordCount = 0 then
+    begin
+      Exit;
+    end;
+
+    sql_registro.First;
+    lotofacil_ltf_id := sql_registro.FieldByName('ltf_id').AsInteger;
+
+    // Agora, atualiza este campo, com o valor do id_complementar_sequencial.
+    Inc(id_complementar_sequencial);
+    sql_registro.Close;
+    sql_registro.Sql.Clear;
+    sql_registro.SQL.Add('Update lotofacil.lotofacil_complementar');
+    sql_registro.Sql.Add('set id_complementar_sequencial = ' + IntToStr(id_complementar_sequencial));
+    sql_registro.Sql.Add('where ltf_id = ' + IntToStr(lotofacil_ltf_id));
+
+    try
+      sql_registro.ExecSql;
+      dmLotofacil.pgLTK.Transaction.Commit;
+      sql_registro.Close;
+    except
+      On exc: EDataBaseError do
+      begin
+        strErro := exc.Message;
+        Exit;
+      end;
+    end;
+
+    // Em seguida, pega as bolas do campo 'ltf_id'.
+    sql_registro.SQL.Clear;
+    sql_registro.SQL.Add('Select ltf_id, b_1, b_2, b_3, b_4, b_5, b_6, b_7, b_8, b_9, b_10,');
+    sql_registro.Sql.Add('b_11, b_12, b_13, b_14, b_15, b_16, b_17, b_18');
+    sql_registro.Sql.Add('from lotofacil.lotofacil_bolas');
+    sql_registro.Sql.Add('where ltf_id = ' + IntToStr(lotofacil_ltf_id));
+
+    try
+      sql_registro.Open;
+    except
+      On exc: EDataBaseError do
+      begin
+        strErro := exc.Message;
+        Exit;
+      end
+    end;
+
+    sql_registro.First;
+    sql_registro.Last;
+
+    if sql_registro.RecordCount = 0 then
+    begin
+      strErro := Format('Registro não encontrado, ltf_id = %d', [lotofacil_ltf_id]);
+      Exit;
+    end;
+
+    // Em seguida, pega as bolas sorteadas.
+    FillChar(lotofacil_bolas, sizeof(Integer) * 26, 0);
+
+    sql_registro.First;
+    for uA := 1 to bolas_por_combinacao do
+    begin
+      bola_numero := sql_registro.Fields[uA].AsInteger;
+      if not ((bola_numero >= 1) and (bola_numero <= 25)) then
+      begin
+        strErro := Format('Número fora do intervalo: %d', [bola_numero]);
+        Exit;
+      end;
+      lotofacil_bolas[bola_numero] := 1;
+    end;
+
+    if Gerar_Combinacao_Complementar(lotofacil_bolas, bolas_por_combinacao, lotofacil_aleatorio) = false then
+    begin
+      Exit;
+    end;
+
+    // Obtém o campo 'ltf_id' das bolas geradas.
+    sql_registro.Close;
+    sql_registro.Sql.Clear;
+    sql_registro.Sql.Add('Select ltf_id from lotofacil.lotofacil_bolas');
+    sql_registro.Sql.Add('where');
+
+    for uA := 0 to 2 do
+    begin
+      if uA = 0 then begin
+         sql_texto := '(';
+      end else begin
+        sql_texto := 'or (';
+      end;
+
+      for uB := 1 to bolas_por_combinacao do
+      begin
+        if uB > 1 then
+        begin
+          sql_texto := sql_texto + ' and ';
+        end;
+        sql_texto := sql_texto + Format('b_%d = %d', [uB, lotofacil_aleatorio[uA, uB]]);
+      end;
+      sql_texto := sql_texto + ' and ltf_qt = ' + IntToStr(bolas_por_combinacao);
+      sql_texto := sql_texto + ')';
+      sql_registro.Sql.Add(sql_texto);
+    end;
+
+    Writeln(sql_registro.Sql.Text);
+
+    try
+      sql_registro.Open;
+    except
+      On exc: EDataBaseError do
+      begin
+        strErro := exc.Message;
+        Exit;
+      end
+    end;
+
+    sql_registro.First;
+    sql_registro.Last;
+
+    if (sql_registro.RecordCount = 0) then
+    begin
+      strErro := Format('Registro não encontrado', []);
+      Exit;
+    end;
+
+    Writeln(sql_registro.RecordCount);
+
+    if (sql_registro.RecordCount <> 3) then
+    begin
+      strErro := Format('Era pra ter 3 registros', []);
+      Exit;
+    end;
+
+    lista_ltf_id.Clear;
+    sql_registro.First;
+    for uA := 0 to 2 do
+    begin
+      lista_ltf_id.Add(IntToStr(sql_registro.FieldByName('ltf_id').AsInteger));
+      sql_registro.Next;
+    end;
+    sql_registro.Close;
+
+    // Agora, vamos atualizar o campo 'id_complementar_sequencial';
+    for uA := 0 to 2 do
+    begin
+      Inc(id_complementar_sequencial);
+      lotofacil_ltf_id := StrToInt(lista_ltf_id[uA]);
+      sql_atualizar.Close;
+      sql_atualizar.Sql.Clear;
+      sql_atualizar.Sql.Add('Update lotofacil.lotofacil_complementar');
+      sql_atualizar.Sql.Add('set id_complementar_sequencial = ' + IntToStr(id_complementar_sequencial));
+      sql_atualizar.Sql.Add('where id_complementar_sequencial = 0');
+      sql_atualizar.Sql.Add('and ltf_id = ' + IntToStr(lotofacil_ltf_id));
+
+      try
+        sql_atualizar.ExecSQL;
+        dmLotofacil.pgLTK.Transaction.Commit;
+      except
+        On exc: EDataBaseError do
+        begin
+          strErro := exc.Message;
+          Exit;
+        end;
+      end;
+
+      qt_registros_afetados := sql_atualizar.RowsAffected;
+      if sql_atualizar.RowsAffected >= 1 then begin
+        Inc(id_complementar_sequencial);
+      end;
+    end;
+  end;
+end;
+
+{
+ Gerar complementar 15 números.
+}
+function TForm1.Gerar_Complementar_15_Numeros: boolean;
+const
+   LOTOFACIL_COMBINACOES = 3268760;
+var
+  b1 , b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15,
+    lotofacil_ltf_id: Integer;
+  lista_id_sequencial : TStringList;
+
+  lotofacil_id: array of array of Integer;
+  lotofacil_bolas: array[0..25] of Integer;
+  lotofacil_aleatorio: TAleatorio_Resultado;
+
+  // Na tabela, há um campo 'ltf_id', que é o identificador lotofacil da
+  // combinação.
+  ltf_id_1, ltf_id_2, ltf_id_3, ltf_id_4 , id_lotofacil, uA, uB,
+    qt_itens: Integer;
+  indice_lista , id_sequencial: LongInt;
+
+  lista_sql : TSTringList;
+  sql_registro : TSQLQuery;
+begin
+
+     // Pra cada id, haverá 3 combinações complementares,
+     // então, iremos gerar ids sequencialmente pra
+     // 4 números, a combinação principal e as combinações
+     // complementares, pra isso devemos armazenar na lista
+     // somente o primeiro id das combinações principais.
+     // Pois, esta os números desta lista, serão sorteados aleatoriamente.
+     // Nos iremos percorrer todas as combinações possíveis começando
+     // do menor identificador pra esta combinação, então pra evitar
+     // que as combinações estejam sequencialmente, iremos
+     // sortear os números desta lista.
+     lista_id_sequencial := TStringList.Create;
+     uA := 1;
+     while uA <= 13075041 do
+     begin
+       lista_id_sequencial.Add(IntToStr(uA));
+       Inc(uA, 4);
+     end;
+
+     SetLength(lotofacil_id, 3268761, 2);
+     SetLength(lotofacil_aleatorio, 3, 26);
+
+     lista_sql := TStringList.Create;
+     lista_sql.Clear;
+
+     // A cada iteração do loop, esta variável terá o valor incrementado.
+     // E também serve pra comparar este valor com o valor retornado
+     // pela função 'identificador_grupo_15_bolas'.
+     id_lotofacil := 0;
+    for b1 := 1 to 25 do
+    for b2 := b1 + 1 to 25 do
+    for b3 := b2 + 1 to 25 do
+    for b4 := b3 + 1 to 25 do
+    for b5 := b4 + 1 to 25 do
+    for b6 := b5 + 1 to 25 do
+    for b7 := b6 + 1 to 25 do
+    for b8 := b7 + 1 to 25 do
+    for b9 := b8 + 1 to 25 do
+    for b10 := b9 + 1 to 25 do
+    for b11 := b10 + 1 to 25 do
+    for b12 := b11 + 1 to 25 do
+    for b13 := b12 + 1 to 25 do
+    for b14 := b13 + 1 to 25 do
+    for b15 := b14 + 1 to 25 do
+    begin
+      // Pega o identificador da combinação atual.
+      ltf_id_1 := identificador_grupo_15_bolas(b1, b2, b3, b4, b5, b6,
+                          b7, b8, b9, b10, b11, b12, b13, b14, b15);
+
+      // Valida o identificador retornado pela função.
+      Inc(id_lotofacil);
+      if ltf_id_1 <> id_lotofacil then
+      begin
+        strErro := Format('Identificador inválido: ltf_id=%d, retornado pela função: %d',
+                [id_lotofacil, ltf_id_1]);
+        Exit(False);
+      end;
+
+      // Verifica se este identificador já foi sorteado.
+      if lotofacil_id[ltf_id_1][0] <> 0 then
+      begin
+        continue;
+      end;
+
+      // Vamos zerar o arranjo e obter as três combinações complementares.
+      FillChar(lotofacil_bolas, 26 * sizeof(Integer), 0);
+
+      // Atribui valor 1 pra as bolas sorteadas.
+      lotofacil_bolas[b1] := 1;
+      lotofacil_bolas[b2] := 1;
+      lotofacil_bolas[b3] := 1;
+      lotofacil_bolas[b4] := 1;
+      lotofacil_bolas[b5] := 1;
+      lotofacil_bolas[b6] := 1;
+      lotofacil_bolas[b7] := 1;
+      lotofacil_bolas[b8] := 1;
+      lotofacil_bolas[b9] := 1;
+      lotofacil_bolas[b10] := 1;
+      lotofacil_bolas[b11] := 1;
+      lotofacil_bolas[b12] := 1;
+      lotofacil_bolas[b13] := 1;
+      lotofacil_bolas[b14] := 1;
+      lotofacil_bolas[b15] := 1;
+
+      if Gerar_Combinacao_Complementar(lotofacil_bolas, 15, lotofacil_aleatorio) = false then
+      begin
+        Exit(False);
+      end;
+
+      // Aqui, iremos pegar o próximo id aleatoriamente que será utilizado
+      // no campo 'id_complementar_sequencial'.
+      if lista_id_sequencial.Count = 0 then begin
+        MessageDlg('Erro', 'Aumentar a quantidade de ítens', mtError, [mbOk], 0);
+        Exit(False);
+      end;
+
+      indice_lista := Random(lista_id_sequencial.Count);
+      id_sequencial := StrToInt(lista_id_sequencial.Strings[indice_lista]);
+      lista_id_sequencial.Delete(indice_lista);
+
+      lotofacil_id[ltf_id_1][0] := 1;
+      lotofacil_id[ltf_id_1][1] := id_sequencial;
+
+      // Agora, vamos pegar os 3 identificadores das três combinações complementares
+      // Somente iremos inserir, se nenhum valor foi definido pra aquela combinação.
+      for uA := 0 to 2 do
+      begin
+        for uB := 1 to 15 do
+        begin
+          lotofacil_bolas[uB] := lotofacil_aleatorio[uA, uB];
+        end;
+
+        lotofacil_ltf_id := identificador_grupo_15_bolas(
+                         lotofacil_bolas[1],
+                         lotofacil_bolas[2],
+                         lotofacil_bolas[3],
+                         lotofacil_bolas[4],
+                         lotofacil_bolas[5],
+                         lotofacil_bolas[6],
+                         lotofacil_bolas[7],
+                         lotofacil_bolas[8],
+                         lotofacil_bolas[9],
+                         lotofacil_bolas[10],
+                         lotofacil_bolas[11],
+                         lotofacil_bolas[12],
+                         lotofacil_bolas[13],
+                         lotofacil_bolas[14],
+                         lotofacil_bolas[15]
+        );
+
+        // Só gerar o sql, se a combinação ainda não foi sorteada.
+        if lotofacil_id[lotofacil_ltf_id][0] = 0 then
+        begin
+          Inc(id_sequencial);
+
+          lotofacil_id[lotofacil_ltf_id][0] := 1;
+          lotofacil_id[lotofacil_ltf_id][1] := id_sequencial;
+
+        end;
+
+      end;
+    end;
+
+    // Agora, salvar no banco de dados, primeiro, deletar o registro que está lá
+    sql_registro := TSqlQuery.Create(Self);
+
+    if Not Assigned(dmLotofacil) then begin
+      dmLotofacil := TDmLotofacil.Create(Self);
+    end;
+
+    sql_registro.DataBase := dmLotofacil.pgLTK;
+    sql_registro.SQL.Clear;
+    sql_registro.Sql.Add('Delete from lotofacil.lotofacil_complementar');
+    sql_registro.Sql.Add('where ltf_qt = 15');
+
+    try
+      sql_registro.ExecSql;
+    except
+      on exc: Exception do
+      begin
+        strErro := exc.Message;
+        Exit(False);
+      end;
+    end;
+
+    // Evitar linha em branco no final
+    lista_sql.Clear;
+    lista_sql.SkipLastLineBreak := True;
+
+    qt_itens := 0;
+    for uA := 1 to LOTOFACIL_COMBINACOES do
+    begin
+
+      if qt_itens = 0 then
+      begin
+        sql_registro.Sql.Add('Insert lotofacil.lotofacil_complementar(ltf_id, ltf_qt,');
+        sql_registro.Sql.Add('id_complementar_sequencial)values');
+        sql_registro.Sql.Add(Format('(%d,%d,%d)', [lotofacil_id[uA, 0], 15,
+                                                 lotofacil_id[uA, 1]]));
+      end else
+      begin
+        sql_registro.Sql.Add(Format(',(%d,%d,%d)', [lotofacil_id[uA, 0], 15,
+                                                 lotofacil_id[uA, 1]]));
+      end;
+
+      Inc(qt_itens);
+
+      // Pra evitar que exaurimos a memória, iremos fazer inserções
+      // incrementais, a cada 50000 ítens, iremos inserir no banco de dados.
+      if qt_itens = 50000 then
+      begin
+        qt_itens := 0;
+
+        // Em seguida, inserir os dados.
+        sql_registro.Close;
+        sql_registro.SQL.Clear;
+        sql_registro.Sql.Text := lista_sql.Text;
+        lista_sql.Clear;
+        try
+          sql_registro.ExecSql;
+        except
+          on exc: Exception do
+          begin
+            strErro := exc.Message;
+            Exit(False);
+          end;
+        end;
+      end;
+    end;
+
+    // Se há ainda registros não inseridos, devemos fazer agora
+    if lista_sql.Count <> 0 then
+    begin
+      // Em seguida, inserir os dados.
+      sql_registro.Close;
+      sql_registro.SQL.Clear;
+      sql_registro.Sql.Text := lista_sql.Text;
+      lista_sql.Clear;
+      try
+        sql_registro.ExecSql;
+      except
+        on exc: Exception do
+        begin
+          strErro := exc.Message;
+          Exit(False);
+        end;
+      end;
+    end;
+
+    Exit(True);
+end;
+
+function TForm1.Gerar_Combinacao_Complementar(
+  lotofacil_bolas : array of Integer; bolas_por_combinacao: Integer; out lotofacil_aleatorio : TAleatorio_Resultado
+  ) : boolean;
+var
+  lista_fixa , lista_nao_fixa_origem, lista_nao_fixa_destino: TStringList;
+  uA , bolas_fixas, bolas_nao_fixas, uC, indice_coluna,
+    qt_bolas_valor_um, uB: Integer;
+  bola_numero , indice_lista: LongInt;
+  ultimo_indice : LongInt;
+begin
+     ultimo_indice := High(lotofacil_bolas);
+     if High(lotofacil_bolas) <> 25 then
+     begin
+       strErro := 'Deve haver um arranjo com índice final igual a 25';
+       Exit(False);
+     end;
+
+     SetLength(lotofacil_aleatorio, 3, 26);
+
+     lista_fixa := TStringList.Create;
+     lista_nao_fixa_origem := TStringList.Create;
+     lista_nao_fixa_destino := TStringList.Create;
+
+     lista_fixa.Clear;
+     lista_nao_fixa_origem.Clear;
+     lista_nao_fixa_destino.Clear;
+
+     case bolas_por_combinacao of
+       15:
+       begin
+           bolas_fixas := 10;
+           bolas_nao_fixas := 5;
+       end;
+       16:
+       begin
+           bolas_fixas := 9;
+           bolas_nao_fixas := 7;
+       end;
+       17:
+       begin
+           bolas_fixas := 8;
+           bolas_nao_fixas := 9;
+       end;
+       18:
+       begin
+           bolas_fixas := 7;
+           bolas_nao_fixas := 11;
+       end;
+     end;
+
+     qt_bolas_valor_um := 0;
+     for uA := 1 to 25 do begin
+       if lotofacil_bolas[uA] = 1 then begin
+         lista_nao_fixa_origem.Add(IntToStr(uA));
+         Inc(qt_bolas_valor_um);
+       end else begin
+         lista_fixa.Add(IntToStr(uA));
+       end;
+     end;
+
+     if qt_bolas_valor_um <> bolas_por_combinacao then
+     begin
+       strErro := 'Quantidade de bolas sorteadas diferente de quantidade de bolas por combinação';
+       Exit(False);
+     end;
+
+
+     for uB := 0 to 2 do begin
+
+       // Preenche
+       FillChar(lotofacil_bolas, 26 * sizeof(Integer), 0);
+       for uC := 0 to Pred(bolas_fixas) do begin
+         bola_numero := StrToInt(lista_fixa.Strings[uC]);
+         lotofacil_bolas[bola_numero] := 1;
+       end;
+
+       // Completa a lista, se estiver faltando.
+       while lista_nao_fixa_origem.Count < bolas_nao_fixas do
+       begin
+         indice_lista := Random(lista_nao_fixa_destino.Count);
+         bola_numero := StrToInt(lista_nao_fixa_destino.Strings[indice_lista]);
+         lista_nao_fixa_destino.Delete(indice_lista);
+         lista_nao_fixa_origem.Add(IntToStr(bola_numero));
+       end;
+
+       // Sortea aleatoriamente bolas da lista não-fixa origem.
+       for uC := 1 to bolas_nao_fixas do
+       begin
+         indice_lista := Random(lista_nao_fixa_origem.Count);
+         bola_numero := StrToInt(lista_nao_fixa_origem.Strings[indice_lista]);
+         lista_nao_fixa_origem.Delete(indice_lista);
+         lista_nao_fixa_destino.Add(IntToStr(bola_numero));
+
+         lotofacil_bolas[bola_numero] := 1;
+       end;
+
+       indice_coluna := 1;
+       for uC := 1 to 25 do
+       begin
+         if lotofacil_bolas[uC] = 1 then
+         begin
+           lotofacil_aleatorio[uB, indice_coluna] := uC;
+           Inc(indice_coluna);
+         end;
+       end;
+     end;
+
+     Exit(True);
+end;
 
 procedure TForm1.GerarSqlGrupo(sqlGrupo: TStringList);
 var
@@ -4360,8 +7474,9 @@ end;
 procedure TForm1.AlterarMarcador(Sender : TObject; aCol,  aRow : Integer; var CanSelect : Boolean);
 var
   gradeTemp : TStringGrid;
+  titulo_coluna : TCaption;
 begin
-  Write('ARow: ', aRow);
+  // Write('ARow: ', aRow);
   // Se está na coluna marcar, então, altera o valor da célula.
   gradeTemp := TStringGrid(Sender);
   // Se a coluna é maior que gradeTemp.Columns, então retorna.
@@ -4374,10 +7489,21 @@ begin
     exit;
   end;
 
+
+  if gradeTemp.Columns[ACol].Title <> nil then
+  begin
+       titulo_coluna := gradeTemp.Columns[Acol].Title.Caption;
+       titulo_coluna := Upcase(titulo_coluna);
+  end;
     // Se a coluna 'marcar' foi clicada, devemos alterar de 0 pra 1 ou vice-versa.
   if (gradeTemp.Columns[ACol].Title <> nil) and  //(UpCase(gradeTemp.Cells[Acol, 0]) = 'MARCAR') or
-     (UpCase(gradeTemp.Columns[Acol].Title.Caption) = 'MARCAR')
-    then begin
+     (
+                                    (titulo_coluna = 'MARCAR') or
+                                    (titulo_coluna = 'DEVE_SAIR') OR
+                                    (titulo_coluna = 'NAO_DEVE_SAIR')
+     )
+    then
+    begin
     if  aRow <> 0 then begin
       if gradeTemp.Cells[aCol, aRow] = '0' then begin
          gradeTemp.Cells[aCol, aRow] := '1';
@@ -4465,36 +7591,70 @@ end;
  atualizar todos os controles que indicam bola que devem sair, pra ter a mesma bola selecionada.
  E ao mesmo tempo, nos controles que indicam bolas que não devem sair devemos deselecionar
  a mesma bola, se a mesma está selecionada em tais controles.
-
  }
+
+
+
 procedure TForm1.AtualizarControleFrequencia(objControle: TStringGrid);
 var
-  uA , ultima_coluna_controle_atualizado,
-    ultima_coluna_controle_desatualizado,
-    ultima_coluna_controle_deselecionar_um,
-    ultima_coluna_controle_deselecionar_dois,
+  uA ,
     ultima_coluna_frequencia_sair, ultima_coluna_frequencia_bolas_sair,
     ultima_coluna_frequencia_total_sair,
     ultima_coluna_frequencia_nao_sair,
     ultima_coluna_frequencia_bolas_nao_sair,
-    ultima_coluna_frequencia_total_nao_sair, ultima_coluna_sair: Integer;
-  valor_campo_bola_deselecionar_um , valor_campo_bola_deselecionar_dois: String;
-  bolaAtual : LongInt;
+    ultima_coluna_frequencia_total_nao_sair, ultima_coluna_sair,
+    ultima_coluna_nao_sair: Integer;
+  bolaAtual , bola_numero: LongInt;
   linha_frequencia_sair , linha_frequencia_bolas_sair,
     linha_frequencia_total_sair, linha_frequencia_nao_sair,
     linha_frequencia_bolas_nao_sair, linha_frequencia_total_nao_sair: Boolean;
+  valor_marcado_sair , valor_marcado_nao_sair: String;
 begin
-  ultima_coluna_frequencia_sair := sgrFrequenciaSair.Columns.Count - 1;
-  ultima_coluna_frequencia_bolas_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
-  ultima_coluna_frequencia_total_sair := sgrFrequenciaTotalSair.Columns.Count - 1;
+  // Agora, haverá as colunas 'DEVE_SAIR' e 'NAO_DEVE_SAIR'
+  ultima_coluna_frequencia_bolas_nao_sair := Pred(sgrFrequenciaBolasSair.Columns.Count);
+  ultima_coluna_frequencia_bolas_sair := ultima_coluna_frequencia_bolas_nao_sair - 1;
 
-  ultima_coluna_frequencia_nao_sair := sgrFrequenciaNaoSair.Columns.Count - 1;
-  ultima_coluna_frequencia_bolas_nao_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
-  ultima_coluna_frequencia_total_nao_sair := sgrFrequenciaTotalSair.Columns.Count - 1;
+  ultima_coluna_frequencia_total_nao_sair := Pred(sgrFrequenciaTotalSair.Columns.Count);
+  ultima_coluna_frequencia_total_sair := ultima_coluna_frequencia_total_nao_sair -1;
+
+
+  // ultima_coluna_frequencia_sair := sgrFrequenciaSair.Columns.Count - 1;
+  // ultima_coluna_frequencia_bolas_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
+  // ultima_coluna_frequencia_total_sair := sgrFrequenciaTotalSair.Columns.Count - 1;
+
+  // Agora, iremos percorrer cada linha e pega o valor que foi marcado e inserir
+  // no arranjo 'concurso_frequencia_sair' e 'concurso_frequencia_nao_sair', em seguida,
+  // iremos, validar pra evitar que a mesma bola tem sido marcado pra sair e não sair.
+  if (objControle = sgrFrequenciaBolasSair) or (objControle = sgrFrequenciaTotalSair) then
+  begin
+       ultima_coluna_nao_sair := Pred(objControle.Columns.Count);
+       ultima_coluna_sair := ultima_coluna_nao_sair - 1;
+
+       // Agora, percorre o controle
+       for uA := 1 to 25 do
+       begin
+         bola_numero := StrToInt(objControle.Cells[0, uA]);
+         concurso_frequencia_sair[bola_numero] := StrToInt(objControle.Cells[ultima_coluna_sair, uA]);
+         concurso_frequencia_nao_sair[bola_numero] := StrToInt(objControle.Cells[ultima_coluna_nao_sair, uA]);
+
+         // Se a bola foi marcada pra sair e também pra não sair, não sabemos
+         // o que realmente, o usuário deseja, então desmarcamos as duas.
+         if (concurso_frequencia_sair[bola_numero] = 1) and (concurso_frequencia_nao_sair[bola_numero] = 1) then
+         begin
+            concurso_frequencia_nao_sair[bola_numero] := 0;
+            concurso_frequencia_sair[bola_numero] := 0;
+         end;
+       end;
+  end;
+
+  // ultima_coluna_frequencia_bolas_nao_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
+  // ultima_coluna_frequencia_total_nao_sair := sgrFrequenciaTotalSair.Columns.Count - 1;
 
   // Pega a frequencia do controle que foi atualizado, devemos armazenar
   // na variável correta.
-  if (objControle = sgrFrequenciaSair) or
+  // if (objControle = sgrFrequenciaSair) or
+  {
+  IF
      (objControle = sgrFrequenciaBolasSair) or
      (objControle = sgrFrequenciaTotalSair) then
   begin
@@ -4511,14 +7671,18 @@ begin
      begin
          bolaAtual := StrToInt(objControle.Cells[0, uA]);
          concurso_frequencia_sair[bolaAtual] := StrToInt(objControle.Cells[ultima_coluna_sair, uA]);
+         concurso_frequencia_nao_sair[bolaAtual] := StrToInt(objControle.Cells[ultima_coluna_nao_sair, uA]);
 
-         // Se a bola está marcar tanto pra sair, quando pra não sair, devemos desmarcar a outra.
+         // Se a bola foi marcada pra sair e também pra não sair, não sabemos
+         // o que realmente, o usuário deseja, então desmarcamos as duas.
          if (concurso_frequencia_sair[bolaAtual] = 1) and (concurso_frequencia_nao_sair[bolaAtual] = 1) then
          begin
             concurso_frequencia_nao_sair[bolaAtual] := 0;
+            concurso_frequencia_sair[bolaAtual] := 0;
          end;
      end;
-  end
+  end;
+
   else
   if (objControle = sgrFrequenciaNaoSair) or
      (objControle = sgrFrequenciaBolasNaoSair) or
@@ -4545,31 +7709,57 @@ begin
          end;
      end;
   end;
+  }
 
   // Vamos verificar quais controles tem linhas completas de dados.
-  linha_frequencia_sair := sgrFrequenciaSair.RowCount = 26;
+  //linha_frequencia_sair := sgrFrequenciaSair.RowCount = 26;
   linha_frequencia_bolas_sair := sgrFrequenciaBolasSair.RowCount = 26;
   linha_frequencia_total_sair := sgrFrequenciaTotalSair.RowCount = 26;
 
-  linha_frequencia_nao_sair := sgrFrequenciaNaoSair.RowCount = 26;
-  linha_frequencia_bolas_nao_sair := sgrFrequenciaBolasNaoSair.RowCount = 26;
-  linha_frequencia_total_nao_sair := sgrFrequenciaTotalNaoSair.RowCount = 26;
+  //linha_frequencia_nao_sair := sgrFrequenciaNaoSair.RowCount = 26;
+  //linha_frequencia_bolas_nao_sair := sgrFrequenciaBolasNaoSair.RowCount = 26;
+  //linha_frequencia_total_nao_sair := sgrFrequenciaTotalNaoSair.RowCount = 26;
 
-  // Agora, iremos percorrer os arranjos 'concurso_frequencia_sair' e 'concurso_frequencia_nao_sair'
-  // e atualizar os controles.
-  for uA := 1 to 25 do begin
+  // Agora, iremos atualizar os campos 'DEVE_SAIR' e 'NAO_DEVE_SAIR'.
+  for uA := 1 to 25 do
+  begin
+
+      {
       if linha_frequencia_sair then begin
          bolaAtual := StrToInt(sgrFrequenciaSair.Cells[0, uA]);
          sgrFrequenciaSair.Cells[ultima_coluna_frequencia_sair, uA] := IntToStr(concurso_frequencia_sair[bolaAtual]);
       end;
+      }
+
+      // Atualiza
       if linha_frequencia_bolas_sair then begin
-         bolaAtual := StrToInt(sgrFrequenciaBolasSair.Cells[0, uA]);
-         sgrFrequenciaBolasSair.Cells[ultima_coluna_frequencia_bolas_sair, uA] := IntToStr(concurso_frequencia_sair[bolaAtual]);
+         bola_numero := StrToInt(sgrFrequenciaBolasSair.Cells[0, uA]);
+
+         valor_marcado_sair := IntToStr(concurso_frequencia_sair[bola_numero]);
+         sgrFrequenciaBolasSair.Cells[ultima_coluna_frequencia_bolas_sair, uA] :=  valor_marcado_sair;
+
+         valor_marcado_nao_sair := IntToStr(concurso_frequencia_nao_sair[bola_numero]);
+         sgrFrequenciaBolasSair.Cells[ultima_coluna_frequencia_bolas_nao_sair, uA] := valor_marcado_nao_sair;
+
+         //sgrFrequenciaBolasSair.Cells[ultima_coluna_frequencia_bolas_sair, uA] := IntToStr(concurso_frequencia_sair[bolaAtual]);
       end;
+
       if linha_frequencia_total_sair then begin
-         bolaAtual := StrToInt(sgrFrequenciaTotalSair.Cells[0, uA]);
-         sgrFrequenciaTotalSair.Cells[ultima_coluna_frequencia_total_sair, uA] := IntToStr(concurso_frequencia_sair[bolaAtual]);
+        bola_numero := StrToInt(sgrFrequenciaTotalSair.Cells[0, uA]);
+
+        valor_marcado_sair := IntToStr(concurso_frequencia_sair[bola_numero]);
+        sgrFrequenciaTotalSair.Cells[ultima_coluna_frequencia_total_sair, uA] :=  valor_marcado_sair;
+
+        valor_marcado_nao_sair := IntToStr(concurso_frequencia_nao_sair[bola_numero]);
+        sgrFrequenciaTotalSair.Cells[ultima_coluna_frequencia_total_nao_sair, uA] := valor_marcado_nao_sair;
+
+         // bolaAtual := StrToInt(sgrFrequenciaTotalSair.Cells[0, uA]);
+         //sgrFrequenciaTotalSair.Cells[ultima_coluna_frequencia_total_sair, uA] := IntToStr(concurso_frequencia_sair[bolaAtual]);
       end;
+
+
+
+      {
       // Controles que indicam as bolas que não devem sair.
       if linha_frequencia_nao_sair then begin
          bolaAtual := StrToInt(sgrFrequenciaNaoSair.Cells[0, uA]);
@@ -4583,95 +7773,357 @@ begin
          bolaAtual := StrToInt(sgrFrequenciaTotalNaoSair.Cells[0, uA]);
          sgrFrequenciaTotalNaoSair.Cells[ultima_coluna_frequencia_total_nao_sair, uA] := IntToStr(concurso_frequencia_nao_sair[bolaAtual]);
       end;
+      }
   end;
-
-
-
 
   AtualizarControleFrequenciaMinimoMaximo;
 end;
 
 {
- Atualiza as 4 caixas de combinação.
- Pois, pode haver alteração em amboos os controles sgrSequenciaBolas e
- sgrFrequenciasBolasNaoSair.
+ Haverá 8 controles, 4 armazenará a quantidade mínima de bolas que deve sair da
+ categoria e 4 armazenará a quantidade máxima de bolas que deve sair da categorias.
+ As categorias são:
+ ainda_nao_saiu
+ deixou_de_sair
+ novo
+ repetindo.
+
+ Antes de atualizar os controles iremos pegar o valor antigo, e em seguida,
+ atualizar o controle de mínimo e máximo, e em seguida, iremos atualizar o
+ controle pra mostrar o valor antigo se possível.
+
+ Por exemplo, há 5 bolas na categoria 'ainda_nao_saiu', quer dizer, que
+ podemos escolher mínimo 1 até 5, por exemplo, se escolhemos 2.
+ Após atualizar o controle foi pra 5 bolas, devemos mostrar o valor 2 no campo
+ mínimo, pois assim, o usuário não precisa toda hora fica mudando os valores.
+
+ Toda vez, que os controles sgrFrequenciaBolasSair ou sgrFrequenciaBolasNaoSair
+ é atualizado, devemos atualizar os controles que ar
+
 }
 procedure TForm1.AtualizarControleFrequenciaMinimoMaximo;
 var
   qt_marcado_valor_um_sair: Integer;
   qt_marcado_valor_um_nao_sair, uA, ultima_coluna_controle_sair,
     ultima_coluna_controle_nao_sair, bolas_disponiveis,
-    indiceNovaPosicao: Integer;
+    indiceNovaPosicao, qt_minima_ainda_nao_saiu_atualizado,
+    qt_ainda_nao_saiu, qt_deixou_de_sair,
+    ainda_nao_saiu_minimo_anterior, ainda_nao_saiu_maximo_anterior,
+    deixou_de_sair_minimo_anterior, deixou_de_sair_maximo_anterior,
+    novo_minimo_anterior, novo_maximo_anterior,
+    repetindo_minimo_anterior, repetindo_maximo_anterior, indice,
+    qt_novo, qt_repetindo, uB, indice_minimo, indice_maximo: Integer;
   valorAntigoMinimoSair , valorAntigoMaximoSair,
     valorAntigoMinimoNaoSair, valorAntigoMaximoNaoSair: TCaption;
+  frequencia_status : String;
 begin
-  ultima_coluna_controle_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
-  ultima_coluna_controle_nao_sair := sgrFrequenciaBolasNaoSair.Columns.Count - 1;
+  // A quantidade de mínimo e máximo é definida, conforme, as marcações
+  // realizações no controle sgrFrequenciaBolasSair, entretanto, pode
+  // ocorrer de o usuário selecionar algum concurso que não foi atualizado
+  // a frequência ainda, pra isto, iremos verificar isto.
+  if sgrFrequenciaBolasSair.RowCount <> 26 then
+  begin
+     exit;
+  end;
+
+  ultima_coluna_controle_nao_sair := Pred(sgrFrequenciaBolasSair.Columns.Count);
+  ultima_coluna_controle_sair := ultima_coluna_controle_nao_sair - 1;
+
   qt_marcado_valor_um_sair := 0;
   qt_marcado_valor_um_nao_sair := 0;
 
+  // Toda vez que o usuário marcar o valor 1, em uma das bolas
+  // devemos contabilizar de qual grupo é.
+  // Pra isto, no loop for seguinte iremos fazer isto.
+  qt_ainda_nao_saiu := 0;
+  qt_deixou_de_sair := 0;
+  qt_novo := 0;
+  qt_repetindo := 0;
+
   // Sempre haverá 25 bolas.
   for uA := 1 to 25 do begin
+
+      // Iremos pegar o valor da coluna 'frequencia_status', está na posição 1.
+      frequencia_status := sgrFrequenciaBolasSair.Cells[1, uA];
+      frequencia_status := LowerCase(frequencia_status);
+
       if sgrFrequenciaBolasSair.Cells[ultima_coluna_controle_sair, uA] = '1' then begin
          Inc(qt_marcado_valor_um_sair);
+
+         if frequencia_status = 'ainda_nao_saiu' then
+         begin
+           Inc(qt_ainda_nao_saiu)
+         end else if frequencia_status = 'deixou_de_sair' then
+         begin
+           Inc(qt_deixou_de_sair);
+         end else if frequencia_status = 'novo' then
+         begin
+           Inc(qt_novo);
+         end else if frequencia_status = 'repetindo' then
+         begin
+           Inc(qt_repetindo);
+         end;
       end;
-      if sgrFrequenciaBolasNaoSair.Cells[ultima_coluna_controle_nao_sair, uA] = '1' then begin
-         Inc(qt_marcado_valor_um_nao_sair);
+
+      if sgrFrequenciaBolasSair.Cells[ultima_coluna_controle_nao_sair, uA] = '1' then
+      begin
+        Inc(qt_marcado_valor_um_nao_sair);
       end;
   end;
 
-  // Devemos pegar os valores de mínimo e máximo, antes de atualizar a caixa de combinação.
-  // Iremos pegar a posição dos índices selecionados.
-  //valorAntigoMinimoSair := StrToInt(cmbFrequenciaMinimoSair.Items[cmbFrequenciaMinimoSair.ItemIndex]);
-  //valorAntigoMaximoSair := StrToInt(cmbFrequenciaMaximoSair.Items[cmbFrequenciaMaximoSair.ItemIndex]);
-  //valorAntigoMinimoNaoSair := StrToInt(cmbFrequenciaMinimoNaoSair.Items[cmbFrequenciaMinimoNaoSair.ItemIndex]);
-  //valorAntigoMaximoNaoSair := StrToInt(cmbFrequenciaMaximoNaoSair.Items[cmbFrequenciaMaximoNaoSair.ItemIndex]);
+  // Pega o valor mínímo e máximo dos controles se houver.
+  // Toda vez que um controle é preenchido mínímo, o controle de máximo é também
+  // preenchido, por isto, se a quantidade de um dos controles é zero, o outro
+  // também o é.
+  ainda_nao_saiu_minimo_anterior := 0;
+  ainda_nao_saiu_maximo_anterior := 0;
 
-  valorAntigoMinimoSair := '0' + cmbFrequenciaMinimoSair.Text;
-  valorAntigoMaximoSair := '0' + cmbFrequenciaMaximoSair.Text;
-  valorAntigoMinimoNaoSair := '0' + cmbFrequenciaMinimoNaoSair.Text;
-  valorAntigoMaximoNaoSair := '0' + cmbFrequenciaMaximoNaoSair.Text;
+  deixou_de_sair_minimo_anterior := 0;
+  deixou_de_sair_maximo_anterior := 0;
+
+  novo_minimo_anterior := 0;
+  novo_maximo_anterior := 0;
+
+  repetindo_minimo_anterior := 0;
+  repetindo_maximo_anterior := 0;
+
+  // Ainda não saiu.
+  indice := cmbAinda_Nao_Saiu_Minimo.ItemIndex;
+  if indice >= 0 then begin
+    ainda_nao_saiu_minimo_anterior := StrToInt(cmbAinda_Nao_Saiu_Minimo.Items[indice]);
+  end;
+
+  indice := cmbAinda_Nao_Saiu_Maximo.ItemIndex;
+  if indice >= 0 then begin
+    ainda_nao_saiu_Maximo_anterior := StrToInt(cmbAinda_Nao_Saiu_Maximo.Items[indice]);
+  end;
+
+  // Deixou de sair.
+  indice := cmbDeixou_de_Sair_Minimo.ItemIndex;
+  if indice >= 0 then begin
+    Deixou_de_Sair_minimo_anterior := StrToInt(cmbDeixou_de_Sair_Minimo.Items[indice]);
+  end;
+
+  indice := cmbDeixou_de_Sair_Maximo.ItemIndex;
+  if indice >= 0 then begin
+    Deixou_de_Sair_Maximo_anterior := StrToInt(cmbDeixou_de_Sair_Maximo.Items[indice]);
+  end;
+
+  // Mínimo.
+  indice := cmbNovo_Minimo.ItemIndex;
+  if indice >= 0 then begin
+    Novo_minimo_anterior := StrToInt(cmbNovo_Minimo.Items[indice]);
+  end;
+
+  indice := cmbNovo_Maximo.ItemIndex;
+  if indice >= 0 then begin
+    Novo_Maximo_anterior := StrToInt(cmbNovo_Maximo.Items[indice]);
+  end;
+
+  // Repetindo.
+  indice := cmbRepetindo_Minimo.ItemIndex;
+  if indice >= 0 then begin
+    Repetindo_minimo_anterior := StrToInt(cmbRepetindo_Minimo.Items[indice]);
+  end;
+
+  indice := cmbRepetindo_Maximo.ItemIndex;
+  if indice >= 0 then begin
+    Repetindo_Maximo_anterior := StrToInt(cmbRepetindo_Maximo.Items[indice]);
+  end;
+
+  // Agora, vamos apagar os controles e inserir os dados.
+  cmbAinda_Nao_Saiu_Minimo.Clear;
+  cmbAinda_Nao_Saiu_Maximo.Clear;
+  cmbDeixou_de_Sair_Minimo.Clear;
+  cmbDeixou_de_Sair_Maximo.Clear;
+  cmbNovo_Minimo.Clear;
+  cmbNovo_Maximo.Clear;
+  cmbRepetindo_Minimo.Clear;
+  cmbRepetindo_Maximo.Clear;
+
+  // Iremos popular os números nos controles, observe
+  // que no controle 'minimo', as bolas, são adicionadas
+  // em ordem crescente e no controle 'maximo', as bolas são
+  // adicionadas em ordem decrescente.
+
+  // *********** AINDA NÃO SAIU ******************
+  if qt_ainda_nao_saiu > 0 then
+  begin
+    uB := qt_ainda_nao_saiu;
+    for uA := 1 to qt_ainda_nao_saiu do
+    begin
+      cmbAinda_Nao_Saiu_Minimo.Items.Add(IntToStr(uA));
+      cmbAinda_Nao_Saiu_Maximo.Items.Add(IntToStr(uB));
+      Dec(uB);
+    end;
+    // Inicialmente, o valor mínimo e máximo terá o mesmo valor, em seguida,
+    // iremos verificar quais eram os valores antigos.
+    // Neste caso, a caixa de combinação de mínimo, os números estão em
+    // ordem crescente e na caixa de combinação de máximo, os números estão em
+    // ordem decrescente, neste caso, devemos, pegar o primeiro índice do
+    // controle mínimo e o último índice do controle máximo.
+    cmbAinda_Nao_Saiu_Minimo.ItemIndex := cmbAinda_Nao_Saiu_Minimo.Items.IndexOf(IntToStr(qt_ainda_nao_saiu));
+    cmbAinda_Nao_Saiu_Maximo.ItemIndex := cmbAinda_Nao_Saiu_Maximo.Items.IndexOf(IntToStr(qt_ainda_nao_saiu));
+    // Em seguida, devemos verificar se os valores anteriores estão na lista, se
+    // sim, alterar o valor do índice selecionado do controle.
+    indice_minimo := cmbAinda_Nao_Saiu_Minimo.Items.IndexOf(IntToStr(ainda_nao_saiu_minimo_anterior));
+    indice_maximo := cmbAinda_Nao_Saiu_Maximo.Items.IndexOf(IntToStr(ainda_nao_saiu_maximo_anterior));
+
+    if indice_minimo >= 0 then
+    begin
+      cmbAinda_Nao_Saiu_Minimo.ItemIndex := indice_minimo;
+    end;
+
+    if indice_maximo >= 0 then
+    begin
+      cmbAinda_Nao_Saiu_Maximo.ItemIndex := indice_maximo;
+    end;
+
+  end;
+
+  // *********** DEIXOU DE SAIR ******************
+  if qt_Deixou_de_Sair > 0 then
+  begin
+    uB := qt_Deixou_de_Sair;
+    for uA := 1 to qt_Deixou_de_Sair do
+    begin
+      cmbDeixou_de_Sair_Minimo.Items.Add(IntToStr(uA));
+      cmbDeixou_de_Sair_Maximo.Items.Add(IntToStr(uB));
+      Dec(uB);
+    end;
+    // Inicialmente, o valor mínimo e máximo terá o mesmo valor, em seguida,
+    // iremos verificar quais eram os valores antigos.
+    // Neste caso, a caixa de combinação de mínimo, os números estão em
+    // ordem crescente e na caixa de combinação de máximo, os números estão em
+    // ordem decrescente, neste caso, devemos, pegar o primeiro índice do
+    // controle mínimo e o último índice do controle máximo.
+    cmbDeixou_de_Sair_Minimo.ItemIndex := cmbDeixou_de_Sair_Minimo.Items.IndexOf(IntToStr(qt_Deixou_de_Sair));
+    cmbDeixou_de_Sair_Maximo.ItemIndex := cmbDeixou_de_Sair_Maximo.Items.IndexOf(IntToStr(qt_Deixou_de_Sair));
+    // Em seguida, devemos verificar se os valores anteriores estão na lista, se
+    // sim, alterar o valor do índice selecionado do controle.
+    indice_minimo := cmbDeixou_de_Sair_Minimo.Items.IndexOf(IntToStr(Deixou_de_Sair_minimo_anterior));
+    indice_maximo := cmbDeixou_de_Sair_Maximo.Items.IndexOf(IntToStr(Deixou_de_Sair_maximo_anterior));
+
+    if indice_minimo >= 0 then
+    begin
+      cmbDeixou_de_Sair_Minimo.ItemIndex := indice_minimo;
+    end;
+
+    if indice_maximo >= 0 then
+    begin
+      cmbDeixou_de_Sair_Maximo.ItemIndex := indice_maximo;
+    end;
+  end;
+
+  // *********** NOVOS ******************
+  if qt_Novo > 0 then
+  begin
+    uB := qt_Novo;
+    for uA := 1 to qt_Novo do
+    begin
+      cmbNovo_Minimo.Items.Add(IntToStr(uA));
+      cmbNovo_Maximo.Items.Add(IntToStr(uB));
+      Dec(uB);
+    end;
+    // Inicialmente, o valor mínimo e máximo terá o mesmo valor, em seguida,
+    // iremos verificar quais eram os valores antigos.
+    // Neste caso, a caixa de combinação de mínimo, os números estão em
+    // ordem crescente e na caixa de combinação de máximo, os números estão em
+    // ordem decrescente, neste caso, devemos, pegar o primeiro índice do
+    // controle mínimo e o último índice do controle máximo.
+    cmbNovo_Minimo.ItemIndex := cmbNovo_Minimo.Items.IndexOf(IntToStr(qt_Novo));
+    cmbNovo_Maximo.ItemIndex := cmbNovo_Maximo.Items.IndexOf(IntToStr(qt_Novo));
+    // Em seguida, devemos verificar se os valores anteriores estão na lista, se
+    // sim, alterar o valor do índice selecionado do controle.
+    indice_minimo := cmbNovo_Minimo.Items.IndexOf(IntToStr(Novo_minimo_anterior));
+    indice_maximo := cmbNovo_Maximo.Items.IndexOf(IntToStr(Novo_maximo_anterior));
+
+    if indice_minimo >= 0 then
+    begin
+      cmbNovo_Minimo.ItemIndex := indice_minimo;
+    end;
+
+    if indice_maximo >= 0 then
+    begin
+      cmbNovo_Maximo.ItemIndex := indice_maximo;
+    end;
+  end;
+
+  // *********** RepetindoS ******************
+  if qt_Repetindo > 0 then
+  begin
+    uB := qt_Repetindo;
+    for uA := 1 to qt_Repetindo do
+    begin
+      cmbRepetindo_Minimo.Items.Add(IntToStr(uA));
+      cmbRepetindo_Maximo.Items.Add(IntToStr(uB));
+      Dec(uB);
+    end;
+    // Inicialmente, o valor mínimo e máximo terá o mesmo valor, em seguida,
+    // iremos verificar quais eram os valores antigos.
+    // Neste caso, a caixa de combinação de mínimo, os números estão em
+    // ordem crescente e na caixa de combinação de máximo, os números estão em
+    // ordem decrescente, neste caso, devemos, pegar o primeiro índice do
+    // controle mínimo e o último índice do controle máximo.
+    cmbRepetindo_Minimo.ItemIndex := cmbRepetindo_Minimo.Items.IndexOf(IntToStr(qt_Repetindo));
+    cmbRepetindo_Maximo.ItemIndex := cmbRepetindo_Maximo.Items.IndexOf(IntToStr(qt_Repetindo));
+    // Em seguida, devemos verificar se os valores anteriores estão na lista, se
+    // sim, alterar o valor do índice selecionado do controle.
+    indice_minimo := cmbRepetindo_Minimo.Items.IndexOf(IntToStr(Repetindo_minimo_anterior));
+    indice_maximo := cmbRepetindo_Maximo.Items.IndexOf(IntToStr(Repetindo_maximo_anterior));
+
+    if indice_minimo >= 0 then
+    begin
+      cmbRepetindo_Minimo.ItemIndex := indice_minimo;
+    end;
+
+    if indice_maximo >= 0 then
+    begin
+      cmbRepetindo_Maximo.ItemIndex := indice_maximo;
+    end;
+  end;
+
 
 
   // Preenche os controles com o mínimo e o máximo.
-  cmbFrequenciaMinimoNaoSair.Clear;
-  cmbFrequenciaMaximoNaoSair.Clear;
-  cmbFrequenciaMinimoSair.Clear;
-  cmbFrequenciaMaximoSair.Clear;
+  cmbFrequencia_Minimo_Nao_Sair.Clear;
+  cmbFrequencia_Maximo_Nao_Sair.Clear;
+  cmbFrequencia_Minimo_Sair.Clear;
+  cmbFrequencia_Maximo_Sair.Clear;
 
   if qt_marcado_valor_um_sair <> 0 then begin
      for uA := 1 to qt_marcado_valor_um_sair do begin
-         cmbFrequenciaMinimoSair.Items.Add(IntToStr(uA));
-         cmbFrequenciaMaximoSair.Items.Add(IntToStr(qt_marcado_valor_um_sair - uA + 1));
+         cmbFrequencia_Minimo_Sair.Items.Add(IntToStr(uA));
+         cmbFrequencia_Maximo_Sair.Items.Add(IntToStr(qt_marcado_valor_um_sair - uA + 1));
      end;
 
      // No controle que indica o mínimo, a bola começa em ordem crescente.
      // No controle que indica o máximo, a bola começa em ordem descrente.
-     cmbFrequenciaMinimoSair.ItemIndex := qt_marcado_valor_um_sair - 1;
-     cmbFrequenciaMaximoSair.ItemIndex := 0;
+     cmbFrequencia_Minimo_Sair.ItemIndex := qt_marcado_valor_um_sair - 1;
+     cmbFrequencia_Maximo_Sair.ItemIndex := 0;
   end;
 
   if qt_marcado_valor_um_nao_sair <> 0 then begin
     for uA := 1 to qt_marcado_valor_um_nao_sair do begin
-        cmbFrequenciaMinimoNaoSair.Items.Add(IntToStr(uA));
-        cmbFrequenciaMaximoNaoSair.Items.Add(IntToStr(qt_marcado_valor_um_nao_sair - uA + 1));
+        cmbFrequencia_Minimo_Nao_Sair.Items.Add(IntToStr(uA));
+        cmbFrequencia_Maximo_Nao_Sair.Items.Add(IntToStr(qt_marcado_valor_um_nao_sair - uA + 1));
     end;
 
     // No controle que indica o mínimo, a bola começa em ordem crescente.
     // No controle que indica o máximo, a bola começa em ordem descrente.
-    cmbFrequenciaMinimoNaoSair.ItemIndex := qt_marcado_valor_um_nao_sair - 1;
-    cmbFrequenciaMaximoNaoSair.ItemIndex := 0;
+    cmbFrequencia_Minimo_Nao_Sair.ItemIndex := qt_marcado_valor_um_nao_sair - 1;
+    cmbFrequencia_Maximo_Nao_Sair.ItemIndex := 0;
   end;
 
   // Procura pelo valor antigo na caixa de combinação, se o encontra define a nova posição.
-  indiceNovaPosicao := cmbFrequenciaMinimoNaoSair.Items.IndexOf(valorAntigoMinimoNaoSair);
+  indiceNovaPosicao := cmbFrequencia_Minimo_Nao_Sair.Items.IndexOf(valorAntigoMinimoNaoSair);
   if indiceNovaPosicao <> -1 then begin
-     cmbFrequenciaMinimoNaoSair.ItemIndex := indiceNovaPosicao;
+     cmbFrequencia_Minimo_Nao_Sair.ItemIndex := indiceNovaPosicao;
   end;
 
-  indiceNovaPosicao := cmbFrequenciaMaximoNaoSair.Items.IndexOf(valorAntigoMaximoNaoSair);
+  indiceNovaPosicao := cmbFrequencia_Maximo_Nao_Sair.Items.IndexOf(valorAntigoMaximoNaoSair);
   if indiceNovaPosicao <> -1 then begin
-     cmbFrequenciaMaximoNaoSair.ItemIndex := indiceNovaPosicao;
+     cmbFrequencia_Maximo_Nao_Sair.ItemIndex := indiceNovaPosicao;
   end;
 
   // Vamos verificar se há pelo menos 15 bolas pra serem filtradas, pois se o usuário
@@ -4843,7 +8295,7 @@ procedure TForm1.CarregarGrupo5Bolas(strSqlWhere: string);
 var
  strSql: TStringList;
  sqlRegistro: TSqlQuery;
- qtRegistros, uLinha, uA: Integer;
+ qtRegistros, uLinha: Integer;
 begin
     strSql := TStringList.Create;
 
@@ -5249,10 +8701,10 @@ end;
 
 procedure TForm1.CarregarDiagonal;
 begin
-     CarregarDiagonal(sgrDiagonal15Bolas);
-     CarregarDiagonal(sgrDiagonal16Bolas);
-     CarregarDiagonal(sgrDiagonal17Bolas);
-     CarregarDiagonal(sgrDiagonal18Bolas);
+     //CarregarDiagonal(sgrDiagonal15Bolas);
+     //CarregarDiagonal(sgrDiagonal16Bolas);
+     //CarregarDiagonal(sgrDiagonal17Bolas);
+     //CarregarDiagonal(sgrDiagonal18Bolas);
 
 end;
 
@@ -5261,8 +8713,9 @@ var
   larguraTab: LongInt;
 begin
   // Há 4 controles, então, a largura será dividida por 4.
-  larguraTab := pnDiagonal.Width div 4;
-  self.Caption := IntToSTr(larguraTab);
+  //larguraTab := pnDiagonal.Width div 4;
+     {
+     self.Caption := IntToSTr(larguraTab);
 
   sgrDiagonal15Bolas.Width := larguraTab;
   sgrDiagonal16Bolas.Width := larguraTab;
@@ -5273,6 +8726,7 @@ begin
   sgrDiagonal16Bolas.ReAlign;
   sgrDiagonal17Bolas.ReAlign;
   sgrDiagonal18Bolas.ReAlign;
+  }
 
 end;
 
@@ -5282,6 +8736,7 @@ var
   sqlConcurso: TSqlQuery;
   qtRegistros, uLinha, uA: Integer;
 begin
+  {
      strSql := TStringList.Create;
 
      ConfigurarControleDiagonal(objControle);
@@ -5364,6 +8819,7 @@ begin
   // Ajusta as colunas.
   objControle.AutoSizeColumns;
 
+  }
 
 end;
 
@@ -5371,6 +8827,7 @@ procedure TForm1.ConfigurarControleDiagonal(objControle: TStringGrid);
 var
   uA, uColunas: Integer;
 begin
+  {
      // Para a quantidade de 15 bolas, haverá 5 colunas, pois, estamos
      // relacionando, as colunas de 15 da tabela agregada, com os dados
      // do concurso relacionados.
@@ -5422,6 +8879,7 @@ begin
 
     objControle.RowCount := 1;
     objControle.FixedRows := 1;
+    }
 end;
 
 procedure TForm1.CarregarFrequencia;
