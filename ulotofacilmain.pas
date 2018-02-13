@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, DateTimePicker, Forms, Controls, Graphics,
   Dialogs, ComCtrls, ExtCtrls, StdCtrls, DBGrids, uLotofacilModulo,
   uLotofacilSeletor, DB, BufDataset, sqlDb, Grids, ButtonPanel, ValEdit,
-  CheckLst, MaskEdit, Buttons, JSONPropStorage, Spin, IdHTTP, strings, strUtils,
+  CheckLst, MaskEdit, Buttons, JSONPropStorage, Spin, EditBtn, Arrow, IdHTTP, strings, strUtils,
   eventlog, fgl, IdHeaderList, IdAuthentication, zipper,
   uHtml_Tokenizador,
   SAX_HTML, dom_html,dom
@@ -268,15 +268,15 @@ type
     cmbConcursoDeletar : TComboBox;
     cmbAinda_Nao_Saiu_Maximo : TComboBox;
     cmbDeixou_de_Sair_Maximo : TComboBox;
-    cmbRepetindo_Maximo : TComboBox;
     cmbFrequencia_Maximo_Nao_Sair : TComboBox;
+    cmbFrequencia_Minimo_Nao_Sair : TComboBox;
+    cmbRepetindo_Maximo : TComboBox;
     cmbFrequencia_Maximo_Sair : TComboBox;
     cmbFrequenciaMaximoSair1 : TComboBox;
     cmbFrequenciaMaximoSair2 : TComboBox;
     cmbAinda_Nao_Saiu_Minimo : TComboBox;
     cmbDeixou_de_Sair_Minimo : TComboBox;
     cmbRepetindo_Minimo : TComboBox;
-    cmbFrequencia_Minimo_Nao_Sair : TComboBox;
     cmbFrequencia_Minimo_Sair : TComboBox;
     cmbNovo_Maximo : TComboBox;
     cmbNovo_Minimo : TComboBox;
@@ -311,6 +311,8 @@ type
     GroupBox29 : TGroupBox;
     GroupBox30 : TGroupBox;
     GroupBox31 : TGroupBox;
+    GroupBox32 : TGroupBox;
+    GroupBox33 : TGroupBox;
     GroupBox7 : TGroupBox;
     GroupBox8 : TGroupBox;
     grpConcursoFrequenciaTotalNaoSair : TGroupBox;
@@ -369,6 +371,7 @@ type
     grpSelecionarCampos : TGroupBox;
     grpSelecionarCampos1 : TGroupBox;
     Label4 : TLabel;
+    mskDeslocamento : TMaskEdit;
     objHttp : TIdHTTP;
     JSONPropStorage1 : TJSONPropStorage;
     Label3 : TLabel;
@@ -435,6 +438,7 @@ type
     pnGrupo2Bolas6 : TPanel;
     pnGrupo2Bolas7 : TPanel;
     pnVerificarAcertos1 : TPanel;
+    rdDeslocamento : TRadioGroup;
     rdGerador_Quantidade_de_Bolas : TRadioGroup;
     sgrDiferenca_Qt_1 : TStringGrid;
     sgrDiferenca_Qt_1_Qt_2 : TStringGrid;
@@ -474,7 +478,7 @@ type
     sgrParImpar18Bolas : TStringGrid;
     sgrExternoInterno18Bolas : TStringGrid;
     sgrFrequencia : TStringGrid;
-    sgrFrequenciaBolasSair : TStringGrid;
+    sgrFrequencia_Bolas_Sair_Nao_Sair : TStringGrid;
     sgrAleatorioVerificarAcertos : TStringGrid;
     sheetFiltro: TTabSheet;
     sgrFiltros : TStringGrid;
@@ -538,6 +542,7 @@ type
     tgVerificarAcertos : TToggleBox;
     tgAleatorioVerificarAcertos : TToggleBox;
     UpDown1 : TUpDown;
+    upDeslocamento : TUpDown;
     ValueListEditor1 : TValueListEditor;
     procedure btnAleatorioNovoClick(Sender : TObject);
     procedure btnAtualizarNovosRepetidosClick(Sender : TObject);
@@ -579,6 +584,7 @@ type
     procedure pageFiltrosChange(Sender : TObject);
     procedure pageFiltrosResize(Sender : TObject);
     procedure pnDiagonalResize(Sender : TObject);
+    procedure rdDeslocamentoSelectionChanged(Sender : TObject);
     procedure rdGerador_Quantidade_de_BolasSelectionChanged(Sender : TObject);
     procedure sgrColunaB1_15BolasSelectCell(Sender : TObject; aCol,
       aRow : Integer; var CanSelect : Boolean);
@@ -903,7 +909,7 @@ begin
   // CarregarFrequenciaBolas;
 
 
-  CarregarFrequenciaPorConcurso(sgrFrequenciaBolasSair);
+  CarregarFrequenciaPorConcurso(sgrFrequencia_Bolas_Sair_Nao_Sair);
   //CarregarFrequenciaPorConcurso(sgrFrequenciaBolasNaoSair);
 
   CarregarConcursoFrequenciaTotalSair;
@@ -1665,7 +1671,7 @@ var
   bola_numero : Integer;
 begin
 
-  if objControle = sgrFrequenciaBolasSair then begin
+  if objControle = sgrFrequencia_Bolas_Sair_Nao_Sair then begin
     concurso := cmbConcursoFrequenciaSair.Items[cmbConcursoFrequenciaSair.ItemIndex];
   end else if objControle = sgrFrequenciaBolasNaoSair then begin
     concurso := cmbConcursoFrequenciaNaoSair.Items[cmbConcursoFrequenciaNaoSair.ItemIndex];
@@ -2351,6 +2357,10 @@ end;
 procedure TForm1.pnDiagonalResize(Sender : TObject);
 begin
   RedimensionarControleDiagonal;
+end;
+
+procedure TForm1.rdDeslocamentoSelectionChanged(Sender : TObject);
+begin
 end;
 
 procedure TForm1.rdGerador_Quantidade_de_BolasSelectionChanged(Sender : TObject
@@ -4384,30 +4394,30 @@ var
   ultimaColuna , uA: Integer;
 begin
   // Se não há 25 linhas + 1 linha de cabeçalho, devemos atualizar o controle.
-  if sgrFrequenciaBolasSair.RowCount < 26 then begin
-    CarregarFrequenciaPorConcurso(sgrFrequenciaBolasSair);
+  if sgrFrequencia_Bolas_Sair_Nao_Sair.RowCount < 26 then begin
+    CarregarFrequenciaPorConcurso(sgrFrequencia_Bolas_Sair_Nao_Sair);
     exit;
   end;
 
   // Pega a frequência das bolas antes de atualizar, pois ao atualizar o controle,
   // a frequência será perdida.
-  ultimaColuna := sgrFrequenciaBolasSair.Columns.Count - 1;
+  ultimaColuna := sgrFrequencia_Bolas_Sair_Nao_Sair.Columns.Count - 1;
   for uA := 1 to 25 do begin
-      frequencia_antes_de_atualizar[StrToInt(sgrFrequenciaBolasSair.Cells[0, uA])]
-      := sgrFrequenciaBolasSair.Cells[ultimaColuna, uA];
+      frequencia_antes_de_atualizar[StrToInt(sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[0, uA])]
+      := sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultimaColuna, uA];
   end;
 
-  CarregarFrequenciaPorConcurso(sgrFrequenciaBolasSair);
+  CarregarFrequenciaPorConcurso(sgrFrequencia_Bolas_Sair_Nao_Sair);
 
-  if sgrFrequenciaBolasSair.RowCount < 26 then begin
-    CarregarFrequenciaPorConcurso(sgrFrequenciaBolasSair);
+  if sgrFrequencia_Bolas_Sair_Nao_Sair.RowCount < 26 then begin
+    CarregarFrequenciaPorConcurso(sgrFrequencia_Bolas_Sair_Nao_Sair);
     exit;
   end;
 
   // Atualizar o controle com a frequência que estava antes.
   for uA := 1 to 25 do begin
-      sgrFrequenciaBolasSair.Cells[ultimaColuna, uA] :=
-      frequencia_antes_de_atualizar[StrToInt(sgrFrequenciaBolasSair.Cells[0, uA])];
+      sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultimaColuna, uA] :=
+      frequencia_antes_de_atualizar[StrToInt(sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[0, uA])];
   end;
 
   AtualizarControleFrequenciaMinimoMaximo;
@@ -4588,8 +4598,9 @@ var
   sqlDiferenca_qt_alt: AnsiString;
 
   sqlGerado : TStringList;
-  uA : Integer;
+  uA , limite_aleatorio: Integer;
   total_registros : LongInt;
+  deslocamento_inicial : Int64;
 begin
   // Se ocorrer um erro dentro de alguma das funções, indicar pra o usuário.
   strErro := '';
@@ -4753,45 +4764,27 @@ begin
   sqlGerado.Add('ltf_qt asc,');
   sqlGerado.Add('tb_ltf_novos_repetidos.novos_repetidos_id_alternado');
 
-  {
-  sqlGerado.Add('qt_alt desc,');
-  sqlGerado.Add('concurso_soma_frequencia_bolas desc,');
-  sqlGerado.Add('qt_dif_1 asc,');
-  sqlGerado.Add('qt_dif_2 asc,');
-  sqlGerado.Add('qt_dif_3 asc,');
-  sqlGerado.Add('qt_dif_4 asc,');
-  sqlGerado.Add('qt_dif_5 asc');
-  }
-
-
-  //sqlGerado.Add('qt_alt_seq desc, ');
-  //sqlGerado.Add('ltf_id asc,');
-  //sqlGerado.Add('novos_repetidos_id_alternado,');
-  //sqlGerado.Add('random()');
-  {
-  sqlGerado.Add('qt_alt desc,');
-  sqlGerado.Add('novos_repetidos_id asc');
-  sqlGerado.Add('qt_dif_1 asc,');
-  sqlGerado.Add('qt_dif_2 asc,');
-  sqlGerado.Add('qt_dif_3 asc,');
-  sqlGerado.Add('qt_dif_4 asc,');
-  sqlGerado.Add('qt_dif_5 asc,');
-  sqlGerado.Add('qt_dif_6 asc,');
-  sqlGerado.Add('qt_dif_7 asc,');
-  sqlGerado.Add('qt_dif_8 desc,');
-  sqlGerado.Add('qt_dif_9 asc,');
-  sqlGerado.Add('qt_dif_10 asc,');
-  sqlGerado.Add('qt_dif_11 asc');
-  }
-
   try
      total_registros := StrToInt(Trim(mskTotalRegistros.Text));
      if total_registros > 0 then begin
        sqlGerado.Add('LIMIT ' + IntToStr(total_registros));
+
+       // No controle 'rdDeslocamento' o índice 0 corresponde a opção
+       // aleatório.
+       if rdDeslocamento.ItemIndex = 0 then
+       begin
+         limite_aleatorio := StrToInt(mskDeslocamento.Text);
+         deslocamento_inicial := Random(limite_aleatorio);
+       end else
+       if rdDeslocamento.ItemIndex = 1 then
+       begin
+         deslocamento_inicial := StrToInt(mskDeslocamento.Text);
+       end;
+       sqlGerado.Add('OFFSET ' + IntToStr(deslocamento_inicial));
      end;
   except
 
-        ;
+
   end;
 
   mmFiltroSql.Clear;
@@ -4815,6 +4808,7 @@ begin
   sqlRegistros.Close;
   sqlRegistros.SQL.Clear;
   sqlRegistros.Sql.Text := sqlFiltro.Text;
+  Writeln(sqlFiltro.Text);
 
   try
      sqlRegistros.ExecSQL;
@@ -5411,7 +5405,10 @@ begin
   end;
 
   // Atualiza todos os controles que recupera informações do banco de dados.
-  CarregarTodosControles;
+  //CarregarTodosControles;
+
+  cmbConcursoFrequenciaTotalSairChange(cmbConcursoFrequenciaTotalSair);
+  cmbConcursoFrequenciaSairChange(cmbConcursoFrequenciaSair);
 
 end;
 
@@ -5447,15 +5444,23 @@ begin
 end;
 
 {
- Iremos percorrer os controles sgrFrequenciaBolasSair e sgrFrequenciaBolasNaoSair
- e gerar uma parte do sql.
+ Iremos percorrer todas as bolas que está no controle sgrFrequenciaBolasSairNaoSair
+ e verificar se o usuário marcou as mesmas, se sim, iremos pegar a bola
+ e inclue no sql dinamicamente, há duas colunas, 'DEVE_SAIR' e 'NAO_DEVE_SAIR',
+ um das colunas terá o valor '1' se o usuário escolheu, '0' caso contrário.
 
- Nesta function, iremos gerar sql, baseado nas bolas que escolhermos, neste caso,
- além de temos as bolas selecionadas e um intervalo, iremos também
- selecionar por categoria.
+ Cada bola, pode pertencer a uma única categoria, há 4 categorias específicas:
+ AINDA_NAO_SAIU,
+ DEIXOU_DE_SAIR,
+ NOVO
+ REPETINDO.
 
- Nesta função, também, há os controles mínimo e máximo que indica a quantidade
- mínima e máxima que cada conjunto de bolas deve sair.
+ Pra cada categoria, há a quantidade mínima e máxima de bolas que cada categoria
+ deve sair.
+
+ Então, esta function retorna um sql das bolas escolhidas, e o intervalo mínimo
+ e máximo de todas as bolas, conforme o grupo.
+
 }
 function TForm1.GerarSqlFrequencia: string;
 var
@@ -5480,11 +5485,11 @@ begin
   sql_bolas_novo := '';
   sql_bolas_repetindo := '';
 
+  // No controle sgrFrequencia_Bolas_Sair_Nao_Sair há duas colunas: deve_sair, nao_deve_sair
+  ultima_coluna_controle_nao_sair := Pred(sgrFrequencia_Bolas_Sair_Nao_Sair.Columns.Count);
+  ultima_coluna_controle_sair :=  ultima_coluna_controle_nao_sair - 1;
 
-  ultima_coluna_controle_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
-  ultima_coluna_controle_nao_sair := sgrFrequenciaBolasNaoSair.Columns.Count - 1;
-
-  // Iremos percorrer todas as linhas do controle: sgrFrequenciaBolasSair e
+  // Iremos percorrer todas as linhas do controle: sgrFrequencia_Bolas_Sair_Nao_Sair e
   // sgrFrequenciaBolasNaoSair, e verificar se o usuário marcou a bola pra sair
   // e a bola pra não sair.
   // E também iremos gerar o sql por categoria, iremos identificar de qual
@@ -5509,12 +5514,12 @@ begin
   for uA := 1 to 25 do
   begin
       // Vamos pegar somente bolas que usuário marcou que devem sair na combinação.
-      if sgrFrequenciaBolasSair.Cells[ultima_coluna_controle_sair, uA] = '1' then begin
-         bola_numero := sgrFrequenciaBolasSair.Cells[0, uA];
+      if sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultima_coluna_controle_sair, uA] = '1' then begin
+         bola_numero := sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[0, uA];
          lista_bola_sair.Add('num_' + bola_numero);
 
          // Na coluna 1, temos o tipo da categoria de frequência.
-         frequencia_status := sgrFrequenciaBolasSair.Cells[1, uA];
+         frequencia_status := sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[1, uA];
          frequencia_status := LowerCase(frequencia_status);
          if frequencia_status = 'ainda_nao_saiu' then begin
             lista_ainda_nao_saiu.Add('num_' + bola_numero);
@@ -5531,43 +5536,14 @@ begin
 
       end;
       // Pega as bolas que não devem sair.
-      if sgrFrequenciaBolasNaoSair.Cells[ultima_coluna_controle_nao_sair, uA] = '1' then begin
-         bola_numero := sgrFrequenciaBolasNaoSair.Cells[0, uA];
+      if sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultima_coluna_controle_nao_sair, uA] = '1' then begin
+         bola_numero := sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[0, uA];
          lista_bola_nao_sair.Add('num_' + bola_numero);
       end;
   end;
 
-  // ==================== BOLAS SAIR =========================
-  {
-  // Não precisamos mais disto, pois iremos basear nossos valores
-  // das bolas categorizadas.
-
-  sql_bolas_sair := '';
-  if lista_bola_sair.Count <> 0 then
-  begin
-    for uA := 0 to Pred(lista_bola_sair.Count) do
-    begin
-      if uA <> 0 then begin
-        sql_bolas_sair := sql_bolas_sair + ' + ';
-      end;
-      sql_bolas_sair := sql_bolas_sair + lista_bola_sair.Strings[uA];
-    end;
-    indice_minimo := cmbFrequencia_Minimo_Sair.ItemIndex;
-    indice_maximo := cmbFrequencia_Maximo_Sair.ItemIndex;
-
-    if (indice_minimo = -1) or (indice_maximo = -1) then
-    begin
-      strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
-      Exit('');
-    end;
-    minimo_sair := cmbFrequencia_Minimo_Sair.Items[indice_minimo];
-    maximo_sair := cmbFrequencia_Maximo_Sair.Items[indice_maximo];
-
-    sql_bolas_sair := '(' + sql_bolas_sair + ' between ' + minimo_sair + ' and ' + maximo_sair + ')';
-  end;
-  }
-
   // ==================== BOLAS NAO SAIR =========================
+
   sql_bolas_nao_sair := '';
   if lista_bola_nao_sair.Count <> 0 then
   begin
@@ -5583,7 +5559,7 @@ begin
 
     if (indice_minimo = -1) or (indice_maximo = -1) then
     begin
-      strErro := strErro + 'Vc deve escolher mínimo e máxima da frequência';
+      strErro := strErro + 'Vc deve escolher mínimo e máximo da frequência';
       Exit('');
     end;
     minimo_nao_sair := cmbFrequencia_Minimo_Nao_sair.Items[indice_minimo];
@@ -5735,7 +5711,7 @@ begin
     begin
 
       // Coloca o operador 'and' entre os sql.
-      if lista_sql.Count > 1 then
+      if lista_sql.Count > 0 then
       begin
         lista_sql.Add('And');
       end;
@@ -5748,7 +5724,7 @@ begin
     begin
 
       // Coloca o operador 'and' entre os sql.
-      if lista_sql.Count > 1 then
+      if lista_sql.Count > 0 then
       begin
         lista_sql.Add('And');
       end;
@@ -5760,7 +5736,7 @@ begin
     begin
 
       // Coloca o operador 'and' entre os sql.
-      if lista_sql.Count > 1 then
+      if lista_sql.Count > 0 then
       begin
         lista_sql.Add('And');
       end;
@@ -7534,12 +7510,12 @@ begin
     end;
 
     // Se o controle é um dos controles da guia 'Frequencia':
-    // sgrFrequenciaTodas, sgrFrequenciaBolasSair, sgrFrequenciaBolasNaoSair
+    // sgrFrequenciaTodas, sgrFrequencia_Bolas_Sair_Nao_Sair, sgrFrequenciaBolasNaoSair
     // iremos atualizar o outro controle que ficou desatualizado, ou seja,
     // sempre os controles estarão em sincronia.
     if (gradeTemp = sgrFrequenciaSair) or
        (gradeTemp = sgrFrequenciaNaoSair) or
-       (gradeTemp = sgrFrequenciaBolasSair) or
+       (gradeTemp = sgrFrequencia_Bolas_Sair_Nao_Sair) or
        (gradeTemp = sgrFrequenciaBolasNaoSair) or
        (gradeTemp = sgrFrequenciaTotalSair) or
        (gradeTemp = sgrFrequenciaTotalNaoSair) then begin
@@ -7611,7 +7587,7 @@ var
   valor_marcado_sair , valor_marcado_nao_sair: String;
 begin
   // Agora, haverá as colunas 'DEVE_SAIR' e 'NAO_DEVE_SAIR'
-  ultima_coluna_frequencia_bolas_nao_sair := Pred(sgrFrequenciaBolasSair.Columns.Count);
+  ultima_coluna_frequencia_bolas_nao_sair := Pred(sgrFrequencia_Bolas_Sair_Nao_Sair.Columns.Count);
   ultima_coluna_frequencia_bolas_sair := ultima_coluna_frequencia_bolas_nao_sair - 1;
 
   ultima_coluna_frequencia_total_nao_sair := Pred(sgrFrequenciaTotalSair.Columns.Count);
@@ -7619,13 +7595,13 @@ begin
 
 
   // ultima_coluna_frequencia_sair := sgrFrequenciaSair.Columns.Count - 1;
-  // ultima_coluna_frequencia_bolas_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
+  // ultima_coluna_frequencia_bolas_sair := sgrFrequencia_Bolas_Sair_Nao_Sair.Columns.Count - 1;
   // ultima_coluna_frequencia_total_sair := sgrFrequenciaTotalSair.Columns.Count - 1;
 
   // Agora, iremos percorrer cada linha e pega o valor que foi marcado e inserir
   // no arranjo 'concurso_frequencia_sair' e 'concurso_frequencia_nao_sair', em seguida,
   // iremos, validar pra evitar que a mesma bola tem sido marcado pra sair e não sair.
-  if (objControle = sgrFrequenciaBolasSair) or (objControle = sgrFrequenciaTotalSair) then
+  if (objControle = sgrFrequencia_Bolas_Sair_Nao_Sair) or (objControle = sgrFrequenciaTotalSair) then
   begin
        ultima_coluna_nao_sair := Pred(objControle.Columns.Count);
        ultima_coluna_sair := ultima_coluna_nao_sair - 1;
@@ -7647,7 +7623,7 @@ begin
        end;
   end;
 
-  // ultima_coluna_frequencia_bolas_nao_sair := sgrFrequenciaBolasSair.Columns.Count - 1;
+  // ultima_coluna_frequencia_bolas_nao_sair := sgrFrequencia_Bolas_Sair_Nao_Sair.Columns.Count - 1;
   // ultima_coluna_frequencia_total_nao_sair := sgrFrequenciaTotalSair.Columns.Count - 1;
 
   // Pega a frequencia do controle que foi atualizado, devemos armazenar
@@ -7655,7 +7631,7 @@ begin
   // if (objControle = sgrFrequenciaSair) or
   {
   IF
-     (objControle = sgrFrequenciaBolasSair) or
+     (objControle = sgrFrequencia_Bolas_Sair_Nao_Sair) or
      (objControle = sgrFrequenciaTotalSair) then
   begin
      // Vamos verificar se há 26 linhas o controle, se não houver, quer dizer
@@ -7713,7 +7689,7 @@ begin
 
   // Vamos verificar quais controles tem linhas completas de dados.
   //linha_frequencia_sair := sgrFrequenciaSair.RowCount = 26;
-  linha_frequencia_bolas_sair := sgrFrequenciaBolasSair.RowCount = 26;
+  linha_frequencia_bolas_sair := sgrFrequencia_Bolas_Sair_Nao_Sair.RowCount = 26;
   linha_frequencia_total_sair := sgrFrequenciaTotalSair.RowCount = 26;
 
   //linha_frequencia_nao_sair := sgrFrequenciaNaoSair.RowCount = 26;
@@ -7733,15 +7709,15 @@ begin
 
       // Atualiza
       if linha_frequencia_bolas_sair then begin
-         bola_numero := StrToInt(sgrFrequenciaBolasSair.Cells[0, uA]);
+         bola_numero := StrToInt(sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[0, uA]);
 
          valor_marcado_sair := IntToStr(concurso_frequencia_sair[bola_numero]);
-         sgrFrequenciaBolasSair.Cells[ultima_coluna_frequencia_bolas_sair, uA] :=  valor_marcado_sair;
+         sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultima_coluna_frequencia_bolas_sair, uA] :=  valor_marcado_sair;
 
          valor_marcado_nao_sair := IntToStr(concurso_frequencia_nao_sair[bola_numero]);
-         sgrFrequenciaBolasSair.Cells[ultima_coluna_frequencia_bolas_nao_sair, uA] := valor_marcado_nao_sair;
+         sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultima_coluna_frequencia_bolas_nao_sair, uA] := valor_marcado_nao_sair;
 
-         //sgrFrequenciaBolasSair.Cells[ultima_coluna_frequencia_bolas_sair, uA] := IntToStr(concurso_frequencia_sair[bolaAtual]);
+         //sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultima_coluna_frequencia_bolas_sair, uA] := IntToStr(concurso_frequencia_sair[bolaAtual]);
       end;
 
       if linha_frequencia_total_sair then begin
@@ -7797,7 +7773,7 @@ end;
  Após atualizar o controle foi pra 5 bolas, devemos mostrar o valor 2 no campo
  mínimo, pois assim, o usuário não precisa toda hora fica mudando os valores.
 
- Toda vez, que os controles sgrFrequenciaBolasSair ou sgrFrequenciaBolasNaoSair
+ Toda vez, que os controles sgrFrequencia_Bolas_Sair_Nao_Sair ou sgrFrequenciaBolasNaoSair
  é atualizado, devemos atualizar os controles que ar
 
 }
@@ -7818,15 +7794,15 @@ var
   frequencia_status : String;
 begin
   // A quantidade de mínimo e máximo é definida, conforme, as marcações
-  // realizações no controle sgrFrequenciaBolasSair, entretanto, pode
+  // realizações no controle sgrFrequencia_Bolas_Sair_Nao_Sair, entretanto, pode
   // ocorrer de o usuário selecionar algum concurso que não foi atualizado
   // a frequência ainda, pra isto, iremos verificar isto.
-  if sgrFrequenciaBolasSair.RowCount <> 26 then
+  if sgrFrequencia_Bolas_Sair_Nao_Sair.RowCount <> 26 then
   begin
      exit;
   end;
 
-  ultima_coluna_controle_nao_sair := Pred(sgrFrequenciaBolasSair.Columns.Count);
+  ultima_coluna_controle_nao_sair := Pred(sgrFrequencia_Bolas_Sair_Nao_Sair.Columns.Count);
   ultima_coluna_controle_sair := ultima_coluna_controle_nao_sair - 1;
 
   qt_marcado_valor_um_sair := 0;
@@ -7844,10 +7820,10 @@ begin
   for uA := 1 to 25 do begin
 
       // Iremos pegar o valor da coluna 'frequencia_status', está na posição 1.
-      frequencia_status := sgrFrequenciaBolasSair.Cells[1, uA];
+      frequencia_status := sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[1, uA];
       frequencia_status := LowerCase(frequencia_status);
 
-      if sgrFrequenciaBolasSair.Cells[ultima_coluna_controle_sair, uA] = '1' then begin
+      if sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultima_coluna_controle_sair, uA] = '1' then begin
          Inc(qt_marcado_valor_um_sair);
 
          if frequencia_status = 'ainda_nao_saiu' then
@@ -7865,7 +7841,7 @@ begin
          end;
       end;
 
-      if sgrFrequenciaBolasSair.Cells[ultima_coluna_controle_nao_sair, uA] = '1' then
+      if sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultima_coluna_controle_nao_sair, uA] = '1' then
       begin
         Inc(qt_marcado_valor_um_nao_sair);
       end;
