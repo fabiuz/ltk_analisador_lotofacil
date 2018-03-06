@@ -15,13 +15,13 @@ object Form1: TForm1
     Height = 561
     Top = 5
     Width = 1264
-    ActivePage = sheetFiltro
+    ActivePage = TabSheet4
     Align = alClient
     BorderSpacing.Left = 5
     BorderSpacing.Top = 5
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
-    TabIndex = 0
+    TabIndex = 7
     TabOrder = 0
     object sheetFiltro: TTabSheet
       Caption = 'Filtros'
@@ -1688,8 +1688,8 @@ object Form1: TForm1
               Top = 0
               Width = 383
               Align = alTop
-              ClientHeight = 38
-              ClientWidth = 383
+              ClientHeight = 34
+              ClientWidth = 379
               TabOrder = 1
               object cmbConcursoFrequenciaSair: TComboBox
                 Left = 261
@@ -1727,8 +1727,8 @@ object Form1: TForm1
               Top = 408
               Width = 383
               Align = alBottom
-              ClientHeight = 60
-              ClientWidth = 383
+              ClientHeight = 56
+              ClientWidth = 379
               TabOrder = 2
               object GroupBox9: TGroupBox
                 Left = 1
@@ -1783,7 +1783,7 @@ object Form1: TForm1
             Width = 243
             Align = alLeft
             BorderSpacing.Around = 5
-            ClientHeight = 483
+            ClientHeight = 468
             ClientWidth = 239
             TabOrder = 1
             object Memo1: TMemo
@@ -2131,8 +2131,8 @@ object Form1: TForm1
               Top = 0
               Width = 343
               Align = alTop
-              ClientHeight = 38
-              ClientWidth = 343
+              ClientHeight = 34
+              ClientWidth = 339
               TabOrder = 1
               object cmbConcursoFrequenciaTotalSair: TComboBox
                 Left = 221
@@ -2170,8 +2170,8 @@ object Form1: TForm1
               Top = 408
               Width = 343
               Align = alBottom
-              ClientHeight = 60
-              ClientWidth = 343
+              ClientHeight = 56
+              ClientWidth = 339
               TabOrder = 2
               object GroupBox12: TGroupBox
                 Left = 1
@@ -2491,8 +2491,8 @@ object Form1: TForm1
               Top = 0
               Width = 263
               Align = alTop
-              ClientHeight = 38
-              ClientWidth = 263
+              ClientHeight = 34
+              ClientWidth = 259
               TabOrder = 1
               object cmbConcursoFrequenciaTotalNaoSair: TComboBox
                 Left = 141
@@ -2530,8 +2530,8 @@ object Form1: TForm1
               Top = 408
               Width = 263
               Align = alBottom
-              ClientHeight = 60
-              ClientWidth = 263
+              ClientHeight = 56
+              ClientWidth = 259
               TabOrder = 2
               object GroupBox22: TGroupBox
                 Left = 1
@@ -2644,8 +2644,8 @@ object Form1: TForm1
               Top = 0
               Width = 263
               Align = alTop
-              ClientHeight = 38
-              ClientWidth = 263
+              ClientHeight = 34
+              ClientWidth = 259
               TabOrder = 1
               object cmbConcursoFrequenciaNaoSair: TComboBox
                 Left = 141
