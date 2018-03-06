@@ -250,6 +250,7 @@ type
     btnAleatorio_Verificar_Acerto : TButton;
     btnObterResultados : TButton;
     btnAtualizar_Combinacao_Complementar : TButton;
+    btnAtualizarTabelaResultados : TButton;
     chkComplementar_Bolas_por_combinacao : TCheckGroup;
     chkExcluirJogos_LTF_QT : TCheckGroup;
     chkExcluir_Jogos_Ja_Sorteados : TCheckGroup;
@@ -546,6 +547,7 @@ type
     ValueListEditor1 : TValueListEditor;
     procedure btnAleatorioNovoClick(Sender : TObject);
     procedure btnAtualizarNovosRepetidosClick(Sender : TObject);
+    procedure btnAtualizarTabelaResultadosClick(Sender : TObject);
     procedure btnAtualizar_Combinacao_ComplementarClick(Sender : TObject);
     procedure btnFiltroGerarClick(Sender : TObject);
     procedure btnFrequenciaAtualizarClick(Sender : TObject);
@@ -2692,6 +2694,174 @@ begin
 
 end;
 
+procedure TForm1.btnAtualizarTabelaResultadosClick(Sender : TObject);
+const
+   campos_cabecalho : array[0..18] of string = (
+                    'status', 'status_ja_inserido',
+                    'concurso', 'data',
+                    'b_1','b_2','b_3','b_4','b_5',
+                    'b_6','b_7','b_8','b_9','b_10',
+                    'b_11','b_12','b_13','b_14','b_15'
+                    );
+var
+  sql_registro : TSQLQuery;
+  lista_campos : TStringList;
+  uA , qt_registros, linha_controle: Integer;
+  coluna_atual : TGridColumn;
+  obj_fonte : TFont;
+  lista_sql_insert : TStringList;
+  sql_insert , nome_do_campo, concurso_data: String;
+  bolas_sorteadas: array[1..25] of Integer;
+  bola_numero , concurso_numero: LongInt;
+begin
+     sql_registro := TSqlQuery.Create(Self);
+     lista_sql_insert := TStringList.Create;
+
+     if not Assigned(dmLotofacil) then
+     begin
+        dmLotofacil := TDmLotofacil.Create(Self);
+     end;
+
+     sql_registro.DataBase := dmLotofacil.pgLTK;
+
+     lista_campos := TStringList.Create;
+     lista_campos.SkipLastLineBreak := true;
+     for uA := 0 to High(campos_cabecalho) do
+     begin
+         lista_campos.Add(campos_cabecalho[uA]);
+     end;
+     lista_campos.Delimiter := ',';
+
+     sql_registro.SQL.Clear;
+     sql_registro.SQl.Add('Select');
+     sql_registro.Sql.Add(lista_campos.DelimitedText);
+     sql_registro.Sql.Add('from lotofacil.v_lotofacil_resultado_importacao');
+
+     // Aqui, iremos pegar somente novos registros, neste caso
+     // o campo que identifica novos registros, chama-se 'status
+     sql_registro.Sql.Add('where status = ' + QuotedStr('NOVO'));
+     sql_registro.Sql.Add('order by concurso asc');
+     sql_registro.Close;
+     sql_registro.Open;
+
+     // Vamos verificar se houve registros.
+     sql_registro.First;
+     sql_registro.Last;
+     qt_registros := sql_registro.RecordCount;
+
+     if qt_registros = 0 then begin
+       MessageDlg('', 'Não há registros novos', mtError, [mbOk], 0);
+       Exit;
+     end;
+
+     // Se chegarmos aqui, há registros novos, devemos, atualizar gerar o sql.
+     sql_registro.First;
+     lista_sql_insert.Clear;
+     while sql_registro.EOF = false do begin
+           sql_insert := 'Insert into lotofacil.lotofacil_resultado_num (';
+           sql_insert := sql_insert + 'concurso, data';
+
+           // O arranjo bolas_sorteadas, serve pra evitar que tenhamos a mesma bola
+           // sorteada mais de uma vez.
+           FillChar(bolas_sorteadas, 25 * sizeof(Integer), 0);
+
+           // A tabela lotofacil_resultado_num, as bolas tem os campos correspondentes,
+           // por exemplo, a bola 1 tem o campo num_1, a bola 2 tem o campo num_2
+           // e assim por diante.
+           // Então, iremos percorrer os campos b_1 até b_15 pra identificar cada bola.
+           concurso_numero := sql_registro.FieldByName('concurso').AsInteger;
+           concurso_data := sql_registro.FieldByName('data').asString;
+           for uA := 1 to 15 do begin
+               nome_do_campo := 'b_' + IntToStr(uA);
+               bola_numero := sql_registro.FieldByName(nome_do_campo).AsInteger;
+
+               // Verifica a faixa do número.
+               if (bola_numero < 1) or (bola_numero > 25) then begin
+                  MessageDlg('Erro', 'Concurso : ' + IntToStr(concurso_numero) +
+                                     ', Campo ' + nome_do_campo + ' tem bola fora do intervalo válido.',
+                                     mtError, [mbOk], 0);
+                  sql_registro.Close;
+                  Exit;
+               end;
+
+               // Verifica por bolas duplicadas.
+               if bolas_sorteadas[bola_numero] > 1 then begin
+                 MessageDlg('Erro', 'Concurso : ' + IntToStr(concurso_numero) +
+                                    ' tem bola duplicada, bola: ' + IntToStr(bola_numero),
+                                    mtError, [mbOk], 0);
+                 sql_registro.Close;
+                 Exit;
+               end;
+
+               bolas_sorteadas[bola_numero] := 1;
+
+               // Gera os nomes dos campos conforme a bola sorteada.
+               sql_insert := sql_insert + ', num_' + IntToStr(bola_numero);
+           end;
+           // Gera o novo insert.
+           // Fecha
+           sql_insert := sql_insert + ')';
+           sql_insert := sql_insert + 'values (';
+
+           // Número do concurso.
+           sql_insert := sql_insert + IntToStr(concurso_numero) + ', ';
+
+           // Data do concurso.
+           // A data já está no formato americano: yyyy-mm-dd, só precisamos
+           // Colocar entre aspas simples.
+           sql_insert := sql_insert + QuotedStr(concurso_data);
+
+           // Na tabela lotofacil_resultado_num, os valores que foram sorteados,
+           // terão nos campos num_ correspondentes o valor 1, então.
+           sql_insert := sql_insert + strUtils.DupeString(',1', 15) + ')';
+
+           // Agora, vamos inserir o sql gerado na lista de sql a ser inseridos.
+
+           // Insere um ';' pra separar as instruções sql.
+           if lista_sql_insert.Count > 0 then begin
+             sql_insert := ';' + sql_insert;
+           end;
+
+           lista_sql_insert.Add(sql_insert);
+
+           Writeln(sql_insert);
+
+           // Ir pra o próximo registro.
+           sql_registro.Next;
+     end;
+
+     // Agora, temos o sql gerados, devemos enviar pra o banco.
+     // Verifica se realmente, há algo na lista.
+     if lista_sql_insert.Count = 0 then begin
+       MessageDlg('', 'Não há registros novos', mtError, [mbOk], 0);
+       Exit;
+     end;
+
+     // Agora, vamos adicionar nosso sql que foi criado.
+     sql_registro.Close;
+     sql_registro.SQL.Clear;
+     sql_registro.SQL.Text := lista_sql_insert.Text;
+
+     try
+        //sql_registro.DataBase := dmLotofacil.pgLTK;
+        sql_registro.ExecSQL;
+        dmLotofacil.pgLTK.Transaction.Commit;
+        sql_registro.Close;
+        dmLotofacil.pgLtk.Close(true);
+    except
+      on Exc: EDataBaseError do begin
+          strErro := Exc.Message;
+          Exit;
+      end;
+    end;
+
+    MessageDlg('', 'Tabela atualizada com sucesso!!!', TMsgDlgType.mtInformation, [mbOk], 0);
+
+
+
+end;
+
+
 procedure TForm1.btnObterResultadosClick(Sender : TObject);
 const
    diretorio_download = '.' + DirectorySeparator + 'lotofacil_resultado';
@@ -2918,6 +3088,8 @@ begin
 
 
 end;
+
+
 
 {
  Analisa o arquivo html e recupera todos os dados referentes aos concursos.
@@ -6388,6 +6560,7 @@ begin
     CarregarTodosControles;
 
 end;
+
 
 {
  Obtém novas combinações aleatórias do banco de dados.
