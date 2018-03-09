@@ -12,10 +12,7 @@ uses
   eventlog, fgl, IdHeaderList, IdAuthentication, zipper,
   uHtml_Tokenizador,
   SAX_HTML, dom_html,dom
-
   ;
-
-
 
 
 // Ao gerar o sql, iremos selecionar estes campos.
@@ -2594,12 +2591,17 @@ begin
   if objButton =  btnNovosFiltros then
   begin
        sql_registro.SQL.Add('Select data_1 from lotofacil.v_lotofacil_filtros_por_data');
-       sql_registro.Sql.Add('order by data_1 desc');
+       // O campo data_1, é um campo do tipo string formatado como um data em formato
+       // brasileiro, entretanto, não é possível ordenar este tipo string, desta forma
+       // pois, a data estará ordenada corretamente.
+       // O formato correto pra classificar é 'yyyy-mm-dd', por isto, há um outro campo
+       // de nome 'data_2' em formato americando 'yyyy-mm-dd', assim é possível ordenar.
+       sql_registro.Sql.Add('order by data_2 desc');
   end else
   if objButton = btnAleatorioNovo then
   begin
       sql_registro.SQL.Add('Select data_1 from lotofacil.v_lotofacil_aleatorio_por_data');
-      sql_registro.Sql.Add('order by data_1 desc');
+      sql_registro.Sql.Add('order by data_2 desc');
   end;
 
   try
