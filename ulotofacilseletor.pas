@@ -5,7 +5,7 @@ unit uLotofacilSeletor;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, DateTimePicker, Forms, Controls, StdCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
   ExtCtrls, Graphics, strUtils;
 
 type
@@ -107,7 +107,6 @@ var
   botaoAtual: TToggleBox;
   nomeControle: string;
   idControle , uA: Integer;
-  strStatusLotofacil: string;
 begin
   botaoAtual := TToggleBox(Sender);
   if not (botaoAtual is TToggleBox) then
@@ -163,7 +162,7 @@ begin
 
   end;
 
-  strStatusLotofacil := '';
+
   for uA:= 1 to 25 do begin
       if lotofacil_bolas[uA].Checked then begin
          lotofacil_bolas_selecionadas[uA] := 1;
@@ -218,8 +217,6 @@ begin
   fBotaoAtivadoCor := clGreen;
   fTotal_de_bolas_selecionadas := 0;
   ;
-
-
 
 end;
 

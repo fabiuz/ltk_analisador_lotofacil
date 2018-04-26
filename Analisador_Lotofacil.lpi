@@ -6,6 +6,7 @@
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
       <Title Value="Analisador_Lotofacil"/>
+      <Scaled Value="True"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
@@ -41,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="20">
       <Unit0>
         <Filename Value="Analisador_Lotofacil.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -101,6 +102,51 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacil_Gerador_id"/>
       </Unit9>
+      <Unit10>
+        <Filename Value="ulotofacil_bolas_arquivo.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="ulotofacilnovosrepetidos.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uLotofacilNovosRepetidos"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="ulotofacilparimpar.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uLotofacilParImpar"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="ulotofacilexternointerno.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ulotofacilExternoInterno"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="ulotofacilprimonaoprimo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uLotofacilPrimoNaoPrimo"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="ulotofacil_colunas_b.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uLotofacil_Colunas_B"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="ulotofacil_diferenca_entre_bolas.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="ulotofacil_grupos.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="ulotofacil_funcoes_uteis.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="ulotofacil_algarismo_nas_dezenas.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit19>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

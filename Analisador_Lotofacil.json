@@ -11,5 +11,16 @@
         "Item5" : "Senha="
       }
     }
+  },
+  "Form1" : {
+    "ValueListEditor1_Strings" : {
+      "Count" : "6",
+      "Item0" : "Host=",
+      "Item1" : "Porta=",
+      "Item2" : "Banco de dados=",
+      "Item3" : "Role=",
+      "Item4" : "Usuario=",
+      "Item5" : "Senha="
+    }
   }
 }
