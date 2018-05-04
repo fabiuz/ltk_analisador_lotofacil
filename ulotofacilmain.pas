@@ -326,6 +326,7 @@ type
     btnObterResultados: TButton;
     btnAtualizar_Combinacao_Complementar: TButton;
     btnAtualizarTabelaResultados: TButton;
+    CheckGroup1 : TCheckGroup;
     chkComplementar_Bolas_por_combinacao: TCheckGroup;
     chkExcluirJogos_LTF_QT: TCheckGroup;
     chkExcluir_Jogos_Ja_Sorteados: TCheckGroup;
@@ -718,7 +719,7 @@ type
     tg8: TToggleBox;
     tg9: TToggleBox;
     tgExibirCampos: TToggleBox;
-    tgExibirCampos1: TToggleBox;
+    tgAleatorioExibirCampos: TToggleBox;
     tgGeradorOpcoes: TToggleBox;
     tgVerificarAcertos: TToggleBox;
     tgAleatorioVerificarAcertos: TToggleBox;
@@ -998,6 +999,8 @@ type
     function Gerar_Lotofacil_Aleatorio(
       var lotofacil_aleatorio: TAleatorio_Resultado; bolas_por_combinacao: integer;
       qt_de_combinacoes: integer): boolean;
+    function Gerar_Lotofacil_Aleatorio_Novo(var lotofacil_aleatorio : TAleatorio_Resultado;
+      bolas_por_combinacao : integer; qt_de_combinacoes : integer) : boolean;
     function Gerar_sql_algarismo_na_dezena : string;
     //procedure Iniciar_Banco_de_Dados;
     procedure InserirNovoFiltro(sqlFiltro: TStringList);
@@ -5715,7 +5718,6 @@ begin
     lista_where.Add('and ' + sqlAlgarismo_na_dezena);
   end;
 
-
   IF sqlLotofacilSoma <> '' then begin
     lista_where.Add('and ' + sqlLotofacilSoma);
   end else
@@ -5814,52 +5816,28 @@ begin
   //  end;
   //end;
 
-  // Insere os demais sql dinamicamente.'.
-  //if sqlNovosRepetidos <> '' then
-  //begin
-  //  sqlGerado.Add('--[Ítens escolhidos da guia novos x repetidos, devemos relacionar');
-  //  sqlGerado.Add('--[as tabelas e pegar os íds dos ítens escolhidos]----');
-  //  sqlGerado.Add('AND tb_ltf_num.ltf_id       = tb_ltf_novos_repetidos.ltf_id');
-  //  sqlGerado.Add('AND tb_ltf_id.ltf_id        = tb_ltf_novos_repetidos.ltf_id');
-  //  sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_novos_repetidos.ltf_id');
-  //  sqlGerado.Add('AND ' + sqlNovosRepetidos);
-  //end;
-
-  //if sqlBolas_por_posicao <> '' then begin
-  //  sqlGerado.Add('/* Bolas selecionadas por posição pelo usuário */');
-  //  sqlGerado.Add('AND ltf_bolas.ltf_id = tb_ltf_num.ltf_id');
-  //  sqlGerado.Add('AND ltf_bolas.ltf_id = tb_ltf_id.ltf_id');
-  //
-  //end;
-
-
   if sqlParImpar <> '' then
   begin
-    //sqlGerado.Add('AND ' + sqlParImpar);
     lista_where.Add('AND ' + sqlParImpar);
   end;
 
   if sqlPrimoNaoPrimo <> '' then
   begin
-    //sqlGerado.Add('AND ' + sqlPrimoNaoPrimo);
     lista_where.Add('AND ' + sqlPrimoNaoPrimo);
   end;
 
   if sqlExternoInterno <> '' then
   begin
-    //sqlGerado.Add('AND ' + sqlExternoInterno);
     lista_where.Add('AND ' + sqlExternoInterno);
   end;
 
   if sqlColunaB <> '' then
   begin
-    //sqlGerado.Add('AND ' + sqlColunaB);
     lista_where.Add('AND ' + sqlColunaB);
   end;
 
   if sqlFrequencia <> '' then
   begin
-    //sqlGerado.Add('AND ' + sqlFrequencia);
     lista_where.Add('AND ' + sqlFrequencia);
   end;
 
@@ -5883,7 +5861,6 @@ begin
   // Se houve algo selecionados, devemos retornar ao usuário.
   if sqlTemp <> '' then
   begin
-    // sqlGerado.Add('And tb_ltf_num.ltf_qt not in (' + sqlTemp + ')');
     lista_where.Add('And lotofacil.lotofacil_num.ltf_qt not in (' + sqlTemp + ')');
   end;
 
@@ -5903,21 +5880,6 @@ begin
   if (sqldiferenca_qt_alt = '') and (sqldiferenca_qt_dif = '') then begin
     DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas, 'lotofacil.lotofacil_diferenca_entre_bolas');
   end;
-
-  //if sqlLotofacilSoma <> '' then
-  //begin
-  //  sqlGerado.Add('AND tb_ltf_num.ltf_id = tb_ltf_soma.ltf_id');
-  //  sqlGerado.Add('AND tb_ltf_id.ltf_id = tb_ltf_soma.ltf_id');
-  //  sqlGerado.Add('AND tb_ltf_dif.ltf_id = tb_ltf_soma.ltf_id');
-  //  sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_soma.ltf_id');
-  //
-  //  if sqlNovosRepetidos <> '' then
-  //  begin
-  //    sqlGerado.add('AND tb_ltf_novos_repetidos.ltf_id = tb_ltf_soma.ltf_id');
-  //  end;
-  //
-  //  sqlGerado.Add('And ' + sqlLotofacilSoma);
-  //end;
 
   // Agora montar o sql dinamicamente.
   sqlGerado := TStringList.Create;
@@ -5951,14 +5913,7 @@ begin
   sqlGerado.Add('ltf_qt asc');
   sqlGerado.Add(', concurso_soma_frequencia_bolas desc');
 
-  //sqlGerado.Add(', concurso_soma_frequencia_bolas desc');
   sqlGerado.Add(', novos_repetidos_id_alternado');
-
-  //sqlGerado.Add(',concurso_soma_frequencia_bolas desc');
-  //if sqlNovosRepetidos <> '' then
-  //begin
-  //  sqlGerado.Add(',tb_ltf_novos_repetidos.novos_repetidos_id_alternado');
-  //end;
 
   try
     total_registros := StrToInt(Trim(mskTotalRegistros.Text));
@@ -5981,8 +5936,6 @@ begin
       sqlGerado.Add('OFFSET ' + IntToStr(deslocamento_inicial));
     end;
   except
-
-
   end;
 
   mmFiltroSql.Clear;
@@ -6008,7 +5961,6 @@ begin
   sqlRegistros.Close;
   sqlRegistros.SQL.Clear;
   sqlRegistros.Sql.Text := sqlFiltro.Text;
-  Writeln(sqlFiltro.Text);
 
   try
     sqlRegistros.ExecSQL;
@@ -6098,20 +6050,28 @@ begin
 
   qt_de_combinacoes := spinGerador_Combinacoes.Value;
 
-  if Gerar_Lotofacil_Aleatorio(lotofacil_combinacoes, bolas_por_combinacao,
+  //if Gerar_Lotofacil_Aleatorio(lotofacil_combinacoes, bolas_por_combinacao,
+  //  qt_de_combinacoes) = False then
+  //begin
+  //  MessageDlg('Erro', strErro, mtError, [mbOK], 0);
+  //  Exit;
+  //end;
+
+  if Gerar_Lotofacil_Aleatorio_Novo(lotofacil_combinacoes, bolas_por_combinacao,
     qt_de_combinacoes) = False then
   begin
     MessageDlg('Erro', strErro, mtError, [mbOK], 0);
     Exit;
   end;
 
+
   // Agora, gravar, no banco de dados, na tabela 'lotofacil_aleatorio_temporario';
   Inserir_Aleatorio_Temporario(lotofacil_combinacoes, bolas_por_combinacao);
-  Exit;
+  //Exit;
 
-  {
-  lista_lotofacil.SkipLastLineBreak := True;
-  lista_lotofacil.SaveToFile('teste_lotofacil.csv');
+
+  //lista_lotofacil.SkipLastLineBreak := True;
+  //lista_lotofacil.SaveToFile('teste_lotofacil.csv');
 
   sgrGeradorAleatorio.Columns.Clear;
   coluna_atual := sgrGeradorAleatorio.Columns.Add;
@@ -6128,9 +6088,9 @@ begin
 
   indice_linha_controle := 1;
   sgrGeradorAleatorio.FixedRows := 1;
-  sgrGeradorAleatorio.RowCount := qt_combinacoes + 1;
+  sgrGeradorAleatorio.RowCount := qt_de_combinacoes + 1;
 
-  for indice_combinacao := 0 to Pred(qt_combinacoes) do
+  for indice_combinacao := 0 to Pred(qt_de_combinacoes) do
   begin
     for indice_coluna_controle := 1 to bolas_por_combinacao do
     begin
@@ -6140,11 +6100,11 @@ begin
   end;
 
   indice_linha_controle := 1;
-  for indice_combinacao := 0 to Pred(qt_combinacoes) do
+  for indice_combinacao := 0 to Pred(qt_de_combinacoes) do
   begin
     indice_linha_controle := indice_combinacao + 1;
     indice_linha_controle_2 := indice_linha_controle + 1;
-    for indice_combinacao_2 := indice_combinacao + 1 to Pred(qt_combinacoes) do
+    for indice_combinacao_2 := indice_combinacao + 1 to Pred(qt_de_combinacoes) do
     begin
       qt_repetidos := 0;
       for indice_coluna_controle := 1 to bolas_por_combinacao do
@@ -6166,7 +6126,7 @@ begin
 
   sgrGeradorAleatorio.AutoSizeColumns;
 
-  }
+
 end;
 
 
@@ -6196,7 +6156,7 @@ type
     ETAPA_DEZ
     );
 var
-  bolas_fixas, bolas_nao_fixas, indice_combinacao, uA, indice_coluna: integer;
+  bolas_fixas, bolas_nao_fixas, indice_combinacao, uA, indice_coluna, indice_a_ser_gerado: integer;
   lista_numeros, lista_fixa, lista_nao_fixa_origem, lista_nao_fixa_destino: TStringList;
   lotofacil_numeros: array[0..25] of integer;
   gerador_etapa: TGerador_Etapa;
@@ -6252,7 +6212,10 @@ begin
 
 
   gerador_etapa := ANTES_DE_GERAR;
+
   indice_combinacao := 0;
+  indice_a_ser_gerado := 0;
+
   while indice_combinacao <= Pred(qt_de_combinacoes) do
   begin
 
@@ -6264,12 +6227,6 @@ begin
         // Adiciona os números à lista, pra posterior sorteio.
         lista_numeros.Clear;
         for uA := 1 to 25 do
-        begin
-          lista_numeros.Add(IntToStr(uA));
-        end;
-
-        lista_numeros.Clear;
-        for uA := 1 to bolas_por_combinacao do
         begin
           lista_numeros.Add(IntToStr(uA));
         end;
@@ -6292,11 +6249,13 @@ begin
           lotofacil_numeros[bola_numero] := 1;
         end;
 
+
         FillChar(lotofacil_numeros, 26 * sizeof(integer), 0);
         for uA := 1 to 15 do begin
           bola_numero := lotofacil_qualquer[uA];
           lotofacil_numeros[bola_numero] := 1;
         end;
+
 
         // Em seguida, devemos pegar as bolas sorteadas aleatoriamente
         // e posicionar as bolas em ordem crescente dentro do arranjo
@@ -6329,9 +6288,10 @@ begin
         // Percorre a última combinação gerada e obtém os números sorteados.
         for uA := 1 to bolas_por_combinacao do
         begin
-          bola_numero := lotofacil_aleatorio[indice_combinacao, uA];
+          bola_numero := lotofacil_aleatorio[indice_a_ser_gerado, uA];
           lotofacil_numeros[bola_numero] := 1;
         end;
+        Inc(indice_a_ser_gerado);
 
         // Obtém a lista fixa e não fixa.
         for uA := 1 to 25 do
@@ -6431,6 +6391,548 @@ begin
     end;
   end;
 
+end;
+
+{
+ Na procedure abaixo, iremos gerar combinações derivadas das bolas do concurso escolhido pelo usuário.
+ As derivações serão baseadas nas bolas novas e repetidas, por exemplo, se o usuário escolher que quer
+ derivar 10 bolas e 5 repetidas, iremos gerar a combinação das bolas do concurso atual com 10 bolas novas
+ e 5 bolas repetidas, se vc observar, que geramos 15 bolas, 5 bolas é do concurso escolhido pelo usuário.
+ Entretanto, 10 bolas do concurso não foi escolhida por isto, iremos gerar mais 2 concursos.
+ Então, haverá sempre 3 combinações, a primeira, é a derivação da combinação do concurso atual conforme
+ a quantidade de novos x repetidos, em seguida, devemos gerar as outras combinações complementares da
+ combinação derivada que foi gerada.
+ Um detalhe a observar, que há 11 combinações de novos x repetidos, então, se o usuário selecionar mais de uma
+ combinação, a cada derivação iremos pegar a próxima combinação de novos x repetidos, ao terminar todas as combinações
+ de novos x repetidos, recomeçamos do início, a vantagem desta abordagem é que conseguimos gerar todas
+ as combinações derivadas de todas as combinações escolhidas pelo usuário junto com os complementares destas
+ derivações.
+}
+
+
+function TForm1.Gerar_Lotofacil_Aleatorio_Novo(
+  var lotofacil_aleatorio: TAleatorio_Resultado; bolas_por_combinacao: integer;
+  qt_de_combinacoes: integer): boolean;
+const
+  lotofacil_qualquer: array[1..15] of integer = (
+    2, 4, 5, 6, 7, 12, 14, 15, 17, 20, 21, 22, 23, 24, 25
+    );
+  lotofacil_ultima_combinacao_gerada: array[1..25] of Integer = (
+    2, 4, 5, 6, 7, 12, 14, 15, 17, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  );
+type
+  TGerador_Etapa = (
+    GERAR_DERIVADO,
+    ANTES_DE_GERAR_COMPLEMENTAR,
+    COMPLEMENTAR_1,
+    COMPLEMENTAR_2,
+    COMPLEMENTAR_3,
+    ANTES_DE_GERAR,
+    ETAPA_ZERO,
+    ETAPA_UM,
+    ETAPA_DOIS,
+    ETAPA_TRES,
+    ETAPA_QUATRO,
+    ETAPA_CINCO,
+    ETAPA_SEIS,
+    ETAPA_SETE,
+    ETAPA_OITO,
+    ETAPA_NOVE,
+    ETAPA_DEZ
+    );
+var
+  bolas_fixas, bolas_nao_fixas, indice_combinacao, uA, indice_coluna, indice_a_ser_gerado,
+    indice_novos_repetidos, indice_final_novos_repetidos, qt_novos, qt_repetidos, diferenca_de_bolas: integer;
+  lista_numeros, lista_fixa, lista_nao_fixa_origem, lista_nao_fixa_destino, lista_de_novos,
+    lista_de_repetidos: TStringList;
+  lotofacil_numeros: array[0..25] of integer;
+  lotofacil_bolas_selecionadas: array[0..25] of Integer;
+  gerador_etapa: TGerador_Etapa;
+  indice_lista, bola_numero, indice_bola_numero: longint;
+  lotofacil_novos_repetidos: array[1..1] of Integer = (10);
+begin
+  // Validar entrada.
+  if not bolas_por_combinacao in [15..18] then
+  begin
+    strErro := Format('Erro, bolas_por_combinacao: %d.' + #1013 +
+      'Intervalo válido é: [15 a 18]', [bolas_por_combinacao]);
+    Exit(False);
+  end;
+  if qt_de_combinacoes <= 0 then
+  begin
+    strErro := Format('Erro, qt_de_combinacoes: %d. ' + #1013 +
+      'Valor deve ser maior que zero.', [qt_de_combinacoes]);
+    Exit(False);
+  end;
+  if not Assigned(lotofacil_aleatorio) then
+  begin
+    SetLength(lotofacil_aleatorio, qt_de_combinacoes, 26);
+  end;
+
+  // No código abaixo, será gerado as combinações:
+  // "Combinação derivada", que é a combinação gerada baseada na quantidade de novos x repetidos das bolas escolhidas
+  // pelo usuário de um concurso específico;
+  // "3 combinações complementares à combinação derivada que foi gerada", onde em todas as 3 combinações,
+  // haverá todas as bolas que não está na combinação derivada mais as bolas da combinação derivada distribuída nas três
+  // combinações.
+  // Segue-exemplo:
+  // Bolas do concurso:           1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15;
+  // Combinação derivada:        16, 17, 18, 19, 20, 21, 22, 23, 24, 25,  1,  2,  3,  4,  5
+  // Combinação complementares:   [Bolas que não estão na combinação derivada + 5 bolas repetidas neste caso]
+  // Combinação complementar 1:   [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  // Combinação complementar 2:   [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25]
+  // Combinação complementar 3:   [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6]
+  // Aqui, as bolas estão em ordem crescente, entretanto, ao gerar as combinações derivadas as bolas serão escolhidas
+  // aleatoriamente, pode acontecer, como no exemplo, algum dos complementares ser igual à combinação do concurso,
+  // mas provavelmente, isto será raro.
+  // Deve-se observar, que se houver combinações duplicadas, somente um das combinações ficará disponível.
+  // Observe que após gerarmos as combinações deve-se aplicar o filtro pra selecionar somente as melhores combinações
+  // com provável chance de ser sorteada.
+  // O gerador é bem inteligente, ao invés de gerar combinações em que não tem alguma relação com a combinação, este
+  // gerador gera cada combinação, onde a combinação anterior tem alguma relação com a combinação que foi gerada.
+
+  // Neste gerador, haverá uma lista fixa e duas listas não-fixas, uma chamada lista_nao_fixa_origem e, a outra, lista_nao_fixa_destino.
+  // Na lista fixa, haverá as bolas que são novas em relação a combinação derivada e que se repetirá nas combinações complementares.
+  // Na lista nao_fixa_origem, haverá as bolas que iremos selecionar pra completar cada combinação complementar, a cada bola
+  // selecionada da lista nao_fixa_origem, esta bola será retirada desta lista e será inserida na lista_nao_fixa_destino.
+  // Se ao tentar completar a combinação complementar, não houver nenhuma bola na lista nao_fixa_origem, iremos pegar as bolas
+  // que faltam da lista_nao_fixa_destino.
+  // Na lista nao_fixa_destino, armazenará todas as bolas que já foram utilizadas pra completar cada combinação complementar.
+
+
+
+  // Define a quantidade de bolas fixas e não_fixas conforme a quantidade de
+  // bolas por combinação.
+  case bolas_por_combinacao of
+    15:
+    begin
+      bolas_fixas := 10;
+      bolas_nao_fixas := 5;
+    end;
+    16:
+    begin
+      bolas_fixas := 9;
+      bolas_nao_fixas := 7;
+    end;
+    17:
+    begin
+      bolas_fixas := 8;
+      bolas_nao_fixas := 9;
+    end;
+    18:
+    begin
+      bolas_fixas := 7;
+      bolas_nao_fixas := 11;
+    end;
+  end;
+
+  lista_numeros := TStringList.Create;
+  lista_fixa := TStringList.Create;
+  lista_nao_fixa_origem := TStringList.Create;
+  lista_nao_fixa_destino := TStringList.Create;
+
+  indice_novos_repetidos := 1;
+  indice_final_novos_repetidos := High(lotofacil_novos_repetidos);
+
+  gerador_etapa := GERAR_DERIVADO;
+
+  indice_combinacao := 0;
+  indice_a_ser_gerado := 0;
+
+  while indice_combinacao <= Pred(qt_de_combinacoes) do
+  begin
+
+    case gerador_etapa of
+      // Gera o número derivado do concurso que foi escolhido,
+      // considerando a quantidade de bolas novas x repetidas escolhida,
+      // há 11 combinações de novos x repetidos, então, o usuário pode escolher de 1 a 11 combinações
+      GERAR_DERIVADO:
+      begin
+        // A cada iteração do loop, neste estado, pega a próxima quantidade de novos
+        // que o usuário escolheu.
+        qt_novos := lotofacil_novos_repetidos[indice_novos_repetidos];
+        Inc(indice_novos_repetidos);
+        if indice_novos_repetidos > indice_final_novos_repetidos then
+        begin
+          indice_novos_repetidos := 1;
+        end;
+
+        // Zera a variável antes de utilizar.
+        FillChar(lotofacil_bolas_selecionadas, 26 * sizeof(integer), 0);
+
+        // Marcar no arranjo, o valor 1, se a bola está no concurso.
+        // Há sempre 15 bolas no concurso.
+        for uA := 1 to 15 do
+        begin
+          // bola_numero := lotofacil_qualquer[uA];
+          bola_numero := lotofacil_ultima_combinacao_gerada[uA];
+          // Verifica se a bola está na faixa válida.
+          if not((bola_numero >= 1) and (bola_numero <= 25)) then
+          begin
+            Exit(False);
+          end;
+          // Terá o valor 1, se a bola saiu no concurso.
+          lotofacil_bolas_selecionadas[bola_numero] := 1;
+        end;
+
+        // Em seguida, identifica quais bolas são repetidas e quais não são.
+        lista_de_novos := TSTringList.Create;
+        lista_de_repetidos := TStringList.Create;
+        for uA := 1 to 25 do
+        begin
+          // Se o valor é 1, quer dizer que é repetida.
+          if lotofacil_bolas_selecionadas[uA] = 1 then
+          begin
+            lista_de_repetidos.Add(IntToStr(uA));
+          end else
+          begin
+            lista_de_novos.Add(IntToStr(uA));
+          end;
+        end;
+
+        // Zera a variável novamente.
+        FillChar(lotofacil_bolas_selecionadas, 26 * sizeof(integer), 0);
+
+        // Agora, iremos gerar as bolas da combinação derivada.
+        for uA := 1 to qt_novos do
+        begin
+             // Pega uma bola aleatoriamente da lista de novos e em seguida,
+             // retira da lista e define como a bola selecionada.
+             indice_bola_numero := Random(lista_de_novos.Count);
+             bola_numero := StrToInt(lista_de_novos.Strings[indice_bola_numero]);
+             lista_de_novos.Delete(indice_bola_numero);
+             lotofacil_bolas_selecionadas[bola_numero] := 1;
+        end;
+
+        // Agora, iremos pegar as bolas repetidas.
+        qt_repetidos := 15 - qt_novos;
+        for uA := 1 to qt_repetidos do
+        begin
+          // Pega uma bola aleatoriamente da lista de repetidos e em seguida,
+          // retira da lista e define como a bola selecionada.
+          indice_bola_numero := Random(lista_de_repetidos.Count);
+          bola_numero := StrToInt(lista_de_repetidos.Strings[indice_bola_numero]);
+          lista_de_repetidos.Delete(indice_bola_numero);
+          lotofacil_bolas_selecionadas[bola_numero] := 1;
+        end;
+
+        // Se o usuário selecionou mais de 15 bolas, devemos, pegar as bolas restantes
+        diferenca_de_bolas := bolas_por_combinacao - 15;
+        for uA := 1 to diferenca_de_bolas do
+        begin
+          if lista_de_repetidos.Count <> 0 then
+          begin
+            indice_bola_numero := Random(lista_de_repetidos.Count);
+            bola_numero := StrToInt(lista_de_repetidos.Strings[indice_bola_numero]);
+            lista_de_repetidos.Delete(indice_bola_numero);
+            lotofacil_bolas_selecionadas[bola_numero] := 1;
+          end else
+          if lista_de_novos.Count <> 0 then
+          begin
+            indice_bola_numero := Random(lista_de_novos.Count);
+            bola_numero := StrToInt(lista_de_novos.Strings[indice_bola_numero]);
+            lista_de_novos.Delete(indice_bola_numero);
+            lotofacil_bolas_selecionadas[bola_numero] := 1;
+          end else
+          begin
+            Exit(False);
+          end;
+        end;
+
+        // Agora, iremos gravar a combinação derivada no arranjo.
+        indice_coluna := 1;
+        for uA := 1 to 25 do
+        begin
+          if lotofacil_bolas_selecionadas[uA] = 1 then
+          begin
+            lotofacil_aleatorio[indice_combinacao, indice_coluna] := uA;
+            Inc(indice_coluna);
+          end;
+        end;
+
+        gerador_etapa := ANTES_DE_GERAR_COMPLEMENTAR;
+        continue;
+      end;
+
+      // Antes de gerar as bolas complementares, precisamos saber
+      // quais são as bolas novas e as bolas repetidas
+      ANTES_DE_GERAR_COMPLEMENTAR:
+      begin
+        // Pega as bolas da combinação derivada
+        FillChar(lotofacil_bolas_selecionadas, 26 * sizeof(integer), 0);
+
+        // As bolas da combinação derivada está armazenada no
+        // arranjo bidimensional lotofacil_aleatorio, há uma variável
+        // também que identifica qual posição do arranjo estamos.
+        // Iremos pegar a quantidade de bolas igual a quantidade de bolas por combinação, que pode
+        // ser 15, 16, 17 ou 18.
+        for uA := 1 to bolas_por_combinacao do
+        begin
+          bola_numero := lotofacil_aleatorio[indice_combinacao, uA];
+          lotofacil_bolas_selecionadas[bola_numero] := 1;
+        end;
+
+        lista_fixa.Clear;
+        lista_nao_fixa_origem.Clear;
+        lista_nao_fixa_destino.Clear;
+
+        // Na lista fixa, haverá as bolas, que serão repetidas em todas as combinações
+        // complementares, a lista fixa corresponde a lista de bolas novos.
+        // As outras duas listas: lista_nao_fixa_origem e lista_nao_fixa_destino
+        // corresponde as bolas da combinação derivada.
+        for uA := 1 to 25 do
+        begin
+          if lotofacil_bolas_selecionadas[uA] = 1 then
+          begin
+            lista_nao_fixa_origem.Add(IntToStr(uA));
+          end else
+          begin
+            lista_fixa.Add(IntToStr(uA));
+          end;
+        end;
+
+        gerador_etapa := COMPLEMENTAR_1;
+        continue;
+      end;
+
+      COMPLEMENTAR_1, COMPLEMENTAR_2, COMPLEMENTAR_3:
+      begin
+        Inc(indice_combinacao);
+        if indice_combinacao >= qt_de_combinacoes then
+          break;
+
+        // A próxima combinação é composta da lista fixa e não-fixa,
+        // entretanto, pode ocorrer da lista não-fixa, ser menor
+        // que a quantidade de bolas nao fixas, neste caso, devemos
+        // completá-la.
+        // Pra resolver isto, pegas as bolas que faltam da lista
+        // não-fixa destino, pois, toda vez que retiramos um ítem
+        // da lista não-fixa origem, ela é enviada pra lista não-fixa destino.
+        // Por este motivo, que existe duas lista de não-fixas, uma de origem
+        // e uma de destino.
+        while lista_nao_fixa_origem.Count < bolas_nao_fixas do
+        begin
+          indice_lista := Random(lista_nao_fixa_destino.Count);
+          bola_numero := StrToInt(lista_nao_fixa_destino.Strings[indice_lista]);
+
+          // Move a bola da lista de destino pra lista de origem.
+          lista_nao_fixa_destino.Delete(indice_lista);
+          lista_nao_fixa_origem.add(IntToStr(bola_numero));
+        end;
+
+        // Zera o arranjo.
+        FillChar(lotofacil_bolas_selecionadas, 26 * SizeOf(integer), 0);
+
+        // Pega as bolas fixas.
+        for uA := 0 to Pred(bolas_fixas) do
+        begin
+          bola_numero := StrToInt(lista_fixa.Strings[uA]);
+          lotofacil_bolas_selecionadas[bola_numero] := 1;
+        end;
+
+        // Pega as bolas não-fixas.
+        for uA := 0 to Pred(bolas_nao_fixas) do
+        begin
+
+          indice_lista := Random(lista_nao_fixa_origem.Count);
+          bola_numero := StrToInt(lista_nao_fixa_origem.Strings[indice_lista]);
+
+          // Move a bola da lista não-fixa origem pra lista não-fixa destino.
+          lista_nao_fixa_origem.Delete(indice_lista);
+          lista_nao_fixa_destino.Add(IntToStr(bola_numero));
+
+          lotofacil_bolas_selecionadas[bola_numero] := 1;
+        end;
+
+        indice_coluna := 1;
+        for uA := 1 to 25 do
+        begin
+          if lotofacil_bolas_selecionadas[uA] = 1 then
+          begin
+            lotofacil_aleatorio[indice_combinacao, indice_coluna] := uA;
+            lotofacil_ultima_combinacao_gerada[indice_coluna] := uA;
+            Inc(indice_coluna);
+          end;
+        end;
+
+        case gerador_etapa of
+          COMPLEMENTAR_1: gerador_etapa := COMPLEMENTAR_2;
+          COMPLEMENTAR_2: gerador_etapa := COMPLEMENTAR_3;
+          COMPLEMENTAR_3: gerador_etapa := GERAR_DERIVADO;
+        end;
+      end;
+    end;
+
+
+       {
+      ANTES_DE_GERAR:
+        // Nesta etapa, iremos gerar aleatoriamente, a primeira combinação
+        // Esta estapa, é iterada somente uma vez.
+      begin
+        // Adiciona os números à lista, pra posterior sorteio.
+        lista_numeros.Clear;
+        for uA := 1 to 25 do
+        begin
+          lista_numeros.Add(IntToStr(uA));
+        end;
+
+        // Zera a variável.
+        FillChar(lotofacil_numeros, 26 * sizeof(integer), 0);
+
+        // Vamos gerar aleatoriamente, a primeira combinação,
+        // O número do índice do arranjo lotofacil_numeros é igual ao
+        // número da bola, então, se a bola for escolhida, a célula
+        // deste arranjo terá o valor 1, senão zero.
+        Randomize;
+        for uA := 1 to bolas_por_combinacao do
+        begin
+
+          indice_lista := Random(lista_numeros.Count);
+          bola_numero := StrToInt(lista_numeros.Strings[indice_lista]);
+          lista_numeros.Delete(indice_lista);
+
+          lotofacil_numeros[bola_numero] := 1;
+        end;
+
+
+        FillChar(lotofacil_numeros, 26 * sizeof(integer), 0);
+        for uA := 1 to 15 do begin
+          bola_numero := lotofacil_qualquer[uA];
+          lotofacil_numeros[bola_numero] := 1;
+        end;
+
+        // Em seguida, devemos pegar as bolas sorteadas aleatoriamente
+        // e posicionar as bolas em ordem crescente dentro do arranjo
+        // lotofacil_aleatorio.
+        indice_coluna := 1;
+        for uA := 1 to 25 do
+        begin
+          if lotofacil_numeros[uA] = 1 then
+          begin
+            lotofacil_aleatorio[0, indice_coluna] := uA;
+            Inc(indice_coluna);
+          end;
+        end;
+        gerador_etapa := ETAPA_ZERO;
+        continue;
+      end;
+
+      // Na etapa zero, obtermos a lista de fixo e não fixo.
+      // Pra isto, iremos considerar a última combinação gerada
+      // pra basear a lista de fixa e não fixo.
+      ETAPA_ZERO:
+      begin
+        lista_fixa.Clear;
+        lista_nao_fixa_origem.Clear;
+        lista_nao_fixa_destino.Clear;
+
+        // Zera sempre a variável.
+        FillChar(lotofacil_numeros, 26 * sizeof(integer), 0);
+
+        // Percorre a última combinação gerada e obtém os números sorteados.
+        for uA := 1 to bolas_por_combinacao do
+        begin
+          bola_numero := lotofacil_aleatorio[indice_a_ser_gerado, uA];
+          lotofacil_numeros[bola_numero] := 1;
+        end;
+        Inc(indice_a_ser_gerado);
+
+        // Obtém a lista fixa e não fixa.
+        for uA := 1 to 25 do
+        begin
+          if lotofacil_numeros[uA] = 1 then
+          begin
+            lista_nao_fixa_origem.Add(IntToStr(uA));
+          end
+          else
+          begin
+            lista_fixa.Add(IntToStr(uA));
+          end;
+        end;
+
+        gerador_etapa := ETAPA_UM;
+        continue;
+      end;
+
+      // Na etapa 1, geramos o derivado da combinação principal.
+      ETAPA_UM, ETAPA_DOIS, ETAPA_TRES, ETAPA_QUATRO, ETAPA_CINCO,
+      ETAPA_SEIS, ETAPA_SETE, ETAPA_OITO, ETAPA_NOVE, ETAPA_DEZ:
+      begin
+        Inc(indice_combinacao);
+        if indice_combinacao >= qt_de_combinacoes then
+          break;
+
+        // A próxima combinação é composta da lista fixa e não-fixa,
+        // entretanto, pode ocorrer da lista não-fixa, ser menor
+        // que a quantidade de bolas nao fixas, neste caso, devemos
+        // completá-la.
+        // Pra resolver isto, pegas as bolas que faltam da lista
+        // não-fixa destino, pois, toda vez que retiramos um ítem
+        // da lista não-fixa origem, ela é enviada pra lista não-fixa destino.
+        // Por este motivo, que existe duas lista de não-fixas, uma de origem
+        // e uma de destino.
+        while lista_nao_fixa_origem.Count < bolas_nao_fixas do
+        begin
+          indice_lista := Random(lista_nao_fixa_destino.Count);
+          bola_numero := StrToInt(lista_nao_fixa_destino.Strings[indice_lista]);
+
+          // Move a bola da lista de destino pra lista de origem.
+          lista_nao_fixa_destino.Delete(indice_lista);
+          lista_nao_fixa_origem.add(IntToStr(bola_numero));
+        end;
+
+        // Zera o arranjo.
+        FillChar(lotofacil_numeros, 26 * SizeOf(integer), 0);
+
+        // Pega as bolas fixas.
+        for uA := 0 to Pred(bolas_fixas) do
+        begin
+          bola_numero := StrToInt(lista_fixa.Strings[uA]);
+          lotofacil_numeros[bola_numero] := 1;
+        end;
+
+        // Pega as bolas não-fixas.
+        for uA := 0 to Pred(bolas_nao_fixas) do
+        begin
+
+          indice_lista := Random(lista_nao_fixa_origem.Count);
+          bola_numero := StrToInt(lista_nao_fixa_origem.Strings[indice_lista]);
+
+          // Move a bola da lista não-fixa origem pra lista não-fixa destino.
+          lista_nao_fixa_origem.Delete(indice_lista);
+          lista_nao_fixa_destino.Add(IntToStr(bola_numero));
+
+          lotofacil_numeros[bola_numero] := 1;
+        end;
+
+        indice_coluna := 1;
+        for uA := 1 to 25 do
+        begin
+          if lotofacil_numeros[uA] = 1 then
+          begin
+            lotofacil_aleatorio[indice_combinacao, indice_coluna] := uA;
+            Inc(indice_coluna);
+          end;
+        end;
+
+        case gerador_etapa of
+          ETAPA_UM: gerador_etapa := ETAPA_DOIS;
+          ETAPA_DOIS: gerador_etapa := ETAPA_TRES;
+          ETAPA_TRES: gerador_etapa := ETAPA_ZERO;
+                    {
+                    ETAPA_TRES: gerador_etapa := ETAPA_QUATRO;
+                    ETAPA_QUATRO : gerador_etapa := ETAPA_CINCO;
+                    ETAPA_CINCO  : gerador_etapa := ETAPA_SEIS;
+                    ETAPA_SEIS   : gerador_etapa := ETAPA_SETE;
+                    ETAPA_SETE   : gerador_etapa := ETAPA_OITO;
+                    ETAPA_OITO   : gerador_etapa := ETAPA_NOVE;
+                    ETAPA_NOVE   : gerador_etapa := ETAPA_DEZ;
+                    ETAPA_DEZ    : gerador_etapa := ANTES_DE_GERAR;
+                    }
+        end;
+        continue;
+        }
+      end; // FIM DO while.
 end;
 
 {
