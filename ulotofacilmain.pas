@@ -3354,7 +3354,16 @@ begin
     // e assim por diante.
     // Então, iremos percorrer os campos b_1 até b_15 pra identificar cada bola.
     concurso_numero := sql_registro.FieldByName('concurso').AsInteger;
-    concurso_data := sql_registro.FieldByName('data').AsString;
+
+
+
+    // Bug[Corrigido]: Se o sistema operacional está indicando o ano com dois dígitos,
+    // a expressão abaixo retorna o ano com 2 dígitos, entretanto, ao inserir na
+    // tabela no banco de dados, está configurado pra ano de 4 dígitos.
+    // concurso_data := sql_registro.FieldByName('data').AsString;
+    // A correção foi formatar pra ser um ano de 4 dígitos.
+    concurso_data := FormatDateTime('yyyy-mm-dd', sql_registro.FieldByName('data').AsDateTime);
+
     for uA := 1 to 15 do
     begin
       nome_do_campo := 'b_' + IntToStr(uA);
