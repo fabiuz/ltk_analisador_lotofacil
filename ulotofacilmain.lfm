@@ -15,13 +15,13 @@ object Form1: TForm1
     Height = 561
     Top = 5
     Width = 1264
-    ActivePage = TabSheet4
+    ActivePage = tabFrequenciaSoma
     Align = alClient
     BorderSpacing.Left = 5
     BorderSpacing.Top = 5
     BorderSpacing.Right = 5
     BorderSpacing.Bottom = 5
-    TabIndex = 7
+    TabIndex = 8
     TabOrder = 0
     object sheetFiltro: TTabSheet
       Caption = 'Filtros'
@@ -43,7 +43,7 @@ object Form1: TForm1
         OnChange = pageFiltrosChange
         object TabSheet6: TTabSheet
           Caption = 'Novos x Repetidos'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object GroupBox1: TGroupBox
             Left = 928
@@ -121,8 +121,8 @@ object Form1: TForm1
               Top = 430
               Width = 296
               Align = alBottom
-              ClientHeight = 38
-              ClientWidth = 296
+              ClientHeight = 34
+              ClientWidth = 292
               TabOrder = 1
               object btnGrupo2BolasDesmarcarTodos20: TButton
                 Left = 165
@@ -196,8 +196,8 @@ object Form1: TForm1
               Top = 430
               Width = 296
               Align = alBottom
-              ClientHeight = 38
-              ClientWidth = 296
+              ClientHeight = 34
+              ClientWidth = 292
               TabOrder = 1
               object btnGrupo2BolasDesmarcarTodos21: TButton
                 Left = 165
@@ -252,8 +252,8 @@ object Form1: TForm1
               Top = 430
               Width = 296
               Align = alBottom
-              ClientHeight = 38
-              ClientWidth = 296
+              ClientHeight = 34
+              ClientWidth = 292
               TabOrder = 1
               object btnGrupo2BolasDesmarcarTodos22: TButton
                 Left = 165
@@ -359,7 +359,7 @@ object Form1: TForm1
         end
         object tabParImpar: TTabSheet
           Caption = 'Par x Impar'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grpParImpar15Bolas: TGroupBox
             Left = 5
@@ -590,7 +590,7 @@ object Form1: TForm1
         end
         object tabExternoInterno: TTabSheet
           Caption = 'Externo x Interno'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grpExternoInternoPorConcurso: TGroupBox
             Left = 310
@@ -821,7 +821,7 @@ object Form1: TForm1
         end
         object tabPrimo: TTabSheet
           Caption = 'Primos x Não-Primos'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grpPrimo15Bolas: TGroupBox
             Left = 5
@@ -1052,7 +1052,7 @@ object Form1: TForm1
         end
         object tabBolasNasColunas: TTabSheet
           Caption = 'Bolas nas colunas'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object PageControl3: TPageControl
             Left = 10
@@ -2444,7 +2444,7 @@ object Form1: TForm1
         end
         object TabSheet14: TTabSheet
           Caption = 'Algarismos na casa das dezenas'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grpAlgarismo_na_dezena: TGroupBox
             Left = 5
@@ -2675,7 +2675,7 @@ object Form1: TForm1
         end
         object tabHorizontal: TTabSheet
           Caption = 'Horizontal'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           TabVisible = False
           object grpExternoInterno15Bolas2: TGroupBox
@@ -2781,7 +2781,7 @@ object Form1: TForm1
         end
         object tabVertical: TTabSheet
           Caption = 'Vertical'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           TabVisible = False
           object grpExternoInterno15Bolas3: TGroupBox
@@ -2812,7 +2812,7 @@ object Form1: TForm1
         end
         object tabDiferencaEntreBolas: TTabSheet
           Caption = 'Diferenca Entre Bolas'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object PageControl4: TPageControl
             Left = 10
@@ -3118,7 +3118,7 @@ object Form1: TForm1
         end
         object tabGrupos: TTabSheet
           Caption = 'Grupos'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grGrupo3Bolas: TGroupBox
             Left = 280
@@ -3348,7 +3348,7 @@ object Form1: TForm1
         end
         object tabFrequenciaConcurso: TTabSheet
           Caption = 'Frequência'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grpFrequenciaBolas: TGroupBox
             Left = 357
@@ -3936,7 +3936,7 @@ object Form1: TForm1
         end
         object tabGerarFiltros: TTabSheet
           Caption = 'Gerar filtros'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object btnFiltroGerar: TButton
             Left = 400
@@ -4116,7 +4116,7 @@ object Form1: TForm1
         end
         object TabSheet7: TTabSheet
           Caption = 'TabSheet7'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grpFrequenciaTotalNaoSair: TGroupBox
             Left = 213
@@ -4372,7 +4372,7 @@ object Form1: TForm1
         end
         object tabLotofacilSoma: TTabSheet
           Caption = 'Soma de bolas'
-          ClientHeight = 497
+          ClientHeight = 520
           ClientWidth = 1246
           object grpDiferenca_qt_alt3: TGroupBox
             Left = 360
@@ -5943,6 +5943,140 @@ object Form1: TForm1
         Caption = 'Atualizar tabela'
         OnClick = btnAtualizarTabelaResultadosClick
         TabOrder = 2
+      end
+    end
+    object tabFrequenciaSoma: TTabSheet
+      Caption = 'Soma das frequências:'
+      ClientHeight = 534
+      ClientWidth = 1260
+      object rdSomaFrequenciaPrecisaoBolas: TRadioGroup
+        Left = 8
+        Height = 73
+        Top = 8
+        Width = 353
+        AutoFill = True
+        Caption = 'Precisão da frequência:'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 4
+        ClientHeight = 54
+        ClientWidth = 349
+        Columns = 4
+        ItemIndex = 0
+        Items.Strings = (
+          '1 bola'
+          '2 bolas'
+          '3 bolas'
+          '4 bolas'
+        )
+        TabOrder = 0
+      end
+      object grpSomaFrequenciaConcurso: TGroupBox
+        Left = 376
+        Height = 73
+        Top = 8
+        Width = 230
+        BorderSpacing.Around = 5
+        Caption = 'Concurso'
+        ClientHeight = 54
+        ClientWidth = 226
+        TabOrder = 1
+        object GroupBox44: TGroupBox
+          Left = 112
+          Height = 54
+          Top = 0
+          Width = 105
+          Align = alLeft
+          Caption = 'Final'
+          ClientHeight = 35
+          ClientWidth = 101
+          TabOrder = 0
+          object cmbSomaFrequenciaConcursoFinal: TComboBox
+            Left = 5
+            Height = 25
+            Top = 5
+            Width = 91
+            Align = alClient
+            BorderSpacing.Around = 5
+            ItemHeight = 0
+            OnChange = cmbNovosRepetidosConsolidadoConcursoFinalChange
+            Style = csDropDownList
+            TabOrder = 0
+          end
+        end
+        object GroupBox45: TGroupBox
+          Left = 0
+          Height = 54
+          Top = 0
+          Width = 112
+          Align = alLeft
+          Caption = 'Inicial'
+          ClientHeight = 35
+          ClientWidth = 108
+          TabOrder = 1
+          object cmbSomaFrequenciaConcursoInicial: TComboBox
+            Left = 5
+            Height = 25
+            Top = 5
+            Width = 98
+            Align = alClient
+            BorderSpacing.Around = 5
+            ItemHeight = 0
+            OnChange = cmbNovosRepetidosConsolidadoConcursoInicialChange
+            Style = csDropDownList
+            TabOrder = 0
+          end
+        end
+      end
+      object chkSomaFrequenciaCombinacoes: TCheckGroup
+        Left = 8
+        Height = 73
+        Top = 88
+        Width = 353
+        AutoFill = True
+        Caption = 'Atualização combinações:'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 4
+        ClientHeight = 54
+        ClientWidth = 349
+        Columns = 4
+        Items.Strings = (
+          '15 bolas'
+          '16 bolas'
+          '17 bolas'
+          '18 bolas'
+        )
+        TabOrder = 2
+        Data = {
+          0400000002020202
+        }
+      end
+      object btnAtualizarSomaFrequencia: TButton
+        Left = 368
+        Height = 65
+        Top = 96
+        Width = 243
+        Caption = 'Atualizar'
+        OnClick = btnAtualizarSomaFrequenciaClick
+        TabOrder = 3
+      end
+      object lblStatus: TStaticText
+        Left = 8
+        Height = 64
+        Top = 168
+        Width = 604
+        BorderStyle = sbsSunken
+        TabOrder = 4
       end
     end
   end

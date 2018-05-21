@@ -22,10 +22,10 @@ procedure Configurar_Controle_Algarismo_na_Dezena(objControle: TStringGrid);
 const
   // Nome das colunas que estarão no controle.
   algarismo_nas_dezenas_campos: array[0..6] of string = (
-    'hz_id',
-    'hz_0',
-    'hz_1',
-    'hz_2',
+    'dz_id',
+    'dz_0',
+    'dz_1',
+    'dz_2',
     'ltf_qt_vz',
     'res_qt',
     'marcar');

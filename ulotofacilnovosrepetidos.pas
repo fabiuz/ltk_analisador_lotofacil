@@ -682,7 +682,7 @@ begin
   FillChar(lotofacil_combinacao, sizeof(Byte) * 25, 0);
   FillChar(novos_repetidos_id_sequencial, sizeof(LongInt) * 10, 0);
 
-  // Abri arquivo pra gramação
+  // Abri arquivo pra gravação
   nome_do_arquivo := './lotofacil_novos_repetidos_concurso_' + IntToStr(fConcurso) + '_' +
                   FormatDateTime('YYYY_MM_DD-HH_NN_SS', Now) + '.csv';
   try
@@ -698,8 +698,8 @@ begin
   end;
 
   // Grava cabeçalho:
-  // ltf_id;ltf_qt;novo_repetidos_id;novos_repetidos_id_alternado;qt_alt_seq
-  str_linhas := 'ltf_id;ltf_qt;novo_repetidos_id;novos_repetidos_id_alternado;qt_alt_seq';
+  // ltf_id;ltf_qt;novo_repetidos_id;novos_repetidos_id_alternado;concurso;qt_alt_seq
+  str_linhas := 'ltf_id;ltf_qt;novo_repetidos_id;novos_repetidos_id_alternado;concurso;qt_alt_seq';
 
   GravarLinhasNoArquivo(arq_novos_repetidos, str_linhas);
   str_linhas := '';
@@ -1138,7 +1138,9 @@ procedure TLotofacilNovosRepetidos.DoStatus;
 begin
   if Assigned(OnStatus) then begin
      fMsg := 'Atualizando: ' + IntToStr(fLtf_id) + ' de 6874010 [' +
-             FloatToStr(fLtf_id / 6874010 * 100) + '%]';
+             Format('%.2f', [fLtf_id / 6874010 * 100]) + '%]';
+             //FloatToStr(fLtf_id / 6874010 * 100) + '%]';
+
      OnStatus(fMsg);
   end;
 end;

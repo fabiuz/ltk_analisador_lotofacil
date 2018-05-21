@@ -326,13 +326,17 @@ type
     btnObterResultados: TButton;
     btnAtualizar_Combinacao_Complementar: TButton;
     btnAtualizarTabelaResultados: TButton;
+    btnAtualizarSomaFrequencia : TButton;
     CheckGroup1 : TCheckGroup;
+    chkSomaFrequenciaCombinacoes : TCheckGroup;
     chkComplementar_Bolas_por_combinacao: TCheckGroup;
     chkExcluirJogos_LTF_QT: TCheckGroup;
     chkExcluir_Jogos_Ja_Sorteados: TCheckGroup;
     chkExibirCampos: TCheckListBox;
     chkExibirCampos1: TCheckListBox;
     cmbNovosRepetidosConsolidadoConcursoFinal: TComboBox;
+    cmbSomaFrequenciaConcursoFinal : TComboBox;
+    cmbSomaFrequenciaConcursoInicial : TComboBox;
     cmbParImparConsolidadoConcursoFinal: TComboBox;
     cmbExternoInternoConsolidadoConcursoFinal: TComboBox;
     cmbPrimoNaoPrimoConsolidadoConcursoFinal: TComboBox;
@@ -410,6 +414,8 @@ type
     GroupBox41: TGroupBox;
     GroupBox42 : TGroupBox;
     GroupBox43 : TGroupBox;
+    GroupBox44 : TGroupBox;
+    GroupBox45 : TGroupBox;
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
     grpBolasB1_15Bolas: TGroupBox;
@@ -465,6 +471,7 @@ type
     grpFrequenciaDeixouDeSair6: TGroupBox;
     grpAlgarismo_na_dezena : TGroupBox;
     grpAlgarismo_nas_dezenas_consolidado : TGroupBox;
+    grpSomaFrequenciaConcurso : TGroupBox;
     grpPrimoNaoPrimoConsolidadoConcurso: TGroupBox;
     grpFrequencialSair: TGroupBox;
     grpFrequenciaTotalNaoSair: TGroupBox;
@@ -589,6 +596,7 @@ type
     pnGrupo2Bolas6: TPanel;
     pnGrupo2Bolas7: TPanel;
     pnVerificarAcertos1: TPanel;
+    rdSomaFrequenciaPrecisaoBolas : TRadioGroup;
     rdDeslocamento: TRadioGroup;
     rdGerador_Quantidade_de_Bolas: TRadioGroup;
     sgrColunaB1 : TStringGrid;
@@ -662,6 +670,7 @@ type
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     sgrResultado_Importacao: TStringGrid;
+    lblStatus : TStaticText;
     stxtNovosRepetidos: TStaticText;
     tabBolasNasColunas: TTabSheet;
     tabHorizontal: TTabSheet;
@@ -676,6 +685,7 @@ type
     TabSheet12 : TTabSheet;
     TabSheet13 : TTabSheet;
     TabSheet14 : TTabSheet;
+    tabFrequenciaSoma : TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     tabBanco_de_dados: TTabSheet;
@@ -729,6 +739,7 @@ type
     XMLConfig1: TXMLConfig;
     procedure btnAleatorioNovoClick(Sender: TObject);
     procedure btnAtualizarNovosRepetidosAntigoClick(Sender: TObject);
+    procedure btnAtualizarSomaFrequenciaClick(Sender : TObject);
     procedure btnAtualizarTabelaResultadosClick(Sender: TObject);
     procedure btnAtualizar_Combinacao_ComplementarClick(Sender: TObject);
     procedure btnFiltroExcluirTodosClick(Sender : TObject);
@@ -1020,6 +1031,9 @@ type
     function Obter_Lotofacil_Resultado: boolean;
     procedure parImparConsolidadoConcursoInicialFinalAlterou;
     procedure PrimoNaoPrimoConsolidadoConcursoInicialFinalAlterou;
+    procedure Soma_Frequencia_Status(status : string);
+    procedure Soma_Frequencia_Status_Concluido(status : string);
+    procedure Soma_Frequencia_Status_Erro(status_erro : string);
     //procedure RedimensionarControleDiagonal;
     procedure Verificar_Acertos(Sender: TObject);
     procedure Verificar_Controle_Frequencia_Minimo_Maximo(Sender: TObject);
@@ -1051,6 +1065,8 @@ type
 
     ltf_novos_repetidos: TLotofacilNovosRepetidos;
 
+    ltf_soma_frequencia: array of array of Integer;
+
   end;
 
 const
@@ -1068,7 +1084,8 @@ uses
   ulotofacilexternointerno,
   uLotofacil_Colunas_B,
   ulotofacil_diferenca_entre_bolas,
-  ulotofacil_algarismo_nas_dezenas;
+  ulotofacil_algarismo_nas_dezenas,
+  uLotofacilSomaFrequencia;
 
 var
   dmLotofacil: TdmLotofacil;
@@ -2919,6 +2936,22 @@ begin
     CarregarPrimoNaoPrimoConsolidadoIntervaloConcurso(sgrPrimoNaoPrimoConsolidado,
       concurso_inicial, concurso_final);
   end;
+end;
+
+procedure TForm1.Soma_Frequencia_Status(status : string);
+begin
+  lblStatus.Caption := status;
+end;
+
+procedure TForm1.Soma_Frequencia_Status_Concluido(status : string);
+begin
+     btnAtualizarSomaFrequencia.Enabled := true;
+end;
+
+procedure TForm1.Soma_Frequencia_Status_Erro(status_erro : string);
+begin
+  lblStatus.Caption := status_erro;
+  btnAtualizarSomaFrequencia.Enabled := true;
 end;
 
 procedure TForm1.parImparConsolidadoConcursoInicialFinalAlterou;
@@ -5020,8 +5053,7 @@ var
 begin
   ltf_novos_repetidos := TLotofacilNovosRepetidos.Create(Self, True);
   ltf_novos_repetidos.OnStatusErro := @lotofacil_novos_repetidos_status_erro;
-  ltf_novos_repetidos.OnStatusAtualizacao :=
-    @lotofacil_novos_repetidos_status_atualizacao;
+  ltf_novos_repetidos.OnStatusAtualizacao := @lotofacil_novos_repetidos_status_atualizacao;
   ltf_novos_repetidos.OnStatus := @lotofacil_novos_repetidos_status;
   ltf_novos_repetidos.OnStatusConcluido := @lotofacil_novos_repetidos_status_concluido;
 
@@ -5032,8 +5064,7 @@ begin
     Exit;
   end;
 
-  concurso_numero := StrToInt(
-    cmbConcursoNovosRepetidos.Items[indice_cmb_novos_repetidos]);
+  concurso_numero := StrToInt(cmbConcursoNovosRepetidos.Items[indice_cmb_novos_repetidos]);
   ltf_novos_repetidos.atualizar(concurso_numero);
   ltf_novos_repetidos.Start;
 
@@ -8533,6 +8564,77 @@ begin
 
   CarregarTodosControles;
   }
+
+end;
+
+procedure TForm1.btnAtualizarSomaFrequenciaClick(Sender : TObject);
+const
+  TOTAL_DE_ITENS = 500000;
+type
+  rd_lotofacil_arquivo = record
+    ltf_id: Integer;
+    ltf_qt: Integer;
+    grp_id: Integer;
+  end;
+  type
+    p_Lotofacil_arquivo = ^rd_lotofacil_arquivo;
+var
+  fbArquivo : TFileStream;
+  ltf_arquivo: array[0..TOTAL_DE_ITENS-1] of rd_lotofacil_arquivo;
+  ltf_arquivo_2: rd_lotofacil_arquivo;
+  total_lido , total_lido_do_arquivo: LongInt;
+  mensagem : String;
+  p_ltf_arquivo : Pointer;
+  lotofacil_soma_frequencia : TLotofacilSomaFrequenciaThread;
+
+begin
+
+  btnAtualizarSomaFrequencia.Enabled := false;
+
+  lotofacil_soma_frequencia := TLotofacilSomaFrequenciaThread.Create(Self, true);
+  lotofacil_soma_frequencia.concurso_inicial := 1;
+  lotofacil_soma_frequencia.concurso_final := 1900;
+  lotofacil_soma_frequencia.qt_bolas_por_grupo := rdSomaFrequenciaPrecisaoBolas.ItemIndex + 1;
+  lotofacil_soma_frequencia.OnStatus := @Soma_Frequencia_Status;
+  lotofacil_soma_frequencia.OnStatus_Erro := @Soma_Frequencia_Status_Erro;
+  lotofacil_soma_frequencia.OnStatus_Concluido := @Soma_Frequencia_Status_Concluido;
+  lotofacil_soma_frequencia.Start;
+  {
+
+  fbArquivo := TFileStream.Create('/run/media/fabiuz/000E4C3400030AE7/LTK/ltk_gerador_binario_de_grupos/arquivos_csv/lotofacil_grupo_2_bolas.ltf_bin',
+            fmOpenRead);
+
+  total_lido := sizeof(rd_lotofacil_arquivo);
+
+  total_lido_do_arquivo := fbArquivo.Read(ltf_arquivo, total_lido  * TOTAL_DE_ITENS);
+
+  ltf_arquivo_2 := ltf_arquivo[0];
+  ltf_arquivo_2 := ltf_arquivo[1];
+
+
+
+  //ltf_arquivo.ltf_id := p_lotofacil_arquivo(p_ltf_arquivo)^.ltf_id;
+  //Inc(p_ltf_arquivo, sizeof(rd_lotofacil_arquivo));
+
+  //ltf_arquivo := p_Lotofacil_arquivo(p_ltf_arquivo)^;
+
+
+  //while total_lido = fbArquivo.Read(ltf_arquivo, 12) do
+  //begin
+  //     mensagem := 'ltf_id: ' + IntToStr(ltf_arquivo.ltf_id) + ', ltf_qt: ' + IntToStr(ltf_arquivo.ltf_qt) + ', grp_id: ' +
+  //                     IntToStr(ltf_arquivo.grp_id);
+  //     total_lido := fbArquivo.Read(ltf_arquivo, 12)
+  //end;
+
+
+  // SetLength(ltf_soma_frequencia, 6704071, 2);
+
+
+
+  ShowMessage(mensagem);
+  }
+
+
 
 end;
 
