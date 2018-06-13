@@ -101,11 +101,11 @@ var
   coluna_atual : TGridColumn;
 begin
   objControle.Columns.Clear;
-  objControle.RowCount := 1;
   indice_ultima_coluna := High(campos_do_controle);
   for uA := 0 to indice_ultima_Coluna do
   begin
     coluna_atual := objControle.Columns.Add;
+    objControle.RowCount := 1;
     coluna_atual.title.Alignment := TAlignment.taCenter;
     coluna_atual.Alignment := TAlignment.taCenter;
     coluna_atual.title.Caption := campos_do_controle[uA];

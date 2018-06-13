@@ -564,11 +564,6 @@ var
   uLinha, uA: integer;
   qt_registros: longint;
 begin
-  // Só iremos manipular StringGrid
-  if not (objControle is TStringGrid) then
-  begin
-    Exit;
-  end;
 
   // Configurar controle inicialmente.
   ConfigurarControlesParImpar(objControle);
@@ -650,8 +645,11 @@ begin
   // Redimensiona as colunas.
   objControle.AutoSizeColumns;
 
-  dmLotofacil.Free;
-  dmLotofacil := nil;
+  // Limpa a memória
+  //dmLotofacil.Free;
+  //dmLotofacil := nil;
+  FreeAndNil(dmLotofacil);
+  FreeAndNil(strSql);
 end;
 
 
@@ -848,12 +846,6 @@ var
   qt_registros: longint;
   concurso_parametro: TParam;
 begin
-  // Só iremos manipular StringGrid
-  if not (objControle is TStringGrid) then
-  begin
-    Exit;
-  end;
-
   // Configurar controle.
   ConfigurarControlesParImparPorConcurso(objControle);
 
@@ -928,8 +920,10 @@ begin
   // Redimensiona as colunas.
   objControle.AutoSizeColumns;
 
-  dmLotofacil.Free;
-  dmLotofacil := nil;
+  // Limpa a memória
+  strSql.Clear;
+  FreeAndNil(strSql);
+  FreeAndNil(dmLotofacil);
 end;
 // FIM
 

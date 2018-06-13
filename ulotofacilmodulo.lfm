@@ -1,8 +1,8 @@
 object dmLotofacil: TdmLotofacil
   OldCreateOrder = False
   Height = 613
-  HorizontalOffset = 248
-  VerticalOffset = 250
+  HorizontalOffset = 272
+  VerticalOffset = 219
   Width = 839
   PPI = 96
   object sqlNovosRepetidos15Bolas: TSQLQuery

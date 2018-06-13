@@ -5,3 +5,5 @@ Analisador_Lotofacil.exe
 Analisador_Lotofacil.dbg
 lotofacil_resultado/*
 *.csv
+lotofacil_novos_repetidos_concurso_csv/
+Analisador_Lotofacil_Debug

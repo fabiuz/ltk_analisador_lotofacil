@@ -51,12 +51,6 @@ var
   qtColunas, indice_ultima_coluna, uA: integer;
   coluna_atual: TGridColumn;
 begin
-  // Esta procedure somente pode mainpular somente stringGrid, evitar que o usuário
-  // passe um outro tipo de controle.
-  if not (objControle is TStringGrid) then
-  begin
-    Exit;
-  end;
 
   // Evitar que adicionemos novas colunas, se já houver.
   objControle.Columns.Clear;
@@ -106,11 +100,6 @@ var
   qt_registros: longint;
   // concurso_parametro: TParam;
 begin
-  // Só iremos manipular StringGrid
-  if not (objControle is TStringGrid) then
-  begin
-    Exit;
-  end;
 
   // Configurar Controle
   ConfigurarControlesExternoInternoPorConcurso(objControle);
@@ -188,8 +177,12 @@ begin
   // Redimensiona as colunas.
   objControle.AutoSizeColumns;
 
-  dmLotofacil.Free;
-  dmLotofacil := nil;
+  // Libera a memória.
+  FreeAndNil(strSql);
+  FreeAndNil(dmLotofacil);
+
+  // dmLotofacil.Free;
+  // dmLotofacil := nil;
 end;
 
 procedure ConfigurarControlesExternoInternoAgrupado(
@@ -240,8 +233,7 @@ end;
  da lotofacil, os registros correspondentes a quantas vezes a combinação saiu
  até hoje nos concursos sorteados.
  }
-procedure CarregarExternoInternoAgrupado(
-  objControle: TStringGrid);
+procedure CarregarExternoInternoAgrupado(objControle: TStringGrid);
 const
   externo_interno_campos: array[0..4] of string = (
     'ext_int_id',
@@ -256,12 +248,6 @@ var
   uLinha, uA: integer;
   qt_registros: longint;
 begin
-  // Verifica se é um component stringGrid
-  if not (objControle is TStringGrid) then
-  begin
-    Exit;
-  end;
-
   // Configurar Controle.
   ConfigurarControlesExternoInternoAgrupado(objControle);
 
@@ -337,8 +323,13 @@ begin
   // Redimensiona as colunas.
   objControle.AutoSizeColumns;
 
-  dmLotofacil.Free;
-  dmLotofacil := nil;
+  // Libera a memória.
+  StrSql.Clear;
+  FreeAndNil(strSql);
+  FreeAndNil(dmLotofacil);
+
+  //dmLotofacil.Free;
+  //dmLotofacil := nil;
 end;
 
 {

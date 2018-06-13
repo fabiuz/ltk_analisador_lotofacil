@@ -1,0 +1,1 @@
+Insert into lotofacil.lotofacil_num_bolas_concurso values(ltf_id, ltf_qt, concurso, concurso_soma_frequencia_bolas) values 

@@ -7,6 +7,7 @@ interface
 uses
   Classes, SysUtils;
 
+
 type
   TLotofacilSomaFrequenciaStatus = procedure (status: string) of object;
   TLotofacilSomaFrequenciaStatusConcluido = procedure (status: string) of object;
@@ -17,13 +18,14 @@ type
 
   TLotofacilSomaFrequenciaThread = class(TThread)
     private
+      fTempo_Inicio: TDateTime;
+      fTempo_Fim: TDateTime;
+
       fStatus: TLotofacilSomaFrequenciaStatus;
       fStatus_Concluido: TLotofacilSomaFrequenciaStatusConcluido;
       fStatus_Erro : TLotofacilSomaFrequenciaStatusErro;
 
       fStatus_Mensagem : String;
-
-
 
       objParent_Component: TComponent;
 
@@ -34,11 +36,16 @@ type
       // A primeira combinação começa no índice 0.
       lotofacil_combinacoes: array of array of LongWord;
 
-      procedure AtualizarSomaFrequencia;
+      //procedure AtualizarSomaFrequencia;
+      procedure AtualizarSomaFrequencia_2;
       procedure DoStatus;
       procedure DoStatus_Concluido;
       procedure DoStatus_Erro;
-      procedure Gravar_Soma_Frequencia_no_banco_de_dados;
+      procedure Exibir_Mensagem_de_Termino;
+      //procedure Gravar_Soma_Frequencia_no_banco_de_dados;
+      //procedure Gravar_Soma_Frequencia_no_banco_de_dados_2;
+      //procedure Gravar_Soma_Frequencia_no_banco_de_dados_3;
+      procedure Gravar_Soma_Frequencia_no_banco_de_dados_4;
       function ObterFrequencia : boolean;
 
     public
@@ -64,7 +71,7 @@ type
 
 implementation
 uses
-  sqlDb, db, uLotofacilModulo, dialogs;
+  sqlDb, db, uLotofacilModulo, dialogs, dateUtils;
 
 { TLotofacilSomaFrequenciaThread }
 
@@ -78,7 +85,10 @@ end;
 
 procedure TLotofacilSomaFrequenciaThread.DoStatus_Concluido;
 begin
-
+  if Assigned(fStatus_Concluido) then
+  begin
+     OnStatus_Concluido(fStatus_Mensagem);
+  end;
 end;
 
 procedure TLotofacilSomaFrequenciaThread.DoStatus_Erro;
@@ -100,21 +110,13 @@ begin
     Exit;
   end;
 
-  // TODO: Criar arquivo binário pra o grupo de 1 bola.
-  if qt_bolas_por_grupo = 1 then begin
-    fStatus_Mensagem := 'Erro, Soma de frequencia pra grupos de 1 bolas ainda não implementado.';
-    Synchronize(@DoStatus_Erro);
-    Exit;
-  end;
-
-
   if Not ObterFrequencia then begin
     Synchronize(@DoStatus_Erro);
     Exit;
   end;
 
-  AtualizarSomaFrequencia;
-
+  fTempo_Inicio:= Now;
+  AtualizarSomaFrequencia_2;
 
 end;
 
@@ -142,7 +144,6 @@ begin
 
   sql_registros := dmLotofacil.sqlLotofacil;
   sql_registros.SQL.Clear;
-
   sql_registros.SQL.Add('Select grp_id, qt_vezes from');
 
   // Gera a sql dinamicamente, baseada na quantidade de bolas de cada grupo.
@@ -278,18 +279,21 @@ end;
  fazendo com que aumentemos a chance de acertos na lotofacil.
 
 }
-procedure TLotofacilSomaFrequenciaThread.AtualizarSomaFrequencia;
+
+procedure TLotofacilSomaFrequenciaThread.AtualizarSomaFrequencia_2;
 const
   nome_dos_arquivos : array[1..4] of string = (
-                    '',
+                    'lotofacil_grupo_1_bola.ltfbin',
                     'lotofacil_grupo_2_bolas.ltfbin',
                     'lotofacil_grupo_3_bolas.ltfbin',
                     'lotofacil_grupo_4_bolas.ltfbin'
   );
 const
+  qt_registros_retornados : array[1..4] of Integer = (25, 300, 2300, 12650);
+const
   diretorio_dos_arquivos = '/run/media/fabiuz/000E4C3400030AE7/LTK/ltk_gerador_binario_de_grupos/arquivos_csv/';
 const
-  TOTAL_DE_ITENS = 50000;
+  TOTAL_DE_ITENS = 5000000;
   LOTOFACIL_TOTAL_ITENS = 6874010;
 type
   rd_lotofacil_arquivo = record
@@ -297,16 +301,25 @@ type
     ltf_qt: Integer;
     grp_id: Integer;
   end;
+  pt_rd_lotofacil_arquivo = ^ rd_lotofacil_arquivo;
 var
-  ltf_arquivo_conteudo: array[0..TOTAL_DE_ITENS] of rd_lotofacil_arquivo;
-
   bytes_por_registro, total_de_bytes_lidos, total_max_de_bytes_a_ler, registros_lidos, uA, frequencia_atual,
-    frequencia_do_grp_id, ltf_id, ltf_qt, grp_id, soma_frequencia: Integer;
+    frequencia_do_grp_id, ltf_id, ltf_qt, grp_id, soma_frequencia,
+    qt_linhas_processadas, total_de_linhas_antes_de_exibir: Integer;
   ltf_arquivo : TFileStream;
+
+  buffer_rd_lotofacil_arquivo : Pointer;
+  pt_buffer : pt_rd_lotofacil_arquivo;
 begin
   total_de_bytes_lidos := 0;
   bytes_por_registro := sizeof(rd_lotofacil_arquivo);
   total_max_de_bytes_a_ler := bytes_por_registro * TOTAL_DE_ITENS;
+
+  // Indica o total de linhas já processadas, antes de exibir, a informação
+  // na tela pra o usuário, a vantagem disto, é que o processamento será mais
+  // rápido.
+  total_de_linhas_antes_de_exibir := TOTAL_DE_ITENS;
+  qt_linhas_processadas := 0;
 
   // Há na lotofacil 6874010 combinações, então, iremos criar um arranjo com 6874010 ítens
   // Este arranjo armazenar a soma das frequências.
@@ -332,22 +345,46 @@ begin
   Except
     On exc:Exception do begin
         fStatus_Mensagem := 'Erro: ' + exc.Message;
+        Exibir_Mensagem_de_Termino;
         SetLength(lotofacil_combinacoes, 0);
         Synchronize(@DoStatus_Erro);
         Exit;
     end;
   end;
 
+  // Vamos tentar alocar memória
+  try
+    buffer_rd_lotofacil_arquivo := AllocMem(total_max_de_bytes_a_ler);
+  except
+    On exc: Exception do begin
+      fStatus_Mensagem := 'Erro: ' + exc.Message;
+      Exibir_Mensagem_de_Termino;
+      SetLength(lotofacil_combinacoes, 0);
+      Synchronize(@DoStatus_Erro);
+      Exit;
+    end;
+  end;
+
   // Ler o arquivo binário que contém pra cada combinação possível da lotofacil,
   // os grupos que aquela combinação contém.
-  total_de_bytes_lidos := ltf_arquivo.Read(ltf_arquivo_conteudo, total_max_de_bytes_a_ler);
+  total_de_bytes_lidos := ltf_arquivo.Read(buffer_rd_lotofacil_arquivo^, total_max_de_bytes_a_ler);
   while total_de_bytes_lidos > 0 do begin
         registros_lidos := total_de_bytes_lidos div bytes_por_registro;
 
+        // Aponta pra o primeiro byte
+        pt_buffer := buffer_rd_lotofacil_arquivo;
+
         for uA := 0 to Pred(registros_lidos) do begin
-             ltf_id := ltf_arquivo_conteudo[uA].ltf_id;
-             ltf_qt := ltf_arquivo_conteudo[uA].ltf_qt;
-             grp_id := ltf_arquivo_conteudo[uA].grp_id;
+             ltf_id := pt_buffer^.ltf_id;
+             ltf_qt := pt_buffer^.ltf_qt;
+             grp_id := pt_buffer^.grp_id;
+
+             // Garantir que ltf_id esteja dentro da faixa.
+             if (ltf_id < 0) or (ltf_id > LOTOFACIL_TOTAL_ITENS) then begin
+               fStatus_Mensagem:= 'Erro, ltf_id inválido.';
+               Synchronize(@DoStatus_Erro);
+               Exit;
+             end;
 
              // Índice 0, armazena ltf_qt.
              // Índice 1, armazena a soma das frequências.
@@ -356,17 +393,26 @@ begin
              frequencia_do_grp_id := frequencia_por_grupo[grp_id];
              soma_frequencia := lotofacil_combinacoes[ltf_id][1] + frequencia_do_grp_id;
              lotofacil_combinacoes[ltf_id][1] := soma_frequencia;
+
+             Inc(qt_linhas_processadas);
+             if (qt_linhas_processadas mod total_de_linhas_antes_de_exibir) = 0 then begin
+                fStatus_Mensagem := 'Lendo arquivo binário, ltf_id atual: ' + IntToStr(ltf_id);
+                Synchronize(@DoStatus);
+             end;
+
+             Inc(pt_buffer, 1);
         end;
 
-        fStatus_Mensagem := 'Lendo arquivo binário, ltf_id atual: ' + IntToStr(ltf_id);
-        Synchronize(@DoStatus);
-
-        total_de_bytes_lidos := ltf_arquivo.Read(ltf_arquivo_conteudo, total_max_de_bytes_a_ler);
+        total_de_bytes_lidos := ltf_arquivo.Read(buffer_rd_lotofacil_arquivo^, total_max_de_bytes_a_ler);
   end;
 
+  FreeMem(buffer_rd_lotofacil_arquivo);
   FreeAndNil(ltf_arquivo);
 
-  Gravar_Soma_Frequencia_no_banco_de_dados;
+  // Gravar_Soma_Frequencia_no_banco_de_dados;
+  // Gravar_Soma_Frequencia_no_banco_de_dados_2
+  //Gravar_Soma_Frequencia_no_banco_de_dados_3;
+  Gravar_Soma_Frequencia_no_banco_de_dados_4
 
 end;
 
@@ -374,30 +420,108 @@ end;
  Após obtermos a soma de frequência de cada combinação, iremos gravar os dados na tabela
  'lotofacil.lotofacil_num_bolas_frequencia_concurso'
 }
-procedure TLotofacilSomaFrequenciaThread.Gravar_Soma_Frequencia_no_banco_de_dados;
+procedure TLotofacilSomaFrequenciaThread.Gravar_Soma_Frequencia_no_banco_de_dados_4;
 const
   LTF_ID_ULTIMO_INDICE = 6874010;
-  TOTAL_DE_REGISTROS_A_INSERIR = 250000;
+  TOTAL_DE_REGISTROS_A_INSERIR = 500000;
 var
   sql_registros: TSqlQuery;
-  lista_de_sql_a_inserir : TStringList;
-  indice_lista_sql , uA, qt_registros_sql_a_inserir: Integer;
+  lista_sql_a_inserir: TStringList;
+
+  uA, qt_registros_lidos: Integer;
+
+
+  sql_a_inserir: String;
 begin
+
+  // Em postgresql, é possível inserir mais de 2 registros ao mesmo tempo desta forma:
+  // Insert into tabela (campo1, campo2) values
+  //  (valor1, valor2)
+  // ,(valor1, valor2)
+  // ,(valor1, valor2)
+
+  fStatus_Mensagem := 'Gravando no banco de dados... Aguarde...';
+  Synchronize(@DoStatus);
+
+  // Agora, vamos inserir o conteúdo na tabela 'lotofacil_num_bolas
   if Not Assigned(dmLotofacil) then begin
      dmLotofacil := TdmLotofacil.Create(objParent_Component);
   end;
 
-  sql_registros := dmLotofacil.sqlLotofacil;
-  sql_registros.Database := dmLotofacil.pgLTK;
-  sql_registros.Active := false;
-  sql_registros.SQL.Clear;
-  sql_registros.Sql.Add('Delete from lotofacil.lotofacil_num_bolas_frequencia_concurso');
-
   try
+    dmLotofacil.pgLTK.Transaction.StartTransaction;
+
+    sql_registros := dmLotofacil.sqlLotofacil;
+    sql_registros.Database := dmLotofacil.pgLTK;
+    sql_registros.Active := false;
+    sql_registros.Sql.Clear;
+    sql_registros.Sql.Add('Truncate lotofacil.lotofacil_num_bolas_concurso');
     sql_registros.ExecSQL;
+
+    // Vamos preparar a consulta e depois, somente alterar os parâmetros.
+    sql_a_inserir := 'Insert into lotofacil.lotofacil_num_bolas_concurso ' +
+                   '(ltf_id, ltf_qt, concurso, concurso_soma_frequencia_bolas) values ' +
+                   '(:$1, :$2, :$3, :$4)';
+
+    qt_registros_lidos := 0;
+
+    lista_sql_a_inserir := TStringList.Create;
+
+    // Vamos percorrer cada registro.
+    for uA := 1 to LTF_ID_ULTIMO_INDICE do
+    begin
+
+      // Iremos gerar um sql dinamico desta forma:
+      // Insert into tabela (campo1, campo) values
+      // (valor1, valor2),
+      // ,(valor1, valor2)
+      // Observe, que há uma vírgula separando cada registro:
+      // (valor1, valor2), (valor1, valor2).
+      // Então, toda vez que o registro for maior que 1, iremos inserir
+      // a vírgula.
+      if qt_registros_lidos <> 0 then begin
+        sql_a_inserir := sql_a_inserir + ',';
+      end
+      else begin
+        lista_sql_a_inserir.Clear;
+        lista_sql_a_inserir.Add('Insert into lotofacil.lotofacil_num_bolas_concurso ' +
+                   '(ltf_id, ltf_qt, concurso, concurso_soma_frequencia_bolas) values ');
+        sql_a_inserir := '';
+      end;
+
+      sql_a_inserir := sql_a_inserir + Format('(%d,%d,%d,%d)',
+                       [uA, lotofacil_combinacoes[uA, 0], concurso_final, lotofacil_combinacoes[uA, 1]]);
+      lista_sql_a_inserir.add(sql_a_inserir);
+      sql_a_inserir := '';
+
+      Inc(qt_registros_lidos);
+
+      // A cada 10 mil registros lidos, iremos inserir no banco.
+      if qt_registros_lidos = TOTAL_DE_REGISTROS_A_INSERIR then begin
+        qt_registros_lidos := 0;
+        sql_registros.Sql.Clear;
+        sql_registros.Sql.Text := lista_sql_a_inserir.Text;
+        sql_registros.ExecSql;
+        fStatus_Mensagem:= 'Inserindo registro, ltf_id: ' + IntToStr(uA);
+        Synchronize(@DoStatus);
+      end;
+
+    end;
+
+    if qt_registros_lidos <> 0 then begin
+     qt_registros_lidos := 0;
+     qt_registros_lidos := 0;
+     sql_registros.Sql.Clear;
+     sql_registros.Sql.Text := lista_sql_a_inserir.Text;
+     sql_registros.ExecSql;
+     fStatus_Mensagem:= 'Inserindo registro, ltf_id: ' + IntToStr(uA);
+     Synchronize(@DoStatus);
+    end;
+
     dmLotofacil.pgLTK.Transaction.Commit;
     sql_registros.Close;
     dmLotofacil.pgLTK.Close;
+
   except
     on Exc: EDataBaseError do
     begin
@@ -407,126 +531,28 @@ begin
     end;
   end;
 
-  // Agora, gera o sql dinamicamente, e a cada 1000 sql, insere no banco de dados.
-  lista_de_sql_a_inserir := TStringList.Create;
-  qt_registros_sql_a_inserir := 0;
-
-  lista_de_sql_a_inserir.Clear;
-  for uA := 1 to LTF_ID_ULTIMO_INDICE do
-  begin
-    // Gera a mensagem pra o usuário.
-    fStatus_Mensagem := 'Gerando sql dinamicamente pra ltf_id: ' + IntToStr(ua);
-    Synchronize(@DoStatus);
-
-    Inc(qt_registros_sql_a_inserir);
-
-    // Vamos interseparar os valores com a vírgula
-    // Exemplo:
-    // Insert into (ltf_id, ltf_qt, concurso_inicial, concurso_final, concurso_soma_frequencia_bolas)
-    // values (1, 15, 1, 1660, 1)
-    // Se há mais de 1 sql, então, intersepara por vírgula.
-    // , (1, 15, 1, 1660, 2);
-
-    if qt_registros_sql_a_inserir <> 1 then begin
-       lista_de_sql_a_inserir.Add(',');
-    end;
-
-    lista_de_sql_a_inserir.Add('(');
-    lista_de_sql_a_inserir.Add(IntToStr(uA) + ','
-                                            + IntToStr(lotofacil_combinacoes[uA, 0]) + ','
-                                            + IntToStr(concurso_inicial) + ', '
-                                            + IntToStr(concurso_final) + ', '
-                                            + IntToStr(lotofacil_combinacoes[uA, 1]));
-    lista_de_sql_a_inserir.Add(')');
-
-    // Se há mil registros, então, inserir no banco de dados.
-    if qt_registros_sql_a_inserir = TOTAL_DE_REGISTROS_A_INSERIR then
-    begin
-       qt_registros_sql_a_inserir := 0;
-       sql_registros.Active := false;
-       sql_registros.SQL.Clear;
-       sql_registros.Sql.Add('Insert into lotofacil.lotofacil_num_bolas_frequencia_concurso');
-       sql_registros.Sql.Add('(ltf_id, ltf_qt, concurso_inicial, concurso_final, concurso_soma_frequencia_bolas)');
-       sql_registros.Sql.Add('values');
-       sql_registros.SQL.Add(lista_de_sql_a_inserir.Text);
-       lista_de_sql_a_inserir.Clear;
-
-       try
-         fStatus_Mensagem := 'Gravando no banco de dados...';
-         Synchronize(@DoStatus);
-
-         sql_registros.ExecSQL;
-         dmLotofacil.pgLTK.Transaction.Commit;
-         sql_registros.Close;
-         dmLotofacil.pgLTK.Close;
-
-
-       except
-         on Exc: EDataBaseError do
-         begin
-           sql_registros.Close;
-           dmLotofacil.pgLTK.Close(true);
-           fStatus_Mensagem := 'Erro: ' + Exc.Message;
-           Synchronize(@DoStatus_Erro);
-
-           // Como houve erro, devemos excluir a tabela que foi criada parcialmente.
-           sql_registros.Active := false;
-           sql_registros.Sql.Clear;
-           sql_registros.Sql.Add('Delete from lotofacil.lotofacil_num_bolas_frequencia_concurso');
-
-           try
-             sql_registros.ExecSQL;
-             dmLotofacil.pgLTK.Transaction.Commit;
-             sql_registros.Close;
-             dmLotofacil.pgLTK.Close;
-           except
-             on Exc: EDataBaseError do
-             begin
-               fStatus_Mensagem := 'Erro: ' + Exc.Message;
-               Synchronize(@DoStatus_Erro);
-               Exit;
-             end;
-           end;
-
-           Exit;
-         end;
-       end;
-    end;
-  end;
-
-  // Verifica se houve registros remanescentes, a ser inserido.
-  if qt_registros_sql_a_inserir <> 0 then
-  begin
-    qt_registros_sql_a_inserir := 0;
-    sql_registros.Active := false;
-    sql_registros.SQL.Clear;
-    sql_registros.Sql.Add('Insert into lotofacil.lotofacil_num_bolas_frequencia_concurso');
-    sql_registros.Sql.Add('(ltf_id, ltf_qt, concurso_inicial, concurso_final, concurso_soma_frequencia_bolas)');
-    sql_registros.Sql.Add('values');
-    sql_registros.SQL.Add(lista_de_sql_a_inserir.Text);
-    lista_de_sql_a_inserir.Clear;
-
-    try
-      sql_registros.ExecSQL;
-      dmLotofacil.pgLTK.Transaction.Commit;
-      sql_registros.Close;
-      dmLotofacil.pgLTK.Close;
-    except
-      on Exc: EDataBaseError do
-      begin
-        sql_registros.Close;
-        dmLotofacil.pgLTK.Close;
-        fStatus_Mensagem := 'Erro: ' + Exc.Message;
-        Synchronize(@DoStatus_Erro);
-        Exit;
-      end;
-    end;
-  end;
-
   fStatus_Mensagem := 'Soma da frequência das bolas em cada combinação atualizada ' +
-                      'com a precisão de ' + IntToStr(qt_bolas_por_grupo) + ' bolas por grupo.';
+                      'com a precisão de ' + IntToStr(qt_bolas_por_grupo) + ' bolas por grupo.' + #10#13;
+
+  Exibir_Mensagem_de_Termino;
   Synchronize(@DoStatus_Concluido);
 
+end;
+
+
+{
+ Exibe mensagem de término pra o usuário.
+}
+procedure TLotofacilSomaFrequenciaThread.Exibir_Mensagem_de_Termino;
+begin
+  fTempo_Fim := Now;
+  fStatus_Mensagem:= fStatus_Mensagem + #10#13 +
+                            'Início: ' + FormatDateTime('hh:nn:ss.zzz', fTempo_Inicio) + #10#13 +
+                            'Fim: ' + FormatDateTime('hh:nn:ss.zzz', fTempo_Fim);
+  fStatus_Mensagem := fStatus_Mensagem + #10#13 + 'Tempo decorrido:' + #10#13 +
+                      IntToStr(HoursBetween(fTempo_Inicio, fTempo_fim)) + ':' +
+                      IntToStr(MinutesBetween(fTempo_Inicio, fTempo_fim) mod 60) + ':' +
+                      IntToStr(SecondsBetween(fTempo_Inicio, fTempo_fim) mod 60);
 end;
 
 constructor TLotofacilSomaFrequenciaThread.Create(objParent : TComponent; CreateSuspended : Boolean);
@@ -538,6 +564,7 @@ begin
   qt_bolas_por_grupo := -1;
   objParent_Component := objParent;
 end;
+
 
 
 end.
