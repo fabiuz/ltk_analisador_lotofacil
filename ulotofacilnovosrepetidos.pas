@@ -2123,7 +2123,7 @@ end;
 
 procedure TLotofacilNovosRepetidos.AtualizarNovosRepetidos_4;
 const
-  ARQUIVO_LTF_NUM_BOLAS = 'lotofacil_dados/lotofacil_bolas_novos_repetidos.ltf_bin';
+  ARQUIVO_LTF_NUM_BOLAS = '../analisador_lotofacil_dados/lotofacil_bolas_novos_repetidos.ltf_bin';
 const
   CRLF = {$IFDEF LINUX}
                  #10;

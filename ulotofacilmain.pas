@@ -14,7 +14,7 @@ uses
   AsyncProcess, IdHTTP,
   strings, strUtils,
 
-  //fgl,
+  fgl,
   //IdHeaderList,
   IdAuthentication, zipper,
   //uHtml_Tokenizador,
@@ -199,6 +199,13 @@ type
 
 type
   TAleatorio_Resultado = array of array of integer;
+{
+ Lista de controles TStringGrid, que serão utilizados
+ pra popular os dados das tabelas que serão utilizados
+ na analise das bolas nas coluna b1 a b15.
+ }
+type
+  TLista_Controle_B1_a_B5 = specialize TFPGList<TStringGrid>;
 
 type
 
@@ -245,10 +252,14 @@ type
     btnGrupo2BolasDesmarcarTodos129: TButton;
     btnGrupo2BolasDesmarcarTodos13 : TButton;
     btnGrupo2BolasDesmarcarTodos130: TButton;
+    btnGrupo2BolasDesmarcarTodos131: TButton;
+    btnGrupo2BolasDesmarcarTodos132: TButton;
     btnGrupo2BolasDesmarcarTodos133: TButton;
     btnGrupo2BolasDesmarcarTodos134: TButton;
     btnGrupo2BolasDesmarcarTodos135: TButton;
     btnGrupo2BolasDesmarcarTodos136: TButton;
+    btnGrupo2BolasDesmarcarTodos137: TButton;
+    btnGrupo2BolasDesmarcarTodos138: TButton;
     btnGrupo2BolasDesmarcarTodos139: TButton;
     btnGrupo2BolasDesmarcarTodos14 : TButton;
     btnGrupo2BolasDesmarcarTodos140: TButton;
@@ -282,9 +293,81 @@ type
     btnGrupo2BolasDesmarcarTodos166: TButton;
     btnGrupo2BolasDesmarcarTodos167: TButton;
     btnGrupo2BolasDesmarcarTodos168: TButton;
+    btnGrupo2BolasDesmarcarTodos169: TButton;
     btnGrupo2BolasDesmarcarTodos17 : TButton;
+    btnGrupo2BolasDesmarcarTodos170: TButton;
+    btnGrupo2BolasDesmarcarTodos171: TButton;
+    btnGrupo2BolasDesmarcarTodos172: TButton;
+    btnGrupo2BolasDesmarcarTodos173: TButton;
+    btnGrupo2BolasDesmarcarTodos174: TButton;
+    btnGrupo2BolasDesmarcarTodos175: TButton;
+    btnGrupo2BolasDesmarcarTodos176: TButton;
+    btnGrupo2BolasDesmarcarTodos177: TButton;
+    btnGrupo2BolasDesmarcarTodos178: TButton;
+    btnGrupo2BolasDesmarcarTodos179: TButton;
     btnGrupo2BolasDesmarcarTodos18 : TButton;
+    btnGrupo2BolasDesmarcarTodos180: TButton;
+    btnGrupo2BolasDesmarcarTodos181: TButton;
+    btnGrupo2BolasDesmarcarTodos182: TButton;
+    btnGrupo2BolasDesmarcarTodos183: TButton;
+    btnGrupo2BolasDesmarcarTodos184: TButton;
+    btnGrupo2BolasDesmarcarTodos185: TButton;
+    btnGrupo2BolasDesmarcarTodos186: TButton;
+    btnGrupo2BolasDesmarcarTodos187: TButton;
+    btnGrupo2BolasDesmarcarTodos188: TButton;
+    btnGrupo2BolasDesmarcarTodos189: TButton;
     btnGrupo2BolasDesmarcarTodos19 : TButton;
+    btnGrupo2BolasDesmarcarTodos190: TButton;
+    btnGrupo2BolasDesmarcarTodos191: TButton;
+    btnGrupo2BolasDesmarcarTodos192: TButton;
+    btnGrupo2BolasDesmarcarTodos193: TButton;
+    btnGrupo2BolasDesmarcarTodos194: TButton;
+    btnGrupo2BolasDesmarcarTodos195: TButton;
+    btnGrupo2BolasDesmarcarTodos196: TButton;
+    btnGrupo2BolasDesmarcarTodos197: TButton;
+    btnGrupo2BolasDesmarcarTodos198: TButton;
+    btnGrupo2BolasDesmarcarTodos199: TButton;
+    btnGrupo2BolasDesmarcarTodos200: TButton;
+    btnGrupo2BolasDesmarcarTodos201: TButton;
+    btnGrupo2BolasDesmarcarTodos202: TButton;
+    btnGrupo2BolasDesmarcarTodos203: TButton;
+    btnGrupo2BolasDesmarcarTodos204: TButton;
+    btnGrupo2BolasDesmarcarTodos205: TButton;
+    btnGrupo2BolasDesmarcarTodos206: TButton;
+    btnGrupo2BolasDesmarcarTodos207: TButton;
+    btnGrupo2BolasDesmarcarTodos208: TButton;
+    btnGrupo2BolasDesmarcarTodos209: TButton;
+    btnGrupo2BolasDesmarcarTodos210: TButton;
+    btnGrupo2BolasDesmarcarTodos211: TButton;
+    btnGrupo2BolasDesmarcarTodos212: TButton;
+    btnGrupo2BolasDesmarcarTodos213: TButton;
+    btnGrupo2BolasDesmarcarTodos214: TButton;
+    btnGrupo2BolasDesmarcarTodos215: TButton;
+    btnGrupo2BolasDesmarcarTodos216: TButton;
+    btnGrupo2BolasDesmarcarTodos217: TButton;
+    btnGrupo2BolasDesmarcarTodos218: TButton;
+    btnGrupo2BolasDesmarcarTodos219: TButton;
+    btnGrupo2BolasDesmarcarTodos220: TButton;
+    btnGrupo2BolasDesmarcarTodos221: TButton;
+    btnGrupo2BolasDesmarcarTodos222: TButton;
+    btnGrupo2BolasDesmarcarTodos223: TButton;
+    btnGrupo2BolasDesmarcarTodos224: TButton;
+    btnGrupo2BolasDesmarcarTodos225: TButton;
+    btnGrupo2BolasDesmarcarTodos226: TButton;
+    btnGrupo2BolasDesmarcarTodos227: TButton;
+    btnGrupo2BolasDesmarcarTodos228: TButton;
+    btnGrupo2BolasDesmarcarTodos229: TButton;
+    btnGrupo2BolasDesmarcarTodos230: TButton;
+    btnGrupo2BolasDesmarcarTodos231: TButton;
+    btnGrupo2BolasDesmarcarTodos232: TButton;
+    btnGrupo2BolasDesmarcarTodos233: TButton;
+    btnGrupo2BolasDesmarcarTodos234: TButton;
+    btnGrupo2BolasDesmarcarTodos235: TButton;
+    btnGrupo2BolasDesmarcarTodos236: TButton;
+    btnGrupo2BolasDesmarcarTodos237: TButton;
+    btnGrupo2BolasDesmarcarTodos238: TButton;
+    btnGrupo2BolasDesmarcarTodos239: TButton;
+    btnGrupo2BolasDesmarcarTodos240: TButton;
     btnGrupo2BolasDesmarcarTodos31 : TButton;
     btnGrupo2BolasDesmarcarTodos32 : TButton;
     btnGrupo2BolasDesmarcarTodos33 : TButton;
@@ -384,10 +467,14 @@ type
     btnGrupo2BolasMarcarTodos129: TButton;
     btnGrupo2BolasMarcarTodos13 : TButton;
     btnGrupo2BolasMarcarTodos130: TButton;
+    btnGrupo2BolasMarcarTodos131: TButton;
+    btnGrupo2BolasMarcarTodos132: TButton;
     btnGrupo2BolasMarcarTodos133: TButton;
     btnGrupo2BolasMarcarTodos134: TButton;
     btnGrupo2BolasMarcarTodos135: TButton;
     btnGrupo2BolasMarcarTodos136: TButton;
+    btnGrupo2BolasMarcarTodos137: TButton;
+    btnGrupo2BolasMarcarTodos138: TButton;
     btnGrupo2BolasMarcarTodos139: TButton;
     btnGrupo2BolasMarcarTodos14 : TButton;
     btnGrupo2BolasMarcarTodos140: TButton;
@@ -421,9 +508,81 @@ type
     btnGrupo2BolasMarcarTodos166: TButton;
     btnGrupo2BolasMarcarTodos167: TButton;
     btnGrupo2BolasMarcarTodos168: TButton;
+    btnGrupo2BolasMarcarTodos169: TButton;
     btnGrupo2BolasMarcarTodos17 : TButton;
+    btnGrupo2BolasMarcarTodos170: TButton;
+    btnGrupo2BolasMarcarTodos171: TButton;
+    btnGrupo2BolasMarcarTodos172: TButton;
+    btnGrupo2BolasMarcarTodos173: TButton;
+    btnGrupo2BolasMarcarTodos174: TButton;
+    btnGrupo2BolasMarcarTodos175: TButton;
+    btnGrupo2BolasMarcarTodos176: TButton;
+    btnGrupo2BolasMarcarTodos177: TButton;
+    btnGrupo2BolasMarcarTodos178: TButton;
+    btnGrupo2BolasMarcarTodos179: TButton;
     btnGrupo2BolasMarcarTodos18 : TButton;
+    btnGrupo2BolasMarcarTodos180: TButton;
+    btnGrupo2BolasMarcarTodos181: TButton;
+    btnGrupo2BolasMarcarTodos182: TButton;
+    btnGrupo2BolasMarcarTodos183: TButton;
+    btnGrupo2BolasMarcarTodos184: TButton;
+    btnGrupo2BolasMarcarTodos185: TButton;
+    btnGrupo2BolasMarcarTodos186: TButton;
+    btnGrupo2BolasMarcarTodos187: TButton;
+    btnGrupo2BolasMarcarTodos188: TButton;
+    btnGrupo2BolasMarcarTodos189: TButton;
     btnGrupo2BolasMarcarTodos19 : TButton;
+    btnGrupo2BolasMarcarTodos190: TButton;
+    btnGrupo2BolasMarcarTodos191: TButton;
+    btnGrupo2BolasMarcarTodos192: TButton;
+    btnGrupo2BolasMarcarTodos193: TButton;
+    btnGrupo2BolasMarcarTodos194: TButton;
+    btnGrupo2BolasMarcarTodos195: TButton;
+    btnGrupo2BolasMarcarTodos196: TButton;
+    btnGrupo2BolasMarcarTodos197: TButton;
+    btnGrupo2BolasMarcarTodos198: TButton;
+    btnGrupo2BolasMarcarTodos199: TButton;
+    btnGrupo2BolasMarcarTodos200: TButton;
+    btnGrupo2BolasMarcarTodos201: TButton;
+    btnGrupo2BolasMarcarTodos202: TButton;
+    btnGrupo2BolasMarcarTodos203: TButton;
+    btnGrupo2BolasMarcarTodos204: TButton;
+    btnGrupo2BolasMarcarTodos205: TButton;
+    btnGrupo2BolasMarcarTodos206: TButton;
+    btnGrupo2BolasMarcarTodos207: TButton;
+    btnGrupo2BolasMarcarTodos208: TButton;
+    btnGrupo2BolasMarcarTodos209: TButton;
+    btnGrupo2BolasMarcarTodos210: TButton;
+    btnGrupo2BolasMarcarTodos211: TButton;
+    btnGrupo2BolasMarcarTodos212: TButton;
+    btnGrupo2BolasMarcarTodos213: TButton;
+    btnGrupo2BolasMarcarTodos214: TButton;
+    btnGrupo2BolasMarcarTodos215: TButton;
+    btnGrupo2BolasMarcarTodos216: TButton;
+    btnGrupo2BolasMarcarTodos217: TButton;
+    btnGrupo2BolasMarcarTodos218: TButton;
+    btnGrupo2BolasMarcarTodos219: TButton;
+    btnGrupo2BolasMarcarTodos220: TButton;
+    btnGrupo2BolasMarcarTodos221: TButton;
+    btnGrupo2BolasMarcarTodos222: TButton;
+    btnGrupo2BolasMarcarTodos223: TButton;
+    btnGrupo2BolasMarcarTodos224: TButton;
+    btnGrupo2BolasMarcarTodos225: TButton;
+    btnGrupo2BolasMarcarTodos226: TButton;
+    btnGrupo2BolasMarcarTodos227: TButton;
+    btnGrupo2BolasMarcarTodos228: TButton;
+    btnGrupo2BolasMarcarTodos229: TButton;
+    btnGrupo2BolasMarcarTodos230: TButton;
+    btnGrupo2BolasMarcarTodos231: TButton;
+    btnGrupo2BolasMarcarTodos232: TButton;
+    btnGrupo2BolasMarcarTodos233: TButton;
+    btnGrupo2BolasMarcarTodos234: TButton;
+    btnGrupo2BolasMarcarTodos235: TButton;
+    btnGrupo2BolasMarcarTodos236: TButton;
+    btnGrupo2BolasMarcarTodos237: TButton;
+    btnGrupo2BolasMarcarTodos238: TButton;
+    btnGrupo2BolasMarcarTodos239: TButton;
+    btnGrupo2BolasMarcarTodos240: TButton;
     btnGrupo2BolasMarcarTodos31 : TButton;
     btnGrupo2BolasMarcarTodos32 : TButton;
     btnGrupo2BolasMarcarTodos33 : TButton;
@@ -655,6 +814,16 @@ type
     grpBolasB1_B2_B3_15Bolas: TGroupBox;
     grpBolasB1_B2_15Bolas: TGroupBox;
     grpBolasB1_B2_B3_B4_15Bolas1: TGroupBox;
+    grp_b10_a_b11_por_concurso: TGroupBox;
+    grp_b10_a_b12_por_concurso: TGroupBox;
+    grp_b10_a_b13_por_concurso: TGroupBox;
+    grp_b10_a_b14_por_concurso: TGroupBox;
+    grp_b10_a_b15_por_concurso: TGroupBox;
+    grp_b10_a_b11: TGroupBox;
+    grp_b10_a_b12: TGroupBox;
+    grp_b10_a_b13: TGroupBox;
+    grp_b10_a_b14: TGroupBox;
+    grp_b10_a_b15: TGroupBox;
     grp_b11_a_b11: TGroupBox;
     grp_b11_a_b11_por_concurso: TGroupBox;
     grpColunaB1 : TGroupBox;
@@ -741,12 +910,46 @@ type
     grpSelecionarCampos1: TGroupBox;
     grp_b1_a_b10: TGroupBox;
     grp_b2_a_b10_por_concurso: TGroupBox;
+    grp_b5_a_b11_por_concurso: TGroupBox;
+    grp_b5_a_b12_por_concurso: TGroupBox;
+    grp_b5_a_b13_por_concurso: TGroupBox;
+    grp_b5_a_b14_por_concurso: TGroupBox;
+    grp_b5_a_b15_por_concurso: TGroupBox;
+    grp_b5_a_b12: TGroupBox;
+    grp_b5_a_b13: TGroupBox;
+    grp_b5_a_b14: TGroupBox;
+    grp_b5_a_b15: TGroupBox;
+    grp_b5_a_b5: TGroupBox;
+    grp_b5_a_b6: TGroupBox;
+    grp_b5_a_b7: TGroupBox;
+    grp_b5_a_b8: TGroupBox;
+    grp_b5_a_b9: TGroupBox;
+    grp_b5_a_b10: TGroupBox;
+    grp_b5_a_b11: TGroupBox;
+    grp_b4_a_b4: TGroupBox;
+    grp_b5_a_b5_por_concurso: TGroupBox;
+    grp_b4_a_b5: TGroupBox;
+    grp_b5_a_b6_por_concurso: TGroupBox;
+    grp_b4_a_b6: TGroupBox;
+    grp_b5_a_b7_por_concurso: TGroupBox;
+    grp_b4_a_b7: TGroupBox;
+    grp_b5_a_b8_por_concurso: TGroupBox;
+    grp_b4_a_b8: TGroupBox;
+    grp_b5_a_b9_por_concurso: TGroupBox;
+    grp_b4_a_b9: TGroupBox;
+    grp_b4_a_b10: TGroupBox;
     grp_b3_a_b3: TGroupBox;
+    grp_b4_a_b4_por_concurso: TGroupBox;
     grp_b3_a_b4: TGroupBox;
+    grp_b4_a_b5_por_concurso: TGroupBox;
     grp_b3_a_b5: TGroupBox;
+    grp_b4_a_b6_por_concurso: TGroupBox;
     grp_b3_a_b6: TGroupBox;
+    grp_b4_a_b7_por_concurso: TGroupBox;
     grp_b3_a_b7: TGroupBox;
+    grp_b4_a_b8_por_concurso: TGroupBox;
     grp_b3_a_b8: TGroupBox;
+    grp_b4_a_b9_por_concurso: TGroupBox;
     grp_b3_a_b9: TGroupBox;
     grp_b3_a_b10: TGroupBox;
     grp_b2_a_b2: TGroupBox;
@@ -793,36 +996,53 @@ type
     grp_b1_a_b9: TGroupBox;
     grp_b2_a_b9_por_concurso: TGroupBox;
     grp_b3_a_b10_por_concurso: TGroupBox;
+    grp_b4_a_b10_por_concurso: TGroupBox;
+    grp_b5_a_b10_por_concurso: TGroupBox;
+    grp_b6_a_b10: TGroupBox;
+    grp_b6_a_b10_por_concurso: TGroupBox;
     grp_b6_a_b6_por_concurso: TGroupBox;
     grp_b11_a_b12_por_concurso: TGroupBox;
     grp_b6_a_b7_por_concurso: TGroupBox;
     grp_b6_a_b8_por_concurso: TGroupBox;
-    grp_b6_a_b9_por_concurso: TGroupBox;
-    grp_b6_a_b10_por_concurso: TGroupBox;
     grp_b6_a_b6: TGroupBox;
     grp_b6_a_b7: TGroupBox;
     grp_b6_a_b8: TGroupBox;
-    grp_b6_a_b9: TGroupBox;
-    grp_b6_a_b10: TGroupBox;
     grp_b12_a_b12_por_concurso: TGroupBox;
     grp_b11_a_b13_por_concurso: TGroupBox;
-    grp_b12_a_b12_por_concurso1: TGroupBox;
+    grp_b7_a_b11_por_concurso: TGroupBox;
+    grp_b7_a_b12_por_concurso: TGroupBox;
+    grp_b7_a_b13_por_concurso: TGroupBox;
+    grp_b7_a_b14_por_concurso: TGroupBox;
+    grp_b7_a_b15_por_concurso: TGroupBox;
+    grp_b7_a_b11: TGroupBox;
+    grp_b7_a_b12: TGroupBox;
+    grp_b7_a_b13: TGroupBox;
+    grp_b7_a_b14: TGroupBox;
+    grp_b7_a_b15: TGroupBox;
+    grp_b7_a_b7_por_concurso: TGroupBox;
     grp_b12_a_b13_por_concurso2: TGroupBox;
-    grp_b12_a_b13_por_concurso3: TGroupBox;
-    grp_b12_a_b13_por_concurso4: TGroupBox;
-    grp_b12_a_b13_por_concurso5: TGroupBox;
-    grp_b12_a_b14_por_concurso1: TGroupBox;
-    grp_b12_a_b15_por_concurso1: TGroupBox;
-    grp_b12_a_b16: TGroupBox;
-    grp_b12_a_b17: TGroupBox;
-    grp_b12_a_b18: TGroupBox;
-    grp_b12_a_b19: TGroupBox;
-    grp_b13_a_b13_por_concurso1: TGroupBox;
-    grp_b13_a_b15_por_concurso1: TGroupBox;
-    grp_b13_a_b16: TGroupBox;
-    grp_b13_a_b17: TGroupBox;
-    grp_b13_a_b18: TGroupBox;
-    grp_b14_a_b14_por_concurso1: TGroupBox;
+    grp_b7_a_b8_por_concurso: TGroupBox;
+    grp_b7_a_b9_por_concurso: TGroupBox;
+    grp_b7_a_b10_por_concurso: TGroupBox;
+    grp_b7_a_b7: TGroupBox;
+    grp_b7_a_b8: TGroupBox;
+    grp_b7_a_b9: TGroupBox;
+    grp_b7_a_b10: TGroupBox;
+    grp_b8_a_b10: TGroupBox;
+    grp_b8_a_b11: TGroupBox;
+    grp_b8_a_b12: TGroupBox;
+    grp_b8_a_b13: TGroupBox;
+    grp_b8_a_b14: TGroupBox;
+    grp_b8_a_b15: TGroupBox;
+    grp_b8_a_b8_por_concurso: TGroupBox;
+    grp_b8_a_b8: TGroupBox;
+    grp_b9_a_b10: TGroupBox;
+    grp_b9_a_b11: TGroupBox;
+    grp_b9_a_b12: TGroupBox;
+    grp_b9_a_b13: TGroupBox;
+    grp_b9_a_b14: TGroupBox;
+    grp_b9_a_b15: TGroupBox;
+    grp_b9_a_b9_por_concurso: TGroupBox;
     grp_b14_a_b15: TGroupBox;
     grp_b13_a_b13_por_concurso: TGroupBox;
     grp_b12_a_b13_por_concurso: TGroupBox;
@@ -845,12 +1065,27 @@ type
     grp_b13_a_b13: TGroupBox;
     grp_b13_a_b14: TGroupBox;
     grp_b13_a_b15: TGroupBox;
-    grp_b14_a_b16: TGroupBox;
-    grp_b14_a_b17: TGroupBox;
+    grp_b9_a_b9: TGroupBox;
     grp_b15_a_b15_por_concurso: TGroupBox;
     grp_b15_a_b15: TGroupBox;
-    grp_b15_a_b15_por_concurso1: TGroupBox;
-    grp_b15_a_b16: TGroupBox;
+    grp_b10_a_b10_por_concurso: TGroupBox;
+    grp_b10_a_b10: TGroupBox;
+    grp_b6_a_b9: TGroupBox;
+    grp_b6_a_b9_por_concurso: TGroupBox;
+    grp_b8_a_b9_por_concurso: TGroupBox;
+    grp_b8_a_b8_por_concurso2: TGroupBox;
+    grp_b8_a_b11_por_concurso: TGroupBox;
+    grp_b8_a_b12_por_concurso: TGroupBox;
+    grp_b8_a_b13_por_concurso: TGroupBox;
+    grp_b8_a_b14_por_concurso: TGroupBox;
+    grp_b8_a_b15_por_concurso: TGroupBox;
+    grp_b8_a_b9: TGroupBox;
+    grp_b9_a_b10_por_concurso: TGroupBox;
+    grp_b9_a_b11_por_concurso: TGroupBox;
+    grp_b9_a_b12_por_concurso: TGroupBox;
+    grp_b9_a_b13_por_concurso: TGroupBox;
+    grp_b9_a_b14_por_concurso: TGroupBox;
+    grp_b9_a_b15_por_concurso: TGroupBox;
     Label4: TLabel;
     mskDeslocamento: TMaskEdit;
     objHttp: TIdHTTP;
@@ -864,6 +1099,14 @@ type
     mmFiltroSql: TMemo;
     PageControl19: TPageControl;
     PageControl20: TPageControl;
+    PageControl21: TPageControl;
+    PageControl22: TPageControl;
+    pnGrupo2Bolas107: TPanel;
+    pnGrupo2Bolas108: TPanel;
+    pnGrupo2Bolas109: TPanel;
+    pnGrupo2Bolas110: TPanel;
+    pnGrupo2Bolas113: TPanel;
+    pnGrupo2Bolas114: TPanel;
     pnGrupo2Bolas117: TPanel;
     pnGrupo2Bolas118: TPanel;
     pnGrupo2Bolas119: TPanel;
@@ -884,10 +1127,14 @@ type
     pnGrupo2Bolas134: TPanel;
     pnGrupo2Bolas135: TPanel;
     pnGrupo2Bolas136: TPanel;
+    pnGrupo2Bolas137: TPanel;
+    pnGrupo2Bolas138: TPanel;
     pnGrupo2Bolas139: TPanel;
     pnGrupo2Bolas140: TPanel;
     pnGrupo2Bolas141: TPanel;
     pnGrupo2Bolas142: TPanel;
+    pnGrupo2Bolas143: TPanel;
+    pnGrupo2Bolas144: TPanel;
     pnGrupo2Bolas145: TPanel;
     pnGrupo2Bolas146: TPanel;
     pnGrupo2Bolas147: TPanel;
@@ -918,13 +1165,133 @@ type
     pnGrupo2Bolas172: TPanel;
     pnGrupo2Bolas173: TPanel;
     pnGrupo2Bolas174: TPanel;
+    pnGrupo2Bolas175: TPanel;
+    pnGrupo2Bolas176: TPanel;
+    pnGrupo2Bolas177: TPanel;
+    pnGrupo2Bolas178: TPanel;
+    pnGrupo2Bolas179: TPanel;
+    pnGrupo2Bolas180: TPanel;
+    pnGrupo2Bolas181: TPanel;
+    pnGrupo2Bolas182: TPanel;
+    pnGrupo2Bolas183: TPanel;
+    pnGrupo2Bolas184: TPanel;
+    pnGrupo2Bolas185: TPanel;
+    pnGrupo2Bolas186: TPanel;
+    pnGrupo2Bolas187: TPanel;
+    pnGrupo2Bolas188: TPanel;
+    pnGrupo2Bolas189: TPanel;
+    pnGrupo2Bolas190: TPanel;
+    pnGrupo2Bolas191: TPanel;
+    pnGrupo2Bolas192: TPanel;
+    pnGrupo2Bolas193: TPanel;
+    pnGrupo2Bolas194: TPanel;
+    pnGrupo2Bolas195: TPanel;
+    pnGrupo2Bolas196: TPanel;
+    pnGrupo2Bolas197: TPanel;
+    pnGrupo2Bolas198: TPanel;
+    pnGrupo2Bolas199: TPanel;
+    pnGrupo2Bolas200: TPanel;
+    pnGrupo2Bolas201: TPanel;
+    pnGrupo2Bolas202: TPanel;
+    pnGrupo2Bolas203: TPanel;
+    pnGrupo2Bolas204: TPanel;
+    pnGrupo2Bolas205: TPanel;
+    pnGrupo2Bolas206: TPanel;
+    pnGrupo2Bolas207: TPanel;
+    pnGrupo2Bolas208: TPanel;
+    pnGrupo2Bolas209: TPanel;
+    pnGrupo2Bolas210: TPanel;
+    pnGrupo2Bolas211: TPanel;
+    pnGrupo2Bolas212: TPanel;
+    pnGrupo2Bolas213: TPanel;
+    pnGrupo2Bolas214: TPanel;
+    pnGrupo2Bolas215: TPanel;
+    pnGrupo2Bolas216: TPanel;
+    pnGrupo2Bolas217: TPanel;
+    pnGrupo2Bolas218: TPanel;
+    pnGrupo2Bolas219: TPanel;
+    pnGrupo2Bolas220: TPanel;
+    pnGrupo2Bolas221: TPanel;
+    pnGrupo2Bolas222: TPanel;
+    pnGrupo2Bolas223: TPanel;
+    pnGrupo2Bolas224: TPanel;
+    pnGrupo2Bolas225: TPanel;
+    pnGrupo2Bolas226: TPanel;
+    pnGrupo2Bolas227: TPanel;
+    pnGrupo2Bolas228: TPanel;
+    pnGrupo2Bolas229: TPanel;
+    pnGrupo2Bolas230: TPanel;
+    pnGrupo2Bolas231: TPanel;
+    pnGrupo2Bolas232: TPanel;
+    pnGrupo2Bolas233: TPanel;
+    pnGrupo2Bolas234: TPanel;
+    pnGrupo2Bolas235: TPanel;
+    pnGrupo2Bolas236: TPanel;
+    pnGrupo2Bolas237: TPanel;
+    pnGrupo2Bolas238: TPanel;
+    pnGrupo2Bolas239: TPanel;
+    pnGrupo2Bolas240: TPanel;
+    pnGrupo2Bolas241: TPanel;
+    pnGrupo2Bolas242: TPanel;
+    pnGrupo2Bolas243: TPanel;
+    pnGrupo2Bolas244: TPanel;
+    pnGrupo2Bolas245: TPanel;
+    pnGrupo2Bolas246: TPanel;
+    pnGrupo2Bolas93: TPanel;
+    pnGrupo2Bolas94: TPanel;
+    pnGrupo2Bolas95: TPanel;
+    pnGrupo2Bolas96: TPanel;
+    sgr_b10_a_b11_por_concurso: TStringGrid;
+    sgr_b10_a_b12_por_concurso: TStringGrid;
+    sgr_b10_a_b13_por_concurso: TStringGrid;
+    sgr_b10_a_b14_por_concurso: TStringGrid;
+    sgr_b10_a_b15_por_concurso: TStringGrid;
+    sgr_b10_a_b11: TStringGrid;
+    sgr_b10_a_b12: TStringGrid;
+    sgr_b10_a_b13: TStringGrid;
+    sgr_b10_a_b14: TStringGrid;
+    sgr_b10_a_b15: TStringGrid;
     sgr_b2_a_b10_por_concurso: TStringGrid;
+    sgr_b5_a_b11_por_concurso: TStringGrid;
+    sgr_b5_a_b12_por_concurso: TStringGrid;
+    sgr_b5_a_b13_por_concurso: TStringGrid;
+    sgr_b5_a_b14_por_concurso: TStringGrid;
+    sgr_b5_a_b15_por_concurso: TStringGrid;
+    sgr_b5_a_b12: TStringGrid;
+    sgr_b5_a_b13: TStringGrid;
+    sgr_b5_a_b14: TStringGrid;
+    sgr_b5_a_b15: TStringGrid;
+    sgr_b5_a_b5: TStringGrid;
+    sgr_b5_a_b6: TStringGrid;
+    sgr_b5_a_b7: TStringGrid;
+    sgr_b5_a_b8: TStringGrid;
+    sgr_b5_a_b9: TStringGrid;
+    sgr_b5_a_b10: TStringGrid;
+    sgr_b5_a_b11: TStringGrid;
+    sgr_b4_a_b4: TStringGrid;
+    sgr_b5_a_b5_por_concurso: TStringGrid;
+    sgr_b4_a_b5: TStringGrid;
+    sgr_b5_a_b6_por_concurso: TStringGrid;
+    sgr_b4_a_b6: TStringGrid;
+    sgr_b5_a_b7_por_concurso: TStringGrid;
+    sgr_b4_a_b7: TStringGrid;
+    sgr_b5_a_b8_por_concurso: TStringGrid;
+    sgr_b4_a_b8: TStringGrid;
+    sgr_b5_a_b9_por_concurso: TStringGrid;
+    sgr_b4_a_b9: TStringGrid;
+    sgr_b4_a_b10: TStringGrid;
     sgr_b3_a_b3: TStringGrid;
+    sgr_b4_a_b4_por_concurso: TStringGrid;
     sgr_b3_a_b4: TStringGrid;
+    sgr_b4_a_b5_por_concurso: TStringGrid;
     sgr_b3_a_b5: TStringGrid;
+    sgr_b4_a_b6_por_concurso: TStringGrid;
     sgr_b3_a_b6: TStringGrid;
+    sgr_b4_a_b7_por_concurso: TStringGrid;
     sgr_b3_a_b7: TStringGrid;
+    sgr_b4_a_b8_por_concurso: TStringGrid;
     sgr_b3_a_b8: TStringGrid;
+    sgr_b4_a_b9_por_concurso: TStringGrid;
     sgr_b3_a_b9: TStringGrid;
     sgr_b3_a_b10: TStringGrid;
     sgr_b2_a_b2: TStringGrid;
@@ -972,9 +1339,87 @@ type
     sgr_b1_a_b8: TStringGrid;
     sgr_b2_a_b9_por_concurso: TStringGrid;
     sgr_b3_a_b10_por_concurso: TStringGrid;
+    sgr_b4_a_b10_por_concurso: TStringGrid;
+    sgr_b5_a_b10_por_concurso: TStringGrid;
+    sgr_b6_a_b10: TStringGrid;
+    sgr_b6_a_b10_por_concurso: TStringGrid;
+    sgr_b6_a_b9: TStringGrid;
+    sgr_b6_a_b9_por_concurso: TStringGrid;
+    sgr_b7_a_b11_por_concurso: TStringGrid;
+    sgr_b7_a_b12_por_concurso: TStringGrid;
+    sgr_b7_a_b13_por_concurso: TStringGrid;
+    sgr_b7_a_b14_por_concurso: TStringGrid;
+    sgr_b7_a_b15_por_concurso: TStringGrid;
+    sgr_b7_a_b11: TStringGrid;
+    sgr_b7_a_b12: TStringGrid;
+    sgr_b7_a_b13: TStringGrid;
+    sgr_b7_a_b14: TStringGrid;
+    sgr_b7_a_b15: TStringGrid;
+    sgr_b8_a_b10: TStringGrid;
+    sgr_b8_a_b11: TStringGrid;
+    sgr_b8_a_b12: TStringGrid;
+    sgr_b8_a_b13: TStringGrid;
+    sgr_b8_a_b14: TStringGrid;
+    sgr_b8_a_b15: TStringGrid;
+    sgr_b8_a_b9_por_concurso: TStringGrid;
+    sgr_b8_a_b8_por_concurso2: TStringGrid;
+    sgr_b8_a_b11_por_concurso: TStringGrid;
+    sgr_b8_a_b12_por_concurso: TStringGrid;
+    sgr_b8_a_b13_por_concurso: TStringGrid;
+    sgr_b8_a_b14_por_concurso: TStringGrid;
+    sgr_b8_a_b15_por_concurso: TStringGrid;
+    sgr_b8_a_b9: TStringGrid;
+    sgr_b9_a_b10: TStringGrid;
+    sgr_b9_a_b11: TStringGrid;
+    sgr_b9_a_b12: TStringGrid;
+    sgr_b9_a_b13: TStringGrid;
+    sgr_b9_a_b14: TStringGrid;
+    sgr_b9_a_b15: TStringGrid;
+    sgr_b9_a_b10_por_concurso: TStringGrid;
+    sgr_b9_a_b11_por_concurso: TStringGrid;
+    sgr_b9_a_b12_por_concurso: TStringGrid;
+    sgr_b9_a_b13_por_concurso: TStringGrid;
+    sgr_b9_a_b14_por_concurso: TStringGrid;
+    sgr_b9_a_b15_por_concurso: TStringGrid;
     TabSheet16: TTabSheet;
     TabSheet17: TTabSheet;
+    TabSheet18: TTabSheet;
+    TabSheet19: TTabSheet;
+    TabSheet20: TTabSheet;
+    TabSheet21: TTabSheet;
+    TabSheet22: TTabSheet;
+    TabSheet23: TTabSheet;
+    TabSheet24: TTabSheet;
+    TabSheet25: TTabSheet;
+    TabSheet26: TTabSheet;
+    TabSheet27: TTabSheet;
+    TabSheet28: TTabSheet;
+    TabSheet29: TTabSheet;
+    TabSheet30: TTabSheet;
+    TabSheet31: TTabSheet;
+    TabSheet32: TTabSheet;
+    TabSheet33: TTabSheet;
+    TabSheet34: TTabSheet;
+    TabSheet35: TTabSheet;
+    TabSheet36: TTabSheet;
+    TabSheet37: TTabSheet;
+    TabSheet38: TTabSheet;
+    TabSheet39: TTabSheet;
+    TabSheet40: TTabSheet;
+    TabSheet41: TTabSheet;
     tab_b1_a_b20: TTabSheet;
+    tab_b1_a_b21: TTabSheet;
+    tab_b1_a_b22: TTabSheet;
+    tab_b1_a_b27: TTabSheet;
+    tab_b1_a_b28: TTabSheet;
+    tab_b1_a_b29: TTabSheet;
+    tab_b1_a_b30: TTabSheet;
+    tab_b3_a_b10: TTabSheet;
+    tab_b3_a_b11: TTabSheet;
+    tab_b5_a_b7: TTabSheet;
+    tab_b3_a_b13: TTabSheet;
+    tab_b3_a_b14: TTabSheet;
+    tab_b3_a_b4: TTabSheet;
     tab_b3_a_b5: TTabSheet;
     tab_b3_a_b6: TTabSheet;
     tab_b3_a_b7: TTabSheet;
@@ -990,6 +1435,8 @@ type
     tab_b1_a_b18: TTabSheet;
     tab_b1_a_b19: TTabSheet;
     tab_b3_a_b3: TTabSheet;
+    tab_b3_a_b8: TTabSheet;
+    tab_b3_a_b9: TTabSheet;
     tab_principal: TPageControl;
     PageControl10: TPageControl;
     PageControl11: TPageControl;
@@ -1026,15 +1473,9 @@ type
     pnGrupo2Bolas104: TPanel;
     pnGrupo2Bolas105: TPanel;
     pnGrupo2Bolas106: TPanel;
-    pnGrupo2Bolas107: TPanel;
-    pnGrupo2Bolas108: TPanel;
-    pnGrupo2Bolas109: TPanel;
     pnGrupo2Bolas11: TPanel;
-    pnGrupo2Bolas110: TPanel;
     pnGrupo2Bolas111: TPanel;
     pnGrupo2Bolas112: TPanel;
-    pnGrupo2Bolas113: TPanel;
-    pnGrupo2Bolas114: TPanel;
     pnGrupo2Bolas115: TPanel;
     pnGrupo2Bolas116: TPanel;
     pnGrupo2Bolas12 : TPanel;
@@ -1107,10 +1548,6 @@ type
     pnGrupo2Bolas90: TPanel;
     pnGrupo2Bolas91: TPanel;
     pnGrupo2Bolas92: TPanel;
-    pnGrupo2Bolas93: TPanel;
-    pnGrupo2Bolas94: TPanel;
-    pnGrupo2Bolas95: TPanel;
-    pnGrupo2Bolas96: TPanel;
     pnGrupo2Bolas97: TPanel;
     pnGrupo2Bolas98: TPanel;
     pnGrupo2Bolas99: TPanel;
@@ -1221,30 +1658,22 @@ type
     sgr_b11_a_b12_por_concurso: TStringGrid;
     sgr_b6_a_b7_por_concurso: TStringGrid;
     sgr_b11_a_b13_por_concurso1: TStringGrid;
-    sgr_b6_a_b9_por_concurso: TStringGrid;
-    sgr_b6_a_b10_por_concurso: TStringGrid;
     sgr_b6_a_b6: TStringGrid;
     sgr_b6_a_b7: TStringGrid;
     sgr_b6_a_b8: TStringGrid;
-    sgr_b6_a_b9: TStringGrid;
-    sgr_b6_a_b10: TStringGrid;
     sgr_b12_a_b12_por_concurso: TStringGrid;
     sgr_b11_a_b13_por_concurso: TStringGrid;
-    sgr_b12_a_b12_por_concurso1: TStringGrid;
-    sgr_b12_a_b13_por_concurso2: TStringGrid;
-    sgr_b12_a_b13_por_concurso3: TStringGrid;
-    sgr_b12_a_b14_por_concurso1: TStringGrid;
-    sgr_b12_a_b15_por_concurso1: TStringGrid;
-    sgr_b12_a_b16: TStringGrid;
-    sgr_b12_a_b17: TStringGrid;
-    sgr_b12_a_b18: TStringGrid;
-    sgr_b12_a_b19: TStringGrid;
-    sgr_b13_a_b13_por_concurso1: TStringGrid;
-    sgr_b13_a_b15_por_concurso1: TStringGrid;
-    sgr_b13_a_b16: TStringGrid;
-    sgr_b13_a_b17: TStringGrid;
-    sgr_b13_a_b18: TStringGrid;
-    sgr_b14_a_b14_por_concurso1: TStringGrid;
+    sgr_b7_a_b7_por_concurso: TStringGrid;
+    sgr_b7_a_b8_por_concurso: TStringGrid;
+    sgr_b7_a_b9_por_concurso: TStringGrid;
+    sgr_b7_a_b10_por_concurso: TStringGrid;
+    sgr_b7_a_b7: TStringGrid;
+    sgr_b7_a_b8: TStringGrid;
+    sgr_b7_a_b9: TStringGrid;
+    sgr_b7_a_b10: TStringGrid;
+    sgr_b8_a_b8_por_concurso: TStringGrid;
+    sgr_b8_a_b8: TStringGrid;
+    sgr_b9_a_b9_por_concurso: TStringGrid;
     sgr_b14_a_b15_por_concurso: TStringGrid;
     sgr_b14_a_b15: TStringGrid;
     sgr_b13_a_b13_por_concurso: TStringGrid;
@@ -1268,13 +1697,11 @@ type
     sgr_b13_a_b13: TStringGrid;
     sgr_b13_a_b14: TStringGrid;
     sgr_b13_a_b15: TStringGrid;
-    sgr_b14_a_b15_por_concurso1: TStringGrid;
-    sgr_b14_a_b16: TStringGrid;
-    sgr_b14_a_b17: TStringGrid;
+    sgr_b9_a_b9: TStringGrid;
     sgr_b15_a_b15_por_concurso: TStringGrid;
     sgr_b15_a_b15: TStringGrid;
-    sgr_b15_a_b15_por_concurso1: TStringGrid;
-    sgr_b15_a_b16: TStringGrid;
+    sgr_b10_a_b10_por_concurso: TStringGrid;
+    sgr_b10_a_b10: TStringGrid;
     sheetFiltro: TTabSheet;
     sgrFiltros: TStringGrid;
     sgrVerificarAcertos: TStringGrid;
@@ -1704,6 +2131,7 @@ type
     function Obter_Lotofacil_Resultado: boolean;
     procedure parImparConsolidadoConcursoInicialFinalAlterou;
     procedure PrimoNaoPrimoConsolidadoConcursoInicialFinalAlterou;
+    function Selecionar_Controles_b1_a_b15: boolean;
     procedure Soma_Frequencia_Status(status : string);
     procedure Soma_Frequencia_Status_Concluido(status : string);
     procedure Soma_Frequencia_Status_Erro(status_erro : string);
@@ -1716,6 +2144,8 @@ type
     { public declarations }
 
   private
+    f_lista_de_controles_b1_a_b15 : TLista_Controle_B1_a_B5;
+
     { private declarations }
     { Este arranjo é utiliza na guia Concurso para poder utilizar nos controles
       que começa com tg1 a tg25
@@ -1760,8 +2190,8 @@ uses
   ulotofacil_algarismo_nas_dezenas,
   uLotofacilSomaFrequencia,
   ulotofacil_bolas_na_mesma_coluna,
-  ulotofacil_b1_a_b15,
-  fgl;
+  ulotofacil_b1_a_b15
+  ;
 
 var
   dmLotofacil: TdmLotofacil;
@@ -1887,73 +2317,21 @@ begin
 end;
 
 procedure TForm1.Carregar_controle_b1_a_b15;
-type
-  Tlista_controle_b1_a_b15 = specialize TFPGObjectList<TStringGrid>;
 var
-  lista_de_controles_b1_a_b15: Tlista_controle_b1_a_b15;
+  //f_lista_de_controles_b1_a_b15: Tlista_controle_b1_a_b15;
   controle_atual: TStringGrid;
   uA: Integer;
 begin
 
-  lista_de_controles_b1_a_b15 := Tlista_controle_b1_a_b15.Create(False);
-  lista_de_controles_b1_a_b15.Clear;
+  if Selecionar_Controles_b1_a_b15 = false then begin
+    Exit;
+  end;
 
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b1);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b2);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b3);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b4);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b5);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b2);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b3);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b4);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b5);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b6);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b3);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b4);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b5);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b6);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b7);
-
-
-
-
-
-
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b6);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b7);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b8);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b9);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b10);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b11);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b12);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b13);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b12);
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b13);
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b13_a_b13);
-  lista_de_controles_b1_a_b15.Add(sgr_b13_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b13_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b14_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b14_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b15_a_b15);
-
-  for uA := 0 to Pred(lista_de_controles_b1_a_b15.Count) do begin
-    controle_atual := lista_de_controles_b1_a_b15.Items[uA];
+  for uA := 0 to Pred(f_lista_de_controles_b1_a_b15.Count) do begin
+    controle_atual := f_lista_de_controles_b1_a_b15.Items[uA];
     ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(controle_atual);
   end;
 
-  lista_de_controles_b1_a_b15.FreeObjects:=false;
-  lista_de_controles_b1_a_b15.Free;
 end;
 
 procedure TForm1.Carregar_controle_bolas_na_mesma_coluna;
@@ -8350,65 +8728,123 @@ begin
 
 end;
 
+{
+ Esta função retorna true, se foi adicionado algum controle.
+ Esta função foi criada com o objetivo de selecionar quais
+ controles queremos popular dados da tabela.
+}
+function TForm1.Selecionar_Controles_b1_a_b15: boolean;
+begin
+  // Se controle já está instanciado, retornar true.
+  if Assigned(f_lista_de_controles_b1_a_b15) then begin
+    Exit(True);
+  end;
+
+  try
+    f_lista_de_controles_b1_a_b15 := TLista_Controle_B1_a_B5.Create;
+    f_lista_de_controles_b1_a_b15.Clear;
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b1_a_b1);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b1_a_b2);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b1_a_b3);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b1_a_b4);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b1_a_b5);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b2_a_b2);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b2_a_b3);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b2_a_b4);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b2_a_b5);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b2_a_b6);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b3_a_b3);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b3_a_b4);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b3_a_b5);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b3_a_b6);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b3_a_b7);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b4_a_b4);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b4_a_b5);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b4_a_b6);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b4_a_b7);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b4_a_b8);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b5_a_b5);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b5_a_b6);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b5_a_b7);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b5_a_b8);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b5_a_b9);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b5_a_b10);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b6_a_b6);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b6_a_b7);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b6_a_b8);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b6_a_b9);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b6_a_b10);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b7_a_b7);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b7_a_b8);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b7_a_b9);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b7_a_b10);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b7_a_b11);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b8_a_b8);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b8_a_b9);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b8_a_b10);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b8_a_b11);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b8_a_b12);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b9_a_b9);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b9_a_b10);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b9_a_b11);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b9_a_b12);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b9_a_b13);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b11_a_b11);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b11_a_b12);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b11_a_b13);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b11_a_b14);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b11_a_b15);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b12_a_b12);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b12_a_b13);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b12_a_b14);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b12_a_b15);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b13_a_b13);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b13_a_b14);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b13_a_b15);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b14_a_b14);
+    f_lista_de_controles_b1_a_b15.Add(sgr_b14_a_b15);
+
+    f_lista_de_controles_b1_a_b15.Add(sgr_b15_a_b15);
+
+  except
+    if Assigned(f_lista_de_controles_b1_a_b15) then begin
+      FreeAndNil(f_lista_de_controles_b1_a_b15);
+      Exit(False);
+    end;
+  end;
+
+
+
+  Exit(True);
+end;
+
 function TForm1.gerar_sql_b1_a_b15: string;
-Type
-  TLista_Controle_B1_a_B5 = specialize TFPGList<TStringGrid>;
 var
-  lista_de_controles_b1_a_b15 : TLista_Controle_B1_a_B5;
+  //f_lista_de_controles_b1_a_b15 : TLista_Controle_B1_a_B5;
   uA, indice_ultima_coluna, indice_ultima_linha, coluna_inicial,
     coluna_final, linha_atual: Integer;
   controle_atual: TStringGrid;
   lista_sql_controle_atual, lista_sql: TStringList;
   sufixo_nome: String;
 begin
-  lista_de_controles_b1_a_b15 := TLista_Controle_B1_a_B5.Create;
-  lista_de_controles_b1_a_b15.Clear;
 
   // Aqui, vc seleciona quais controles vc deseja que apareça no select.
-
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b1);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b2);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b3);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b4);
-  lista_de_controles_b1_a_b15.Add(sgr_b1_a_b5);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b2);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b3);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b4);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b5);
-  lista_de_controles_b1_a_b15.Add(sgr_b2_a_b6);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b3);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b4);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b5);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b6);
-  lista_de_controles_b1_a_b15.Add(sgr_b3_a_b7);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b6);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b7);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b8);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b9);
-  lista_de_controles_b1_a_b15.Add(sgr_b6_a_b10);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b11);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b12);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b13);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b11_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b12);
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b13);
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b12_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b13_a_b13);
-  lista_de_controles_b1_a_b15.Add(sgr_b13_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b13_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b14_a_b14);
-  lista_de_controles_b1_a_b15.Add(sgr_b14_a_b15);
-
-  lista_de_controles_b1_a_b15.Add(sgr_b15_a_b15);
+  if Selecionar_Controles_b1_a_b15 = false then begin
+    Exit('');
+  end;
 
   lista_sql := TStringList.Create;
   lista_sql.Clear;
@@ -8416,9 +8852,9 @@ begin
   lista_sql_controle_atual := TStringList.Create;
   lista_sql_controle_atual.Clear;
 
-  for uA := 0 to Pred(lista_de_controles_b1_a_b15.Count) do
+  for uA := 0 to Pred(f_lista_de_controles_b1_a_b15.Count) do
   begin
-    controle_atual := lista_de_controles_b1_a_b15.Items[uA];
+    controle_atual := f_lista_de_controles_b1_a_b15.Items[uA];
     if controle_atual.rowCount <= 0 then begin
       continue;
     end;

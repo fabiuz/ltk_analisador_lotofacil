@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="10"/>
-    <BuildModes Count="2" Active="Debug">
+    <BuildModes Count="2" Active="Release">
       <Item1 Name="Debug">
         <CompilerOptions>
           <Version Value="11"/>
@@ -109,10 +109,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uLotofacilMain"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="8362"/>
-        <CursorPos X="44" Y="8387"/>
-        <FoldState Value=" TMiwT0f1C"/>
+        <TopLine Value="8793"/>
+        <CursorPos X="51" Y="8800"/>
+        <FoldState Value=" TMi.K0f1r"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -126,6 +127,7 @@
         <UnitName Value="uLotofacilModulo"/>
         <EditorIndex Value="8"/>
         <CursorPos X="27" Y="6"/>
+        <ComponentState Value="1"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -217,8 +219,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilNovosRepetidos"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="2605"/>
-        <CursorPos X="27" Y="2613"/>
+        <TopLine Value="2107"/>
+        <CursorPos X="44" Y="2120"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit11>
@@ -237,6 +239,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ulotofacilExternoInterno"/>
         <EditorIndex Value="4"/>
+        <TopLine Value="142"/>
         <CursorPos X="39" Y="163"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -305,7 +308,6 @@
       <Unit21>
         <Filename Value="README.md"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
         <TopLine Value="2"/>
         <CursorPos Y="23"/>
@@ -319,7 +321,7 @@
         <EditorIndex Value="7"/>
         <TopLine Value="25"/>
         <CursorPos Y="42"/>
-        <UsageCount Value="145"/>
+        <UsageCount Value="160"/>
         <Loaded Value="True"/>
       </Unit22>
       <Unit23>
@@ -328,7 +330,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="174"/>
         <CursorPos Y="187"/>
-        <UsageCount Value="48"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit23>
       <Unit24>
@@ -337,14 +339,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="24"/>
         <CursorPos X="35" Y="35"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="23"/>
       </Unit24>
       <Unit25>
         <Filename Value="/usr/share/fpcsrc/rtl/objpas/classes/classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1656"/>
         <CursorPos X="23" Y="1664"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="25"/>
       </Unit25>
       <Unit26>
         <Filename Value="/usr/lib64/lazarus/lcl/grids.pas"/>
@@ -352,7 +354,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="12234"/>
         <CursorPos Y="12247"/>
-        <UsageCount Value="99"/>
+        <UsageCount Value="97"/>
       </Unit26>
       <Unit27>
         <Filename Value="/usr/lib64/lazarus/lcl/include/application.inc"/>
@@ -367,138 +369,138 @@
         <UnitName Value="RegExpr"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="268"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
       </Unit28>
       <Unit29>
         <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/sysutils/syshelph.inc"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="5"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="6"/>
       </Unit29>
     </Units>
     <OtherDefines Count="1">
       <Define0 Value="UseCThreads"/>
     </OtherDefines>
-    <JumpHistory Count="30" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1828" Column="38" TopLine="1828"/>
+        <Caret Line="8719" Column="38" TopLine="8710"/>
       </Position1>
       <Position2>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1827" Column="38" TopLine="1827"/>
+        <Caret Line="8720" Column="38" TopLine="8711"/>
       </Position2>
       <Position3>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1826" Column="38" TopLine="1826"/>
+        <Caret Line="8730" Column="38" TopLine="8721"/>
       </Position3>
       <Position4>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1825" Column="38" TopLine="1825"/>
+        <Caret Line="8740" Column="38" TopLine="8731"/>
       </Position4>
       <Position5>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1824" Column="38" TopLine="1824"/>
+        <Caret Line="8750" Column="38" TopLine="8741"/>
       </Position5>
       <Position6>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1823" Column="38" TopLine="1823"/>
+        <Caret Line="8760" Column="38" TopLine="8751"/>
       </Position6>
       <Position7>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1822" Column="38" TopLine="1822"/>
+        <Caret Line="8770" Column="38" TopLine="8761"/>
       </Position7>
       <Position8>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1821" Column="38" TopLine="1821"/>
+        <Caret Line="8780" Column="38" TopLine="8771"/>
       </Position8>
       <Position9>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1820" Column="38" TopLine="1820"/>
+        <Caret Line="8745" Column="51" TopLine="8738"/>
       </Position9>
       <Position10>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1819" Column="38" TopLine="1819"/>
+        <Caret Line="8746" Column="51" TopLine="8739"/>
       </Position10>
       <Position11>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1818" Column="38" TopLine="1818"/>
+        <Caret Line="8747" Column="51" TopLine="8740"/>
       </Position11>
       <Position12>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1817" Column="38" TopLine="1817"/>
+        <Caret Line="8748" Column="51" TopLine="8741"/>
       </Position12>
       <Position13>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1816" Column="38" TopLine="1816"/>
+        <Caret Line="8749" Column="51" TopLine="8742"/>
       </Position13>
       <Position14>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1923" Column="3" TopLine="1930"/>
+        <Caret Line="8750" Column="51" TopLine="8743"/>
       </Position14>
       <Position15>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1922" Column="3" TopLine="1922"/>
+        <Caret Line="8760" Column="51" TopLine="8753"/>
       </Position15>
       <Position16>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1921" Column="3" TopLine="1921"/>
+        <Caret Line="8770" Column="51" TopLine="8763"/>
       </Position16>
       <Position17>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1920" Column="3" TopLine="1920"/>
+        <Caret Line="8780" Column="51" TopLine="8773"/>
       </Position17>
       <Position18>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1919" Column="3" TopLine="1919"/>
+        <Caret Line="8790" Column="51" TopLine="8783"/>
       </Position18>
       <Position19>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1918" Column="3" TopLine="1918"/>
+        <Caret Line="8800" Column="51" TopLine="8793"/>
       </Position19>
       <Position20>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1917" Column="3" TopLine="1917"/>
+        <Caret Line="8810" Column="51" TopLine="8803"/>
       </Position20>
       <Position21>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1916" Column="3" TopLine="1916"/>
+        <Caret Line="8809" Column="51" TopLine="8802"/>
       </Position21>
       <Position22>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1915" Column="3" TopLine="1915"/>
+        <Caret Line="8808" Column="51" TopLine="8801"/>
       </Position22>
       <Position23>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1914" Column="3" TopLine="1914"/>
+        <Caret Line="8807" Column="51" TopLine="8800"/>
       </Position23>
       <Position24>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1913" Column="3" TopLine="1913"/>
+        <Caret Line="8806" Column="51" TopLine="8799"/>
       </Position24>
       <Position25>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1912" Column="3" TopLine="1912"/>
+        <Caret Line="8805" Column="51" TopLine="8798"/>
       </Position25>
       <Position26>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1906" Column="49" TopLine="1899"/>
+        <Caret Line="8804" Column="51" TopLine="8797"/>
       </Position26>
       <Position27>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="6327" Column="3" TopLine="6328"/>
+        <Caret Line="8803" Column="51" TopLine="8796"/>
       </Position27>
       <Position28>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="1688" Column="14" TopLine="1679"/>
+        <Caret Line="8802" Column="51" TopLine="8795"/>
       </Position28>
       <Position29>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="8367" Column="74" TopLine="8374"/>
+        <Caret Line="8801" Column="51" TopLine="8794"/>
       </Position29>
       <Position30>
         <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4146" Column="17" TopLine="4142"/>
+        <Caret Line="8800" Column="51" TopLine="8793"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
@@ -516,14 +518,14 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="9677"/>
+        <Line Value="10113"/>
       </Item2>
       <Item3>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="9718"/>
+        <Line Value="10154"/>
       </Item3>
       <Item4>
         <Kind Value="bpkSource"/>
@@ -537,14 +539,14 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="5207"/>
+        <Line Value="5585"/>
       </Item5>
       <Item6>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="3901"/>
+        <Line Value="4279"/>
       </Item6>
       <Item7>
         <Kind Value="bpkSource"/>
@@ -670,14 +672,14 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="6342"/>
+        <Line Value="6720"/>
       </Item24>
       <Item25>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="8460"/>
+        <Line Value="8896"/>
       </Item25>
       <Item26>
         <Kind Value="bpkSource"/>
