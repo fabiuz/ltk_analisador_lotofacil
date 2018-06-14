@@ -368,6 +368,7 @@ type
     btnGrupo2BolasDesmarcarTodos238: TButton;
     btnGrupo2BolasDesmarcarTodos239: TButton;
     btnGrupo2BolasDesmarcarTodos240: TButton;
+    btnGrupo2BolasDesmarcarTodos241: TButton;
     btnGrupo2BolasDesmarcarTodos31 : TButton;
     btnGrupo2BolasDesmarcarTodos32 : TButton;
     btnGrupo2BolasDesmarcarTodos33 : TButton;
@@ -583,6 +584,7 @@ type
     btnGrupo2BolasMarcarTodos238: TButton;
     btnGrupo2BolasMarcarTodos239: TButton;
     btnGrupo2BolasMarcarTodos240: TButton;
+    btnGrupo2BolasMarcarTodos241: TButton;
     btnGrupo2BolasMarcarTodos31 : TButton;
     btnGrupo2BolasMarcarTodos32 : TButton;
     btnGrupo2BolasMarcarTodos33 : TButton;
@@ -726,6 +728,8 @@ type
     chkExibirCampos: TCheckListBox;
     chkExibirCampos1: TCheckListBox;
     cmbNovosRepetidosConsolidadoConcursoFinal: TComboBox;
+    cmbParImparConsolidadoConcursoFinal1: TComboBox;
+    cmbParImparConsolidadoConcursoInicial1: TComboBox;
     cmbSomaFrequenciaConcursoFinal : TComboBox;
     cmbSomaFrequenciaConcursoInicial : TComboBox;
     cmbParImparConsolidadoConcursoFinal: TComboBox;
@@ -807,6 +811,8 @@ type
     GroupBox43 : TGroupBox;
     GroupBox44 : TGroupBox;
     GroupBox45 : TGroupBox;
+    GroupBox46: TGroupBox;
+    GroupBox47: TGroupBox;
     GroupBox7: TGroupBox;
     GroupBox8: TGroupBox;
     grpBolasB1_15Bolas: TGroupBox;
@@ -814,6 +820,8 @@ type
     grpBolasB1_B2_B3_15Bolas: TGroupBox;
     grpBolasB1_B2_15Bolas: TGroupBox;
     grpBolasB1_B2_B3_B4_15Bolas1: TGroupBox;
+    grpFrequenciaDeixouDeSair7: TGroupBox;
+    grpParImparConsolidado1: TGroupBox;
     grp_b10_a_b11_por_concurso: TGroupBox;
     grp_b10_a_b12_por_concurso: TGroupBox;
     grp_b10_a_b13_por_concurso: TGroupBox;
@@ -1237,10 +1245,12 @@ type
     pnGrupo2Bolas244: TPanel;
     pnGrupo2Bolas245: TPanel;
     pnGrupo2Bolas246: TPanel;
+    pnGrupo2Bolas247: TPanel;
     pnGrupo2Bolas93: TPanel;
     pnGrupo2Bolas94: TPanel;
     pnGrupo2Bolas95: TPanel;
     pnGrupo2Bolas96: TPanel;
+    sgrParImparConsolidado1: TStringGrid;
     sgr_b10_a_b11_por_concurso: TStringGrid;
     sgr_b10_a_b12_por_concurso: TStringGrid;
     sgr_b10_a_b13_por_concurso: TStringGrid;
