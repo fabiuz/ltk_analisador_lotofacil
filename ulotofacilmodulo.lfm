@@ -1,7 +1,7 @@
 object dmLotofacil: TdmLotofacil
   OldCreateOrder = False
   Height = 613
-  HorizontalOffset = 272
+  HorizontalOffset = 489
   VerticalOffset = 219
   Width = 839
   PPI = 96
