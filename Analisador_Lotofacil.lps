@@ -109,9 +109,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uLotofacilMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="10436"/>
+        <TopLine Value="10419"/>
         <CursorPos X="3" Y="10419"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
@@ -216,7 +215,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilNovosRepetidos"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="66"/>
+        <TopLine Value="69"/>
         <CursorPos X="7" Y="42"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -236,7 +235,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ulotofacilExternoInterno"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="149"/>
+        <TopLine Value="95"/>
         <CursorPos X="39" Y="163"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -298,7 +297,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilSomaFrequencia"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="181"/>
+        <TopLine Value="348"/>
         <CursorPos X="32" Y="363"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -322,9 +321,10 @@
       <Unit23>
         <Filename Value="ulotofacil_b1_a_b15.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="585"/>
-        <CursorPos Y="594"/>
+        <TopLine Value="844"/>
+        <CursorPos X="2" Y="847"/>
         <UsageCount Value="209"/>
         <Loaded Value="True"/>
       </Unit23>

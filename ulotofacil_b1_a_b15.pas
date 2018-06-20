@@ -676,10 +676,6 @@ end;
  os campos 'b1_a_b1_id' e 'b1_a_b2_id', então, quando o usuário seleciona alguma combinação
  do controle 'sgr_b1_a_b1', ele está na realidade selecionando um id do campo
  'b1_a_b1_id', então, pra atualizar o controle 'sgr_b1_a_b2' que
-
-
-
-
 }
 procedure Carregar_controle_bx_a_by_sem_qt_zero(objControle: TStringGrid; str_where: string);
 var
@@ -848,7 +844,8 @@ order by qt_vezes desc;
 
 end;
 
-
+{
+ }
 procedure Carregar_controle_b1_a_b15_por_intervalo_concurso(objControle: TStringGrid; concurso_inicial, concurso_final: integer);
 var
   nome_sufixo, nome_dos_campos_b, nome_dos_campos_b_asc, nome_campo_id: string;
