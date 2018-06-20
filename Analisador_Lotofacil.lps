@@ -111,8 +111,8 @@
         <UnitName Value="uLotofacilMain"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="3419"/>
-        <CursorPos X="17" Y="3423"/>
+        <TopLine Value="10436"/>
+        <CursorPos X="3" Y="10419"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -197,8 +197,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacil_Gerador_id"/>
         <EditorIndex Value="20"/>
-        <TopLine Value="709"/>
-        <CursorPos X="51" Y="728"/>
+        <TopLine Value="713"/>
+        <CursorPos X="41" Y="717"/>
         <UsageCount Value="204"/>
         <Loaded Value="True"/>
       </Unit9>
@@ -206,7 +206,7 @@
         <Filename Value="ulotofacil_bolas_arquivo.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="16"/>
-        <TopLine Value="27"/>
+        <TopLine Value="31"/>
         <CursorPos X="5" Y="47"/>
         <UsageCount Value="241"/>
         <Loaded Value="True"/>
@@ -216,7 +216,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilNovosRepetidos"/>
         <EditorIndex Value="9"/>
-        <TopLine Value="67"/>
+        <TopLine Value="66"/>
         <CursorPos X="7" Y="42"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -246,7 +246,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilPrimoNaoPrimo"/>
         <EditorIndex Value="11"/>
-        <TopLine Value="2"/>
+        <TopLine Value="5"/>
         <CursorPos X="4" Y="21"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
@@ -265,7 +265,7 @@
         <Filename Value="ulotofacil_diferenca_entre_bolas.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="18"/>
-        <TopLine Value="83"/>
+        <TopLine Value="87"/>
         <CursorPos Y="103"/>
         <UsageCount Value="213"/>
         <Loaded Value="True"/>
@@ -288,7 +288,7 @@
         <Filename Value="ulotofacil_algarismo_nas_dezenas.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="15"/>
-        <TopLine Value="8"/>
+        <TopLine Value="12"/>
         <CursorPos X="7" Y="28"/>
         <UsageCount Value="224"/>
         <Loaded Value="True"/>
@@ -298,8 +298,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilSomaFrequencia"/>
         <EditorIndex Value="13"/>
-        <TopLine Value="409"/>
-        <CursorPos X="40" Y="409"/>
+        <TopLine Value="181"/>
+        <CursorPos X="32" Y="363"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit20>
@@ -315,7 +315,6 @@
         <Filename Value="ulotofacil_bolas_na_mesma_coluna.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="9"/>
         <CursorPos X="29" Y="12"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
@@ -330,35 +329,35 @@
         <Loaded Value="True"/>
       </Unit23>
       <Unit24>
-        <Filename Value="/usr/share/fpcsrc/rtl/objpas/classes/classesh.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1656"/>
-        <CursorPos X="23" Y="1664"/>
-        <UsageCount Value="1"/>
-      </Unit24>
-      <Unit25>
-        <Filename Value="/usr/lib64/lazarus/lcl/grids.pas"/>
-        <UnitName Value="Grids"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="12234"/>
-        <CursorPos Y="12247"/>
-        <UsageCount Value="73"/>
-      </Unit25>
-      <Unit26>
-        <Filename Value="/usr/lib64/lazarus/lcl/include/application.inc"/>
-        <EditorIndex Value="14"/>
-        <TopLine Value="1265"/>
-        <CursorPos Y="1276"/>
-        <UsageCount Value="102"/>
-        <Loaded Value="True"/>
-      </Unit26>
-      <Unit27>
         <Filename Value="ulotofacil_concursos.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="7"/>
         <TopLine Value="47"/>
         <CursorPos Y="58"/>
         <UsageCount Value="110"/>
+        <Loaded Value="True"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="/usr/share/fpcsrc/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1656"/>
+        <CursorPos X="23" Y="1664"/>
+        <UsageCount Value="1"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="/usr/lib64/lazarus/lcl/grids.pas"/>
+        <UnitName Value="Grids"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="12234"/>
+        <CursorPos Y="12247"/>
+        <UsageCount Value="73"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="/usr/lib64/lazarus/lcl/include/application.inc"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="1265"/>
+        <CursorPos Y="1276"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
       </Unit27>
       <Unit28>
@@ -375,39 +374,39 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2511" TopLine="2501"/>
+        <Caret Line="2535" TopLine="2525"/>
       </Position1>
       <Position2>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2534" TopLine="2525"/>
+        <Caret Line="2536" TopLine="2525"/>
       </Position2>
       <Position3>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2535" TopLine="2525"/>
+        <Caret Line="2537" TopLine="2525"/>
       </Position3>
       <Position4>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2536" TopLine="2525"/>
+        <Caret Line="2539" TopLine="2525"/>
       </Position4>
       <Position5>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2537" TopLine="2525"/>
+        <Caret Line="2540" TopLine="2525"/>
       </Position5>
       <Position6>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2539" TopLine="2525"/>
+        <Caret Line="2541" TopLine="2525"/>
       </Position6>
       <Position7>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2540" TopLine="2525"/>
+        <Caret Line="2543" TopLine="2527"/>
       </Position7>
       <Position8>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2541" TopLine="2525"/>
+        <Caret Line="2544" TopLine="2528"/>
       </Position8>
       <Position9>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2543" TopLine="2527"/>
+        <Caret Line="2543" TopLine="2528"/>
       </Position9>
       <Position10>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
@@ -419,79 +418,79 @@
       </Position11>
       <Position12>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2544" TopLine="2528"/>
+        <Caret Line="2546" TopLine="2530"/>
       </Position12>
       <Position13>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2543" TopLine="2528"/>
+        <Caret Line="2549" TopLine="2540"/>
       </Position13>
       <Position14>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2546" TopLine="2530"/>
+        <Caret Line="2550" TopLine="2540"/>
       </Position14>
       <Position15>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2549" TopLine="2540"/>
+        <Caret Line="2579" TopLine="2570"/>
       </Position15>
       <Position16>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2550" TopLine="2540"/>
+        <Caret Line="2580" TopLine="2570"/>
       </Position16>
       <Position17>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2579" TopLine="2570"/>
+        <Caret Line="2540" Column="68" TopLine="2528"/>
       </Position17>
       <Position18>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2580" TopLine="2570"/>
+        <Caret Line="2196" TopLine="2187"/>
       </Position18>
       <Position19>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2540" Column="68" TopLine="2528"/>
+        <Caret Line="2203" TopLine="2187"/>
       </Position19>
       <Position20>
-        <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2196" TopLine="2187"/>
+        <Filename Value="Analisador_Lotofacil.lpr"/>
+        <Caret Line="9" Column="24" TopLine="2"/>
       </Position20>
       <Position21>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2203" TopLine="2187"/>
+        <Caret Line="2196" TopLine="2187"/>
       </Position21>
       <Position22>
-        <Filename Value="Analisador_Lotofacil.lpr"/>
-        <Caret Line="9" Column="24" TopLine="2"/>
+        <Filename Value="ulotofacilnovosrepetidos.pas"/>
+        <Caret Line="2203" TopLine="2187"/>
       </Position22>
       <Position23>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2196" TopLine="2187"/>
+        <Caret Line="2483" TopLine="2474"/>
       </Position23>
       <Position24>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2203" TopLine="2187"/>
+        <Caret Line="2196" TopLine="2187"/>
       </Position24>
       <Position25>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2483" TopLine="2474"/>
+        <Caret Line="2203" TopLine="2195"/>
       </Position25>
       <Position26>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2196" TopLine="2187"/>
+        <Caret Line="66" Column="17" TopLine="60"/>
       </Position26>
       <Position27>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2203" TopLine="2195"/>
+        <Caret Line="2848" Column="3" TopLine="2845"/>
       </Position27>
       <Position28>
-        <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2617" Column="10" TopLine="2660"/>
+        <Filename Value="ulotofacilmain.pas"/>
+        <Caret Line="3423" Column="17" TopLine="3419"/>
       </Position28>
       <Position29>
-        <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="66" Column="17" TopLine="60"/>
+        <Filename Value="ulotofacilmain.pas"/>
+        <Caret Line="9292" Column="3" TopLine="9290"/>
       </Position29>
       <Position30>
-        <Filename Value="ulotofacilnovosrepetidos.pas"/>
-        <Caret Line="2848" Column="3" TopLine="2845"/>
+        <Filename Value="ulotofacilmain.pas"/>
+        <Caret Line="3061" Column="15" TopLine="3055"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
