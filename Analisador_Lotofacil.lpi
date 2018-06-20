@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="24">
+    <Units Count="25">
       <Unit0>
         <Filename Value="Analisador_Lotofacil.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -164,6 +164,10 @@
         <Filename Value="ulotofacil_b1_a_b15.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit23>
+      <Unit24>
+        <Filename Value="ulotofacil_concursos.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit24>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

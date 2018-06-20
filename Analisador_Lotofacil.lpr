@@ -16,7 +16,7 @@ uses
   ulotofacilExternoInterno, uLotofacilPrimoNaoPrimo, uLotofacil_Colunas_B,
   ulotofacil_diferenca_entre_bolas, ulotofacil_grupos, ulotofacil_funcoes_uteis,
   ulotofacil_algarismo_nas_dezenas, uLotofacilSomaFrequencia,
-  ulotofacil_bolas_na_mesma_coluna, ulotofacil_b1_a_b15;
+  ulotofacil_bolas_na_mesma_coluna, ulotofacil_b1_a_b15, ulotofacil_concursos;
 
 {$R *.res}
 

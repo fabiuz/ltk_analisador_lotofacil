@@ -1,7 +1,9 @@
 #Analisador Lotofacil
+======================
 ##Autor: *Fábio Moura de Oliveira*
 
-** Aumente suas chances de acertar no jogo da lotofacil **
+Aumente suas chances de acertar no jogo da lotofacil
+
 
 Este programa realiza as seguintes análises estatísticas:
 * par x ímpar
@@ -14,6 +16,7 @@ Este programa realiza as seguintes análises estatísticas:
 * algarismo do número da bola na casa das dezenas
 * diferenca entre bolas na mesma combinacao
 * frequencia: ainda não saiu, deixou de sair, novo e repetindo
+* grupo de 1 até 15 bolas, começando a partir de uma coluna específica.
 
 Gere filtros baseados nas estatísticas escolhidas.
 

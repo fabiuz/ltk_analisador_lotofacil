@@ -2487,13 +2487,14 @@ begin
             str_sql_a_inserir := ',';
          end;
 
+         writeln('Antes de atribuir str_sql_a_inserir.');
          str_sql_a_inserir := str_sql_a_inserir + '(';
          str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.ltf_id) + ',';
          str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.ltf_qt) + ',';
          str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.novos_repetidos_id) + ',';
          str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.novos_repetidos_id_alternado) + ',';
          str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.cmp_b_id) + ', ';
-
+         writeln('Apos de atribuir str_sql_a_inserir.');
          for uB := 1 to 15 do begin
              str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.bolas[uB]) + ',';
          end;
@@ -2503,44 +2504,72 @@ begin
 
          tamanho_do_string := str_sql_a_inserir.Length;
 
+
+         Writeln('Antes do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+         Writeln('Tamanho do string: ', tamanho_do_string);
+         Writeln('qt_max_de_bytes_ja_alocados: ', qt_max_de_bytes_ja_alocados);
          if tamanho_do_string > qt_max_de_bytes_ja_alocados then begin
             // Se já foi alocado memória, deslocar da memória.
+            Writeln('Dentro do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+            Writeln('Tamanho do string: ', tamanho_do_string);
+            Writeln('qt_max_de_bytes_ja_alocados', qt_max_de_bytes_ja_alocados);
+
             if qt_max_de_bytes_ja_alocados <> 0 then begin
+               Writeln('Antes de liberar: FreemMem');
+               Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
                FreeMem(buffer_texto);
+               Writeln('Após liberar');
+               Format('Após liberar: buffer_texto: %p', [Addr(buffer_texto)]);
+               buffer_texto := nil;
             end;
             Writeln('Expandindo memória de ', qt_max_de_bytes_ja_alocados, ' pra ', tamanho_do_string);
             qt_max_de_bytes_ja_alocados:= tamanho_do_string;
 
+            Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
             buffer_texto:= GetMem(qt_max_de_bytes_ja_alocados);
+            Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
          end;
 
          // Garantir que o string termino em nulo.
+         Writeln('Antes de buffer_texto^');
+         Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
          buffer_texto^ := #0;
+         Writeln('Antes de strlcat');
          strlcat(buffer_texto, PChar(str_sql_a_inserir), tamanho_do_string);
+         Writeln('Apos strlcat');
+         Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
 
+         Writeln('Antes de sql_memory');
          sql_memory.Write(buffer_texto^, tamanho_do_string);
          str_sql_a_inserir := '';
 
-         Writeln('ltf_id: ', pt_buffer^.ltf_id, 'tam_string: ',
+         Writeln('ltf_id: ', pt_buffer^.ltf_id, ', tam_string: ',
                           tamanho_do_string, ', qt_max_de_bytes_ja_alocados:', qt_max_de_bytes_ja_alocados);
 
-         Writeln('sql_memory.size: ', sql_memory.Size, 'TOTAL_DE_BYTES_MAXIMO: ', TOTAL_DE_BYTES_MAXIMO);
+         Writeln('sql_memory.size: ', sql_memory.Size, ', TOTAL_DE_BYTES_MAXIMO: ', TOTAL_DE_BYTES_MAXIMO);
 
          // A cada 250000 registros lidos, ou quando atingir mais de 500 mb
          Inc(qt_registros_lidos);
          if sql_memory.Size > TOTAL_DE_BYTES_MAXIMO then begin
+            Writeln('Entrou no if..');
             sql_query.SQL.Clear;
             sql_query.Sql.Add(str_sql_inicio);
             sql_query.Sql.Add(sql_memory.DataString);
             sql_query.ExecSQL;
+            Writeln('Executou sql_query.ExecSql');
 
             str_sql_a_inserir := '';
 
             // Deve-se mover pra a posição 0 e também definir o tamanho do fluxo pra 0.
             // Senão haverá erro ao tentar inserir pois, iremos inserir dados já inseridos
             // no banco de dados.
+            Writeln('Antes de sql_memory.Position=0');
             sql_memory.Position:=0;
+            Writeln('Apos de sql_memory.Position=0');
+
+            Writeln('Antes de sql_memory.Size = 0');
             sql_memory.Size := 0;
+            Writeln('Depois de sql_memory.Size = 0');
 
             fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) + ' de 6874010 [' +
              Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
@@ -2550,6 +2579,7 @@ begin
 
 
          // Aponta pra o próximo registro.
+         Writeln('Inc(pt_buffer);');
          Inc(pt_buffer);
 
          // Verifica se o usuário solicitou cancelamento.
@@ -2595,19 +2625,27 @@ begin
      sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_add_constraint()');
      sql_query.ExecSql;
 
+     Writeln('Executou... sql_query.Execsql na linha 2595');
+
      // Tudo ocorreu normalmente, então, confirmar transação.
      dmLotofacil.pgLTK.Transaction.Commit;
+
+     Writeln('Executou o commit');
      dmLotofacil.pgLTK.Close(true);
+
+     Writeln('Fechou o banco.');
      sql_query.Close;
+     Writeln('Fechou sql_query.');
 
      FreeAndNil(dmLotofacil);
+
+     Writeln('Desalocou sql_memory');
      FreeAndNil(sql_memory);
 
-    //fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) + ' de 6874010 [' +
-    //Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
-
+     Writeln('Antes de executar @doSTatus');
     Synchronize(@DoStatus);
     Synchronize(@DoStatusAtualizacao);
+    Writeln('Após executar @doStatus');
 
   except
         On Exc: EDatabaseError do
@@ -2632,7 +2670,11 @@ begin
   fStatus_Mensagem := 'Itens atualizado com sucesso!!!';
   Exibir_Mensagem_de_Termino;
 
+  Writeln('Antes de sair da procedure, antes de @doStatusConcluido');
   Synchronize(@DoStatusConcluido);
+  Writeln('Antes de sair da procedure, depois de @doStatusConcluido');
+
+
 
 end;
 
@@ -2796,7 +2838,8 @@ end;
 procedure TLotofacilNovosRepetidos.DoStatusAtualizacao;
 begin
   if Assigned(fStatus_Atualizacao) then begin
-     OnStatusAtualizacao(fltf_id, fltf_qt);
+     //OnStatusAtualizacao(fltf_id, fltf_qt);
+     ;
   end;
 end;
 
