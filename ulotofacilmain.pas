@@ -3095,7 +3095,7 @@ type
     procedure Carregar_controle_bx_a_by;
     procedure Carregar_controle_bolas_na_mesma_coluna;
     procedure Carregar_Controle_sgrFiltro(strWhere_Data_Hora: string);
-    procedure controle_b1_a_b15_atualizar_dependentes(objControle: TStringGrid);
+    procedure sgr_bx_a_by_atualizar_dependentes(objControle: TStringGrid);
     //procedure controle_cmb_intervalo_por_concurso_alterou(Sender: TObject);
     procedure Mapear_cmb_bx_a_by_concurso_inicial_final;
     procedure mapear_sgr_bx_a_by;
@@ -3207,7 +3207,7 @@ type
       ltf_qt: byte);
     procedure lotofacil_novos_repetidos_status_concluido(ltf_status: string);
     procedure lotofacil_novos_repetidos_status_erro(ltf_erro: string);
-    procedure Mapear_Controles_Dependentes;
+    procedure Mapear_sgr_bx_a_by_dependentes;
     procedure Mapear_sgr_intervalo_por_concurso_bx_a_by;
     procedure MarcarGrupo2Bolas;
     procedure NovosRepetidosConsolidadoConcursoInicialFinalAlterou;
@@ -3216,7 +3216,7 @@ type
     function Obter_Lotofacil_Resultado: boolean;
     procedure parImparConsolidadoConcursoInicialFinalAlterou;
     procedure PrimoNaoPrimoConsolidadoConcursoInicialFinalAlterou;
-    function Selecionar_controles_sgr_bx_a_by: boolean;
+    function Selecionar_sgr_bx_a_by: boolean;
     procedure Soma_Frequencia_Status(status : string);
     procedure Soma_Frequencia_Status_Concluido(status : string);
     procedure Soma_Frequencia_Status_Erro(status_erro : string);
@@ -3286,7 +3286,7 @@ type
 
     ltf_novos_repetidos: TLotofacilNovosRepetidos;
 
-    ltf_soma_frequencia: array of array of Integer;
+    //ltf_soma_frequencia: array of array of Integer;
 
   end;
 
@@ -3309,7 +3309,7 @@ uses
   uLotofacilSomaFrequencia,
   ulotofacil_bolas_na_mesma_coluna,
   ulotofacil_b1_a_b15,
-  Regex,
+  //Regex,
   ulotofacil_concursos
   ;
 
@@ -3465,9 +3465,9 @@ end;
 }
 procedure TForm1.mapear_sgr_bx_a_by;
 begin
-  Mapear_Controles_Dependentes;
+  Mapear_sgr_bx_a_by_dependentes;
 
-  if Not Assigned(f_sgr_bx_a_by_mapa) then begin
+  if not Assigned(f_sgr_bx_a_by_mapa) then begin
      f_sgr_bx_a_by_mapa := TMapa_Controle_B1_a_B15.Create;
   end;
 
@@ -3589,8 +3589,8 @@ end;
 {
  Seja, os controles 'cmb_intervalo_por_concurso_inicial_bx_a_by' e
  'cmb_intervalo_por_concurso_inicial_bx_a_by', do tipo 'TComboBox',
- tal que o 'x' e 'y' são números de 1 a 15, onde, o número em 'x' é menor que o
- número em 'y'.
+ tal que o 'x' e 'y' são números de 1 a 15, onde, o número em 'x' é menor que ou
+ igual ao número em 'y'.
  Toda vez que um dos controles tem o conteúdo alterado, devemos, atualizar o
  controle do tipo TStringGrid correspondente. Este controle do tipo TStringGrid
  terá o nome da forma 'sgr_intervalo_por_concurso_bx_a_by', onde x e y, terá o mesmo
@@ -3600,7 +3600,7 @@ end;
  obter informação do outro controle 'TComboBox' correspondente, pois um dos controles
  armazena o concurso inicial e o outro armazena o concurso final.
  De posse do número inicial e final do concurso, deve-se passar esta informação
- pra a  procedure 'Carregar_controle_b1_a_b15_por_intervalo_concurso' que está
+ pra a  procedure 'Carregar_sgr_bx_a_by_intervalo_concurso' que está
  no arquivo 'ulotofacil_b1_a_b15', além desta informação precisamos saber qual
  controle 'TStringGrid' devemos atualizar.
  Pra isto, iremos ter uma procedure que mapea cada controle 'TComboBox' inicial
@@ -4216,7 +4216,7 @@ end;
  * Em seguida, o primeiro controle filho é atualizado com dados conforme o id
  do controle pai que foi atualizado.
 }
-procedure TForm1.controle_b1_a_b15_atualizar_dependentes(objControle: TStringGrid);
+procedure TForm1.sgr_bx_a_by_atualizar_dependentes(objControle: TStringGrid);
 var
   nome_do_controle, nome_controle_filho, ids_selecionados_pai: string;
   indice, uA: Integer;
@@ -4273,7 +4273,8 @@ begin
   ids_selecionados_pai := Format('%s in (%s)', [nome_do_campo_pai, ids_selecionados_pai]);
 
   // Agora, atualizar o controle filho.
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15_novo(obj_controle_filho, ids_selecionados_pai);
+  //ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15_novo(obj_controle_filho, ids_selecionados_pai);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by_sem_ter_qt_zero(obj_controle_filho, ids_selecionados_pai);
 
 end;
 
@@ -4283,7 +4284,7 @@ end;
  A procedure abaixo, amazenará em um map, fazendo um mapeamento de cada controle
  com uma lista de controles que dependem deste.
 }
-procedure TForm1.Mapear_Controles_Dependentes;
+procedure TForm1.Mapear_sgr_bx_a_by_dependentes;
 var
   uA, uB, uC: Integer;
   controle_pai, controle_filho: String;
@@ -4321,32 +4322,29 @@ begin
     end;
 end;
 
-
-
-
 procedure TForm1.Carregar_controle_bx_a_by;
 begin
 
-  if Selecionar_Controles_sgr_bx_a_by = false then begin
+  if Selecionar_sgr_bx_a_by = false then begin
     Exit;
   end;
 
   // No código abaixo, iremos carregar somente os controles que tem 1 bola.
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b1_a_b1);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b2_a_b2);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b3_a_b3);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b4_a_b4);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b5_a_b5);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b6_a_b6);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b7_a_b7);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b8_a_b8);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b9_a_b9);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b10_a_b10);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b11_a_b11);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b12_a_b12);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b13_a_b13);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b14_a_b14);
-  ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15(sgr_b15_a_b15);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b1_a_b1);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b2_a_b2);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b3_a_b3);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b4_a_b4);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b5_a_b5);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b6_a_b6);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b7_a_b7);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b8_a_b8);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b9_a_b9);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b10_a_b10);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b11_a_b11);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b12_a_b12);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b13_a_b13);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b14_a_b14);
+  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b15_a_b15);
 
   Mapear_sgr_bx_a_by;
   Mapear_cmb_bx_a_by_concurso_inicial_final;
@@ -4395,7 +4393,8 @@ begin
   //obj_controle_3 := f_sgr_bx_a_by_mapa.KeyData[nome_do_controle_3];
   obj_controle_3 := f_sgr_intervalo_por_concurso_bx_a_by.KeyData[nome_do_controle_3];
 
-  Carregar_controle_b1_a_b15_por_intervalo_concurso(obj_controle_3, concurso_inicial, concurso_final);
+  //Carregar_controle_b1_a_b15_por_intervalo_concurso(obj_controle_3, concurso_inicial, concurso_final);
+  atualizar_sgr_bx_a_by_por_intervalo_de_concurso(obj_controle_3, concurso_inicial, concurso_final);
 end;
 
 {
@@ -10828,7 +10827,7 @@ end;
  Nesta função, selecionamos quais controles da forma sgr_bx_a_by devemos utilizar
  no programa.
 }
-function TForm1.Selecionar_controles_sgr_bx_a_by: boolean;
+function TForm1.Selecionar_sgr_bx_a_by: boolean;
 begin
   // Se controle já está instanciado, retornar true.
   if Assigned(f_sgr_bx_a_by_lista) then begin
@@ -10942,7 +10941,7 @@ var
 begin
 
   // Aqui, vc seleciona quais controles vc deseja que apareça no select.
-  if Selecionar_Controles_sgr_bx_a_by = false then begin
+  if Selecionar_sgr_bx_a_by = false then begin
     Exit('');
   end;
 
@@ -13282,20 +13281,8 @@ begin
 
     indice_b1_a_b15 := f_sgr_bx_a_by_lista.IndexOf(gradeTemp);
     if indice_b1_a_b15 >= 0 then begin
-      controle_b1_a_b15_atualizar_dependentes(gradeTemp);
+      sgr_bx_a_by_atualizar_dependentes(gradeTemp);
     end;
-
-    //if f_controles_b1_a_b15_pra_ser_atualizado.KeyData[gradeTemp.Name] <> nil then begin
-    //  controle_b1_a_b15_atualizar_dependentes(gradeTemp);
-    //end;
-
-
-
-
-
-    //if f_controles_b1_a_b15_pra_ser_atualizado.Find(gradeTemp.Name, indice_na_lista) then begin
-    //  controle_b1_a_b15_atualizar_dependentes(gradeTemp);
-    //end;
 
   end;
 end;

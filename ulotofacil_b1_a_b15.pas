@@ -5,31 +5,37 @@ unit ulotofacil_b1_a_b15;
 interface
 
 uses
-  Classes, SysUtils, sqldb, Grids, stdCtrls;
+  Classes, SysUtils, sqldb, Grids, StdCtrls;
 
-procedure Configurar_controle_b1_a_b15(objControle: TStringGrid);
-procedure Carregar_controle_b1_a_b15(objControle: TStringGrid);
+procedure Configurar_sgr_bx_a_by(objControle: TStringGrid);
+procedure Atualizar_sgr_bx_a_by(objControle: TStringGrid);
+procedure Atualizar_sgr_bx_a_by_sem_ter_qt_zero(objControle: TStringGrid;
+  str_Where: string);
+
+
 procedure Carregar_controle_b1_a_b15(objControle: TStringGrid; str_where: string);
 procedure Carregar_controle_b1_a_b15_novo(objControle: TStringGrid; str_where: string);
-procedure Carregar_controle_b1_a_b15_por_intervalo_concurso(objControle: TStringGrid;  concurso_inicial, concurso_final: integer);
+procedure Atualizar_sgr_bx_a_by_por_intervalo_de_concurso(objControle: TStringGrid;
+  concurso_inicial, concurso_final: integer);
 
-procedure Atualizar_cmb_intervalo_por_concurso_bx_a_by(objControle: TComboBox; lista_de_concursos: TStringList);
 
-function obter_sufixo_do_nome_da_tabela(objControle: TStringGrid;  var nome_da_tabela: string; var coluna_inicial, coluna_final: integer): boolean;
+procedure Atualizar_cmb_intervalo_por_concurso_bx_a_by(objControle: TComboBox;
+  lista_de_concursos: TStringList);
+
+function obter_sufixo_do_nome_da_tabela(objControle: TStringGrid;
+  var nome_da_tabela: string; var coluna_inicial, coluna_final: integer): boolean;
 function obter_sufixo_de_controle_por_intervalo_de_concurso(objControle: TStringGrid;
   var nome_da_tabela: string; var coluna_inicial, coluna_final: integer): boolean;
 
 function obter_id_de_combinacoes_selecionadas(objControle: TStringGrid;
   var id_selecionados: string): boolean;
 
-//function gerar_sql_b1_a_b15: string;
-
 implementation
 
 uses
   RegExpr, strUtils, Dialogs,
   uLotofacilModulo,
-  fgl;
+  fgl, DB;
 
 {
  Ao invés de ter 120 procedures pra cada controle com a quantidade de colunas
@@ -39,7 +45,7 @@ uses
  sgr_b1_a_b15.
  Na procedure iremos
 }
-procedure Configurar_controle_b1_a_b15(objControle: TStringGrid);
+procedure Configurar_sgr_bx_a_by(objControle: TStringGrid);
 var
   bola_final, bola_inicial: integer;
   nome_do_controle: TComponentName;
@@ -104,7 +110,7 @@ begin
   coluna_atual.Alignment := taCenter;
   coluna_atual.Title.Caption := 'grp_id';
   coluna_atual.Title.Alignment := taCenter;
-  coluna_atual.Visible:= false;
+  coluna_atual.Visible := False;
 
   // As colunas onde ficarão as bolas.
   for uA := coluna_inicial to coluna_final do
@@ -140,13 +146,14 @@ end;
  onde x e y representa números do intervalo de 1 a 15, onde x é maior ou igual a y.
  Por exemplo, cmb_intervalo_por_concurso_inicial_b1_b15 é um controle válido.
 }
-procedure Atualizar_cmb_intervalo_por_concurso_bx_a_by(objControle: TComboBox; lista_de_concursos: TStringList);
+procedure Atualizar_cmb_intervalo_por_concurso_bx_a_by(objControle: TComboBox;
+  lista_de_concursos: TStringList);
 begin
   objControle.Items.Clear;
   objControle.Items.AddStrings(lista_de_concursos, True);
 end;
 
-procedure Carregar_controle_b1_a_b15(objControle: TStringGrid);
+procedure Atualizar_sgr_bx_a_by(objControle: TStringGrid);
 var
   nome_sufixo, nome_dos_campos_b, nome_dos_campos_b_asc, nome_campo_id: string;
   coluna_inicial, coluna_final, linha_atual, id_coluna, uA: integer;
@@ -154,7 +161,7 @@ var
   qt_registros, valor_da_coluna_atual: longint;
 begin
 
-  Configurar_controle_b1_a_b15(objControle);
+  Configurar_sgr_bx_a_by(objControle);
 
   nome_sufixo := '';
   coluna_inicial := 0;
@@ -216,17 +223,33 @@ begin
     sql_query.UniDirectional := False;
     sql_query.Open;
 
-    qt_registros := 0;
+    // Obtém a quantidade de registros.
+    sql_query.First;
+    sql_query.Last;
+    qt_registros := sql_query.RecordCount;
+
+    if qt_registros = 0 then
+    begin
+      sql_query.Close;
+      dmLotofacil.pgLTK.Close(True);
+
+      objControle.Columns.Clear;
+      objControle.RowCount := 1;
+      objControle.Cells[0, 0] := 'Não há registros';
+
+      Exit;
+    end;
+
+    objControle.RowCount := qt_registros + 1;
+
     linha_atual := 1;
     sql_query.First;
-    objControle.BeginUpdate;
-    while not sql_query.EOF do
+    while (not sql_query.EOF) and (qt_registros <> 0) do
     begin
-      Inc(qt_registros);
-      objControle.RowCount := qt_registros + 1;
-
+      // Váriável indica qual é a próxima coluna a inserir os dados.
       id_coluna := 0;
-      objControle.Cells[0, linha_atual] := IntToStr(sql_query.FieldByName(nome_sufixo + '_id').AsInteger);
+      objControle.Cells[0, linha_atual] :=
+        IntToStr(sql_query.FieldByName(nome_sufixo + '_id').AsInteger);
 
       // Colunas b: b1, b2, ...
       for uA := coluna_inicial to coluna_final do
@@ -250,20 +273,10 @@ begin
 
       sql_query.Next;
       Inc(linha_atual);
+      Dec(qt_registros);
     end;
-    objControle.EndUpdate(true);
     sql_query.Close;
     dmLotofacil.pgLTK.Close(True);
-
-    // Se não houve registros
-    if qt_registros = 0 then
-    begin
-      objControle.Columns.Clear;
-      objControle.Columns.Add;
-      objControle.RowCount := 1;
-      objControle.FixedRows := 1;
-      objControle.Cells[0, 0] := 'Nenhum registro localizado.';
-    end;
 
   except
     on exc: Exception do
@@ -279,6 +292,12 @@ begin
 
 end;
 
+procedure Atualizar_sgr_bx_a_by_sem_qt_zero(obControle: TStringGrid; str_where: string);
+begin
+
+end;
+
+
 procedure Carregar_controle_b1_a_b15(objControle: TStringGrid; str_where: string);
 var
   nome_sufixo, nome_dos_campos_b, nome_dos_campos_b_asc, campo_id: string;
@@ -287,7 +306,7 @@ var
   qt_registros, valor_da_coluna_atual: longint;
 begin
 
-  Configurar_controle_b1_a_b15(objControle);
+  Configurar_sgr_bx_a_by(objControle);
 
   nome_sufixo := '';
   coluna_inicial := 0;
@@ -470,9 +489,8 @@ end;
 procedure Carregar_controle_b1_a_b15_novo(objControle: TStringGrid; str_where: string);
 var
   nome_sufixo, nome_dos_campos_b, nome_dos_campos_b_asc, campo_id,
-    campo_id_1, campo_id_2: string;
-  coluna_inicial, coluna_final, linha_atual, id_coluna, uA,
-    indice_virgula: integer;
+  campo_id_1, campo_id_2: string;
+  coluna_inicial, coluna_final, linha_atual, id_coluna, uA, indice_virgula: integer;
   sql_query: TSQLQuery;
   qt_registros, valor_da_coluna_atual: longint;
 begin
@@ -481,8 +499,9 @@ begin
 
   // Vamos procurar a posição do '('.
   indice_virgula := str_where.IndexOf('(');
-  if indice_virgula < 0 then begin
-    MessageDlg('', 'Parâmetro: str_where inválido', mtError, [mbOk], 0);
+  if indice_virgula < 0 then
+  begin
+    MessageDlg('', 'Parâmetro: str_where inválido', mtError, [mbOK], 0);
     Exit;
   end;
 
@@ -495,7 +514,7 @@ begin
   campo_id_1 := ReplaceText(campo_id_1, '_id', '');
   campo_id_1 := ReplaceText(campo_id_1, ' ', '');
 
-  Configurar_controle_b1_a_b15(objControle);
+  Configurar_sgr_bx_a_by(objControle);
 
   nome_sufixo := '';
   coluna_inicial := 0;
@@ -551,7 +570,8 @@ begin
   group by ltf_a.b1_a_b2_id, ltf_b.b1, ltf_b.b2
   order by qt_vezes desc;
   }
-  sql_query.Sql.Add('Select ltf_a.@id_2@_id, @select_campos_b@, count(ltf_c.@id_2@_id) as qt_vezes');
+  sql_query.Sql.Add(
+    'Select ltf_a.@id_2@_id, @select_campos_b@, count(ltf_c.@id_2@_id) as qt_vezes');
   sql_query.Sql.Add('from lotofacil.ltf_bx_a_by_@id_1@_agregado_com_@id_2@ ltf_a');
   sql_query.Sql.Add('inner join lotofacil.lotofacil_id_@id_2@ ltf_b');
   sql_query.Sql.Add('on ltf_a.@id_2@_id = ltf_b.@id_2@_id');
@@ -586,7 +606,8 @@ begin
   // Agora, é só substituir, as tags @id_1, @tabela_sufixo, @campos_b, @campos_asc.
   sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@id_1@', campo_id_1);
   sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@id_2@', campo_id_2);
-  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@select_campos_b@', nome_dos_campos_b);
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@select_campos_b@',
+    nome_dos_campos_b);
   sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@select_campos_b_asc@',
     nome_dos_campos_b_asc);
   sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@str_where@', str_where);
@@ -600,7 +621,7 @@ begin
     linha_atual := 1;
     objControle.Columns[0].Visible := False;
 
-    objControle.BeginUpdate;
+    //objControle.BeginUpdate;
     qt_registros := 0;
     while not sql_query.EOF do
     begin
@@ -633,7 +654,7 @@ begin
       sql_query.Next;
       Inc(linha_atual);
     end;
-    objControle.EndUpdate(True);
+    //objControle.EndUpdate(True);
 
     sql_query.Close;
     dmLotofacil.pgLTK.Close(True);
@@ -645,7 +666,7 @@ begin
       objControle.Columns.Add;
       objControle.FixedRows := 1;
       objControle.Cells[0, 0] := 'Error: ' + exc.Message;
-      objControle.EndUpdate(True);
+      //objControle.EndUpdate(True);
     end;
   end;
 
@@ -664,6 +685,236 @@ begin
 
 end;
 
+procedure Atualizar_sgr_bx_a_by_sem_ter_qt_zero(objControle: TStringGrid;
+  str_where: string);
+var
+  nome_sufixo, nome_dos_campos_b, nome_dos_campos_b_asc, campo_id,
+  campo_id_1, campo_id_2: string;
+  coluna_inicial, coluna_final, linha_atual, id_coluna, uA, indice_virgula: integer;
+  sql_query: TSQLQuery;
+  qt_registros, valor_da_coluna_atual: longint;
+begin
+  // Vamos obter o campo_id do outro controle.
+  // str_where, deve vir desta forma: bx_a_by_id in (  onde x e y são números, sem espações, entre
+
+  // Vamos procurar a posição do '('.
+  indice_virgula := str_where.IndexOf('(');
+  if indice_virgula < 0 then
+  begin
+    MessageDlg('', 'Parâmetro: str_where inválido', mtError, [mbOK], 0);
+    Exit;
+  end;
+
+  // Vamos pegar tudo antes de '('.
+  campo_id_1 := AnsiLeftStr(str_where, indice_virgula);
+
+  // Agora, vamos apagar
+  // os string 'in', id e espaço.
+  campo_id_1 := ReplaceText(campo_id_1, 'in', '');
+  campo_id_1 := ReplaceText(campo_id_1, '_id', '');
+  campo_id_1 := ReplaceText(campo_id_1, ' ', '');
+
+  Configurar_sgr_bx_a_by(objControle);
+
+  nome_sufixo := '';
+  coluna_inicial := 0;
+  coluna_final := 0;
+
+  if not obter_sufixo_do_nome_da_tabela(objControle, nome_sufixo,
+    coluna_inicial, coluna_final) then
+  begin
+    MessageDlg('', 'Nome de controle inválido pra analisar colunas b1 a b15: ' +
+      objControle.Name, mtError, [mbOK], 0);
+    objControle.Columns.Clear;
+    Exit;
+  end;
+
+  if not Assigned(dmLotofacil) then
+  begin
+    dmLotofacil := tdmLotofacil.Create(objControle.Parent);
+  end;
+
+  sql_query := dmLotofacil.sqlLotofacil;
+  sql_query.DataBase := dmLotofacil.pgLTK;
+  sql_query.sql.Clear;
+
+  {
+   No sql, abaixo, que criaremos dinamicamente iremos substituir as tags:
+   @id_2@, que corresponde ao id da tabela que será populado no controle correspondente,
+           por exemplo, se o controle é sgr_b1_a_b2, então, irá ser substituido por
+           b1_a_b2.
+
+   @select_campos_b@:
+                     Neste caso, será os nomes dos campos da tabela, interseparados
+                     pela ',' (vírgula), no exemplo, acima, a tabela a ser usada
+                     seria 'lotofacil.lotofacil_id_b1_a_b2', neste caso, os campos
+                     seriam: b1, b2
+
+   @str_where@:      Ao chamar a procedure, o parâmetro str_where substituído a tag '@str_where@'.
+
+   @select_campos_b_as:
+                       Na cláusula order by, iremos colocar os mesmo campos b que
+                       substitui @select_campos_b2@, neste caso, terá após o nome
+                       do campo a palavra asc, então, no nosso exemplo, seria substituído
+                       por b1 asc, b2 asc.
+
+   Após substituímos as tags, baseando no nosso exemplo dado, o select ficaria desta forma:
+
+   Select ltf_a.b1_a_b2_id, ltf_b.b1, ltf_b.b2, count(ltf_c.b1_a_b2_id) as qt_vezes
+  from lotofacil.ltf_bx_a_by_b1_a_b1_agregado_com_b1_a_b2 ltf_a
+  inner join lotofacil.lotofacil_id_b1_a_b2 ltf_b
+    on ltf_a.b1_a_b2_id = ltf_b.b1_a_b2_id
+  left join lotofacil.lotofacil_resultado_coluna_b ltf_c
+    on ltf_c.b1_a_b2_id = ltf_b.b1_a_b2_id
+  where ltf_a.b1_a_b1_id in (1, 2)
+  group by ltf_a.b1_a_b2_id, ltf_b.b1, ltf_b.b2
+  order by qt_vezes desc;
+  }
+
+  sql_query.SQL.Add(
+    'Select ltf_a.@id_2@_id, @select_campos_b@, count(ltf_b.@id_2@_id) as qt_vezes');
+  sql_query.Sql.Add('from lotofacil.lotofacil_id_@id_2@ ltf_a');
+  sql_query.Sql.Add('inner join lotofacil.lotofacil_resultado_coluna_b ltf_b');
+  sql_query.Sql.Add('on ltf_a.@id_2@_id = ltf_b.@id_2@_id');
+  sql_query.Sql.Add('where @str_where@');
+  sql_query.Sql.Add('group by ltf_a.@id_2@_id, @select_campos_b@');
+  sql_query.Sql.Add('order by qt_vezes desc, @select_campos_b_asc@');
+
+
+  //sql_query.Sql.Add('Select ltf_a.@id_2@_id, @select_campos_b@, count(ltf_c.@id_2@_id) as qt_vezes');
+  //sql_query.Sql.Add('from lotofacil.ltf_bx_a_by_@id_1@_agregado_com_@id_2@ ltf_a');
+  //sql_query.Sql.Add('inner join lotofacil.lotofacil_id_@id_2@ ltf_b');
+  //sql_query.Sql.Add('on ltf_a.@id_2@_id = ltf_b.@id_2@_id');
+  //sql_query.Sql.Add('left join lotofacil.lotofacil_resultado_coluna_b ltf_c');
+  //sql_query.Sql.Add('on ltf_c.@id_2@_id = ltf_b.@id_2@_id');
+  //sql_query.Sql.Add('where ltf_a.@str_where@');
+  //sql_query.Sql.Add('group by ltf_a.@id_2@_id, @select_campos_b@');
+  //sql_query.Sql.Add('order by qt_vezes desc, @select_campos_b_asc@');
+
+  writeln(sql_query.sql.Text);
+
+  // Agora, iremos substituir as tags começando por @ e terminando por @.
+  nome_dos_campos_b := '';
+  nome_dos_campos_b_asc := '';
+
+  for uA := coluna_inicial to coluna_final do
+  begin
+    if uA <> coluna_inicial then
+    begin
+      nome_dos_campos_b := nome_dos_campos_b + Format(', b%d', [uA]);
+      nome_dos_campos_b_asc := nome_dos_campos_b_asc + Format(', b%d asc', [uA]);
+    end
+    else
+    begin
+      nome_dos_campos_b := nome_dos_campos_b + Format('b%d', [uA]);
+      nome_dos_campos_b_asc := nome_dos_campos_b_asc + Format('b%d asc', [uA]);
+    end;
+  end;
+
+  campo_id_2 := nome_sufixo;
+
+  // Agora, é só substituir, as tags @id_1, @tabela_sufixo, @campos_b, @campos_asc.
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@id_1@', campo_id_1);
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@id_2@', campo_id_2);
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@select_campos_b@',
+    nome_dos_campos_b);
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@select_campos_b_asc@',
+    nome_dos_campos_b_asc);
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@str_where@', str_where);
+
+  writeln(sql_query.sql.Text);
+
+  try
+    sql_query.UniDirectional := False;
+    sql_query.Open;
+    sql_query.First;
+    sql_query.Last;
+
+    qt_registros := sql_query.RecordCount;
+
+    // Não há registros, sair.
+    if qt_registros = 0 then
+    begin
+      sql_query.Close;
+      dmLotofacil.pgLTK.Close(True);
+
+      objControle.Columns.Clear;
+      objControle.Columns.Add;
+      objControle.FixedRows := 1;
+      objControle.Cells[0, 0] := 'Erro, não há registros...';
+      Exit;
+    end;
+
+    objControle.RowCount := qt_registros + 1;
+
+    // A coluna 0, contém o id das combinações devemos ocultar.
+    objControle.Columns[0].Visible := False;
+
+    linha_atual := 1;
+    sql_query.First;
+    while (not sql_query.EOF) and (qt_registros <> 0) do
+    begin
+      //Inc(qt_registros);
+      //objControle.RowCount := qt_registros + 1;
+      objControle.Cells[0, linha_atual] :=
+        IntToStr(sql_query.FieldByName(nome_sufixo + '_id').AsInteger);
+
+      // Colunas b: b1, b2, e assim por diante.
+      id_coluna := 0;
+      for uA := coluna_inicial to coluna_final do
+      begin
+        Inc(id_coluna);
+        valor_da_coluna_atual := sql_query.FieldByName('b' + IntToStr(uA)).AsInteger;
+        objControle.Cells[id_coluna, linha_atual] := IntToStr(valor_da_coluna_atual);
+      end;
+
+      // Coluna qt_vezes
+      Inc(id_coluna);
+      valor_da_coluna_atual := sql_query.FieldByName('qt_vezes').AsInteger;
+      objControle.Cells[id_coluna, linha_atual] := IntToStr(valor_da_coluna_atual);
+
+      // Coluna marcar.
+      // A valor da célula na linha e coluna marcar terá o valor 0
+      // pois o estilo desta coluna é checkbox, e um valor 0, significa
+      // desmarcado o checkbox.
+      Inc(id_coluna);
+      objControle.Cells[id_coluna, linha_atual] := '0';
+
+      sql_query.Next;
+      Inc(linha_atual);
+      Dec(qt_registros);
+    end;
+    //objControle.EndUpdate(True);
+
+    sql_query.Close;
+    dmLotofacil.pgLTK.Close(True);
+  except
+    on Exc: EDatabaseError do
+    begin
+      dmLotofacil.pgLTK.Close(True);
+      objControle.Columns.Clear;
+      objControle.Columns.Add;
+      objControle.RowCount := 1;
+      objControle.FixedRows := 0;
+      objControle.Cells[0, 0] := 'Error: ' + exc.Message;
+    end;
+    on exc: Exception do
+    begin
+      dmLotofacil.pgLTK.Close(True);
+      objControle.Columns.Clear;
+      objControle.Columns.Add;
+      objControle.RowCount := 1;
+      objControle.FixedRows := 0;
+      objControle.Cells[0, 0] := 'Error: ' + exc.Message;
+      //objControle.EndUpdate(True);
+    end;
+  end;
+
+end;
+
+{
+ Limpa o controle
+}
 
 
 {
@@ -677,7 +928,8 @@ end;
  do controle 'sgr_b1_a_b1', ele está na realidade selecionando um id do campo
  'b1_a_b1_id', então, pra atualizar o controle 'sgr_b1_a_b2' que
 }
-procedure Carregar_controle_bx_a_by_sem_qt_zero(objControle: TStringGrid; str_where: string);
+procedure Carregar_controle_bx_a_by_sem_qt_zero_antigo(objControle: TStringGrid;
+  str_where: string);
 var
   nome_sufixo, nome_dos_campos_b, nome_dos_campos_b_asc, campo_id: string;
   coluna_inicial, coluna_final, linha_atual, id_coluna, uA: integer;
@@ -685,7 +937,7 @@ var
   qt_registros, valor_da_coluna_atual: longint;
 begin
 
-  Configurar_controle_b1_a_b15(objControle);
+  Configurar_sgr_bx_a_by(objControle);
 
   nome_sufixo := '';
   coluna_inicial := 0;
@@ -845,8 +1097,17 @@ order by qt_vezes desc;
 end;
 
 {
- }
-procedure Carregar_controle_b1_a_b15_por_intervalo_concurso(objControle: TStringGrid; concurso_inicial, concurso_final: integer);
+ Toda vez que os controles TComboBox, que tem os nomes cmb_intervalo_por_concurso_bx_a_by
+ ou cmb_intervalo_por_concurso_bx_a_by, onde, x e y, representam números no intervalo
+ de 1 a 15, e que x <= y, tiver o conteúdo alterado, esta procedure será chamada,
+ passando o controle 'TStringGrid' corresponde pra ser atualizado, e o valor
+ do concurso inicial e no final.
+ Por exemplo, se o controle 'TComboBox' de nome 'cmb_intervalo_por_concurso_b1_a_b1'
+ for alterado, o controle 'TStringGrid' corresponde de nome 'sgr_intervalo_por_concurso_b1_a_b1'
+ será atualizado.
+}
+procedure atualizar_sgr_bx_a_by_por_intervalo_de_concurso(objControle: TStringGrid;
+  concurso_inicial, concurso_final: integer);
 var
   nome_sufixo, nome_dos_campos_b, nome_dos_campos_b_asc, nome_campo_id: string;
   coluna_inicial, coluna_final, linha_atual, id_coluna, uA: integer;
@@ -854,14 +1115,14 @@ var
   qt_registros, valor_da_coluna_atual: longint;
 begin
 
-  Configurar_controle_b1_a_b15(objControle);
+  Configurar_sgr_bx_a_by(objControle);
 
   nome_sufixo := '';
   coluna_inicial := 0;
   coluna_final := 0;
 
-  if not obter_sufixo_de_controle_por_intervalo_de_concurso(objControle, nome_sufixo,
-    coluna_inicial, coluna_final) then
+  if not obter_sufixo_de_controle_por_intervalo_de_concurso(objControle,
+    nome_sufixo, coluna_inicial, coluna_final) then
   begin
     MessageDlg('', 'Nome de controle inválido pra analisar colunas b1 a b15: ' +
       objControle.Name, mtError, [mbOK], 0);
@@ -912,10 +1173,12 @@ begin
     nome_dos_campos_b_asc);
   sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@tabela_nome_sufixo@',
     nome_sufixo);
-    sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@concurso_inicial@', IntToStr(concurso_inicial));
-    sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@concurso_final@', IntToStr(concurso_final));
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@concurso_inicial@',
+    IntToStr(concurso_inicial));
+  sql_query.Sql.Text := ReplaceText(sql_query.Sql.Text, '@concurso_final@',
+    IntToStr(concurso_final));
 
-    writeln(sql_query.sql.text);
+  writeln(sql_query.sql.Text);
 
   try
     sql_query.UniDirectional := False;
@@ -931,7 +1194,8 @@ begin
       objControle.RowCount := qt_registros + 1;
 
       id_coluna := 0;
-      objControle.Cells[0, linha_atual] := IntToStr(sql_query.FieldByName(nome_sufixo + '_id').AsInteger);
+      objControle.Cells[0, linha_atual] :=
+        IntToStr(sql_query.FieldByName(nome_sufixo + '_id').AsInteger);
 
       // Colunas b: b1, b2, ...
       for uA := coluna_inicial to coluna_final do
@@ -956,7 +1220,7 @@ begin
       sql_query.Next;
       Inc(linha_atual);
     end;
-    objControle.EndUpdate(true);
+    objControle.EndUpdate(True);
     sql_query.Close;
     dmLotofacil.pgLTK.Close(True);
 
@@ -1018,7 +1282,8 @@ begin
     coluna_inicial := numero_da_coluna_1;
     coluna_final := numero_da_coluna_2;
 
-    if (not (numero_da_coluna_1 in [1..15])) or (not (numero_da_coluna_1 in [1..15])) then
+    if (not (numero_da_coluna_1 in [1..15])) or
+      (not (numero_da_coluna_1 in [1..15])) then
     begin
       nome_da_tabela := '';
       Exit(False);
@@ -1043,14 +1308,17 @@ begin
 end;
 
 {
- Há 120 controles, toda vez que o usuário alterar o intervalo de concurso devemos
- chamar esta função pra identificar qual controle foi chamado, o objetivo desta função
- é retornar a bola inicial e final, e també
+ Cada controle do tipo TStringGrid da guia, b1_a_b15, tem uma tabela do banco de
+ dados associada, ou seja, cada controle representa uma tabela, por exemplo, o controle
+ sgr_b1_a_b1, representa quantas vezes o campo b1_a_b1_id saiu no concurso.
+ Então, pra isto, criamos esta função pra recuperar o sufixo do controle, com
+ isto, conseguimos identificar qual tabela deve recuperar a informação.
+ Tais controles neste caso, começa com o nome 'sgr_intervalo_por_concurso'.
 }
 function obter_sufixo_de_controle_por_intervalo_de_concurso(objControle: TStringGrid;
   var nome_da_tabela: string; var coluna_inicial, coluna_final: integer): boolean;
 var
-  nome_do_controle: TComponentName;
+  nome_do_controle: string;
   numero_da_coluna_1, numero_da_coluna_2: longint;
   colunas: TStringArray;
 begin
@@ -1072,7 +1340,8 @@ begin
     coluna_inicial := numero_da_coluna_1;
     coluna_final := numero_da_coluna_2;
 
-    if (not (numero_da_coluna_1 in [1..15])) or (not (numero_da_coluna_1 in [1..15])) then
+    if (not (numero_da_coluna_1 in [1..15])) or
+      (not (numero_da_coluna_1 in [1..15])) then
     begin
       nome_da_tabela := '';
       Exit(False);
@@ -1096,8 +1365,15 @@ begin
 
 end;
 
-
-
+{
+ Esta função retorna 'true' se alguma combinação foi selecionada pelo usuário.
+ Se houver alguma marcação selecionada pelo usuário, o parâmetro 'id_selecionado'
+ retornará todos os ids das combinações selecionadas, este parâmetro é do tipo
+ string, entretanto, serão retornados números, tais números estarão interseparados
+ pelo caractere ',', ou seja, por exemplo, se o usuário selecionou cinco combinações
+ que tem o id: 1, 2, 3, 4, 5. Quando a função retornar, o parâmetro 'id_selecionados'
+ terá o valor: 1,2,3,4,5.
+}
 function obter_id_de_combinacoes_selecionadas(objControle: TStringGrid;
   var id_selecionados: string): boolean;
 var
@@ -1106,14 +1382,16 @@ var
 begin
   id_selecionados := '';
 
-  // No controle TStringGrid, a linha e coluna é baseada em zero.
-  // No nosso controle, a linha 0 contém o cabeçalho do controle.
+  // A linha 0 no controle corresponde ao cabeçalho do controle.
   linha_atual_do_controle := 1;
   indice_ultima_coluna := Pred(objControle.ColCount);
   indice_ultima_linha := Pred(objControle.RowCount);
 
   while linha_atual_do_controle <= indice_ultima_linha do
   begin
+    // A última coluna com o título 'Marcar' contém cada linha, o valor 0 ou 1.
+    // Haverá 1, se o usuário selecionou aquela combinação daquela linha, 0 caso
+    // contrário.
     if objControle.Cells[indice_ultima_coluna, linha_atual_do_controle] = '1' then
     begin
       if id_selecionados <> '' then
@@ -1121,8 +1399,7 @@ begin
         id_selecionados := id_selecionados + ',';
       end;
       valor_da_celula_id := objControle.Cells[0, linha_atual_do_controle];
-      id_selecionados := id_selecionados + objControle.Cells[0,
-        linha_atual_do_controle];
+      id_selecionados := id_selecionados + objControle.Cells[0,linha_atual_do_controle];
     end;
     Inc(linha_atual_do_controle);
   end;
