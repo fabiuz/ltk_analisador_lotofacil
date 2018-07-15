@@ -2354,7 +2354,7 @@ type
     sgr_b8_a_b14: TStringGrid;
     sgr_b8_a_b15: TStringGrid;
     sgr_b8_a_b9_por_concurso: TStringGrid;
-    sgr_b8_a_b8_por_concurso2: TStringGrid;
+    sgr_b8_a_b10_por_concurso: TStringGrid;
     sgr_b8_a_b11_por_concurso: TStringGrid;
     sgr_b8_a_b12_por_concurso: TStringGrid;
     sgr_b8_a_b13_por_concurso: TStringGrid;
@@ -2735,7 +2735,7 @@ type
     sgr_b6_a_b6_por_concurso: TStringGrid;
     sgr_b11_a_b12_por_concurso: TStringGrid;
     sgr_b6_a_b7_por_concurso: TStringGrid;
-    sgr_b11_a_b13_por_concurso1: TStringGrid;
+    sgr_b6_a_b8_por_concurso: TStringGrid;
     sgr_b6_a_b6: TStringGrid;
     sgr_b6_a_b7: TStringGrid;
     sgr_b6_a_b8: TStringGrid;
@@ -2757,7 +2757,7 @@ type
     sgr_b13_a_b13_por_concurso: TStringGrid;
     sgr_b12_a_b13_por_concurso: TStringGrid;
     sgr_b11_a_b14_por_concurso: TStringGrid;
-    sgr_b12_a_b13_por_concurso1: TStringGrid;
+    sgr_b13_a_b14_por_concurso: TStringGrid;
     sgr_b12_a_b14_por_concurso: TStringGrid;
     sgr_b11_a_b15_por_concurso: TStringGrid;
     sgr_b11_a_b12: TStringGrid;
@@ -3095,10 +3095,13 @@ type
     procedure Carregar_controle_bx_a_by;
     procedure Carregar_controle_bolas_na_mesma_coluna;
     procedure Carregar_Controle_sgrFiltro(strWhere_Data_Hora: string);
+    procedure Carregar_sgr_bx_a_by;
+    procedure Carregar_sgr_bx_a_by_por_concurso;
     procedure sgr_bx_a_by_atualizar_dependentes(objControle: TStringGrid);
     //procedure controle_cmb_intervalo_por_concurso_alterou(Sender: TObject);
     procedure Mapear_cmb_bx_a_by_concurso_inicial_final;
     procedure mapear_sgr_bx_a_by;
+    procedure mapear_sgr_bx_a_by_por_concurso;
     procedure ConfigurarControleConcursoFrequenciaTotalSair(objControle: TStringGrid);
     //procedure ConfigurarControleDiferencaEntreBolas_qt_1;
     //procedure ConfigurarControleDiferencaEntreBolas_qt_1_qt_2;
@@ -3241,6 +3244,7 @@ type
 
     // Mapear o nome do controle pra a instância do controle.
     f_sgr_bx_a_by_mapa: TMap_String_TStringGrid;
+    f_sgr_bx_a_by_por_concurso_mapa: TMap_String_TStringGrid;
 
     // f_cmb_bx_a_by_lista: TMap_String_TComboBox;
     f_cmb_bx_a_by_lista : TList_ComboBox;
@@ -3583,6 +3587,126 @@ begin
 
   f_sgr_bx_a_by_mapa.Add('sgr_b15_a_b15', sgr_b15_a_b15);
 
+
+end;
+
+procedure TForm1.mapear_sgr_bx_a_by_por_concurso;
+begin
+  if not Assigned(f_sgr_bx_a_by_por_concurso_mapa) then begin
+     f_sgr_bx_a_by_por_concurso_mapa := TMap_String_TStringGrid.Create;
+  end;
+
+  f_sgr_bx_a_by_por_concurso_mapa.Clear;
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b1_por_concurso',  sgr_b1_a_b1_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b2_por_concurso',  sgr_b1_a_b2_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b3_por_concurso',  sgr_b1_a_b3_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b4_por_concurso',  sgr_b1_a_b4_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b5_por_concurso',  sgr_b1_a_b5_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b6_por_concurso',  sgr_b1_a_b6_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b7_por_concurso',  sgr_b1_a_b7_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b8_por_concurso',  sgr_b1_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b9_por_concurso',  sgr_b1_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b1_a_b10_por_concurso',  sgr_b1_a_b10_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b2_por_concurso',  sgr_b2_a_b2_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b3_por_concurso',  sgr_b2_a_b3_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b4_por_concurso',  sgr_b2_a_b4_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b5_por_concurso',  sgr_b2_a_b5_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b6_por_concurso',  sgr_b2_a_b6_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b7_por_concurso',  sgr_b2_a_b7_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b8_por_concurso',  sgr_b2_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b9_por_concurso',  sgr_b2_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b2_a_b10_por_concurso',  sgr_b2_a_b10_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b3_por_concurso',  sgr_b3_a_b3_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b4_por_concurso',  sgr_b3_a_b4_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b5_por_concurso',  sgr_b3_a_b5_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b6_por_concurso',  sgr_b3_a_b6_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b7_por_concurso',  sgr_b3_a_b7_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b8_por_concurso',  sgr_b3_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b9_por_concurso',  sgr_b3_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b3_a_b10_por_concurso',  sgr_b3_a_b10_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b4_a_b4_por_concurso',  sgr_b4_a_b4_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b4_a_b5_por_concurso',  sgr_b4_a_b5_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b4_a_b6_por_concurso',  sgr_b4_a_b6_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b4_a_b7_por_concurso',  sgr_b4_a_b7_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b4_a_b8_por_concurso',  sgr_b4_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b4_a_b9_por_concurso',  sgr_b4_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b4_a_b10_por_concurso',  sgr_b4_a_b10_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b5_a_b5_por_concurso',  sgr_b5_a_b5_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b5_a_b6_por_concurso',  sgr_b5_a_b6_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b5_a_b7_por_concurso',  sgr_b5_a_b7_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b5_a_b8_por_concurso',  sgr_b5_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b5_a_b9_por_concurso',  sgr_b5_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b5_a_b10_por_concurso',  sgr_b5_a_b10_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b6_por_concurso',  sgr_b6_a_b6_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b7_por_concurso',  sgr_b6_a_b7_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b8_por_concurso',  sgr_b6_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b9_por_concurso',  sgr_b6_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b10_por_concurso',  sgr_b6_a_b10_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b11_por_concurso',  sgr_b6_a_b11_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b12_por_concurso',  sgr_b6_a_b12_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b13_por_concurso',  sgr_b6_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b14_por_concurso',  sgr_b6_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b6_a_b15_por_concurso',  sgr_b6_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b7_por_concurso',  sgr_b7_a_b7_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b8_por_concurso',  sgr_b7_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b9_por_concurso',  sgr_b7_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b10_por_concurso',  sgr_b7_a_b10_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b11_por_concurso',  sgr_b7_a_b11_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b12_por_concurso',  sgr_b7_a_b12_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b13_por_concurso',  sgr_b7_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b14_por_concurso',  sgr_b7_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b7_a_b15_por_concurso',  sgr_b7_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b8_por_concurso',  sgr_b8_a_b8_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b9_por_concurso',  sgr_b8_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b10_por_concurso',  sgr_b8_a_b10_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b11_por_concurso',  sgr_b8_a_b11_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b12_por_concurso',  sgr_b8_a_b12_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b13_por_concurso',  sgr_b8_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b14_por_concurso',  sgr_b8_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b8_a_b15_por_concurso',  sgr_b8_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b9_a_b9_por_concurso',  sgr_b9_a_b9_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b9_a_b10_por_concurso',  sgr_b9_a_b10_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b9_a_b11_por_concurso',  sgr_b9_a_b11_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b9_a_b12_por_concurso',  sgr_b9_a_b12_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b9_a_b13_por_concurso',  sgr_b9_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b9_a_b14_por_concurso',  sgr_b9_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b9_a_b15_por_concurso',  sgr_b9_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b10_a_b10_por_concurso',  sgr_b10_a_b10_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b10_a_b11_por_concurso',  sgr_b10_a_b11_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b10_a_b12_por_concurso',  sgr_b10_a_b12_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b10_a_b13_por_concurso',  sgr_b10_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b10_a_b14_por_concurso',  sgr_b10_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b10_a_b15_por_concurso',  sgr_b10_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b11_a_b11_por_concurso',  sgr_b11_a_b11_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b11_a_b12_por_concurso',  sgr_b11_a_b12_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b11_a_b13_por_concurso',  sgr_b11_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b11_a_b14_por_concurso',  sgr_b11_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b11_a_b15_por_concurso',  sgr_b11_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b12_a_b12_por_concurso',  sgr_b12_a_b12_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b12_a_b13_por_concurso',  sgr_b12_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b12_a_b14_por_concurso',  sgr_b12_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b12_a_b15_por_concurso',  sgr_b12_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b13_a_b13_por_concurso',  sgr_b13_a_b13_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b13_a_b14_por_concurso',  sgr_b13_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b13_a_b15_por_concurso',  sgr_b13_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b14_a_b14_por_concurso',  sgr_b14_a_b14_por_concurso);
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b14_a_b15_por_concurso',  sgr_b14_a_b15_por_concurso);
+
+  f_sgr_bx_a_by_por_concurso_mapa.Add('sgr_b15_a_b15_por_concurso',  sgr_b15_a_b15_por_concurso);
 
 end;
 
@@ -4224,6 +4348,9 @@ var
   objControle_Temp, obj_controle_filho: TStringGrid;
   nome_do_controle_pai, nome_do_campo, nome_do_campo_pai: string;
 begin
+  Exit;
+
+
   // Pega os controles secundário baseado no nome do controle.
   nome_do_controle_pai := objControle.Name;
 
@@ -4274,7 +4401,7 @@ begin
 
   // Agora, atualizar o controle filho.
   //ulotofacil_b1_a_b15.Carregar_controle_b1_a_b15_novo(obj_controle_filho, ids_selecionados_pai);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by_sem_ter_qt_zero(obj_controle_filho, ids_selecionados_pai);
+  //ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by_sem_ter_qt_zero(obj_controle_filho, ids_selecionados_pai);
 
 end;
 
@@ -4322,6 +4449,46 @@ begin
     end;
 end;
 
+{
+ Carrega todos os controles do tipo 'TStringGrid' que tem no nome a
+ nomenclatura: sgr_bx_a_by, onde x e y são números no intervalo de 1 a 15
+ e x é menor ou igual a y.
+}
+procedure TForm1.Carregar_sgr_bx_a_by;
+var
+  uA: Integer;
+  controle_atual: TStringGrid;
+begin
+  if Not Assigned(f_sgr_bx_a_by_lista) then begin
+    Exit;
+  end;
+
+  for uA := 0 to Pred(f_sgr_bx_a_by_lista.Count) do begin
+    controle_atual := f_sgr_bx_a_by_lista.Items[uA];
+    Atualizar_sgr_bx_a_by(controle_atual);
+  end;
+end;
+
+// Carrega todos os controles.
+procedure TForm1.Carregar_sgr_bx_a_by_por_concurso;
+var
+  uA: Integer;
+  controle_atual: TStringGrid;
+begin
+  if Not Assigned(f_sgr_bx_a_by_por_concurso_mapa) then begin
+    f_sgr_bx_a_by_por_concurso_mapa := TMap_String_TStringGrid.Create;
+  end;
+
+  for uA := 0 to Pred(f_sgr_bx_a_by_por_concurso_mapa.Count) do begin
+    controle_atual := f_sgr_bx_a_by_por_concurso_mapa.Data[uA];
+    Writeln(controle_atual.Name);
+    Atualizar_sgr_bx_a_by_por_concurso(controle_atual);
+  end;
+
+  //Atualizar_sgr_bx_a_by_por_concurso(sgr_b1_a_b5_por_concurso);
+end;
+
+
 procedure TForm1.Carregar_controle_bx_a_by;
 begin
 
@@ -4329,29 +4496,18 @@ begin
     Exit;
   end;
 
-  // No código abaixo, iremos carregar somente os controles que tem 1 bola.
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b1_a_b1);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b2_a_b2);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b3_a_b3);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b4_a_b4);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b5_a_b5);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b6_a_b6);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b7_a_b7);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b8_a_b8);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b9_a_b9);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b10_a_b10);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b11_a_b11);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b12_a_b12);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b13_a_b13);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b14_a_b14);
-  ulotofacil_b1_a_b15.Atualizar_sgr_bx_a_by(sgr_b15_a_b15);
-
   Mapear_sgr_bx_a_by;
-  Mapear_cmb_bx_a_by_concurso_inicial_final;
+  mapear_sgr_bx_a_by_por_concurso;
   Mapear_sgr_intervalo_por_concurso_bx_a_by;
 
+  Mapear_cmb_bx_a_by_concurso_inicial_final;
+
   Carregar_cmb_intervalo_por_concurso_bx_a_by;
+  Carregar_sgr_bx_a_by_por_concurso;
+  Carregar_sgr_bx_a_by;
 end;
+
+
 
 procedure TForm1.controle_cmb_intervalo_por_concurso_alterou(Sender: TObject);
 var
@@ -10897,8 +11053,8 @@ begin
     f_sgr_bx_a_by_lista.Add(sgr_b10_a_b11);
     f_sgr_bx_a_by_lista.Add(sgr_b10_a_b12);
     f_sgr_bx_a_by_lista.Add(sgr_b10_a_b13);
-    f_sgr_bx_a_by_lista.Add(sgr_b10_a_b13);
-    f_sgr_bx_a_by_lista.Add(sgr_b10_a_b13);
+    f_sgr_bx_a_by_lista.Add(sgr_b10_a_b14);
+    f_sgr_bx_a_by_lista.Add(sgr_b10_a_b15);
 
     f_sgr_bx_a_by_lista.Add(sgr_b11_a_b11);
     f_sgr_bx_a_by_lista.Add(sgr_b11_a_b12);
@@ -10980,7 +11136,8 @@ begin
       coluna_inicial := 0;
       coluna_final := 0;
       lista_sql_controle_atual.Delimiter:=',';
-      obter_sufixo_do_nome_da_tabela(controle_atual, sufixo_nome, coluna_inicial, coluna_final);
+      ///obter_sufixo_do_nome_da_tabela(controle_atual, sufixo_nome, coluna_inicial, coluna_final);
+      obter_info_de_sgr_bx_a_by(controle_atual, sufixo_nome, coluna_inicial, coluna_final);
 
       // Agora, insere na lista principal.
       if lista_sql.Count > 0 then begin
@@ -13281,6 +13438,7 @@ begin
 
     indice_b1_a_b15 := f_sgr_bx_a_by_lista.IndexOf(gradeTemp);
     if indice_b1_a_b15 >= 0 then begin
+      Writeln(gradeTemp.Name);
       sgr_bx_a_by_atualizar_dependentes(gradeTemp);
     end;
 

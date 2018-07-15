@@ -2504,11 +2504,10 @@ begin
 
          tamanho_do_string := str_sql_a_inserir.Length;
 
-
          Writeln('Antes do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
          Writeln('Tamanho do string: ', tamanho_do_string);
          Writeln('qt_max_de_bytes_ja_alocados: ', qt_max_de_bytes_ja_alocados);
-         if tamanho_do_string > qt_max_de_bytes_ja_alocados then begin
+         if tamanho_do_string >= qt_max_de_bytes_ja_alocados then begin
             // Se já foi alocado memória, deslocar da memória.
             Writeln('Dentro do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
             Writeln('Tamanho do string: ', tamanho_do_string);
@@ -2523,7 +2522,9 @@ begin
                buffer_texto := nil;
             end;
             Writeln('Expandindo memória de ', qt_max_de_bytes_ja_alocados, ' pra ', tamanho_do_string);
-            qt_max_de_bytes_ja_alocados:= tamanho_do_string;
+            // Devemos colocar 1 caractere a mais por causa do caractere 'nulo', que será utilizada
+            // quando usarmos strlcat
+            qt_max_de_bytes_ja_alocados:= tamanho_do_string + 1;
 
             Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
             buffer_texto:= GetMem(qt_max_de_bytes_ja_alocados);
@@ -2531,8 +2532,8 @@ begin
          end;
 
          // Garantir que o string termino em nulo.
-         Writeln('Antes de buffer_texto^');
-         Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+         //Writeln('Antes de buffer_texto^');
+         //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
          buffer_texto^ := #0;
          Writeln('Antes de strlcat');
          strlcat(buffer_texto, PChar(str_sql_a_inserir), tamanho_do_string);

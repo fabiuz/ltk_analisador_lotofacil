@@ -162,6 +162,7 @@ const
 var
   uA: integer;
   indiceUltimaColuna: integer;
+  coluna_atual: TGridColumn;
 begin
   indiceUltimaColuna := High(b1_b2_b3_b4_campos);
 

@@ -5,17 +5,17 @@ unit ulotofacilExternoInterno;
 interface
 
 uses
-  Classes, SysUtils, Grids, sqlDb, DB, uLotofacilModulo, dialogs;
+  Classes, SysUtils, Grids, sqlDb, DB, uLotofacilModulo, Dialogs;
 
-    procedure ConfigurarControlesExternoInternoAgrupado(objControle: TStringGrid);
-    procedure ConfigurarControlesExternoInternoPorConcurso(objControle: TStringGrid);
+procedure ConfigurarControlesExternoInternoAgrupado(objControle: TStringGrid);
+procedure ConfigurarControlesExternoInternoPorConcurso(objControle: TStringGrid);
 
-    procedure CarregarExternoInternoAgrupado(objControle: TStringGrid);
-    procedure CarregarExternoInternoConsolidadoIntervaloConcurso(
-      objControle: TStringGrid; concursoInicial, concursoFinal: integer);
-    procedure CarregarExternoInternoPorConcurso(objControle: TStringGrid);
+procedure CarregarExternoInternoAgrupado(objControle: TStringGrid);
+procedure CarregarExternoInternoConsolidadoIntervaloConcurso(
+  objControle: TStringGrid; concursoInicial, concursoFinal: integer);
+procedure CarregarExternoInternoPorConcurso(objControle: TStringGrid);
 
-  { TLotofacilExternoInterno }
+{ TLotofacilExternoInterno }
 
   {
   TExternoInterno = class
@@ -38,8 +38,7 @@ uses
 
 implementation
 
-procedure ConfigurarControlesExternoInternoPorConcurso(
-  objControle: TStringGrid);
+procedure ConfigurarControlesExternoInternoPorConcurso(objControle: TStringGrid);
 const
   // Nome das colunas que estarão no controle.
   externo_interno_campos: array[0..2] of string = (
@@ -85,8 +84,7 @@ end;
  Carrega o controle com todas as combinações externo e interno de todos os
  concursos que saíram em ordem decrescente de concurso.
 }
-procedure CarregarExternoInternoPorConcurso(
-  objControle: TStringGrid);
+procedure CarregarExternoInternoPorConcurso(objControle: TStringGrid);
 const
   par_impar_campos: array[0..2] of string = (
     'concurso',
@@ -98,10 +96,8 @@ var
   dsLotofacil: TSqlQuery;
   uLinha, uA: integer;
   qt_registros: longint;
-  // concurso_parametro: TParam;
 begin
 
-  // Configurar Controle
   ConfigurarControlesExternoInternoPorConcurso(objControle);
 
   // Cria o sql
@@ -181,12 +177,9 @@ begin
   FreeAndNil(strSql);
   FreeAndNil(dmLotofacil);
 
-  // dmLotofacil.Free;
-  // dmLotofacil := nil;
 end;
 
-procedure ConfigurarControlesExternoInternoAgrupado(
-  objControle: TStringGrid);
+procedure ConfigurarControlesExternoInternoAgrupado(objControle: TStringGrid);
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   externo_interno_campos: array[0..5] of
@@ -200,11 +193,6 @@ begin
   // ltf_qt
   // res_qt
   // marcar
-  if not (objControle is TStringGrid) then
-  begin
-    Exit;
-  end;
-
   indice_ultima_coluna := High(externo_interno_campos);
   objControle.Columns.Clear;
   for uA := 0 to indice_ultima_Coluna do
@@ -218,11 +206,10 @@ begin
 
   // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
   // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
-  objControle.Columns[indice_ultima_coluna].ButtonStyle :=
-    TColumnButtonStyle.cbsCheckboxColumn;
+  objControle.Columns[indice_ultima_coluna].ButtonStyle := TColumnButtonStyle.cbsCheckboxColumn;
 
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
-  objControle.RowCount :=1;
+  objControle.RowCount := 1;
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
 end;
@@ -328,16 +315,14 @@ begin
   FreeAndNil(strSql);
   FreeAndNil(dmLotofacil);
 
-  //dmLotofacil.Free;
-  //dmLotofacil := nil;
 end;
 
 {
  Carrega o controle sgrParImparPorConcurso, neste caso, o usuário deve informar
  um concurso inicial e um concurso final
 }
-procedure CarregarExternoInternoConsolidadoIntervaloConcurso(
-  objControle: TStringGrid; concursoInicial, concursoFinal: integer);
+procedure CarregarExternoInternoConsolidadoIntervaloConcurso(objControle: TStringGrid;
+  concursoInicial, concursoFinal: integer);
 const
   par_impar_campos: array[0..4] of string = (
     'ext_int_id',
@@ -362,7 +347,8 @@ begin
   // Cria o sql
   strSql := TStringList.Create;
   strSql.add('Select ext_int_id, externo, interno, ltf_qt, res_qt from');
-  strSql.add('lotofacil.fn_lotofacil_resultado_externo_interno_agrupado_intervalo_concurso($1, $2)');
+  strSql.add(
+    'lotofacil.fn_lotofacil_resultado_externo_interno_agrupado_intervalo_concurso($1, $2)');
   strSql.add('order by res_qt desc, ltf_qt desc');
 
   // Inicia o módulo de dados.
@@ -387,13 +373,13 @@ begin
   concurso_parametro.AsInteger := concursoFinal;
 
   try
-     dsLotofacil.Prepare;
-     dsLotofacil.Open;
+    dsLotofacil.Prepare;
+    dsLotofacil.Open;
   except
     On exc: EDataBaseError do
     begin
-       MessageDlg('Erro', 'Erro: ' + exc.Message, mtError, [mbok], 0);
-       Exit;
+      MessageDlg('Erro', 'Erro: ' + exc.Message, mtError, [mbOK], 0);
+      Exit;
     end;
   end;
 
@@ -453,7 +439,6 @@ begin
   dmLotofacil.Free;
   dmLotofacil := nil;
 end;
-
 
 
 
@@ -887,5 +872,8 @@ end;
  }
 
 end.
+
+
+
 
 
