@@ -25,6 +25,9 @@ salvar em arquivo e depois fazer inserção manual. Obs.: Há também
 a opção manual, caso, o resultado ainda não esteja disponível no arquivo
 zipado.
 
+[Novos x Repetidos](Imagens/Novos_Repetidos.png)
+
+
 
 
 
