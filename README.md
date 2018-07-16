@@ -25,7 +25,30 @@ salvar em arquivo e depois fazer inserção manual. Obs.: Há também
 a opção manual, caso, o resultado ainda não esteja disponível no arquivo
 zipado.
 
-[Novos x Repetidos](Imagens/Novos_Repetidos.png)
+![Imagens/Novos_Repetidos.png](Imagens/Novos_Repetidos.png)
+
+![Imagens/Par_Impar.png](Imagens/Par_Impar.png)
+
+![Imagens/Primo_Nao_Primo.png](Imagens/Primo_Nao_Primo.png)
+
+![Imagens/Externo_Interno.png](Imagens/Externo_Interno.png)
+
+![Imagens/Bolas_Nas_Colunas.png](Imagens/Bolas_Nas_Colunas.png)
+
+![Imagens/Bolas_na_mesma_coluna.png](Imagens/Bolas_na_mesma_coluna.png)
+
+![Imagens/Algarismo_na_casa_das_dezenas.png](Imagens/algarismo_na_casa_das_dezenas.png)
+
+![Imagens/Diferenca_entre_bolas.png](Imagens/diferenca_entre_bolas.png)
+
+![Imagens/frequencia.png](Imagens/frequencia.png)
+
+![Imagens/Bolas_Na_Posicao_do_Sorteio.png](Imagens/Bolas_Na_Posicao_do_Sorteio.png)
+
+![Imagens/gerar_filtros.png](Imagens/gerar_filtros.png)
+
+![Imagens/analise_b1_a_b15.png](Imagens/analise_b1_a_b15.png)
+
 
 
 
