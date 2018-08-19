@@ -1,8 +1,8 @@
 object dmLotofacil: TdmLotofacil
   OldCreateOrder = False
   Height = 613
-  HorizontalOffset = 376
-  VerticalOffset = 219
+  HorizontalOffset = 469
+  VerticalOffset = 193
   Width = 839
   PPI = 96
   object sqlNovosRepetidos15Bolas: TSQLQuery
@@ -140,5 +140,12 @@ object dmLotofacil: TdmLotofacil
     Params = <>
     left = 592
     top = 136
+  end
+  object ZConnection1: TZConnection
+    ControlsCodePage = cCP_UTF8
+    AutoEncodeStrings = False
+    Port = 0
+    left = 64
+    top = 32
   end
 end

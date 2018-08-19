@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, sqldb, db, pqconnection, FileUtil,
-  PQTEventMonitor;
+  PQTEventMonitor, ZConnection;
 
 type
 
@@ -25,6 +25,7 @@ type
     sqlNovosRepetidos17Bolas : TSQLQuery;
     sqlNovosRepetidos18Bolas : TSQLQuery;
     SQLTransaction1 : TSQLTransaction;
+    ZConnection1: TZConnection;
   private
     { private declarations }
   public

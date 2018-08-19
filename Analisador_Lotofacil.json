@@ -9,6 +9,15 @@
         "Item3" : "Role=",
         "Item4" : "Usuario=",
         "Item5" : "Senha="
+      },
+      "config_de_conexao_Strings" : {
+        "Count" : "6",
+        "Item0" : "Host=192.168.88.248",
+        "Item1" : "Porta=5432",
+        "Item2" : "Banco de dados=ltk",
+        "Item3" : "Role=",
+        "Item4" : "Usuario=ltk",
+        "Item5" : "Senha="
       }
     }
   },
