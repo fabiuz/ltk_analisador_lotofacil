@@ -32,13 +32,13 @@ object Form1: TForm1
         Hint = 'Selecione grupos de 2, 3, 4 ou 5 bolas.'
         Top = 60
         Width = 1088
-        ActivePage = tab_quinteto
+        ActivePage = tab_mais_usados
         Align = alClient
         BorderSpacing.Left = 5
         BorderSpacing.Top = 10
         BorderSpacing.Right = 5
         MultiLine = True
-        TabIndex = 8
+        TabIndex = 0
         TabOrder = 0
         OnChange = pageFiltrosChange
         Options = [nboMultiLine]

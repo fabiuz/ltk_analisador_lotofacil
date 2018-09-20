@@ -110,8 +110,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uLotofacilMain"/>
-        <TopLine Value="4513"/>
-        <CursorPos X="44" Y="4518"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="15665"/>
+        <CursorPos X="3" Y="15688"/>
+        <ComponentState Value="1"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -319,10 +321,9 @@
       <Unit25>
         <Filename Value="lotofacil_constantes.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="94"/>
-        <CursorPos X="22" Y="131"/>
+        <TopLine Value="121"/>
+        <CursorPos X="38" Y="124"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
       </Unit25>
@@ -400,7 +401,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="710"/>
         <CursorPos Y="719"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
