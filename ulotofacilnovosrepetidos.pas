@@ -5,7 +5,7 @@ unit uLotofacilNovosRepetidos;
 interface
 
 uses
-    Classes, SysUtils, dbugintf, grids ;
+    Classes, SysUtils, dbugintf, grids, ZConnection, ZDataset ;
 
 procedure CarregarNovosRepetidos(objControle: TStringGrid);
 procedure ConfigurarControlesNovosRepetidosAgrupado(objControle: TStringGrid);
@@ -51,11 +51,14 @@ type
       fInicio_da_atualizacao : TDateTime;
       fFim_da_atualizacao : TDateTime;
 
+      f_sql_conexao: TZConnection;
+
     private
       // procedure AtualizarNovosRepetidos;
       // procedure AtualizarNovosRepetidos_2;
       //procedure AtualizarNovosRepetidos_3;
       procedure AtualizarNovosRepetidos_4;
+      procedure atualizar_resultado_novos_repetidos;
       procedure Exibir_Mensagem_de_Termino;
       //procedure GravarLinhasNoArquivo(arquivo_novos_repetidos : TFileStream; str_linhas : AnsiString);
       function ObterBolasDoConcurso(numero_do_concurso : Integer) : boolean;
@@ -69,6 +72,9 @@ type
         qt_de_bolas_subindo, qt_de_bolas_descendo: Integer): Integer; inline;
       function Obter_todos_id_de_comparacao_de_bolas_na_mesma_coluna: boolean;
 
+      public
+      procedure verificar_tabela_de_id_novos_repetidos;
+
     public
       constructor Create (objComponent: TComponent; bCriarSuspenso : boolean ) ;
       procedure atualizar ( numero_do_concurso : Integer ) ;
@@ -80,6 +86,10 @@ type
       property OnStatusAtualizacao: TLotofacilNovosRepetidosStatusAtualizacao read fStatus_Atualizacao write fStatus_Atualizacao;
       property OnStatusConcluido: TLotofacilNovosRepetidosStatusConcluido read fStatus_Concluido write fStatus_Concluido;
       property OnStatusErro: TLotofacilNovosRepetidosStatusErro read fStatus_Erro write fStatus_Erro;
+
+      property sql_conexao: TZconnection read f_sql_conexao write f_sql_conexao;
+
+      property concurso: Integer read fConcurso write fConcurso;
 
     public
 
@@ -2255,12 +2265,13 @@ begin
   // Antes de percorrer o buffer em memória do arquivo que lemos do disco
   // precisamos alocar memória pra o arranjo que armazenará o identificador
   // de comparação de bolas na mesma coluna.
-  if Obter_todos_id_de_comparacao_de_bolas_na_mesma_coluna = false then begin
-     FreeMem(pt_buffer_ltf_novos_repetidos);
-     Exibir_Mensagem_de_Termino;
-     Synchronize(@DoStatusErro);
-     Exit;
-  end;
+  // TODO:
+  //if Obter_todos_id_de_comparacao_de_bolas_na_mesma_coluna = false then begin
+  //   FreeMem(pt_buffer_ltf_novos_repetidos);
+  //   Exibir_Mensagem_de_Termino;
+  //   Synchronize(@DoStatusErro);
+  //   Exit;
+  //end;
 
   pt_buffer:= pt_buffer_ltf_novos_repetidos;
   qt_registros_lidos := 0;
@@ -2371,8 +2382,11 @@ begin
        end;
 
 
+    // TODO: Utilizar posteriormente.
+    {
     pt_buffer^.cmp_b_id := f_ltf_id_bolas_na_mesma_coluna[qt_de_bolas_comuns_na_mesma_coluna,
                            qt_de_bolas_subindo_na_mesma_coluna, qt_de_bolas_descendo_na_mesma_coluna];
+                           }
 
     // Verifica se a quantidade de repetidos está dentro da faixa válida pra lotofacil.
     if (qt_repetidos < 5) and (qt_repetidos > 15) then begin
@@ -2626,7 +2640,25 @@ begin
      sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_add_constraint()');
      sql_query.ExecSql;
 
-     Writeln('Executou... sql_query.Execsql na linha 2595');
+     fStatus_Mensagem:='Realizando commit...';
+     Synchronize(@DoStatus);
+
+     // Tudo ocorreu normalmente, então, confirmar transação.
+     dmLotofacil.pgLTK.Transaction.Commit;
+
+     // Verifica se a tabela lotofacil_id_novos_repetidos_agrupados e
+     // lotofacil_id_novos_repetidos_agrupados_por_qt está vazia, se sim
+     // devemos atualizar
+     fStatus_Mensagem:='Verificando tabela de id novos x repetidos';
+     Synchronize(@DoStatus);
+     verificar_tabela_de_id_novos_repetidos;
+
+     // Em seguida, atualiza a tabela lotofacil.lotofacil_resultado_novos_repetidos;
+     fStatus_Mensagem := 'Atualizando tabela lotofacil.lotofacil_resultado_novos_repetidos';
+     Synchronize(@DoStatus);
+     atualizar_resultado_novos_repetidos;
+
+     //Writeln('Executou... sql_query.Execsql na linha 2595');
 
      // Tudo ocorreu normalmente, então, confirmar transação.
      dmLotofacil.pgLTK.Transaction.Commit;
@@ -2634,19 +2666,19 @@ begin
      Writeln('Executou o commit');
      dmLotofacil.pgLTK.Close(true);
 
-     Writeln('Fechou o banco.');
+     //Writeln('Fechou o banco.');
      sql_query.Close;
-     Writeln('Fechou sql_query.');
+     //Writeln('Fechou sql_query.');
 
      FreeAndNil(dmLotofacil);
 
-     Writeln('Desalocou sql_memory');
+     //Writeln('Desalocou sql_memory');
      FreeAndNil(sql_memory);
 
-     Writeln('Antes de executar @doSTatus');
+     //Writeln('Antes de executar @doSTatus');
     Synchronize(@DoStatus);
     Synchronize(@DoStatusAtualizacao);
-    Writeln('Após executar @doStatus');
+    //Writeln('Após executar @doStatus');
 
   except
         On Exc: EDatabaseError do
@@ -2667,6 +2699,8 @@ begin
         end;
   end;
 
+
+
   // Se chegarmos aqui, quer dizer, que todos os ítens foram atualizados com sucesso!!!;
   fStatus_Mensagem := 'Itens atualizado com sucesso!!!';
   Exibir_Mensagem_de_Termino;
@@ -2676,6 +2710,72 @@ begin
   Writeln('Antes de sair da procedure, depois de @doStatusConcluido');
 
 
+
+end;
+
+procedure TLotofacilNovosRepetidos.atualizar_resultado_novos_repetidos;
+var
+  sql_query: TZQuery;
+begin
+  sql_query := TZQuery.Create(Nil);
+  sql_query.Connection := f_sql_conexao;
+  sql_query.Connection.Autocommit := True;
+  sql_query.Sql.Clear;
+  sql_query.Sql.Add('Select from lotofacil.fn_ltf_res_novos_repetidos_atualizar(0,');
+  sql_query.Sql.Add(IntToStr(fConcurso));
+  sql_query.Sql.Add(')');
+  sql_query.ExecSql;
+  sql_query.Close;
+  sql_query.Connection.Connected := false;
+  FreeAndNil(sql_query);
+end;
+
+procedure TLotofacilNovosRepetidos.verificar_tabela_de_id_novos_repetidos;
+var
+  sql_query: TZQuery;
+  qt_registros: LongInt;
+begin
+     sql_query := TZquery.Create(Nil);
+     sql_query.Connection := f_sql_conexao;
+     sql_query.Connection.Connected := false;
+     sql_query.Connection.AutoCommit := false;
+     sql_query.Sql.Clear;
+     sql_query.Sql.Add('Select * from lotofacil.lotofacil_id_novos_repetidos_agrupado');
+     sql_query.Open;
+     sql_query.First;
+     sql_query.Last;
+
+     qt_registros := sql_query.RecordCount;
+
+     // A tabela lotofacil_id_novos_repetidos_agrupado, tem que ter
+     // 11 registros.
+     if qt_registros <> 11 then begin
+        sql_query.SQL.Clear;
+        sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_id_novos_repetidos_agrupado()');
+        sql_query.ExecSql;
+     end;
+
+     // A tabela lotofacil_id_novos_repetidos_agrupado_por_qt tem que ter 38 registros.
+     sql_query.Sql.Clear;
+     sql_query.Sql.Add('Select * from lotofacil.lotofacil_id_novos_repetidos_agrupado_por_qt');
+     //sql_query.ExecSql;
+     sql_query.Open;
+     sql_query.First;
+     sql_query.Last;
+
+     qt_registros := sql_query.RecordCount;
+
+     if qt_registros <> 38 then begin
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select * from lotofacil.fn_lotofacil_id_novos_repetidos_agrupado_por_qt()');
+        sql_query.ExecSql;
+     end;
+
+     sql_query.Connection.Commit;
+     sql_query.Connection.Connected := false;
+
+     sql_query.Close;
+     FreeAndNil(sql_query);
 
 end;
 

@@ -49,7 +49,7 @@ object dmLotofacil: TdmLotofacil
   object pgLTK: TPQConnection
     Connected = False
     LoginPrompt = False
-    DatabaseName = 'ltk'
+    DatabaseName = 'lotofacil'
     KeepConnection = False
     Password = 'ltk'
     Transaction = SQLTransaction1
@@ -144,6 +144,9 @@ object dmLotofacil: TdmLotofacil
   object ZConnection1: TZConnection
     ControlsCodePage = cCP_UTF8
     AutoEncodeStrings = False
+    Properties.Strings = (
+      'AutoEncodeStrings='
+    )
     Port = 0
     left = 64
     top = 32
