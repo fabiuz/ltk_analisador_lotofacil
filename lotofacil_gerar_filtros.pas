@@ -26,10 +26,6 @@ type
         Concurso:   integer;
     end;
 
-{
- Ao gerar filtros, iremos pegar o campo id de cada controle,
- pois esta é a informação que precisamos.
-}
 procedure configurar_campo_id_dos_controles(var campo_id: TStringArray);
 procedure Gerar_Filtros(lista_sgr_controle: array of R_Filtro_Controle; sql_conexao: TZConnection;
     opcoes_do_filtro: R_Filtro_Opcoes; cmb_minimo_maximo: R_Frequencia_Minimo_Maximo);
@@ -40,8 +36,6 @@ procedure atualizar_controle_sgr_filtros(sgr_filtros: TStringGrid; str_filtro_da
     sql_conexao: TZConnection);
 procedure configurar_sgr_filtros(sgr_filtros: TStringGrid);
 procedure atualizar_sgr_filtros(sgr_filtros: TStringGrid; str_filtro_data_hora: string; sql_conexao: TZConnection);
-procedure filtro_excluir(sql_conexao: TZConnection; filtro_data_hora: string);
-procedure filtro_excluir_todos(sql_conexao: TZConnection);
 function obter_id_da_frequencia(sgr_controle: TStringGrid; cmb_minimo_maximo: R_Frequencia_Minimo_Maximo): string;
 function filtro_binario_obter_ids: string;
 
@@ -95,7 +89,7 @@ begin
 end;
 
 {
- Esta procedure chama outras funtions e procedures pra gerar o filtro.
+ Esta procedure chama outras functions e procedures pra gerar o filtro.
 }
 procedure Gerar_Filtros(lista_sgr_controle: array of R_Filtro_Controle;
   sql_conexao: TZConnection; opcoes_do_filtro: R_Filtro_Opcoes;
@@ -124,14 +118,6 @@ begin
         id_obtidos := id_obtidos + lista_de_ids[uA];
     end;
 
-    //if (id_obtidos <> '') and (id_obtidos_frequencia <> '') then begin
-    //    id_obtidos := id_obtidos + ' and ' + id_obtidos_frequencia;
-    //end else if id_obtidos_frequencia <> '' then begin
-    //    id_obtidos := id_obtidos_frequencia;
-    //end else if id_obtidos = '' then begin
-    //        MessageDlg('', 'Nenhum filtro foi selecionado.', mtError, [mbok], 0);
-    //        Exit;
-    //end;
     sql_foi_gerado := gerar_sql_dos_ids_obtidos(id_obtidos, sql_conexao, opcoes_do_filtro);
     if sql_foi_gerado then
     begin
@@ -336,8 +322,6 @@ begin
         sql_gerado.Add('limit ' + IntToStr(opcoes_do_filtro.sql_limit));
     end;
 
-    Writeln(sql_gerado.Text);
-
     try
         sql_query := TZQuery.Create(nil);
         sql_query.Connection := sql_conexao;
@@ -357,57 +341,57 @@ begin
 
     /// Código daqui pra baixo não será utilizado.
     exit;
-    try
-        sql_query := TZQuery.Create(nil);
-        sql_query.connection := sql_conexao;
-        sql_query.Sql.Add('Insert into d_sorte.d_sorte_filtros');
-        sql_query.Sql.Add('(');
-        sql_query.Sql.Add('data,');
-        sql_query.Sql.Add('d_sorte_id,');
-        sql_query.Sql.Add('d_sorte_qt,');
-        sql_query.Sql.Add('concurso,');
-        sql_query.Sql.Add('acertos,');
-        sql_query.Sql.Add('id_seq_cmb_em_grupos,');
-        sql_query.Sql.Add('id_seq_exc_novos_repetidos_id');
-        sql_query.Sql.Add(')');
-        sql_query.Sql.Add('Select Now(),');
-        sql_query.Sql.Add('d_sorte.d_sorte_bolas.d_sorte_id,');
-        sql_query.Sql.Add('d_sorte.d_sorte_bolas.d_sorte_qt,');
-        sql_query.Sql.Add('1,');
-        sql_query.Sql.Add('0,');
-        sql_query.Sql.Add('id_seq_cmb_em_grupos,');
-        sql_query.Sql.Add('id_seq_exc_novos_repetidos_id');
-        sql_query.Sql.Add('from');
-        sql_query.Sql.Add('d_sorte.d_sorte_bolas,');
-        sql_query.Sql.Add('d_sorte.d_sorte_id,');
-        sql_query.Sql.Add('d_sorte.d_sorte_combinacoes_em_grupos,');
-        sql_query.Sql.Add('d_sorte.d_sorte_novos_repetidos');
-        sql_query.Sql.Add('where d_sorte.d_sorte_bolas.d_sorte_id = d_sorte.d_sorte_id.d_sorte_id');
-        sql_query.Sql.Add('and   d_sorte.d_sorte_bolas.d_sorte_id = d_sorte.d_sorte_combinacoes_em_grupos.d_sorte_id');
-        sql_query.Sql.Add('and   d_sorte.d_sorte_bolas.d_sorte_id = d_sorte.d_sorte_novos_repetidos.d_sorte_id');
-        sql_query.Sql.Add('and   d_sorte.d_sorte_id.d_sorte_id = d_sorte.d_sorte_combinacoes_em_grupos.d_sorte_id');
-        sql_query.Sql.Add('and   d_sorte.d_sorte_id.d_sorte_id = d_sorte.d_sorte_novos_repetidos.d_sorte_id');
-        sql_query.Sql.Add(
-            'and   d_sorte.d_sorte_combinacoes_em_grupos.d_sorte_id = d_sorte.d_sorte_novos_repetidos.d_sorte_id');
-        sql_query.Sql.Add('and ' + id_obtidos);
-        //sql_query.Sql.Add('order by id_seq_exc_novos_repetidos_id asc');
-        sql_query.Sql.Add('order by id_seq_cmb_em_grupos asc');
-        sql_query.Sql.Add('limit 1000');
-
-        Writeln(sql_query.Sql.Text);
-
-        sql_query.ExecSQL;
-        sql_query.Close;
-        FreeAndNil(sql_query);
-    except
-        On exc: Exception do
-        begin
-            MessageDlg('', 'Erro: ' + exc.Message, mtError, [mbOK], 0);
-            sql_query.Close;
-            Exit(False);
-        end;
-    end;
-    Exit(True);
+    //try
+    //    sql_query := TZQuery.Create(nil);
+    //    sql_query.connection := sql_conexao;
+    //    sql_query.Sql.Add('Insert into d_sorte.d_sorte_filtros');
+    //    sql_query.Sql.Add('(');
+    //    sql_query.Sql.Add('data,');
+    //    sql_query.Sql.Add('d_sorte_id,');
+    //    sql_query.Sql.Add('d_sorte_qt,');
+    //    sql_query.Sql.Add('concurso,');
+    //    sql_query.Sql.Add('acertos,');
+    //    sql_query.Sql.Add('id_seq_cmb_em_grupos,');
+    //    sql_query.Sql.Add('id_seq_exc_novos_repetidos_id');
+    //    sql_query.Sql.Add(')');
+    //    sql_query.Sql.Add('Select Now(),');
+    //    sql_query.Sql.Add('d_sorte.d_sorte_bolas.d_sorte_id,');
+    //    sql_query.Sql.Add('d_sorte.d_sorte_bolas.d_sorte_qt,');
+    //    sql_query.Sql.Add('1,');
+    //    sql_query.Sql.Add('0,');
+    //    sql_query.Sql.Add('id_seq_cmb_em_grupos,');
+    //    sql_query.Sql.Add('id_seq_exc_novos_repetidos_id');
+    //    sql_query.Sql.Add('from');
+    //    sql_query.Sql.Add('d_sorte.d_sorte_bolas,');
+    //    sql_query.Sql.Add('d_sorte.d_sorte_id,');
+    //    sql_query.Sql.Add('d_sorte.d_sorte_combinacoes_em_grupos,');
+    //    sql_query.Sql.Add('d_sorte.d_sorte_novos_repetidos');
+    //    sql_query.Sql.Add('where d_sorte.d_sorte_bolas.d_sorte_id = d_sorte.d_sorte_id.d_sorte_id');
+    //    sql_query.Sql.Add('and   d_sorte.d_sorte_bolas.d_sorte_id = d_sorte.d_sorte_combinacoes_em_grupos.d_sorte_id');
+    //    sql_query.Sql.Add('and   d_sorte.d_sorte_bolas.d_sorte_id = d_sorte.d_sorte_novos_repetidos.d_sorte_id');
+    //    sql_query.Sql.Add('and   d_sorte.d_sorte_id.d_sorte_id = d_sorte.d_sorte_combinacoes_em_grupos.d_sorte_id');
+    //    sql_query.Sql.Add('and   d_sorte.d_sorte_id.d_sorte_id = d_sorte.d_sorte_novos_repetidos.d_sorte_id');
+    //    sql_query.Sql.Add(
+    //        'and   d_sorte.d_sorte_combinacoes_em_grupos.d_sorte_id = d_sorte.d_sorte_novos_repetidos.d_sorte_id');
+    //    sql_query.Sql.Add('and ' + id_obtidos);
+    //    //sql_query.Sql.Add('order by id_seq_exc_novos_repetidos_id asc');
+    //    sql_query.Sql.Add('order by id_seq_cmb_em_grupos asc');
+    //    sql_query.Sql.Add('limit 1000');
+    //
+    //    Writeln(sql_query.Sql.Text);
+    //
+    //    sql_query.ExecSQL;
+    //    sql_query.Close;
+    //    FreeAndNil(sql_query);
+    //except
+    //    On exc: Exception do
+    //    begin
+    //        MessageDlg('', 'Erro: ' + exc.Message, mtError, [mbOK], 0);
+    //        sql_query.Close;
+    //        Exit(False);
+    //    end;
+    //end;
+    //Exit(True);
 end;
 
 procedure atualizar_controle_sgr_filtros(sgr_filtros: TStringGrid; str_filtro_data_hora: string;
@@ -497,108 +481,9 @@ begin
     sgr_filtros.AutoSizeColumns;
 end;
 
-procedure filtro_excluir(sql_conexao: TZConnection; filtro_data_hora: string);
-var
-    sql_query: TZQuery;
-    filtro_data_hora_original: string;
-    data_hora, Data, hora: TStringArray;
 
-begin
-    // Aqui, verificaremos se o usuário deseja excluir o filtro
-    // Se a resposta for não, retornaremos imediatamente.
-    if mrNo = MessageDlg('', 'Deseja excluir o filtro criado em ' + filtro_data_hora + '?',
-        mtConfirmation, [mbYes, mbNo], 0) then
-    begin
-        Exit;
-    end;
 
-    if filtro_data_hora = '' then
-    begin
-        Exit;
-    end;
-    // Armazena o filtro original, pra ser exibido caso o filtro seja
-    // excluído com sucesso.
-    filtro_data_hora_original := filtro_data_hora;
 
-    // A data está em formato brasileiro, assim: dd-mm-yyyy hh:nn:ss.mi
-    // Vamos criar um arranjo, pra isto, o campo data é separado do campo tempo por um
-    // espaço.
-    data_hora := filtro_data_hora.Split(' ');
-
-    if Length(data_hora) <> 2 then
-    begin
-        MessageDlg('', 'Erro, deve haver um espaço separado a data e hora.',
-            mtError, [mbOK], 0);
-        Exit;
-    end;
-
-    // Agora, iremos separar a parte data, em dia, mes e ano.
-    Data := data_hora[0].Split('-');
-
-    // Deve haver 3 valores.
-    if Length(Data) <> 3 then
-    begin
-        MessageDlg('',
-            'Erro, os campos de dia, mês e ano, deve ser interseparados pelo caractere ' +
-            '-', mtError, [mbOK], 0);
-        Exit;
-    end;
-
-    // Ficará desta forma:
-    // data[0] => dia
-    // data[1] => mes
-    // data[2] => ano
-
-    // Agora, iremos colocar a data no formato americano.
-    filtro_data_hora := Data[2] + '-' + Data[1] + '-' + Data[0] + ' ' + data_hora[1];
-
-    try
-        sql_query := TZQuery.Create(nil);
-        sql_query.Connection := sql_conexao;
-        sql_query.Sql.Clear;
-        sql_query.Sql.Add('Delete from d_sorte.d_sorte_filtros');
-        sql_query.Sql.Add('where data = ' + QuotedStr(filtro_data_hora));
-        Writeln(sql_query.Sql.Text);
-        sql_query.ExecSql;
-        sql_query.Close;
-    except
-        On exc: Exception do
-        begin
-            sql_query.Close;
-            sql_conexao.Rollback;
-            MessageDlg('', 'Erro, ' + exc.Message, mtError, [mbOK], 0);
-            Exit;
-        end;
-    end;
-
-    MessageDlg('', 'Filtro ' + filtro_data_hora_original, mtInformation, [mbOK], 0);
-end;
-
-procedure filtro_excluir_todos(sql_conexao: TZConnection);
-var
-    sql_query: TZQuery;
-begin
-    if mrNo = MessageDlg('', 'Deseja excluir todos os concurso???', mtInformation, [mbYes, mbNo], 0) then
-    begin
-        Exit;
-    end;
-
-    try
-        sql_query := TZQuery.Create(nil);
-        sql_query.Connection := sql_conexao;
-        sql_query.Sql.Clear;
-        sql_query.Sql.Add('Truncate d_sorte.d_sorte_filtros');
-        sql_query.ExecSql;
-    except
-        On exc: Exception do
-        begin
-            MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbOK], 0);
-            sql_conexao.Rollback;
-        end;
-    end;
-    FreeAndNil(sql_query);
-    MessageDlg('', 'Todos os filtros foram excluídos com sucesso!!!', mtInformation, [mbOK], 0);
-end;
 
 function obter_id_da_frequencia(sgr_controle: TStringGrid; cmb_minimo_maximo: R_Frequencia_Minimo_Maximo): string;
 var
@@ -1131,7 +1016,6 @@ end;
  similar a isto:
  ((par_impar_id in (1, 2, 3)) and (prm_id in (1, 2, 7)))
 }
-//function obter_id_dos_filtros(lista_sgr_controle: TList_StringGrid): string;
 function filtro_binario_obter_ids: string;
 var
     id_atual, titulo_coluna, titulo_ultima_coluna, titulo_penultima_coluna, id_atual_sim,
@@ -1150,7 +1034,6 @@ begin
         chave := mapa_filtro_binario_info.Keys[uA];
         filtro_info := mapa_filtro_binario_info.KeyData[chave];
 
-        //sgr_controle := lista_sgr_controle[uA].sgr_controle;
         sgr_controle := filtro_info.sgr_controle;
 
         // Alguns controle terão uma procedure pra obter os ids, por exemplo,

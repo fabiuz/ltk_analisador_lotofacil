@@ -1,3 +1,8 @@
+{
+ Unit não mais necessária pois, agora, toda a informação de estatística fica
+ em um objeto do tipo mapa.
+}
+
 unit uLotofacilPrimoNaoPrimo;
 
 {$mode objfpc}{$H+}
@@ -55,6 +60,7 @@ end;
   até hoje nos concursos sorteados.
   }
 procedure CarregarPrimoNaoPrimo(objControle: TStringGrid);
+{
 const
     externo_interno_campos: array [0..4] of string = (
         'prm_id',
@@ -67,7 +73,9 @@ var
     sql_query:  TSqlQuery;
     uLinha, uA: integer;
     qt_registros: longint;
+    }
 begin
+    {
     if not Assigned(dmLotofacil) then
     begin
         dmLotofacil := TdmLotofacil.Create(objControle.parent);
@@ -142,6 +150,7 @@ begin
 
     dmLotofacil.Free;
     dmLotofacil := nil;
+    }
 end;
 
 {
@@ -150,6 +159,7 @@ end;
 }
 procedure CarregarPrimoNaoPrimoConsolidadoIntervaloConcurso(objControle: TStringGrid;
     concursoInicial, concursoFinal: integer);
+{
 const
     primo_naoprimo_campos: array[0..4] of string = (
         'prm_id',
@@ -163,7 +173,9 @@ var
     uLinha, uA:  integer;
     qt_registros: longint;
     concurso_parametro: TParam;
+    }
 begin
+    {
     // Só iremos manipular StringGrid
     if not (objControle is TStringGrid) then
     begin
@@ -253,11 +265,13 @@ begin
 
     dmLotofacil.Free;
     dmLotofacil := nil;
+    }
 end;
 
 
 
 procedure ConfigurarControlesPrimoNaoPrimoPorConcurso(objControle: TStringGrid);
+{
 const
     // Nome das colunas que estarão no controle.
     primo_nao_primo_campos: array[0..2] of string = (
@@ -268,8 +282,9 @@ const
 var
     indice_ultima_coluna, uA: integer;
     coluna_atual: TGridColumn;
+    }
 begin
-
+      {
     // Evitar que adicionemos novas colunas, se já houver.
     objControle.Columns.Clear;
 
@@ -296,6 +311,7 @@ begin
     objControle.RowCount := 1;
     objControle.FixedRows := 1;
     objControle.FixedCols := 0;
+    }
 
 end;
 
@@ -304,6 +320,7 @@ end;
  concursos que saíram em ordem decrescente de concurso.
 }
 procedure CarregarPrimoNaoPrimoPorConcurso(objControle: TStringGrid);
+{
 const
     primo_nao_primo_campos: array[0..2] of string = (
         'concurso',
@@ -315,7 +332,10 @@ var
     dsLotofacil: TSqlQuery;
     uLinha, uA:  integer;
     qt_registros: longint;
+    }
 begin
+
+{
     // Só iremos manipular StringGrid
     if not (objControle is TStringGrid) then
     begin
@@ -399,7 +419,7 @@ begin
 
     dmLotofacil.Free;
     dmLotofacil := nil;
-
+   }
 
 
 

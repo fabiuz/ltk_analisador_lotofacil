@@ -20,17 +20,22 @@ function configurar_sgr_controle(sgr_controle: TStringGrid): boolean;
 procedure Filtro_Excluir(filtro_data_hora_brasil: ansistring; sql_conexao: TZConnection);
 
 procedure filtro_chk_controle_obter_opcoes_selecionadas(chk_controle: TCheckGroup);
-procedure atualizar_filtro_controle_binario(controle_tag_id: Integer; sql_conexao: TZConnection);
+procedure atualizar_filtro_controle_binario(controle_tag_id: integer; sql_conexao: TZConnection);
 procedure obter_filtro_binario(sgr_controle: TStringGrid; sql_conexao: TZConnection);
 function configurar_filtro_binario_sgr_controle(sgr_controle: TStringGrid): boolean;
 procedure filtro_binario_rd_controle_alterou(rd_controle: TRadioGroup);
 
-
+//procedure filtro_excluir(sql_conexao: TZConnection; filtro_data_hora: string);
+procedure filtro_excluir_todos(sql_conexao: TZConnection);
 
 implementation
 
 uses Dialogs;
 
+{
+ Exclui filtro selecionado pelo usuário, a filtro a excluir é igual a data no formato brasileiro:
+ dd-mm-yyyy hh:nn:ss.mi
+}
 procedure Filtro_Excluir(filtro_data_hora_brasil: ansistring; sql_conexao: TZConnection);
 var
     sql_query: TZQuery;
@@ -87,8 +92,7 @@ begin
     // entretanto, o string de data passado na procedure está no formato brasileiro,
     // pois, a caixa de combinação exibe sempre no formato brasileiro,
     // na atribuição abaixo, iremos converter pra o formato americano.
-    filtro_data_hora_brasil :=
-        Data[2] + '-' + Data[1] + '-' + Data[0] + ' ' + data_hora[1];
+    filtro_data_hora_brasil := Data[2] + '-' + Data[1] + '-' + Data[0] + ' ' + data_hora[1];
 
     try
         sql_query := TZQuery.Create(nil);
@@ -129,15 +133,16 @@ end;
  a uma chave na variável global 'mapa_filtro_binario_info', que armazena todos os controles
  que está relacionada a estatística de onde o button foi chamado.
 }
-procedure atualizar_filtro_controle_binario(controle_tag_id: Integer; sql_conexao: TZConnection);
+procedure atualizar_filtro_controle_binario(controle_tag_id: integer; sql_conexao: TZConnection);
 var
-    chk_controle : TCheckGroup;
+    chk_controle: TCheckGroup;
     filtro_info: R_Filtro_Binario_Controle;
-    bolas_a_excluir: String;
-    uA: Integer;
+    bolas_a_excluir: string;
+    uA: integer;
     sgr_controle: TStringGrid;
 begin
-    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then begin
+    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then
+    begin
         Exit;
     end;
 
@@ -161,29 +166,34 @@ end;
 }
 procedure filtro_chk_controle_obter_opcoes_selecionadas(chk_controle: TCheckGroup);
 var
-  controle_tag_id, uA: Integer;
-  bolas_a_excluir: String;
-  filtro_info: R_Filtro_Binario_Controle;
+    controle_tag_id, uA: integer;
+    bolas_a_excluir: string;
+    filtro_info: R_Filtro_Binario_Controle;
 begin
     controle_tag_id := chk_controle.Tag;
-    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then begin
-       Exit;
+    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then
+    begin
+        Exit;
     end;
 
     bolas_a_excluir := '';
-    for uA := 0 to Pred(chk_controle.Items.Count) do begin
-        if chk_controle.Checked[uA] then begin
-            if bolas_a_excluir <> '' then begin
-                bolas_a_excluir:=bolas_a_excluir + ',';
+    for uA := 0 to Pred(chk_controle.Items.Count) do
+    begin
+        if chk_controle.Checked[uA] then
+        begin
+            if bolas_a_excluir <> '' then
+            begin
+                bolas_a_excluir := bolas_a_excluir + ',';
             end;
-            bolas_a_excluir:=bolas_a_excluir + chk_controle.Items[uA];
+            bolas_a_excluir := bolas_a_excluir + chk_controle.Items[uA];
         end;
     end;
-    if bolas_a_excluir <> '' then begin
-        bolas_a_excluir:= 'where bin_qt not in(' + bolas_a_excluir +')';
+    if bolas_a_excluir <> '' then
+    begin
+        bolas_a_excluir := 'where bin_qt not in(' + bolas_a_excluir + ')';
     end;
     filtro_info := mapa_filtro_binario_info.KeyData[controle_tag_id];
-    filtro_info.chk_controle_excluir_bolas:= bolas_a_excluir;
+    filtro_info.chk_controle_excluir_bolas := bolas_a_excluir;
     mapa_filtro_binario_info.KeyData[controle_tag_id] := filtro_info;
 end;
 
@@ -243,15 +253,16 @@ end;
 function configurar_filtro_binario_sgr_controle(sgr_controle: TStringGrid): boolean;
 var
     ultima_coluna, uA: integer;
-    coluna_atual: TGridColumn;
+    coluna_atual:    TGridColumn;
     cabecalho_do_controle: array of string;
-    indice_tag: integer;
+    indice_tag:      integer;
     sgr_controle_info: R_Filtro_Controle;
-    controle_tag_id: Integer;
-    filtro_info: R_Filtro_Binario_Controle;
+    controle_tag_id: integer;
+    filtro_info:     R_Filtro_Binario_Controle;
 begin
     controle_tag_id := sgr_controle.Tag;
-    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then begin
+    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then
+    begin
         Exit(False);
     end;
     filtro_info := mapa_filtro_binario_info.KeyData[controle_tag_id];
@@ -295,12 +306,13 @@ var
     qt_registros, linha_sgr_controle, uA: integer;
     valor_do_campo_atual: string;
     sgr_controle_info: R_Filtro_Controle;
-    controle_tag_id: Integer;
-    filtro_info: R_Filtro_Binario_Controle;
+    controle_tag_id: integer;
+    filtro_info:   R_Filtro_Binario_Controle;
 begin
     // Verifica se a tag existe no mapa de filtros.
     controle_tag_id := sgr_controle.Tag;
-    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then begin
+    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then
+    begin
         Exit;
     end;
 
@@ -315,7 +327,7 @@ begin
 
     ultima_coluna := High(sql_campos);
     try
-        sql_query := TZQuery.Create(Nil);
+        sql_query := TZQuery.Create(nil);
         sql_query.Connection := sql_conexao;
 
         sql_query.Sql.Clear;
@@ -338,7 +350,7 @@ begin
             sgr_controle.Columns.Clear;
             sgr_controle.Columns.Add;
             sgr_controle.Columns[0].Alignment := tacenter;
-            sgr_controle.FixedRows:=0;
+            sgr_controle.FixedRows := 0;
             sgr_controle.cells[0, 0] := 'Erro, não há filtros';
             sgr_controle.AutoSizeColumns;
             Exit;
@@ -347,7 +359,7 @@ begin
         // Será 1 linha a mais por causa do cabeçalho na linha 0.
         sgr_controle.RowCount := qt_registros + 1;
         linha_sgr_controle := 1;
-
+        sgr_controle.BeginUpdate;
         // Iremos percorre todos os registros e iremos inserir no controle
         sql_query.First;
         while sql_query.EOF = False do
@@ -366,6 +378,7 @@ begin
             sql_query.Next;
             Inc(linha_sgr_controle);
         end;
+        sgr_controle.EndUpdate(True);
         sql_query.Close;
         FreeAndNil(sql_query);
     except
@@ -382,7 +395,10 @@ begin
     sgr_controle.AutoSizeColumns;
 end;
 
-
+{
+ Carrega o controle do tipo 'TStringGrid' com os filtros conforme a estatística a qual
+ aquele controle se refere.
+}
 procedure carregar_filtro_sgr_controle(sgr_controle: TStringGrid; sql_conexao: TZConnection);
 begin
     obter_filtro(sgr_controle, sql_conexao);
@@ -411,7 +427,8 @@ begin
 
     // Pra os controles que começa em 'sgr_cmp_b', não iremos popular
     // nenhum conteúdo pois, será renderizado, de outra forma.
-    if AnsiStartsStr('sgr_cmp_', LowerCase(sgr_controle.Name)) then begin
+    if AnsiStartsStr('sgr_cmp_', LowerCase(sgr_controle.Name)) then
+    begin
         Exit;
 
     end;
@@ -431,7 +448,8 @@ begin
 
     // Se não há sql, devemos retornar pois, provavelmente, o controle será populado
     // posteriormente.
-    if trim(sgr_controle_info.sql) = '' then begin
+    if trim(sgr_controle_info.sql) = '' then
+    begin
         Exit;
     end;
 
@@ -439,7 +457,7 @@ begin
     ultima_coluna := High(sql_campos);
 
     try
-        sql_query := TZQuery.Create(Nil);
+        sql_query := TZQuery.Create(nil);
         sql_query.Connection := sql_conexao;
 
         sql_query.Sql.Clear;
@@ -458,7 +476,7 @@ begin
             sgr_controle.Columns.Clear;
             sgr_controle.Columns.Add;
             sgr_controle.Columns[0].Alignment := tacenter;
-            sgr_controle.FixedRows:=0;
+            sgr_controle.FixedRows := 0;
             sgr_controle.cells[0, 0] := 'Erro, não há filtros';
             sgr_controle.AutoSizeColumns;
             Exit;
@@ -708,57 +726,148 @@ end;
 }
 procedure filtro_binario_rd_controle_alterou(rd_controle: TRadioGroup);
 const
-  ID_MARCAR_NAO = 0;
-  ID_MARCAR_SIM = 1;
-  ID_DESMARCAR_TUDO = 2;
-  ID_MARCACAO_PARCIAL = 3;
+    ID_MARCAR_NAO     = 0;
+    ID_MARCAR_SIM     = 1;
+    ID_DESMARCAR_TUDO = 2;
+    ID_MARCACAO_PARCIAL = 3;
 var
-    controle_tag_id:   integer;
-    sgr_controle: TStringGrid;
-    filtro_info: R_Filtro_Binario_Controle;
+    controle_tag_id: integer;
+    sgr_controle:    TStringGrid;
+    filtro_info:     R_Filtro_Binario_Controle;
 begin
     controle_tag_id := rd_controle.Tag;
-    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then begin
+    if mapa_filtro_binario_info.IndexOf(controle_tag_id) = -1 then
+    begin
         Exit;
     end;
 
     filtro_info := mapa_filtro_binario_info.KeyData[controle_tag_id];
 
     sgr_controle := filtro_info.sgr_controle;
-    if Not Assigned(sgr_controle) then begin
+    if not Assigned(sgr_controle) then
+    begin
         Exit;
     end;
 
     // Se índice é 0, o usuário deseja selecionar todas as células da coluna 'sim'.
     if rd_controle.ItemIndex = ID_MARCAR_SIM then
     begin
-        //indice_tag := rd_controle.tag;
-        //if indice_tag < lista_sgr_controle_filtros.Count then
-        //begin
-            //sgr_controle := lista_sgr_controle_filtros.Items[indice_tag];
-            marcar_sim_nao_pra_coluna(sgr_controle, 'sim');
-        //end;
-        // Índice 1, o usuário deseja selecionar a coluna não.
+        marcar_sim_nao_pra_coluna(sgr_controle, 'sim');
     end
     else if rd_controle.ItemIndex = ID_MARCAR_NAO then
     begin
-        //indice_tag := rd_controle.tag;
-        //if indice_tag < lista_sgr_controle_filtros.Count then
-        //begin
-        //    sgr_controle := lista_sgr_controle_filtros.Items[indice_tag];
-            marcar_sim_nao_pra_coluna(sgr_controle, 'nao');
-        //end;
-        // Índice 2, o usuário deseja desmarcar tudo.
+        marcar_sim_nao_pra_coluna(sgr_controle, 'nao');
     end
     else if rd_controle.ItemIndex = ID_DESMARCAR_TUDO then
     begin
-        //indice_tag := rd_controle.tag;
-        //if indice_tag < lista_sgr_controle_filtros.Count then
-        //begin
-        //    sgr_controle := lista_sgr_controle_filtros.Items[indice_tag];
-            marcar_sim_nao_pra_coluna(sgr_controle, '');
-        //end;
+        marcar_sim_nao_pra_coluna(sgr_controle, '');
     end;
 end;
+
+{
+ Exclui todos os filtros, pergunta antes se deseja realmente excluir.
+}
+procedure filtro_excluir_todos(sql_conexao: TZConnection);
+var
+    sql_query: TZQuery;
+begin
+    if mrNo = MessageDlg('', 'Deseja excluir todos os concurso???', mtInformation, [mbYes, mbNo], 0) then
+    begin
+        Exit;
+    end;
+
+    try
+        sql_query := TZQuery.Create(nil);
+        sql_query.Connection := sql_conexao;
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Truncate d_sorte.d_sorte_filtros');
+        sql_query.ExecSql;
+    except
+        On exc: Exception do
+        begin
+            MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbOK], 0);
+            sql_conexao.Rollback;
+        end;
+    end;
+    FreeAndNil(sql_query);
+    MessageDlg('', 'Todos os filtros foram excluídos com sucesso!!!', mtInformation, [mbOK], 0);
+end;
+
+//procedure filtro_excluir(sql_conexao: TZConnection; filtro_data_hora: string);
+//var
+//    sql_query: TZQuery;
+//    filtro_data_hora_original: string;
+//    data_hora, Data, hora: TStringArray;
+//
+//begin
+//    // Aqui, verificaremos se o usuário deseja excluir o filtro
+//    // Se a resposta for não, retornaremos imediatamente.
+//    if mrNo = MessageDlg('', 'Deseja excluir o filtro criado em ' + filtro_data_hora + '?',
+//        mtConfirmation, [mbYes, mbNo], 0) then
+//    begin
+//        Exit;
+//    end;
+//
+//    if filtro_data_hora = '' then
+//    begin
+//        Exit;
+//    end;
+//    // Armazena o filtro original, pra ser exibido caso o filtro seja
+//    // excluído com sucesso.
+//    filtro_data_hora_original := filtro_data_hora;
+//
+//    // A data está em formato brasileiro, assim: dd-mm-yyyy hh:nn:ss.mi
+//    // Vamos criar um arranjo, pra isto, o campo data é separado do campo tempo por um
+//    // espaço.
+//    data_hora := filtro_data_hora.Split(' ');
+//
+//    if Length(data_hora) <> 2 then
+//    begin
+//        MessageDlg('', 'Erro, deve haver um espaço separado a data e hora.',
+//            mtError, [mbOK], 0);
+//        Exit;
+//    end;
+//
+//    // Agora, iremos separar a parte data, em dia, mes e ano.
+//    Data := data_hora[0].Split('-');
+//
+//    // Deve haver 3 valores.
+//    if Length(Data) <> 3 then
+//    begin
+//        MessageDlg('',
+//            'Erro, os campos de dia, mês e ano, deve ser interseparados pelo caractere ' +
+//            '-', mtError, [mbOK], 0);
+//        Exit;
+//    end;
+//
+//    // Ficará desta forma:
+//    // data[0] => dia
+//    // data[1] => mes
+//    // data[2] => ano
+//
+//    // Agora, iremos colocar a data no formato americano.
+//    filtro_data_hora := Data[2] + '-' + Data[1] + '-' + Data[0] + ' ' + data_hora[1];
+//
+//    try
+//        sql_query := TZQuery.Create(nil);
+//        sql_query.Connection := sql_conexao;
+//        sql_query.Sql.Clear;
+//        sql_query.Sql.Add('Delete from d_sorte.d_sorte_filtros');
+//        sql_query.Sql.Add('where data = ' + QuotedStr(filtro_data_hora));
+//        Writeln(sql_query.Sql.Text);
+//        sql_query.ExecSql;
+//        sql_query.Close;
+//    except
+//        On exc: Exception do
+//        begin
+//            sql_query.Close;
+//            sql_conexao.Rollback;
+//            MessageDlg('', 'Erro, ' + exc.Message, mtError, [mbOK], 0);
+//            Exit;
+//        end;
+//    end;
+//
+//    MessageDlg('', 'Filtro ' + filtro_data_hora_original, mtInformation, [mbOK], 0);
+//end;
 
 end.

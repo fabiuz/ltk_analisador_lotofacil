@@ -12,7 +12,7 @@ procedure ConfigurarControleDiferenca_qt_alt(objControle: TStringGrid);
 procedure ConfigurarControleDiferenca_qt_alt_1(objControle: TStringGrid);
 procedure ConfigurarControleDiferenca_qt_alt_2(objControle: TStringGrid);
 
-procedure CarregarControleDiferenca_qt_alt(objControle: TStringGrid);
+//procedure CarregarControleDiferenca_qt_alt(objControle: TStringGrid);
 procedure CarregarControleDiferenca_qt_alt_1(objControle: TStringGrid; strWhere: string);
 procedure CarregarControleDiferenca_qt_alt_2(objControle: TStringGrid; strWhere: string);
 
@@ -28,14 +28,18 @@ uses
   sqlDb, uLotofacilModulo;
 
 procedure ConfigurarControleDiferencaEntreBolas_qt_1_qt_2(objControle: TStringGrid);
+{
 var
+
   qtColunas, indice_ultima_coluna, uA: integer;
   campos_do_controle: array[0..5] of
   string = ('qt_dif_1', 'qt_dif_2',
     'qt_dif_cmb', 'ltf_qt_vezes',
     'res_qt', 'Marcar');
   coluna_atual : TGridColumn;
+  }
 begin
+  {
   indice_ultima_coluna := High(campos_do_controle);
   objControle.Columns.Clear;
   for uA := 0 to indice_ultima_Coluna do
@@ -58,18 +62,22 @@ begin
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
+  }
 
 end;
 
 procedure ConfigurarControleDiferencaEntreBolas_qt_1(objControle: TStringGrid);
+{
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   campos_do_controle: array[0..3] of
   string = ('qt_dif_1', 'ltf_qt_vezes',
     'res_qt', 'Marcar');
   coluna_atual: TGridColumn;
+  }
 begin
 
+  {
   indice_ultima_coluna := High(campos_do_controle);
   objControle.Columns.Clear;
   for uA := 0 to indice_ultima_Coluna do
@@ -89,17 +97,21 @@ begin
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
+  }
 
 end;
 
 procedure ConfigurarControleDiferenca_qt_alt(objControle : TStringGrid);
+{
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   campos_do_controle: array[0..3] of
   string = ('qt_alt', 'ltf_qt',
     'res_qt', 'Marcar');
   coluna_atual : TGridColumn;
+  }
 begin
+  {
   objControle.Columns.Clear;
   indice_ultima_coluna := High(campos_do_controle);
   for uA := 0 to indice_ultima_Coluna do
@@ -120,10 +132,12 @@ begin
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
+  }
 
 end;
 
 procedure ConfigurarControleDiferenca_qt_alt_1(objControle: TStringGrid);
+{
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   campos_do_controle: array[0..5] of
@@ -131,8 +145,10 @@ var
     'qt_cmb', 'ltf_qt',
     'res_qt', 'Marcar');
   coluna_atual: TGridColumn;
+  }
 begin
 
+  {
   objControle.Columns.Clear;
   indice_ultima_coluna := High(campos_do_controle);
   for uA := 0 to indice_ultima_Coluna do
@@ -154,9 +170,11 @@ begin
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
+  }
 end;
 
 procedure ConfigurarControleDiferenca_qt_alt_2(objControle: TStringGrid);
+{
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   campos_do_controle: array[0..6] of string = (
@@ -168,7 +186,9 @@ var
                       'res_qt',
                       'Marcar');
   coluna_atual: TGridColumn;
+  }
 begin
+  {
   indice_ultima_coluna := High(campos_do_controle);
 
   // Cria os campos do controle.
@@ -194,82 +214,90 @@ begin
   // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
+  }
 end;
 
-procedure CarregarControleDiferenca_qt_alt(objControle: TStringGrid);
-var
-  strSql: TStringList;
-  sqlLotofacil: TSqlQuery;
-  uLinha, qt_registros: integer;
-begin
-  if dmLotofacil = nil then
-    dmLotofacil := TdmLotofacil.Create(objControle.parent);
-
-  strSql := TStringList.Create;
-  strSql.Add('Select qt_alt, ltf_qt, res_qt');
-  strSql.Add('from lotofacil.v_lotofacil_resultado_diferenca_qt_alt');
-  strSql.Add('order by res_qt desc, ltf_qt desc');
-
-  sqlLotofacil := dmLotofacil.sqlLotofacil;
-  sqlLotofacil.Close;
-  sqlLotofacil.DataBase := dmLotofacil.pgLtk;
-  sqlLotofacil.SQL.Text := strSql.Text;
-  // Na linha abaixo, se uniDirectional, ficar true, sempre vai retornar
-  // a propriedade RecordCount o valor 1.
-  sqlLotofacil.UniDirectional := False;
-  sqlLotofacil.Prepare;
-  sqlLotofacil.Open;
-
-  //ConfigurarControleDiferenca_qt_alt;
-  ConfigurarControleDiferenca_qt_alt(objControle);
-
-  sqlLotofacil.First;
-  sqlLotofacil.Last;
-  qt_registros := sqlLotofacil.RecordCount;
-
-  if qt_Registros = 0 then
-  begin
-    objControle.Columns.Clear;
-    objControle.Columns.Add;
-    objControle.FixedRows := 0;
-    objControle.RowCount := 1;
-    objControle.Cells[0, 0] := 'Erro, Nao há registros';
-    objControle.AutoSizeColumns;
-    Exit;
-  end;
-
-  // Define o número de linhas, conforme a quantidade de registro
-  // Haverá uma linha mais por causa do título.
-  objControle.RowCount := qt_Registros + 1;
-
-  // Percorrer registro
-  uLinha := 1;
-  sqlLotofacil.First;
-  while (not sqlLotofacil.EOF) and (qt_Registros > 0) do
-  begin
-    objControle.Cells[0, uLinha] := IntToStr(sqlLotofacil.FieldByName('qt_alt').AsInteger);
-    objControle.Cells[1, uLinha] := sqlLotofacil.FieldByName('ltf_qt').AsString;
-    objControle.Cells[2, uLinha] := IntToStr(sqlLotofacil.FieldByName('res_qt').AsInteger);
-    objControle.Cells[3, uLinha] := '0';
-
-    Inc(uLinha);
-    Dec(qt_Registros);
-
-    sqlLotofacil.Next;
-  end;
-  sqlLotofacil.Close;
-  dmLotofacil.Free;
-  dmLotofacil := nil;
-
-  objControle.AutoSizeColumns;
-end;
+//procedure CarregarControleDiferenca_qt_alt(objControle: TStringGrid);
+//{
+//var
+//  strSql: TStringList;
+//  sqlLotofacil: TSqlQuery;
+//  uLinha, qt_registros: integer;
+//  }
+//begin
+//  {
+//  if dmLotofacil = nil then
+//    dmLotofacil := TdmLotofacil.Create(objControle.parent);
+//
+//  strSql := TStringList.Create;
+//  strSql.Add('Select qt_alt, ltf_qt, res_qt');
+//  strSql.Add('from lotofacil.v_lotofacil_resultado_diferenca_qt_alt');
+//  strSql.Add('order by res_qt desc, ltf_qt desc');
+//
+//  sqlLotofacil := dmLotofacil.sqlLotofacil;
+//  sqlLotofacil.Close;
+//  sqlLotofacil.DataBase := dmLotofacil.pgLtk;
+//  sqlLotofacil.SQL.Text := strSql.Text;
+//  // Na linha abaixo, se uniDirectional, ficar true, sempre vai retornar
+//  // a propriedade RecordCount o valor 1.
+//  sqlLotofacil.UniDirectional := False;
+//  sqlLotofacil.Prepare;
+//  sqlLotofacil.Open;
+//
+//  //ConfigurarControleDiferenca_qt_alt;
+//  ConfigurarControleDiferenca_qt_alt(objControle);
+//
+//  sqlLotofacil.First;
+//  sqlLotofacil.Last;
+//  qt_registros := sqlLotofacil.RecordCount;
+//
+//  if qt_Registros = 0 then
+//  begin
+//    objControle.Columns.Clear;
+//    objControle.Columns.Add;
+//    objControle.FixedRows := 0;
+//    objControle.RowCount := 1;
+//    objControle.Cells[0, 0] := 'Erro, Nao há registros';
+//    objControle.AutoSizeColumns;
+//    Exit;
+//  end;
+//
+//  // Define o número de linhas, conforme a quantidade de registro
+//  // Haverá uma linha mais por causa do título.
+//  objControle.RowCount := qt_Registros + 1;
+//
+//  // Percorrer registro
+//  uLinha := 1;
+//  sqlLotofacil.First;
+//  while (not sqlLotofacil.EOF) and (qt_Registros > 0) do
+//  begin
+//    objControle.Cells[0, uLinha] := IntToStr(sqlLotofacil.FieldByName('qt_alt').AsInteger);
+//    objControle.Cells[1, uLinha] := sqlLotofacil.FieldByName('ltf_qt').AsString;
+//    objControle.Cells[2, uLinha] := IntToStr(sqlLotofacil.FieldByName('res_qt').AsInteger);
+//    objControle.Cells[3, uLinha] := '0';
+//
+//    Inc(uLinha);
+//    Dec(qt_Registros);
+//
+//    sqlLotofacil.Next;
+//  end;
+//  sqlLotofacil.Close;
+//  dmLotofacil.Free;
+//  dmLotofacil := nil;
+//
+//  objControle.AutoSizeColumns;
+//  }
+//end;
 
 procedure CarregarControleDiferenca_qt_alt_1(objControle: TStringGrid; strWhere: string);
+{
 var
   strSql: TStringList;
   sqlLotofacil: TSqlQuery;
   uLinha, qt_registros: integer;
+  }
 begin
+  {
   if strWhere = '' then
   begin
     objControle.Columns.Clear;
@@ -349,14 +377,18 @@ begin
   dmLotofacil := nil;
 
   objControle.AutoSizeColumns;
+  }
 end;
 
 procedure CarregarControleDiferenca_qt_alt_2(objControle: TStringGrid; strWhere: string);
+{
 var
   strSql: TStringList;
   sqlLotofacil: TSqlQuery;
   uLinha, qt_registros: integer;
+  }
 begin
+  {
   if strWhere = '' then
   begin
     objControle.Columns.Clear;
@@ -432,14 +464,18 @@ begin
   dmLotofacil := nil;
 
   objControle.AutoSizeColumns;
+  }
 end;
 
 procedure CarregarControleDiferencaEntreBolas_qt_1(objControle: TStringGrid);
+{
 var
   strSql: TStringList;
   sqlLotofacil: TSqlQuery;
   uLinha, qt_registros: integer;
+  }
 begin
+  {
   if dmLotofacil = nil then
     dmLotofacil := TdmLotofacil.Create(objControle.Parent);
 
@@ -504,14 +540,18 @@ begin
   dmLotofacil := nil;
 
   objControle.AutoSizeColumns;
+  }
 end;
 
 procedure CarregarControleDiferencaEntreBolas_Qt_1_Qt_2(objControle: TStringGrid; strWhere: string);
+{
 var
   strSql: TStringList;
   sqlLotofacil: TSqlQuery;
   uLinha, qt_registros: integer;
+  }
 begin
+  {
   if Trim(strWhere) = '' then
   begin
     objControle.Clear;
@@ -591,6 +631,7 @@ begin
   dmLotofacil := nil;
 
   objControle.AutoSizeColumns;
+}
 end;
 
 

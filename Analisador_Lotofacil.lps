@@ -47,9 +47,11 @@
             <Verbosity>
               <ShoLineNum Value="True"/>
             </Verbosity>
-            <CustomOptions Value="-dUseCThreads"/>
-            <OtherDefines Count="1">
+            <CustomOptions Value="-dUseCThreads
+-ddsdebug"/>
+            <OtherDefines Count="2">
               <Define0 Value="UseCThreads"/>
+              <Define1 Value="dsdebug"/>
             </OtherDefines>
           </Other>
         </CompilerOptions>
@@ -94,13 +96,13 @@
         </CompilerOptions>
       </Item2>
     </BuildModes>
-    <Units Count="40">
+    <Units Count="45">
       <Unit0>
         <Filename Value="Analisador_Lotofacil.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="3"/>
-        <CursorPos X="71" Y="21"/>
+        <CursorPos X="15" Y="7"/>
         <UsageCount Value="216"/>
       </Unit0>
       <Unit1>
@@ -111,9 +113,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uLotofacilMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="15665"/>
-        <CursorPos X="3" Y="15688"/>
-        <ComponentState Value="1"/>
+        <TopLine Value="8630"/>
+        <CursorPos Y="8641"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -191,10 +192,11 @@
         <Filename Value="ulotofacil_gerador_id.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacil_Gerador_id"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="131"/>
-        <CursorPos X="48" Y="212"/>
+        <EditorIndex Value="13"/>
+        <TopLine Value="65"/>
+        <CursorPos X="45" Y="200"/>
         <UsageCount Value="204"/>
+        <Loaded Value="True"/>
       </Unit9>
       <Unit10>
         <Filename Value="ulotofacil_bolas_arquivo.pas"/>
@@ -208,36 +210,40 @@
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilNovosRepetidos"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="2712"/>
-        <CursorPos X="23" Y="2718"/>
+        <EditorIndex Value="12"/>
+        <CursorPos X="28" Y="11"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit11>
       <Unit12>
         <Filename Value="ulotofacilparimpar.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilParImpar"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="9"/>
-        <CursorPos X="11" Y="23"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="14"/>
+        <CursorPos X="3" Y="25"/>
         <UsageCount Value="204"/>
+        <Loaded Value="True"/>
       </Unit12>
       <Unit13>
         <Filename Value="ulotofacilexternointerno.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ulotofacilExternoInterno"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="308"/>
-        <CursorPos Y="318"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="12"/>
+        <CursorPos X="30" Y="12"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
         <Filename Value="ulotofacilprimonaoprimo.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilPrimoNaoPrimo"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos Y="405"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="76"/>
+        <CursorPos X="6" Y="76"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit14>
       <Unit15>
         <Filename Value="ulotofacil_colunas_b.pas"/>
@@ -252,8 +258,7 @@
         <Filename Value="ulotofacil_diferenca_entre_bolas.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="87"/>
-        <CursorPos Y="103"/>
+        <CursorPos X="40" Y="5"/>
         <UsageCount Value="213"/>
       </Unit16>
       <Unit17>
@@ -272,19 +277,20 @@
       <Unit19>
         <Filename Value="ulotofacil_algarismo_nas_dezenas.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="83"/>
-        <CursorPos X="64" Y="93"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="440"/>
+        <CursorPos X="4" Y="456"/>
         <UsageCount Value="224"/>
+        <Loaded Value="True"/>
       </Unit19>
       <Unit20>
         <Filename Value="ulotofacilsomafrequencia.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilSomaFrequencia"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="86"/>
-        <CursorPos X="32" Y="363"/>
+        <EditorIndex Value="11"/>
+        <CursorPos X="39" Y="563"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit20>
       <Unit21>
         <Filename Value="README.md"/>
@@ -321,54 +327,53 @@
       <Unit25>
         <Filename Value="lotofacil_constantes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="121"/>
-        <CursorPos X="38" Y="124"/>
+        <EditorIndex Value="15"/>
+        <TopLine Value="161"/>
+        <CursorPos X="24" Y="169"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
       </Unit25>
       <Unit26>
         <Filename Value="lotofacil_filtros.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="670"/>
-        <CursorPos X="24" Y="679"/>
-        <FoldState Value=" T3lK0jJ"/>
+        <EditorIndex Value="17"/>
+        <TopLine Value="53"/>
+        <CursorPos X="33" Y="57"/>
         <UsageCount Value="205"/>
         <Loaded Value="True"/>
       </Unit26>
       <Unit27>
         <Filename Value="lotofacil_var_global.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="6"/>
-        <CursorPos X="54" Y="44"/>
+        <EditorIndex Value="18"/>
+        <TopLine Value="50"/>
+        <CursorPos X="5" Y="41"/>
         <UsageCount Value="203"/>
         <Loaded Value="True"/>
       </Unit27>
       <Unit28>
         <Filename Value="lotofacil_gerar_filtros.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="1188"/>
-        <CursorPos X="18" Y="1201"/>
-        <FoldState Value=" T3:30}3g"/>
+        <EditorIndex Value="16"/>
+        <TopLine Value="67"/>
+        <CursorPos Y="38"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit28>
       <Unit29>
         <Filename Value="lotofacil_concursos.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="454"/>
-        <CursorPos X="36" Y="469"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="17"/>
+        <CursorPos X="11" Y="21"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit29>
       <Unit30>
         <Filename Value="lotofacil_sgr_controle.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
-        <CursorPos X="54" Y="8"/>
+        <EditorIndex Value="19"/>
+        <CursorPos Y="11"/>
         <UsageCount Value="203"/>
         <Loaded Value="True"/>
       </Unit30>
@@ -381,197 +386,239 @@
         <UsageCount Value="208"/>
       </Unit31>
       <Unit32>
-        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/component/ZAbstractConnection.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="594"/>
-        <CursorPos Y="600"/>
-        <UsageCount Value="88"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="272"/>
+        <CursorPos X="25" Y="272"/>
+        <UsageCount Value="120"/>
+        <Loaded Value="True"/>
       </Unit32>
       <Unit33>
+        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/component/ZAbstractConnection.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="492"/>
+        <CursorPos Y="504"/>
+        <UsageCount Value="55"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit33>
+      <Unit34>
         <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/component/ZAbstractRODataset.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="840"/>
         <CursorPos Y="850"/>
-        <UsageCount Value="83"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit33>
-      <Unit34>
-        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/dbc/ZDbcPostgreSqlUtils.pas"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="710"/>
-        <CursorPos Y="719"/>
-        <UsageCount Value="90"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="58"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit34>
       <Unit35>
-        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/component/ZAbstractDataset.pas"/>
+        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/dbc/ZDbcPostgreSqlUtils.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="198"/>
-        <CursorPos Y="211"/>
-        <UsageCount Value="59"/>
+        <TopLine Value="712"/>
+        <CursorPos Y="719"/>
+        <UsageCount Value="84"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit35>
       <Unit36>
+        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/component/ZAbstractDataset.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="456"/>
+        <CursorPos X="57" Y="476"/>
+        <UsageCount Value="25"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit36>
+      <Unit37>
         <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/component/ZSqlStrings.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="179"/>
         <CursorPos Y="192"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="25"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
-      </Unit36>
-      <Unit37>
-        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/sysutils/sysstrh.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="168"/>
-        <CursorPos X="10" Y="174"/>
-        <UsageCount Value="14"/>
       </Unit37>
       <Unit38>
         <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/fgl.pp"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="316"/>
-        <CursorPos X="14" Y="322"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="102"/>
+        <CursorPos X="11" Y="114"/>
+        <UsageCount Value="10"/>
       </Unit38>
       <Unit39>
-        <Filename Value="/usr/lib64/lazarus/lcl/stdctrls.pp"/>
-        <UnitName Value="StdCtrls"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/math.pp"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1197"/>
-        <CursorPos X="3" Y="1205"/>
-        <UsageCount Value="7"/>
+        <TopLine Value="195"/>
+        <CursorPos X="3" Y="207"/>
+        <UsageCount Value="10"/>
       </Unit39>
+      <Unit40>
+        <Filename Value="../../../.lazarus/onlinepackagemanager/packages/zeosdbo-7.1.4/src/component/ZDataset.pas"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="105"/>
+        <CursorPos X="3" Y="81"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit40>
+      <Unit41>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="1646"/>
+        <CursorPos X="14" Y="1655"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/dataset.inc"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="2009"/>
+        <CursorPos X="34" Y="2018"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit42>
+      <Unit43>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="1829"/>
+        <CursorPos X="17" Y="1840"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit43>
+      <Unit44>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/classes/compon.inc"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="458"/>
+        <CursorPos X="3" Y="461"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit44>
     </Units>
-    <OtherDefines Count="1">
+    <OtherDefines Count="2">
       <Define0 Value="UseCThreads"/>
+      <Define1 Value="dsdebug"/>
     </OtherDefines>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="lotofacil_gerar_filtros.pas"/>
-        <Caret Line="133" Column="31" TopLine="126"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="345" TopLine="333"/>
       </Position1>
       <Position2>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4433" Column="42" TopLine="4112"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="346" TopLine="334"/>
       </Position2>
       <Position3>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4079" Column="22" TopLine="4074"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="347" TopLine="335"/>
       </Position3>
       <Position4>
-        <Filename Value="lotofacil_filtros.pas"/>
-        <Caret Line="622" Column="49" TopLine="609"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="348" TopLine="336"/>
       </Position4>
       <Position5>
-        <Filename Value="lotofacil_filtros.pas"/>
-        <Caret Line="26" Column="28" TopLine="18"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="349" TopLine="337"/>
       </Position5>
       <Position6>
-        <Filename Value="lotofacil_filtros.pas"/>
-        <Caret Line="692" TopLine="686"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="350" TopLine="338"/>
       </Position6>
       <Position7>
-        <Filename Value="lotofacil_filtros.pas"/>
-        <Caret Line="714" Column="29" TopLine="713"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="351" TopLine="339"/>
       </Position7>
       <Position8>
-        <Filename Value="lotofacil_filtros.pas"/>
-        <Caret Line="726" Column="46" TopLine="716"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="272" TopLine="265"/>
       </Position8>
       <Position9>
-        <Filename Value="lotofacil_filtros.pas"/>
-        <Caret Line="760" Column="11" TopLine="747"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="274" TopLine="265"/>
       </Position9>
       <Position10>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="8684" Column="17" TopLine="8685"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="275" TopLine="265"/>
       </Position10>
       <Position11>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="16646" Column="5" TopLine="16644"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="276" TopLine="265"/>
       </Position11>
       <Position12>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="3737" Column="19" TopLine="3729"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="277" TopLine="265"/>
       </Position12>
       <Position13>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="16769" Column="5" TopLine="16858"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="278" TopLine="266"/>
       </Position13>
       <Position14>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="3738" Column="19" TopLine="3730"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="280" TopLine="268"/>
       </Position14>
       <Position15>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="16998" Column="81" TopLine="16993"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="282" TopLine="270"/>
       </Position15>
       <Position16>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="16999" TopLine="16993"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="284" TopLine="272"/>
       </Position16>
       <Position17>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="17072" Column="23" TopLine="17069"/>
+        <Filename Value="lotofacil_frequencia.pas"/>
+        <Caret Line="287" TopLine="280"/>
       </Position17>
       <Position18>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="17085" Column="42" TopLine="17076"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1656" Column="17" TopLine="1645"/>
       </Position18>
       <Position19>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="17092" Column="42" TopLine="17083"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/dataset.inc"/>
+        <Caret Line="2043" Column="3" TopLine="2040"/>
       </Position19>
       <Position20>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="17099" Column="42" TopLine="17090"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1466" Column="15" TopLine="1457"/>
       </Position20>
       <Position21>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="17106" Column="42" TopLine="17097"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/dataset.inc"/>
+        <Caret Line="2051" Column="3" TopLine="2049"/>
       </Position21>
       <Position22>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="17108" Column="37" TopLine="17080"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1655" Column="14" TopLine="1605"/>
       </Position22>
       <Position23>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="3823" Column="32" TopLine="3816"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1634" Column="21" TopLine="1630"/>
       </Position23>
       <Position24>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4101" TopLine="4087"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/dataset.inc"/>
+        <Caret Line="1745" Column="3" TopLine="1738"/>
       </Position24>
       <Position25>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4105" Column="31" TopLine="4088"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1635" Column="14" TopLine="1626"/>
       </Position25>
       <Position26>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4106" Column="9" TopLine="4093"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1656" Column="17" TopLine="1650"/>
       </Position26>
       <Position27>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4114" Column="14" TopLine="4104"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/dataset.inc"/>
+        <Caret Line="2044" Column="11" TopLine="2040"/>
       </Position27>
       <Position28>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4507" Column="9" TopLine="4495"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1655" Column="14" TopLine="1646"/>
       </Position28>
       <Position29>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4597" Column="42" TopLine="4489"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/dataset.inc"/>
+        <Caret Line="2037" Column="18" TopLine="2037"/>
       </Position29>
       <Position30>
-        <Filename Value="ulotofacilmain.pas"/>
-        <Caret Line="4518" Column="44" TopLine="4513"/>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/packages/fcl-db/src/base/db.pas"/>
+        <Caret Line="1655" Column="14" TopLine="1646"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="34">
+    <BreakPoints Count="40">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
@@ -584,14 +631,14 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="15241"/>
+        <Line Value="14353"/>
       </Item2>
       <Item3>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="15282"/>
+        <Line Value="14394"/>
       </Item3>
       <Item4>
         <Kind Value="bpkSource"/>
@@ -730,91 +777,136 @@
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="ulotofacilmain.pas"/>
-        <Line Value="19261"/>
+        <Source Value="lotofacil_gerar_filtros.pas"/>
+        <Line Value="381"/>
       </Item23>
       <Item24>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="lotofacil_gerar_filtros.pas"/>
-        <Line Value="397"/>
+        <Source Value="ulotofacilmain.pas"/>
+        <Line Value="8551"/>
       </Item24>
       <Item25>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="9446"/>
+        <Line Value="8978"/>
       </Item25>
       <Item26>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="ulotofacilmain.pas"/>
-        <Line Value="9872"/>
+        <Source Value="ulotofacilnovosrepetidos.pas"/>
+        <Line Value="2251"/>
       </Item26>
       <Item27>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilnovosrepetidos.pas"/>
-        <Line Value="2251"/>
+        <Line Value="2738"/>
       </Item27>
       <Item28>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilnovosrepetidos.pas"/>
-        <Line Value="2738"/>
+        <Line Value="2762"/>
       </Item28>
       <Item29>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="ulotofacilnovosrepetidos.pas"/>
-        <Line Value="2762"/>
+        <Source Value="lotofacil_concursos.pas"/>
+        <Line Value="448"/>
       </Item29>
       <Item30>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="lotofacil_gerar_filtros.pas"/>
-        <Line Value="812"/>
+        <Source Value="ulotofacilmain.pas"/>
+        <Line Value="7987"/>
       </Item30>
       <Item31>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="9936"/>
+        <Line Value="16072"/>
       </Item31>
       <Item32>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="lotofacil_concursos.pas"/>
-        <Line Value="448"/>
+        <Source Value="ulotofacilmain.pas"/>
+        <Line Value="16696"/>
       </Item32>
       <Item33>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="ulotofacilmain.pas"/>
-        <Line Value="17157"/>
+        <Line Value="8486"/>
       </Item33>
       <Item34>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
-        <Source Value="ulotofacilmain.pas"/>
-        <Line Value="17156"/>
+        <Source Value="lotofacil_frequencia.pas"/>
+        <Line Value="115"/>
       </Item34>
+      <Item35>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="ulotofacilmain.pas"/>
+        <Line Value="8641"/>
+      </Item35>
+      <Item36>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="lotofacil_frequencia.pas"/>
+        <Line Value="393"/>
+      </Item36>
+      <Item37>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="lotofacil_frequencia.pas"/>
+        <Line Value="381"/>
+      </Item37>
+      <Item38>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="lotofacil_frequencia.pas"/>
+        <Line Value="398"/>
+      </Item38>
+      <Item39>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="lotofacil_frequencia.pas"/>
+        <Line Value="340"/>
+      </Item39>
+      <Item40>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="lotofacil_frequencia.pas"/>
+        <Line Value="335"/>
+      </Item40>
     </BreakPoints>
-    <Watches Count="1">
+    <Watches Count="2">
       <Item1>
         <Expression Value="campo_id_1"/>
       </Item1>
+      <Item2>
+        <Expression Value="sql_query.text"/>
+      </Item2>
     </Watches>
   </Debugging>
 </CONFIG>

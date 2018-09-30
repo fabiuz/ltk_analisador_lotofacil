@@ -19,6 +19,7 @@ uses
   sqlDb, uLotofacilModulo, db, dialogs;
 
 procedure Configurar_Controle_Algarismo_na_Dezena(objControle: TStringGrid);
+{
 const
   // Nome das colunas que estarão no controle.
   algarismo_nas_dezenas_campos: array[0..6] of string = (
@@ -29,11 +30,15 @@ const
     'ltf_qt_vz',
     'res_qt',
     'marcar');
+    }
+{
 var
   qtColunas, indice_ultima_coluna, uA, qt_linhas, qt_coluna: integer;
   coluna_atual: TGridColumn;
+}
 begin
 
+  {
   // Evitar que adicionemos novas colunas, se já houver.
   objControle.Columns.Clear;
 
@@ -60,6 +65,7 @@ begin
   objControle.RowCount := 1;
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
+  }
 
 end;
 
@@ -67,6 +73,7 @@ end;
  Carrega no controle, a estatística de pares x ímpares da lotofacil.
 }
 procedure Carregar_algarismo_nas_dezenas_agrupado(objControle: TStringGrid);
+{
 const
   algarismo_nas_dezenas_campos: array[0..5] of string = (
     'dz_id',
@@ -76,14 +83,16 @@ const
     'ltf_qt_vz',
     'res_qt'
     );
-
+ }
+{
 var
   strSql: TStrings;
   dsLotofacil: TSqlQuery;
   uLinha, uA: integer;
   qt_registros: longint;
+}
 begin
-
+{
   // Configurar controle inicialmente.
   Configurar_Controle_Algarismo_na_Dezena(objControle);
 
@@ -166,6 +175,7 @@ begin
 
   dmLotofacil.Free;
   dmLotofacil := nil;
+  }
 end;
 
 {
@@ -174,6 +184,7 @@ end;
 }
 procedure Carregar_algarismo_na_dezena_consolidado_intervalo_concurso(
   objControle: TStringGrid; concursoInicial, concursoFinal: integer);
+{
 const
   algarismo_nas_dezenas_campos: array[0..5] of string = (
     'dz_id',
@@ -183,13 +194,17 @@ const
     'ltf_qt_vz',
     'res_qt'
     );
+    }
+{
 var
   strSql: TStrings;
   dsLotofacil: TSqlQuery;
   uLinha, uA: integer;
   qt_registros: longint;
   concurso_parametro: TParam;
+}
 begin
+  {
 
   // ConfigurarControle
   Configurar_Controle_Algarismo_na_Dezena(objControle);
@@ -287,10 +302,12 @@ begin
 
   dmLotofacil.Free;
   dmLotofacil := nil;
+  }
 end;
 
 //procedure ConfigurarControlesParImparPorConcurso(objControle: TStringGrid);
 procedure Configurar_controle_algarismo_na_dezena_por_concurso(objControle: TStringGrid);
+{
 const
   // Nome das colunas que estarão no controle.
   algarismo_nas_dezenas_campos: array[0..3] of string = (
@@ -299,11 +316,14 @@ const
     'dz_1',
     'dz_2'
     );
+    }
+{
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   coluna_atual: TGridColumn;
+}
 begin
-
+{
   // Evitar que adicionemos novas colunas, se já houver.
   objControle.Columns.Clear;
 
@@ -330,6 +350,7 @@ begin
   objControle.RowCount := 1;
   objControle.FixedRows := 1;
   objControle.FixedCols := 0;
+  }
 end;
 
 {
@@ -337,6 +358,7 @@ end;
  concursos que saíram em ordem decrescente de concurso.
 }
 procedure Carregar_algarismo_na_dezena_por_concurso(objControle: TStringGrid);
+{
 const
   algarismo_nas_dezenas_campos: array[0..3] of string = (
     'concurso',
@@ -344,13 +366,17 @@ const
     'dz_1',
     'dz_2'
     );
+    }
+{
 var
   strSql: TStrings;
   dsLotofacil: TSqlQuery;
   uLinha, uA: integer;
   qt_registros: longint;
   concurso_parametro: TParam;
+}
 begin
+  {
   // Configurar controle.
   Configurar_controle_algarismo_na_dezena_por_concurso(objControle);
 
@@ -427,6 +453,7 @@ begin
 
   dmLotofacil.Free;
   dmLotofacil := nil;
+  }
 end;
 // FIM
 

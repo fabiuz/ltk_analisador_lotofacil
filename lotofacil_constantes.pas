@@ -100,35 +100,87 @@ const
     ID_BIN_EXTERNO = 5;
     ID_BIN_INTERNO = 6;
 
+    // Horizontal.
     ID_BIN_HRZ_1 = 7;
     ID_BIN_HRZ_2 = 8;
     ID_BIN_HRZ_3 = 9;
     ID_BIN_HRZ_4 = 10;
     ID_BIN_HRZ_5 = 11;
 
+    // Vertical.
     ID_BIN_VRT_1 = 12;
     ID_BIN_VRT_2 = 13;
     ID_BIN_VRT_3 = 14;
     ID_BIN_VRT_4 = 15;
     ID_BIN_VRT_5 = 16;
 
+    // Diagonal esquerda.
     ID_BIN_DGE_1 = 17;
     ID_BIN_DGE_2 = 18;
     ID_BIN_DGE_3 = 19;
     ID_BIN_DGE_4 = 20;
     ID_BIN_DGE_5 = 21;
 
+    // Diagonal direita.
     ID_BIN_DGD_1 = 22;
     ID_BIN_DGD_2 = 23;
     ID_BIN_DGD_3 = 24;
     ID_BIN_DGD_4 = 25;
     ID_BIN_DGD_5 = 26;
 
-    ID_BIN_QNT_1 = 27;
-    ID_BIN_QNT_2 = 28;
-    ID_BIN_QNT_3 = 29;
-    ID_BIN_QNT_4 = 30;
-    ID_BIN_QNT_5 = 31;
+    // Esquerda, direita.
+    // Superior, inferior.
+    ID_BIN_ESQ = 27;
+    ID_BIN_DIR = 28;
+    ID_BIN_SUP = 29;
+    ID_BIN_INF = 30;
+
+    // Superior esquerda, inferior direita
+    // Superior direita,  inferior esquerda
+    ID_BIN_SUP_ESQ = 31;
+    ID_BIN_INF_DIR = 32;
+    ID_BIN_SUP_DIR = 33;
+    ID_BIN_INF_ESQ = 34;
+
+    // Cruzeta.
+    ID_BIN_CRZ_1 = 35;
+    ID_BIN_CRZ_2 = 36;
+    ID_BIN_CRZ_3 = 37;
+    ID_BIN_CRZ_4 = 38;
+    ID_BIN_CRZ_5 = 39;
+
+    // Losango.
+    ID_BIN_LSNG_1 = 40;
+    ID_BIN_LSNG_2 = 41;
+    ID_BIN_LSNG_3 = 42;
+    ID_BIN_LSNG_4 = 43;
+    ID_BIN_LSNG_5 = 44;
+
+    // Quinteto.
+    ID_BIN_QNT_1 = 45;
+    ID_BIN_QNT_2 = 46;
+    ID_BIN_QNT_3 = 47;
+    ID_BIN_QNT_4 = 48;
+    ID_BIN_QNT_5 = 49;
+
+    // Triângulo.
+    ID_BIN_TRNG_1 = 50;
+    ID_BIN_TRNG_2 = 51;
+    ID_BIN_TRNG_3 = 52;
+    ID_BIN_TRNG_4 = 53;
+
+    // Trio.
+    ID_BIN_TRIO_1 = 54;
+    ID_BIN_TRIO_2 = 55;
+    ID_BIN_TRIO_3 = 56;
+    ID_BIN_TRIO_4 = 57;
+    ID_BIN_TRIO_5 = 58;
+    ID_BIN_TRIO_6 = 59;
+    ID_BIN_TRIO_7 = 60;
+    ID_BIN_TRIO_8 = 61;
+
+    ID_BIN_X1 = 62;
+    ID_BIN_X2 = 63;
 
 const
     ID_MARCAR_NAO     = 0;

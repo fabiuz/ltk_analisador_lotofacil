@@ -39,6 +39,7 @@ procedure CarregarExternoInternoPorConcurso(objControle: TStringGrid);
 implementation
 
 procedure ConfigurarControlesExternoInternoPorConcurso(objControle: TStringGrid);
+{
 const
   // Nome das colunas que estarão no controle.
   externo_interno_campos: array[0..2] of string = (
@@ -46,10 +47,14 @@ const
     'externo',
     'interno'
     );
+    }
+{
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   coluna_atual: TGridColumn;
+}
 begin
+    {
 
   // Evitar que adicionemos novas colunas, se já houver.
   objControle.Columns.Clear;
@@ -78,6 +83,7 @@ begin
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
 
+  }
 end;
 
 {
@@ -85,18 +91,23 @@ end;
  concursos que saíram em ordem decrescente de concurso.
 }
 procedure CarregarExternoInternoPorConcurso(objControle: TStringGrid);
+{
 const
   par_impar_campos: array[0..2] of string = (
     'concurso',
     'externo',
     'interno'
     );
+    }
+{
 var
   strSql: TStrings;
   dsLotofacil: TSqlQuery;
   uLinha, uA: integer;
   qt_registros: longint;
+}
 begin
+  {
 
   ConfigurarControlesExternoInternoPorConcurso(objControle);
 
@@ -177,14 +188,17 @@ begin
   FreeAndNil(strSql);
   FreeAndNil(dmLotofacil);
 
+  }
 end;
 
 procedure ConfigurarControlesExternoInternoAgrupado(objControle: TStringGrid);
+{
 var
   qtColunas, indice_ultima_coluna, uA: integer;
   externo_interno_campos: array[0..5] of
   string = ('ext_int_id', 'Ext', 'Int', 'ltf_qt', 'res_qt', 'marcar');
   coluna_atual: TGridColumn;
+  }
 begin
   // No controle par x impar, haverá as colunas:
   // ext_int_id      -> identificador de combinação Externo x Interno.
@@ -193,6 +207,7 @@ begin
   // ltf_qt
   // res_qt
   // marcar
+  {
   indice_ultima_coluna := High(externo_interno_campos);
   objControle.Columns.Clear;
   for uA := 0 to indice_ultima_Coluna do
@@ -212,6 +227,7 @@ begin
   objControle.RowCount := 1;
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
+  }
 end;
 
 
@@ -221,6 +237,7 @@ end;
  até hoje nos concursos sorteados.
  }
 procedure CarregarExternoInternoAgrupado(objControle: TStringGrid);
+{
 const
   externo_interno_campos: array[0..4] of string = (
     'ext_int_id',
@@ -229,12 +246,16 @@ const
     'ltf_qt',
     'res_qt'
     );
+    }
+  {
 var
   strSql: TStrings;
   dsLotofacil: TSqlQuery;
   uLinha, uA: integer;
   qt_registros: longint;
+  }
 begin
+  {
   // Configurar Controle.
   ConfigurarControlesExternoInternoAgrupado(objControle);
 
@@ -314,7 +335,7 @@ begin
   StrSql.Clear;
   FreeAndNil(strSql);
   FreeAndNil(dmLotofacil);
-
+  }
 end;
 
 {
@@ -323,7 +344,9 @@ end;
 }
 procedure CarregarExternoInternoConsolidadoIntervaloConcurso(objControle: TStringGrid;
   concursoInicial, concursoFinal: integer);
+{
 const
+
   par_impar_campos: array[0..4] of string = (
     'ext_int_id',
     'externo',
@@ -331,13 +354,17 @@ const
     'ltf_qt',
     'res_qt'
     );
+    }
+{
 var
   strSql: TStrings;
   dsLotofacil: TSqlQuery;
   uLinha, uA: integer;
   qt_registros: longint;
   concurso_parametro: TParam;
+}
 begin
+  {
   // Só iremos manipular StringGrid
   if not (objControle is TStringGrid) then
   begin
@@ -438,13 +465,14 @@ begin
 
   dmLotofacil.Free;
   dmLotofacil := nil;
+  }
 end;
 
 
 
 
  {
-{ TLotofacilExternoInterno }
+{TLotofacilExternoInterno }
 constructor TExternoInterno.Create;
 begin
 
@@ -459,10 +487,15 @@ const
     'externo',
     'interno'
     );
+    {
 var
+
   qtColunas, indice_ultima_coluna, uA: integer;
   coluna_atual: TGridColumn;
+  }
+
 begin
+{
   // Esta procedure somente pode mainpular somente stringGrid, evitar que o usuário
   // passe um outro tipo de controle.
   if not (objControle is TStringGrid) then
@@ -498,6 +531,7 @@ begin
   objControle.FixedCols := 0;
   objControle.FixedRows := 1;
 
+  }
 end;
 
 {
@@ -753,6 +787,7 @@ begin
 
   dmLotofacil.Free;
   dmLotofacil := nil;
+
 end;
 
 {
