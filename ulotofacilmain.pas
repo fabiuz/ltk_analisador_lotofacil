@@ -24,7 +24,8 @@ uses
     lotofacil_var_global, lotofacil_concursos, ZDataset,
     lotofacil_comparacao_de_bolas_na_mesma_coluna,
     lotofacil_sgr_controle,
-    lotofacil_frequencia;
+    lotofacil_frequencia
+    ;
 
 type
     TList_StringGrid = specialize TFPGList<TStringGrid>;
@@ -4244,7 +4245,7 @@ implementation
 
 uses
     uLotofacil_Gerador_id,
-    ulotofacilexternointerno,
+    //ulotofacilexternointerno,
     uLotofacil_Colunas_B,
     ulotofacil_diferenca_entre_bolas,
     //ulotofacil_algarismo_nas_dezenas,
@@ -7755,7 +7756,7 @@ var
 begin
     lista_de_concursos := TStringList.Create;
 
-    if not Obter_todos_os_concursos(lista_de_concursos) then
+    if not Obter_todos_os_concursos(sql_conexao, lista_de_concursos) then
     begin
         Exit;
     end;
@@ -11037,22 +11038,21 @@ begin
 end;
 
 procedure TForm1.ExternoInternoConsolidadoConcursoInicialFinalAlterou;
-var
-    indice_concurso_inicial, indice_concurso_final: integer;
-    concurso_inicial, concurso_final: integer;
+//var
+//    indice_concurso_inicial, indice_concurso_final: integer;
+//    concurso_inicial, concurso_final: integer;
 begin
-    indice_concurso_inicial := cmbExternoInternoConsolidadoConcursoInicial.ItemIndex;
-    indice_concurso_final := cmbExternoInternoConsolidadoConcursoFinal.ItemIndex;
-
-    if (indice_concurso_inicial > -1) and (indice_concurso_final > -1) then
-    begin
-        concurso_inicial := StrToInt(cmbExternoInternoConsolidadoConcursoInicial.Items
-            [indice_concurso_inicial]);
-        concurso_final := StrToInt(cmbExternoInternoConsolidadoConcursoFinal.Items[indice_concurso_final]);
-
-        CarregarExternoInternoConsolidadoIntervaloConcurso(sgrExternoInternoConsolidado,
-            concurso_inicial, concurso_final);
-    end;
+    //indice_concurso_inicial := cmbExternoInternoConsolidadoConcursoInicial.ItemIndex;
+    //indice_concurso_final := cmbExternoInternoConsolidadoConcursoFinal.ItemIndex;
+    //
+    //if (indice_concurso_inicial > -1) and (indice_concurso_final > -1) then
+    //begin
+    //    concurso_inicial := StrToInt(cmbExternoInternoConsolidadoConcursoInicial.Items
+    //        [indice_concurso_inicial]);
+    //    concurso_final := StrToInt(cmbExternoInternoConsolidadoConcursoFinal.Items[indice_concurso_final]);
+    //
+    //    CarregarExternoInternoConsolidadoIntervaloConcurso(sgrExternoInternoConsolidado, concurso_inicial, concurso_final);
+    //end;
 end;
 
 

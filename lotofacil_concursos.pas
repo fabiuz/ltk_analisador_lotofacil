@@ -26,7 +26,72 @@ function gerar_sql_dinamicamente(lista_de_resultado_json: TStringList): string;
 
 //procedure atualizar_controle_de_concursos(sql_conexao: TZConnection; cmb_controle: TComboBox);
 
+function Obter_todos_os_concursos(sql_conexao: TZConnection; var lista_de_concursos: TStringList): boolean;
+
 implementation
+
+{
+ Retorna true, se obter pelo menos um concurso, falso caso contrário.
+}
+function Obter_todos_os_concursos(sql_conexao: TZConnection; var lista_de_concursos: TStringList): boolean;
+var
+    sql_query: TZQuery;
+begin
+
+    if not Assigned(lista_de_concursos) then
+    begin
+        lista_de_concursos := TStringList.Create;
+    end;
+    //lista_de_concursos.Clear;
+
+    //if not Assigned(dmLotofacil) then
+    //begin
+    //    dmLotofacil := TdmLotofacil.Create(nil);
+    //end;
+
+    try
+        sql_query := TZQuery.Create(nil);
+        sql_query.Connection := sql_conexao;
+
+        //sql_query := dmLotofacil.sqlLotofacil;
+        //sql_query.DataBase := dmLotofacil.pgLTK;
+        //sql_query.UniDirectional:= false;
+        sql_query.Sql.Clear;
+
+        sql_query.Sql.Add('Select concurso from lotofacil.v_lotofacil_concursos');
+        sql_query.Sql.Add('order by concurso');
+
+        sql_query.Open;
+        sql_query.First;
+        lista_de_concursos.Clear;
+        while not sql_query.EOF do
+        begin
+            lista_de_concursos.Add(IntToStr(sql_query.FieldByName('concurso').AsInteger));
+            sql_query.Next;
+        end;
+        sql_query.Close;
+
+    except
+        On Exc: Exception do
+        begin
+            lista_de_concursos.Clear;
+            FreeAndNil(lista_de_concursos);
+            Exit(False);
+        end;
+    end;
+
+    //FreeAndNil(dmLotofacil);
+    FreeAndNil(sql_query);
+
+    if lista_de_concursos.Count <> 0 then
+    begin
+        Exit(True);
+    end
+    else
+    begin
+        Exit(False);
+    end;
+end;
 
 {
  Retorna as bolas do concurso, se o número do concurso foi localizado
@@ -513,14 +578,11 @@ begin
 
                 // No banco de dados, os campos que tem o tipo decimal, o separador
                 // de decimal é o ponto e não a vírgula, então, iremos manipular esta situação
-                if (nome_do_campo = 'rateio_15_numeros') or (nome_do_campo =
-                    'rateio_14_numeros') or (nome_do_campo = 'rateio_13_numeros') or
-                    (nome_do_campo = 'rateio_12_numeros') or (nome_do_campo =
-                    'rateio_11_numeros') or (nome_do_campo = 'valor_arrecadado') or
+                if (nome_do_campo = 'rateio_15_numeros') or (nome_do_campo = 'rateio_14_numeros') or
+                    (nome_do_campo = 'rateio_13_numeros') or (nome_do_campo = 'rateio_12_numeros') or
+                    (nome_do_campo = 'rateio_11_numeros') or (nome_do_campo = 'valor_arrecadado') or
                     (nome_do_campo = 'valor_acumulado_especial') or
                     (nome_do_campo = 'estimativa_premio') then
-
-
 
                 begin
                     numero_decimal := StrToFloat(valor_campo_atual);

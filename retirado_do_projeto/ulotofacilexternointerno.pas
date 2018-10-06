@@ -1,3 +1,7 @@
+{
+ Esta unit não será mais utilizada.
+}
+
 unit ulotofacilExternoInterno;
 
 {$mode objfpc}{$H+}

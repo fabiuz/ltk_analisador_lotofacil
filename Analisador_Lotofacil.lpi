@@ -48,7 +48,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="33">
+    <Units Count="24">
       <Unit0>
         <Filename Value="Analisador_Lotofacil.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -109,103 +109,64 @@
         <UnitName Value="uLotofacil_Gerador_id"/>
       </Unit9>
       <Unit10>
-        <Filename Value="ulotofacil_bolas_arquivo.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit10>
-      <Unit11>
         <Filename Value="ulotofacilnovosrepetidos.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilNovosRepetidos"/>
-      </Unit11>
-      <Unit12>
-        <Filename Value="ulotofacilparimpar.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uLotofacilParImpar"/>
-      </Unit12>
-      <Unit13>
-        <Filename Value="ulotofacilexternointerno.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="ulotofacilExternoInterno"/>
-      </Unit13>
-      <Unit14>
-        <Filename Value="ulotofacilprimonaoprimo.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uLotofacilPrimoNaoPrimo"/>
-      </Unit14>
-      <Unit15>
+      </Unit10>
+      <Unit11>
         <Filename Value="ulotofacil_colunas_b.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacil_Colunas_B"/>
-      </Unit15>
-      <Unit16>
+      </Unit11>
+      <Unit12>
         <Filename Value="ulotofacil_diferenca_entre_bolas.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit16>
-      <Unit17>
-        <Filename Value="ulotofacil_grupos.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit17>
-      <Unit18>
-        <Filename Value="ulotofacil_funcoes_uteis.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit18>
-      <Unit19>
-        <Filename Value="ulotofacil_algarismo_nas_dezenas.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit19>
-      <Unit20>
+      </Unit12>
+      <Unit13>
         <Filename Value="ulotofacilsomafrequencia.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uLotofacilSomaFrequencia"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="README.md"/>
+        <IsPartOfProject Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="ulotofacil_bolas_na_mesma_coluna.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="ulotofacil_b1_a_b15.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="lotofacil_constantes.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="lotofacil_filtros.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="lotofacil_var_global.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="lotofacil_gerar_filtros.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit20>
       <Unit21>
-        <Filename Value="README.md"/>
+        <Filename Value="lotofacil_concursos.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit21>
       <Unit22>
-        <Filename Value="ulotofacil_bolas_na_mesma_coluna.pas"/>
+        <Filename Value="lotofacil_comparacao_de_bolas_na_mesma_coluna.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit22>
       <Unit23>
-        <Filename Value="ulotofacil_b1_a_b15.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit23>
-      <Unit24>
-        <Filename Value="ulotofacil_concursos.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit24>
-      <Unit25>
-        <Filename Value="lotofacil_constantes.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit25>
-      <Unit26>
-        <Filename Value="lotofacil_filtros.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit26>
-      <Unit27>
-        <Filename Value="lotofacil_var_global.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit27>
-      <Unit28>
-        <Filename Value="lotofacil_gerar_filtros.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit28>
-      <Unit29>
-        <Filename Value="lotofacil_concursos.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit29>
-      <Unit30>
-        <Filename Value="lotofacil_sgr_controle.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit30>
-      <Unit31>
-        <Filename Value="lotofacil_comparacao_de_bolas_na_mesma_coluna.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit31>
-      <Unit32>
         <Filename Value="lotofacil_frequencia.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit32>
+      </Unit23>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
