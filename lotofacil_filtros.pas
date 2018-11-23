@@ -25,7 +25,6 @@ procedure obter_filtro_binario(sgr_controle: TStringGrid; sql_conexao: TZConnect
 function configurar_filtro_binario_sgr_controle(sgr_controle: TStringGrid): boolean;
 procedure filtro_binario_rd_controle_alterou(rd_controle: TRadioGroup);
 
-//procedure filtro_excluir(sql_conexao: TZConnection; filtro_data_hora: string);
 procedure filtro_excluir_todos(sql_conexao: TZConnection);
 
 implementation
@@ -430,7 +429,6 @@ begin
     if AnsiStartsStr('sgr_cmp_', LowerCase(sgr_controle.Name)) then
     begin
         Exit;
-
     end;
 
     // Obtém o índice.
@@ -792,82 +790,5 @@ begin
     FreeAndNil(sql_query);
     MessageDlg('', 'Todos os filtros foram excluídos com sucesso!!!', mtInformation, [mbOK], 0);
 end;
-
-//procedure filtro_excluir(sql_conexao: TZConnection; filtro_data_hora: string);
-//var
-//    sql_query: TZQuery;
-//    filtro_data_hora_original: string;
-//    data_hora, Data, hora: TStringArray;
-//
-//begin
-//    // Aqui, verificaremos se o usuário deseja excluir o filtro
-//    // Se a resposta for não, retornaremos imediatamente.
-//    if mrNo = MessageDlg('', 'Deseja excluir o filtro criado em ' + filtro_data_hora + '?',
-//        mtConfirmation, [mbYes, mbNo], 0) then
-//    begin
-//        Exit;
-//    end;
-//
-//    if filtro_data_hora = '' then
-//    begin
-//        Exit;
-//    end;
-//    // Armazena o filtro original, pra ser exibido caso o filtro seja
-//    // excluído com sucesso.
-//    filtro_data_hora_original := filtro_data_hora;
-//
-//    // A data está em formato brasileiro, assim: dd-mm-yyyy hh:nn:ss.mi
-//    // Vamos criar um arranjo, pra isto, o campo data é separado do campo tempo por um
-//    // espaço.
-//    data_hora := filtro_data_hora.Split(' ');
-//
-//    if Length(data_hora) <> 2 then
-//    begin
-//        MessageDlg('', 'Erro, deve haver um espaço separado a data e hora.',
-//            mtError, [mbOK], 0);
-//        Exit;
-//    end;
-//
-//    // Agora, iremos separar a parte data, em dia, mes e ano.
-//    Data := data_hora[0].Split('-');
-//
-//    // Deve haver 3 valores.
-//    if Length(Data) <> 3 then
-//    begin
-//        MessageDlg('',
-//            'Erro, os campos de dia, mês e ano, deve ser interseparados pelo caractere ' +
-//            '-', mtError, [mbOK], 0);
-//        Exit;
-//    end;
-//
-//    // Ficará desta forma:
-//    // data[0] => dia
-//    // data[1] => mes
-//    // data[2] => ano
-//
-//    // Agora, iremos colocar a data no formato americano.
-//    filtro_data_hora := Data[2] + '-' + Data[1] + '-' + Data[0] + ' ' + data_hora[1];
-//
-//    try
-//        sql_query := TZQuery.Create(nil);
-//        sql_query.Connection := sql_conexao;
-//        sql_query.Sql.Clear;
-//        sql_query.Sql.Add('Delete from d_sorte.d_sorte_filtros');
-//        sql_query.Sql.Add('where data = ' + QuotedStr(filtro_data_hora));
-//        Writeln(sql_query.Sql.Text);
-//        sql_query.ExecSql;
-//        sql_query.Close;
-//    except
-//        On exc: Exception do
-//        begin
-//            sql_query.Close;
-//            sql_conexao.Rollback;
-//            MessageDlg('', 'Erro, ' + exc.Message, mtError, [mbOK], 0);
-//            Exit;
-//        end;
-//    end;
-//
-//    MessageDlg('', 'Filtro ' + filtro_data_hora_original, mtInformation, [mbOK], 0);
-//end;
 
 end.

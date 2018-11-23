@@ -178,12 +178,10 @@ begin
         // Agora, exibe os dados.
         for uA := 1 to 25 do
         begin
-            Writeln('cmp_num_', uA, ',qt_vz');
             frequencia_num_mapa := frequencia_lista[uA];
             for uB := 0 to Pred(frequencia_num_mapa.Count) do
             begin
                 chave_atual := frequencia_num_mapa.Keys[uB];
-                Writeln(chave_atual, ',', frequencia_num_mapa.KeyData[chave_atual]);
             end;
         end;
 
@@ -209,7 +207,7 @@ const
     LTF_CMB_15_BOLAS = 3268760;
 var
     frequencia_num_concurso: array [0..25] of integer;
-    sql_query, sql_query_2: TZQuery;
+    sql_query : TZQuery;
     frequencia_concurso, qt_registros, zero_um: longint;
     frequencia_combinacoes: array of array of integer;
     uA, soma_frequencia, uB, qt_ainda_nao_saiu, qt_saiu, qt_repetindo, qt_deixou_de_sair,
@@ -291,7 +289,7 @@ begin
                 zero_um_atual := zero_um_atual + IntToStr(zero_um);
 
                 frequencia_concurso := frequencia_num_concurso[uB];
-                Writeln('uB:', uB, 'zero_um:', zero_um, 'freq_conc: ', frequencia_concurso);
+                //Writeln('uB:', uB, 'zero_um:', zero_um, 'freq_conc: ', frequencia_concurso);
 
                 // Nos ifs abaixo, funciona assim, a variável 'zero_um' tem o valor
                 // '1' se a bola saiu naquela combinação, '0' caso contrário,
@@ -323,23 +321,23 @@ begin
                     Inc(frequencia_concurso, -1);
                     Inc(qt_ainda_nao_saiu);
                 end else begin
-                    Writeln('Caiu aqui, verificar.');
+                    //Writeln('Caiu aqui, verificar.');
                 end;
                 // Após alterar.
-                Writeln('uB:', uB, 'zero_um:', zero_um, 'freq_conc: ', frequencia_concurso);
+                //Writeln('uB:', uB, 'zero_um:', zero_um, 'freq_conc: ', frequencia_concurso);
 
 
                 soma_frequencia := soma_frequencia + frequencia_concurso;
             end;
 
             if zero_um_anterior = zero_um_atual then begin
-                    Writeln('zero_um=zero_um_anterior');
+                    //Writeln('zero_um=zero_um_anterior');
             end;
             zero_um_anterior := zero_um_atual;
 
             sql_query.Next;
             if sql_query.EOF = true then begin
-                Writeln('EOF');
+                //Writeln('EOF');
             END;;
 
 
@@ -377,7 +375,7 @@ begin
             Inc(qt_registros_lidos);
             if qt_registros_lidos = 1000 then
             begin
-                Writeln(sql_query.SQL.Text);
+                //Writeln(sql_query.SQL.Text);
                 sql_query.ExecSql;
                 sql_query.SQL.Clear;
                 qt_registros_lidos := 0;

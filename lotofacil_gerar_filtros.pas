@@ -6,7 +6,9 @@ interface
 
 uses
     Classes, SysUtils, lotofacil_constantes, fgl, Grids, Dialogs, StdCtrls,
-    ZDataset, ZConnection, lotofacil_var_global, lotofacil_sgr_controle, strUtils;
+    ZDataset, ZConnection, lotofacil_var_global,
+    //lotofacil_sgr_controle,
+    strUtils;
 
 type
     TList_StringGrid = specialize TFPGList<TStringGrid>;
@@ -24,6 +26,7 @@ type
         sql_offset: integer;
         sql_limit:  integer;
         Concurso:   integer;
+
     end;
 
 procedure configurar_campo_id_dos_controles(var campo_id: TStringArray);
@@ -121,7 +124,7 @@ begin
     sql_foi_gerado := gerar_sql_dos_ids_obtidos(id_obtidos, sql_conexao, opcoes_do_filtro);
     if sql_foi_gerado then
     begin
-        MessageDlg('', 'Filtros gerados com sucesso!!!', mtError, [mbOK], 0);
+        MessageDlg('', 'Filtros gerados com sucesso!!!', mtInformation, [mbOK], 0);
     end;
 
 end;
@@ -159,17 +162,19 @@ function gerar_sql_dos_ids_obtidos(id_obtidos: string; sql_conexao: TZConnection
     end;
 
 const
-    tabelas_utilizadas: array [0..4] of string = (
+    tabelas_utilizadas: array [0..6] of string = (
         'lotofacil.lotofacil_num',
         'lotofacil.lotofacil_bolas',
         'lotofacil.lotofacil_novos_repetidos',
         //'lotofacil.lotofacil_num_bolas_concurso',
         //'lotofacil.lotofacil_diferenca_entre_bolas',
         'lotofacil.lotofacil_id',
-        'lotofacil.v_lotofacil_num_nao_sorteado' //,
+        'lotofacil.v_lotofacil_num_nao_sorteado',
         //'lotofacil.lotofacil_coluna_b',
         //'lotofacil.lotofacil_combinacoes_em_grupos',
-        //'lotofacil.lotofacil_algarismo_na_dezena'
+        //'lotofacil.lotofacil_algarismo_na_dezena',
+        'lotofacil.lotofacil_id_classificado',
+        'lotofacil.lotofacil_diferenca_entre_bolas'
         );
 var
     sql_query: TZQuery;
@@ -326,6 +331,7 @@ begin
         sql_query := TZQuery.Create(nil);
         sql_query.Connection := sql_conexao;
         sql_query.Sql.Add(sql_gerado.Text);
+        Writeln(sql_gerado.Text);
         sql_query.ExecSql;
         sql_query.Close;
         FreeAndNil(sql_query);
@@ -842,7 +848,6 @@ var
 begin
     lista_de_id_pra_retornar := '';
 
-
     for uA := 0 to High(lista_sgr_controle) do
     begin
         sgr_controle := lista_sgr_controle[uA].sgr_controle;
@@ -852,7 +857,6 @@ begin
         if sgr_controle = lista_sgr_controle[ID_FREQUENCIA].sgr_controle then begin
             continue;
         end;
-
 
         // A lista de controle pode ter controles que não foram inseridos ainda.
         if not Assigned(sgr_controle) then
@@ -900,16 +904,6 @@ begin
         // Verifica se o nome do campo na primeira coluna coincide
         // com o nome do campo.
         indice_tag := sgr_controle.tag;
-        //if AnsiLowerCase(sgr_controle.Columns[0].Title.Caption) <> sgr_filtro_sql[indice_tag, 2] then
-
-        Writeln('Nome:', sgr_controle.Columns[0].Title.Caption, '=campo=>', lista_sgr_controle[uA].sql_campo_id);
-
-
-
-        //if AnsiLowerCase(sgr_controle.Columns[0].Title.Caption) <> lista_sgr_controle[uA].sql_campo_id then
-        //begin
-        //    Continue;
-        //end;
 
         // Agora, vamos pegar os ids.
         id_atual_sim := '';
@@ -937,7 +931,7 @@ begin
                 begin
                     id_atual_sim := id_atual_sim + ',';
                 end;
-                id_atual_sim := id_atual_sim + sgr_controle.Cells[0, uB];
+                id_atual_sim := id_atual_sim + QuotedStr(sgr_controle.Cells[0, uB]);
             end;
 
             // Pega cada id, se o usuário marcou 'nao'.
@@ -947,7 +941,7 @@ begin
                 begin
                     id_atual_nao := id_atual_nao + ',';
                 end;
-                id_atual_nao := id_atual_nao + sgr_controle.Cells[0, uB];
+                id_atual_nao := id_atual_nao + QuotedStr(sgr_controle.Cells[0, uB]);
             end;
         end;
 

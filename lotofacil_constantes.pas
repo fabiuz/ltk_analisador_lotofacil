@@ -83,7 +83,13 @@ const
 
     ID_FREQUENCIA = 55;
 
-    ID_ULTIMO = 55;
+    ID_DF_MENOR_MAIOR = 56;
+    ID_DF_PAR_IMPAR = 57;
+    ID_DF_QT_DF_1 = 58;
+    ID_DF_QT_DF_1_A_QT_DF_2 = 59;
+    ID_DF_QT_DF_1_A_QT_DF_3 = 60;
+
+    ID_ULTIMO = 60;
     TOTAL_DE_FILTROS = ID_ULTIMO + 1;
 
     // Indica qual é o último controle implementado.

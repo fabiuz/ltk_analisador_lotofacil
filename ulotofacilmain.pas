@@ -11,21 +11,22 @@ uses
     DB, BufDataset, sqlDb, Grids,
     ValEdit,
     CheckLst, MaskEdit, Buttons, JSONPropStorage, Spin, EditBtn,
-    AsyncProcess, IdHTTP,
+    AsyncProcess, PairSplitter, IdHTTP,
     strings, strUtils,
     fgl,
     //IdHeaderList,
     IdAuthentication, zipper,
     SAX_HTML, dom_html, dom, XMLConf,
-    uLotofacilPrimoNaoPrimo,
-    uLotofacilNovosRepetidos, Types, ZConnection,
+    //uLotofacilPrimoNaoPrimo,
+    uLotofacilNovosRepetidos,
+    Types, ZConnection,
     lotofacil_gerar_filtros,
     lotofacil_filtros,
     lotofacil_var_global, lotofacil_concursos, ZDataset,
     lotofacil_comparacao_de_bolas_na_mesma_coluna,
-    lotofacil_sgr_controle,
-    lotofacil_frequencia
-    ;
+    //lotofacil_sgr_controle,
+    lotofacil_frequencia, lotofacil_id_classificado, lotofacil_gerar_aleatorio,
+    pqconnection;
 
 type
     TList_StringGrid = specialize TFPGList<TStringGrid>;
@@ -591,6 +592,8 @@ type
         btnGrupo2BolasDesmarcarTodos398: TButton;
         btnGrupo2BolasDesmarcarTodos399: TButton;
         btnGrupo2BolasDesmarcarTodos400: TButton;
+        btnGrupo2BolasDesmarcarTodos401: TButton;
+        btnGrupo2BolasDesmarcarTodos402: TButton;
         btnGrupo2BolasDesmarcarTodos46: TButton;
         btnGrupo2BolasDesmarcarTodos47: TButton;
         btnGrupo2BolasDesmarcarTodos48: TButton;
@@ -623,6 +626,8 @@ type
         btnGrupo2BolasMarcarTodos398: TButton;
         btnGrupo2BolasMarcarTodos399: TButton;
         btnGrupo2BolasMarcarTodos400: TButton;
+        btnGrupo2BolasMarcarTodos401: TButton;
+        btnGrupo2BolasMarcarTodos402: TButton;
         btnGrupo2BolasMarcarTodos46: TButton;
         btnGrupo2BolasMarcarTodos47: TButton;
         btnGrupo2BolasMarcarTodos48: TButton;
@@ -674,9 +679,11 @@ type
         btn_bin_vrt_4: TButton;
         btn_bin_vrt_5: TButton;
         btn_bin_dge_1: TButton;
+        btn_classificados_obter_campos: TButton;
         btn_frequencia_novos_concursos1: TButton;
         btn_frequencia_atualizar: TButton;
         btn_gerar_estatistica_frequencia_num: TButton;
+        btn_gerar_aleatorio: TButton;
         btn_obter_resultado_do_webservice: TButton;
         btn_obter_status_cmp_de_bolas_na_mesma_coluna: TButton;
         btn_atualizar_status_cmp_de_bolas_na_mesma_coluna: TButton;
@@ -1149,7 +1156,20 @@ type
         btn_novos_repetidos_ultima_atualizacao: TButton;
         btn_frequencia_novos_concursos: TButton;
         btn_frequencia_obter_concursos_2: TButton;
+        btn_rotacao_binaria_obter_concursos1: TButton;
+        btn_gerador_aleatorio_obter_concursos: TButton;
+        Button1: TButton;
+        btnInterromper: TButton;
+        btn_classificado_selecionar: TButton;
+        btn_classificado_nao_selecionar: TButton;
+        btn_classificado_mover_pra_cima: TButton;
+        btn_classificado_mover_pra_baixo: TButton;
+        btn_rotacao_binaria_obter_concursos: TButton;
+        btn_gerar_rotacao_binaria: TButton;
+        btn_atualizar_concursos_ja_inseridos: TButton;
         CheckGroup1: TCheckGroup;
+        chk_gerador_aleatorio_bolas_novas: TCheckGroup;
+        chk_rotacao_binaria: TCheckGroup;
         chk_bin_dgd_2: TCheckGroup;
         chk_bin_dgd_3: TCheckGroup;
         chk_bin_dgd_4: TCheckGroup;
@@ -1201,10 +1221,10 @@ type
         chk_bin_vrt_3: TCheckGroup;
         chk_bin_vrt_4: TCheckGroup;
         chk_bin_dge_1: TCheckGroup;
-        chk_excluir_jogos_ltf_qt: TCheckGroup;
-        chk_excluir_Jogos_Ja_Sorteados: TCheckGroup;
         chkExibirCampos: TCheckListBox;
         chkExibirCampos1: TCheckListBox;
+        chk_excluir_Jogos_Ja_Sorteados: TCheckGroup;
+        chk_excluir_jogos_ltf_qt: TCheckGroup;
         cmbAinda_Nao_Saiu_Maximo: TComboBox;
         cmbAinda_Nao_Saiu_Maximo1: TComboBox;
         cmbAinda_Nao_Saiu_Minimo: TComboBox;
@@ -1462,6 +1482,9 @@ type
         cmb_intervalo_por_concurso_inicial_b8_a_b9: TComboBox;
         cmb_concursos_bolas_na_mesma_coluna: TComboBox;
         cmb_frequencia_obter_concursos: TComboBox;
+        cmb_rotacao_binaria_concursos: TComboBox;
+        cmb_rotacao_binaria_concursos1: TComboBox;
+        cmb_gerador_aleatorio_concursos: TComboBox;
         dtp_concurso_manual_data: TDateTimePicker;
         ed_concurso_manual_numero: TLabeledEdit;
         grGrupo3Bolas: TGroupBox;
@@ -1647,6 +1670,10 @@ type
         GroupBox258: TGroupBox;
         GroupBox259: TGroupBox;
         GroupBox26: TGroupBox;
+        GroupBox260: TGroupBox;
+        GroupBox261: TGroupBox;
+        GroupBox262: TGroupBox;
+        grp_rotacao_binaria: TGroupBox;
         GroupBox27: TGroupBox;
         GroupBox28: TGroupBox;
         GroupBox29: TGroupBox;
@@ -1953,6 +1980,7 @@ type
         grp_dezena: TGroupBox;
         grp_diagonal_direita: TGroupBox;
         grp_diagonal_esquerda: TGroupBox;
+        grp_dif_menor_maior: TGroupBox;
         grp_esquerda_direita: TGroupBox;
         grp_horizontal: TGroupBox;
         grp_bin_hrz_1: TGroupBox;
@@ -2018,10 +2046,13 @@ type
         grp_losango: TGroupBox;
         grp_novos_repetidos: TGroupBox;
         grp_novos_repetidos1: TGroupBox;
+        grp_dif_par_impar: TGroupBox;
         grp_primo_nao_primo: TGroupBox;
         grp_primo_nao_primo1: TGroupBox;
         grp_primo_nao_primo_por_concurso: TGroupBox;
         grp_quinteto: TGroupBox;
+        grp_rotacao_binaria1: TGroupBox;
+        grp_gerador_aleatorio: TGroupBox;
         grp_soma_de_bolas: TGroupBox;
         grpFiltroData: TGroupBox;
         grpFiltroData1: TGroupBox;
@@ -2312,17 +2343,19 @@ type
         grp_soma_algarismo: TGroupBox;
         grp_x1_x2: TGroupBox;
         gr_concurso_manual_data: TGroupBox;
-        Label3: TLabel;
+        Label3:  TLabel;
         Label4:  TLabel;
-        Label5: TLabel;
+        Label5:  TLabel;
         lbl_novos_repetidos_ultima_atualizacao: TLabel;
+        lst_campos_disponiveis: TListBox;
+        lst_campos_ordenados: TListBox;
         Memo1:   TMemo;
-        Memo2: TMemo;
+        Memo2:   TMemo;
         mskDeslocamento: TMaskEdit;
+        msk_filtro_total_de_registros: TMaskEdit;
         objHttp: TIdHTTP;
         JSONPropStorage1: TJSONPropStorage;
         Label6:  TLabel;
-        msk_filtro_total_de_registros: TMaskEdit;
         mmFiltroSql: TMemo;
         PageControl1: TPageControl;
         PageControl19: TPageControl;
@@ -2370,15 +2403,20 @@ type
         PageControl61: TPageControl;
         PageControl62: TPageControl;
         PageControl63: TPageControl;
+        PageControl64: TPageControl;
+        PageControl65: TPageControl;
         Panel10: TPanel;
         Panel11: TPanel;
+        Panel12: TPanel;
         pnFrequenciaNaoSair: TPanel;
         pnFrequenciaNaoSair1: TPanel;
         pnFrequenciaNaoSair2: TPanel;
         pnFrequenciaNaoSair4: TPanel;
         pnGrupo2Bolas37: TPanel;
         pnGrupo2Bolas408: TPanel;
+        pnGrupo2Bolas409: TPanel;
         pnGrupo2Bolas41: TPanel;
+        pnGrupo2Bolas410: TPanel;
         pn_bin_dgd_2: TPanel;
         pn_bin_dgd_3: TPanel;
         pn_bin_dgd_4: TPanel;
@@ -2802,6 +2840,9 @@ type
         pn_sup_bin_vrt_3: TPanel;
         pn_sup_bin_vrt_4: TPanel;
         pn_sup_bin_dge_1: TPanel;
+        rd_concursos_ja_inseridos_classificar: TRadioGroup;
+        rd_gerar_aleatorio_opcoes: TRadioGroup;
+        rdDeslocamento: TRadioGroup;
         rd_bin_dgd_2: TRadioGroup;
         rd_bin_dgd_3: TRadioGroup;
         rd_bin_dgd_4: TRadioGroup;
@@ -2852,11 +2893,13 @@ type
         rd_bin_dge_1: TRadioGroup;
         rd_cruzeta: TRadioGroup;
         rd_dezena_sim_nao: TRadioGroup;
+        rd_df_menor_maior: TRadioGroup;
         rd_diagonal_direita: TRadioGroup;
         rd_diagonal_esquerda: TRadioGroup;
         rd_esquerda_direita: TRadioGroup;
         rd_externo_interno_sim_nao: TRadioGroup;
         rd_filtro_ordenar_asc_desc: TRadioGroup;
+        rd_filtro_ordenar_campo: TRadioGroup;
         rd_frequencia: TRadioGroup;
         rd_horizontal: TRadioGroup;
         rd_bin_hrz_1: TRadioGroup;
@@ -2864,6 +2907,7 @@ type
         rd_losango: TRadioGroup;
         rd_novos_repetidos_sim_nao: TRadioGroup;
         rd_novos_repetidos_sim_nao1: TRadioGroup;
+        rd_df_par_impar: TRadioGroup;
         rd_par_impar_sim_nao: TRadioGroup;
         rd_par_impar_sim_nao1: TRadioGroup;
         rd_par_impar_sim_nao10: TRadioGroup;
@@ -2878,7 +2922,6 @@ type
         rd_primo_nao_primo_sim_nao: TRadioGroup;
         rd_quinteto: TRadioGroup;
         rd_soma_de_bolas_sim_nao: TRadioGroup;
-        rd_filtro_ordenar_campo: TRadioGroup;
         rd_superior_direita_inferior_esquerda: TRadioGroup;
         rd_superior_esquerda_inferior_direita: TRadioGroup;
         rd_superior_inferior: TRadioGroup;
@@ -2980,7 +3023,9 @@ type
         sgr_b14_qt_vz: TStringGrid;
         sgr_b15_qt_vz: TStringGrid;
         sgr_concursos: TStringGrid;
+        sgr_dif_menor_maior: TStringGrid;
         sgr_novos_repetidos1: TStringGrid;
+        sgr_dif_par_impar: TStringGrid;
         sgr_resultado_importacao: TStringGrid;
         sgr_b6_a_b11_por_concurso: TStringGrid;
         sgr_b6_a_b12_por_concurso: TStringGrid;
@@ -3260,11 +3305,24 @@ type
         sgr_algarismo: TStringGrid;
         sgr_soma_algarismo: TStringGrid;
         sgr_x1_x2: TStringGrid;
+        sgr_gerador_aleatorio: TStringGrid;
+        sgr_concursos_ja_inseridos: TStringGrid;
+        stx_log_geracao: TStaticText;
         stx_bolas_do_concurso: TStaticText;
         stxtNovosRepetidos: TStaticText;
         TabSheet100: TTabSheet;
         TabSheet101: TTabSheet;
         TabSheet102: TTabSheet;
+        TabSheet103: TTabSheet;
+        TabSheet106: TTabSheet;
+        TabSheet107: TTabSheet;
+        TabSheet112: TTabSheet;
+        tab_concursos_ja_inseridos: TTabSheet;
+        tab_rotacao_binaria: TTabSheet;
+        tab_dif_menor_maior: TTabSheet;
+        tab_dif_par_impar: TTabSheet;
+        tab_filtro_opcoes: TTabSheet;
+        TabSheet4: TTabSheet;
         TabSheet70: TTabSheet;
         TabSheet71: TTabSheet;
         tab_bin_esquerda: TTabSheet;
@@ -3582,7 +3640,6 @@ type
         pnGrupo2Bolas7: TPanel;
         pnVerificarAcertos1: TPanel;
         rdSomaFrequenciaPrecisaoBolas: TRadioGroup;
-        rdDeslocamento: TRadioGroup;
         rdGerador_Quantidade_de_Bolas: TRadioGroup;
         sgr_b11_a_b11: TStringGrid;
         sgr_b11_a_b11_por_concurso: TStringGrid;
@@ -3762,7 +3819,6 @@ type
         TabSheet2: TTabSheet;
         TabSheet3: TTabSheet;
         tabBanco_de_dados: TTabSheet;
-        TabSheet4: TTabSheet;
         TabSheet5: TTabSheet;
         tabExternoInterno: TTabSheet;
         tabDiferencaEntreBolas: TTabSheet;
@@ -3803,11 +3859,12 @@ type
         tgGeradorOpcoes: TToggleBox;
         tgVerificarAcertos: TToggleBox;
         tgAleatorioVerificarAcertos: TToggleBox;
-        UpDown1: TUpDown;
-        upDeslocamento: TUpDown;
         config_de_conexao: TValueListEditor;
+        upDeslocamento: TUpDown;
+        UpDown1: TUpDown;
         XMLConfig1: TXMLConfig;
         //procedure alterar_marcador(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
+        procedure btn_atualizar_concursos_ja_inseridosClick(Sender: TObject);
         procedure btn_atualizar_sgr_filtro_binario(Sender: TObject);
         procedure btnAleatorioNovoClick(Sender: TObject);
         //procedure btnAtualizarNovosRepetidosAntigoClick(Sender: TObject);
@@ -3822,6 +3879,9 @@ type
         //procedure btnGrupo2BolasMarcarTodosClick(Sender: TObject);
         procedure btn_atualizar_filtrosClick(Sender: TObject);
         procedure btn_atualizar_status_cmp_de_bolas_na_mesma_colunaClick(Sender: TObject);
+        procedure btn_classificados_obter_camposClick(Sender: TObject);
+        procedure btn_classificado_nao_selecionarClick(Sender: TObject);
+        procedure btn_classificado_selecionarClick(Sender: TObject);
         procedure btn_concurso_manual_atualizarClick(Sender: TObject);
         procedure btn_concurso_excluirClick(Sender: TObject);
         procedure btn_concurso_manual_inserirClick(Sender: TObject);
@@ -3830,8 +3890,11 @@ type
         procedure btn_frequencia_novos_concursosClick(Sender: TObject);
         procedure btn_frequencia_obter_concursosClick(Sender: TObject);
         procedure btn_frequencia_obter_concursos_2Click(Sender: TObject);
+        procedure btn_gerador_aleatorio_obter_concursosClick(Sender: TObject);
+        procedure btn_gerar_aleatorioClick(Sender: TObject);
         procedure btn_gerar_estatistica_frequencia_numClick(Sender: TObject);
         procedure btn_gerar_filtroClick(Sender: TObject);
+        procedure btn_gerar_rotacao_binariaClick(Sender: TObject);
         procedure btn_novos_repetidos_ultima_atualizacaoClick(Sender: TObject);
         procedure btn_obter_concursos_bolas_na_mesma_colunaClick(Sender: TObject);
         procedure btn_obter_concursos_novos_repetidosClick(Sender: TObject);
@@ -3847,6 +3910,9 @@ type
         procedure btn_configurar_conexaoClick(Sender: TObject);
         procedure btn_obter_resultado_do_webserviceClick(Sender: TObject);
         procedure btn_obter_status_cmp_de_bolas_na_mesma_colunaClick(Sender: TObject);
+        procedure btn_rotacao_binaria_obter_concursosClick(Sender: TObject);
+        procedure Button1Click(Sender: TObject);
+        procedure btnInterromperClick(Sender: TObject);
         //procedure CheckBox1Change(Sender : TObject);
         procedure chkExibirCamposClickCheck(Sender: TObject);
         procedure cmbAinda_Nao_Saiu_MaximoChange(Sender: TObject);
@@ -3880,6 +3946,7 @@ type
         procedure cmbRepetindo_MinimoChange(Sender: TObject);
         //procedure edConcursoKeyDown(Sender: TObject; var Key: word;  Shift: TShiftState);
         procedure ed_concurso_manual_numeroKeyPress(Sender: TObject; var Key: char);
+        procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
         procedure FormCreate(Sender: TObject);
         procedure pageFiltrosChange(Sender: TObject);
         //procedure grpDiagonal15BolasResize(Sender : TObject);
@@ -3895,7 +3962,7 @@ type
         procedure sgrBolas_na_mesma_colunaSelectCell(Sender: TObject; aCol, aRow: integer;
             var CanSelect: boolean);
 
-//        procedure sgrColunaB1_15BolasSelectCell(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
+        //        procedure sgrColunaB1_15BolasSelectCell(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
         //procedure sgrColunaB1_16BolasSelectCell(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
         //procedure sgrColunaB1_17BolasSelectCell(Sender : TObject; aCol,
         //  aRow : Integer; var CanSelect : Boolean);
@@ -3935,8 +4002,7 @@ type
             var CanSelect: boolean);
         procedure sgrColunaB1_B8_B15_18BolasSelectCell(Sender: TObject; aCol, aRow: integer;
             var CanSelect: boolean);
-        procedure AlterarMarcador(Sender: TObject; aCol, aRow: integer;
-            var CanSelect: boolean);
+        procedure AlterarMarcador(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
         procedure sgrExternoInternoPorConcursoSelectCell(Sender: TObject; aCol, aRow: integer;
             var CanSelect: boolean);
         procedure sgr_concursosDrawCell(Sender: TObject; aCol, aRow: integer; aRect: TRect;
@@ -4021,8 +4087,10 @@ type
         procedure configurar_controle_binario;
         procedure configurar_opcoes_do_filtro;
         procedure configurar_todos_os_controles_de_filtros;
+        procedure fGerar_id_classificadoStatus(AStatus: string);
         procedure novos_repetidos_ultima_atualizacao;
         function obter_id_da_frequencia: string;
+        procedure preencher_listbox_campos_disponiveis(sql_conexao: TZConnection);
         procedure Resetar_Antes_de_atualizar;
         procedure sgr_bx_a_by_atualizar_dependentes(objControle: TStringGrid);
         //procedure controle_cmb_intervalo_por_concurso_alterou(Sender: TObject);
@@ -4099,7 +4167,7 @@ type
         procedure Configurar_Controle_sgrFiltro;
         //procedure Controle_Diferenca_entre_Bolas_alterou(objControle: TStringGrid);
         procedure Exibir_Ocultar_Filtro_Campos;
-        procedure ExternoInternoConsolidadoConcursoInicialFinalAlterou;
+
         procedure Filtro_Excluir(filtro_data_hora: ansistring);
 
 
@@ -4232,6 +4300,9 @@ type
     private
         sql_conexao: TZConnection;
 
+    private
+        fGerar_id_classificado: TLotofacil_id_Classificado;
+
     end;
 
 const
@@ -4252,9 +4323,10 @@ uses
     uLotofacilSomaFrequencia,
     ulotofacil_bolas_na_mesma_coluna,
     ulotofacil_b1_a_b15,
-    lotofacil_constantes,
+    lotofacil_constantes
     //Regex,
-    ulotofacil_concursos;
+    //ulotofacil_concursos
+    ;
 
 var
     dmLotofacil: TdmLotofacil;
@@ -4273,6 +4345,10 @@ begin
     CarregarControlesTG;
     Resetar_Antes_de_atualizar;
     configurar_controle_binario;
+end;
+
+procedure TForm1.preencher_listbox_campos_disponiveis(sql_conexao: TZConnection);
+begin
 end;
 
 {
@@ -5285,22 +5361,6 @@ begin
     mapa_filtro_binario_info.Add(ID_BIN_QNT_5, filtro_info);
     Dispose(p_filtro_info);
 
-
-
-
-    {
-    filtro_info := p_controle_info^;
-    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_par';
-    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
-    filtro_info.sql_campos := 'bin_id,bin_qt,bin_11,bin_10' +
-                              ',bin_9,bin_8,bin_7,bin_6,bin5' +
-                              ',bin_4,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0';
-    filtro_info.sql_campo_id:= 'lotofacil_id.bin_id_par';
-    filtro_info.sgr_controle := sgr_bin_hrz_1;
-
-    mapa_filtro_binario_info.Add(ID_BIN_PAR, p_controle_info^);
-    dispose(p_controle_info);
-    }
 end;
 
 procedure TForm1.Resetar_Antes_de_atualizar;
@@ -5992,8 +6052,53 @@ begin
     sgr_filtro_controle_info[ID_LINHA_COLUNA].sgr_controle.Tag := ID_LINHA_COLUNA;
     sgr_filtro_controle_info[ID_LINHA_COLUNA].rd_controle.Tag := ID_LINHA_COLUNA;
 
+
+    //========================= DIFERENÇA PAR X ÍMPAR ==========================
+    // Alguns campos não tem um identificador exclusivo pra cada combinação
+    // possível, por isso, devemos concatenar os campos.
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].sgr_controle_cabecalho:=
+    'cmb_df_par_impar,df_par,df_impar,cmb_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].sql_campos :=
+    'cmb_qt_df_par_impar' +
+    ',qt_df_par,qt_df_impar,cmb_qt,res_qt';
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].sql :=
+     'Select qt_df_par||''_''||qt_df_impar as cmb_qt_df_par_impar' +
+     ',qt_df_par,qt_df_impar,cmb_qt,res_qt ' +
+     'from lotofacil.v_lotofacil_diferenca_entre_bolas_qt_df_par_qt_df_impar';
+
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].sql_campo_id := 'qt_df_par||''_''||qt_df_impar';
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].sgr_controle := sgr_dif_par_impar;
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].rd_controle := rd_df_par_impar;
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].sgr_controle.Tag := ID_DF_PAR_IMPAR;
+    sgr_filtro_controle_info[ID_DF_PAR_IMPAR].rd_controle.Tag := ID_DF_PAR_IMPAR;
+
+
+    //========================= DIFERENÇA MENOR X MAIOR ==========================
+    // Alguns campos não tem um identificador exclusivo pra cada combinação
+    // possível, por isso, devemos concatenar os campos.
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].sgr_controle_cabecalho:=
+    'cmb_df_menor_maior,df_menor,df_maior,cmb_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].sql_campos :=
+    'cmb_df_menor_maior,df_menor,df_maior,cmb_qt,res_qt';
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].sql :=
+     'Select df_menor||''_''||df_maior as cmb_df_menor_maior' +
+     ',df_menor,df_maior,cmb_qt,res_qt ' +
+     'from lotofacil.v_lotofacil_diferenca_entre_bolas_qt_df_menor_df_maior';
+
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].sql_campo_id := 'df_menor||''_''||df_maior';
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].sgr_controle := sgr_dif_menor_maior;
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].rd_controle := rd_df_menor_maior;
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].sgr_controle.Tag := ID_DF_MENOR_MAIOR;
+    sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].rd_controle.Tag := ID_DF_MENOR_MAIOR;
+
+
     lista_sgr_controle_filtros := TList_StringGrid.Create;
 
+end;
+
+procedure TForm1.fGerar_id_classificadoStatus(AStatus: string);
+begin
+    stx_log_geracao.Caption := AStatus;
 end;
 
 procedure TForm1.pageFiltrosChange(Sender: TObject);
@@ -6035,11 +6140,6 @@ begin
         filtro_campos_selecionados[uA] := True;
     end;
 
-    //filtro_campos_selecionados[LTF_QT_ALT] := True;
-    //filtro_campos_selecionados[LTF_QT_DIF_1] := True;
-    //filtro_campos_selecionados[LTF_QT_DIF_2] := True;
-    //filtro_campos_selecionados[LTF_QT_DIF_3] := True;
-
     // Iniciar controle 'chkExibirCampos'
     chkExibirCampos.Items.Clear;
     for uA := 0 to High(filtro_campos_selecionados) do
@@ -6052,7 +6152,6 @@ begin
         chkExibirCampos.Checked[uA] := filtro_campos_selecionados[uA];
     end;
 end;
-
 
 {
  Este procedure atualiza todos os controles, ao iniciar, esta procedure é chamada.
@@ -6095,7 +6194,8 @@ begin
     //    dmLotofacil.pgLtk.Close(True);
     //end;
 
-    Carregar_controle_bx_a_by;
+    // TODO: Verificar depois.
+    //Carregar_controle_bx_a_by;
 end;
 
 {
@@ -8481,6 +8581,15 @@ begin
     end;
 end;
 
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+    if Assigned(fGerar_id_classificado) then
+    begin
+        fGerar_id_classificado.Terminate;
+        FreeAndNil(fGerar_id_classificado);
+    end;
+end;
+
 procedure TForm1.cmb_frequencia_fimChange(Sender: TObject);
 begin
     //AtualizarFrequencia;
@@ -8630,11 +8739,12 @@ end;
 
 procedure TForm1.btn_frequencia_atualizarClick(Sender: TObject);
 var
-  indice_escolhido: Integer;
-  concurso: LongInt;
+    indice_escolhido: integer;
+    concurso: longint;
 begin
     indice_escolhido := cmb_frequencia_atualizar.ItemIndex;
-    if indice_escolhido <= -1 then begin
+    if indice_escolhido <= -1 then
+    begin
         exit;
     end;
     concurso := StrToInt(cmb_frequencia_atualizar.Items[indice_escolhido]);
@@ -8644,9 +8754,9 @@ end;
 
 procedure TForm1.btn_frequencia_novos_concursosClick(Sender: TObject);
 begin
-  preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_inicio, 'asc');
-  preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_fim, 'desc');
-  cmb_frequencia_inicioChange(cmb_frequencia_inicio);
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_inicio, 'asc');
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_fim, 'desc');
+    cmb_frequencia_inicioChange(cmb_frequencia_inicio);
 end;
 
 procedure TForm1.btn_frequencia_obter_concursosClick(Sender: TObject);
@@ -8659,16 +8769,66 @@ begin
     preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_atualizar, 'desc');
 end;
 
+procedure TForm1.btn_gerador_aleatorio_obter_concursosClick(Sender: TObject);
+begin
+    preencher_combobox_com_concursos(sql_conexao, cmb_gerador_aleatorio_concursos, 'desc');
+end;
+
+procedure TForm1.btn_gerar_aleatorioClick(Sender: TObject);
+var
+  indice_escolhido, uA, qt_checked_true: Integer;
+  concurso_numero, qt_de_combinacoes: LongInt;
+  gerador_aleatorio_opcoes : R_Gerador_Aleatorio_Opcoes;
+begin
+    indice_escolhido := cmb_gerador_aleatorio_concursos.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Nenhum concurso foi escolhido.', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_numero := StrToInt(cmb_gerador_aleatorio_concursos.Items[indice_escolhido]);
+
+    indice_escolhido := rd_gerar_aleatorio_opcoes.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Quantidade de combinações a gerar não foi escolhida', mtError, [mbok], 0);
+        Exit;
+    end;
+    qt_de_combinacoes := StrToInt(rd_gerar_aleatorio_opcoes.Items[indice_escolhido]);
+
+    // Vamos passar os valores marcados no controle TCheckGroup pra o arranjo 'novos_escolhidos'
+    // da variável 'novos_escolhidos' e em seguida, contabilizar a quantidade de marcações
+    // com o valor true.
+    qt_checked_true := 0;
+    for uA := 0 to pred(chk_gerador_aleatorio_bolas_novas.Items.Count) do begin
+        gerador_aleatorio_opcoes.novos_escolhidos[uA] := chk_gerador_aleatorio_bolas_novas.Checked[uA];
+        if gerador_aleatorio_opcoes.novos_escolhidos[uA] then begin
+            Inc(qt_checked_true);
+        end;
+    end;
+
+    if qt_checked_true = 0 then begin
+        MessageDlg('', 'Erro, vc deve selecionar pelo menos uma quantidade ' +
+                       'de bolas novas de cada combinação', mtError, [mbok], 0);
+        Exit;
+    end;
+
+    gerador_aleatorio_opcoes.concurso := concurso_numero;
+    gerador_aleatorio_opcoes.qt_de_combinacoes:=qt_de_combinacoes;
+    gerador_aleatorio_opcoes.gerador_controle :=  sgr_gerador_aleatorio;
+
+    gerar_combinacoes_aleatorias(sql_conexao, gerador_aleatorio_opcoes);
+end;
+
 procedure TForm1.btn_gerar_estatistica_frequencia_numClick(Sender: TObject);
 begin
-  frequencia_gerar_estatistica(sql_conexao);
+    frequencia_gerar_estatistica(sql_conexao);
 end;
 
 procedure TForm1.btn_gerar_filtroClick(Sender: TObject);
 var
     opcoes_do_filtro:  R_Filtro_Opcoes;
-    ordenar_indice_escolhido, orderby_indice_escolhido: integer;
+    ordenar_indice_escolhido, orderby_indice_escolhido, uA: integer;
     cmb_minimo_maximo: R_Frequencia_Minimo_Maximo;
+    campos_order_by:   string;
 const
     order_by_asc_desc: array[0..1] of string = ('asc', 'desc');
 begin
@@ -8684,12 +8844,29 @@ begin
         opcoes_do_filtro.Sql_limit := 0;
     end;
 
-    ordenar_indice_escolhido := rd_filtro_ordenar_campo.ItemIndex;
-    opcoes_do_filtro.ordenar_pelo_campo := filtro_order_by[ordenar_indice_escolhido, 1];
+    campos_order_by := '';
+    for uA := 0 to Pred(lst_campos_ordenados.Count) do
+    begin
+        if campos_order_by <> '' then
+        begin
+            campos_order_by := campos_order_by + ',';
+        end;
+        if AnsiStartsStr('novos_repetidos', lst_campos_ordenados.Items[uA]) then begin
+            campos_order_by := campos_order_by + 'lotofacil_novos_repetidos.' +
+            lst_campos_ordenados.Items[uA];
+        end else begin
+            campos_order_by := campos_order_by + 'lotofacil_id_classificado.' +
+            lst_campos_ordenados.Items[uA];
+        end;
+    end;
+    opcoes_do_filtro.ordenar_pelo_campo := campos_order_by;
 
-    orderby_indice_escolhido := rd_filtro_ordenar_asc_desc.ItemIndex;
-    opcoes_do_filtro.ordenar_pelo_campo :=
-        Format('%s %s', [opcoes_do_filtro.ordenar_pelo_campo, order_by_asc_desc[orderby_indice_escolhido]]);
+    //ordenar_indice_escolhido := rd_filtro_ordenar_campo.ItemIndex;
+    //opcoes_do_filtro.ordenar_pelo_campo := filtro_order_by[ordenar_indice_escolhido, 1];
+
+    //orderby_indice_escolhido := rd_filtro_ordenar_asc_desc.ItemIndex;
+    //opcoes_do_filtro.ordenar_pelo_campo :=
+    //Format('%s %s', [opcoes_do_filtro.ordenar_pelo_campo, order_by_asc_desc[orderby_indice_escolhido]]);
 
     // Pega os controles minímo e máximo.
     cmb_minimo_maximo.cmb_ainda_nao_saiu_minimo := cmbAinda_Nao_Saiu_Minimo;
@@ -8702,6 +8879,185 @@ begin
     cmb_minimo_maximo.cmb_deixou_de_sair_maximo := cmbDeixou_de_Sair_Maximo;
 
     Gerar_Filtros(sgr_filtro_controle_info, sql_conexao, opcoes_do_filtro, cmb_minimo_maximo);
+end;
+
+{
+ Gera a rotação binária relativo ao número do concurso escolhido
+ pelo usuário.
+}
+procedure TForm1.btn_gerar_rotacao_binariaClick(Sender: TObject);
+var
+  indice_escolhido, bola_atual, uA, indice_nao_fixa, indice_atual,
+    qt_iteracoes, ultimo_indice_nao_fixa, zero_um_inicial,
+    indice_anterior, indice_combinacao, indice_combinacao_invertida,
+    uB: Integer;
+  concurso_numero: String;
+  bolas_do_concurso: TArrayInt;
+  zero_um_combinacao: Array Of Byte;
+  indice_a_serem_deslocados: Array Of Byte;
+  combinacoes_rotacionadas: Array of Array of Byte;
+begin
+    indice_escolhido := cmb_rotacao_binaria_concursos.ItemIndex;
+
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Nenhum concurso selecionado.', mtError, [mbok], 0);
+        Exit;
+    end;
+
+    concurso_numero := cmb_rotacao_binaria_concursos.Items[indice_escolhido];
+
+    if obter_bolas_do_concurso(sql_conexao, StrToInt(concurso_numero), bolas_do_concurso) = false then begin
+        MessageDlg('', 'Um erro ocorreu ao obter as bolas do concurso.', mtError, [mbok], 0);
+        Exit;
+    end;
+
+    SetLength(zero_um_combinacao, 26);
+    SetLength(indice_a_serem_deslocados, 26);
+    FillByte(zero_um_combinacao[0], 26, 0);
+    FillByte(indice_a_serem_deslocados[0], 26, 0);
+
+    // No loop abaixo, iremos pra cada célula, de 1 a 25,
+    // do arranjo 'zero_um_combinacao',
+    // iremos definir o valor pra '0' se a bola não saiu
+    // no concurso que escolhermos, ou '1', se saiu.
+    for uA := 1 to Pred(Length(bolas_do_concurso)) do begin
+        bola_atual := bolas_do_concurso[uA];
+        zero_um_combinacao[bola_atual] := 1;
+    end;
+
+    // Agora, iremos verificar se o usuário escolheu alguma posição
+    // fixa, se não foi escolhida, iremos mover o número da bola
+    // pra o arranjo que armazena os índices.
+    indice_atual := -1;
+    for uA := 0 to Pred(chk_rotacao_binaria.Items.Count) do begin
+        // Os ítens são baseado em zero, entretanto, na lotofacil
+        // a primeira bola é 1.
+        bola_atual := uA + 1;
+        // Se o usuário não marcou quer dizer que o ítem pode ser rotacionado.
+        if chk_rotacao_binaria.Checked[uA] = false then begin
+            Inc(indice_atual);
+            indice_a_serem_deslocados[indice_atual] := bola_atual;
+        end;
+    end;
+
+    // Na lotofacil, temos, 25 combinações, então, no arranjo,
+    // zero_um_combinacao, o índice do arranjo indica o número da bola,
+    // e o valor que está em cada posição terá o valor '0' ou '1',
+    // o valor '0' indica que a bola não saiu e o valor '1' indica
+    // que a bola saiu.
+    // No código abaixo, iremos deslocar estes valores pra esquerda ou pra
+    // direita, na realidade iremos rotacionar os valores, de tal forma
+    // que se deslocarmos pra esquerda, o valor mais a esquerda vai pra
+    // a posição mais a direita e se estivermos deslocando pra direita,
+    // o valor mais a direita, vai pra a posição mais à esquerda.
+    // No programa, o usuário pode indicar posições fixas, de tal forma
+    // que tais posições não tem o valor alterado, então, no código abaixo
+    // só iremos deslocar posições não-fixas.
+    // Então, por exemplo, em uma combinação, onde, por exemplo, há 10
+    // combinações, onde somente 5 bolas podem ser escolhidas, temos,
+    // os valores:
+    // [1][0][1][0][0][1][1][0][1][0]
+    // Observe que os valores acima, representa a combinação:
+    // [1]   [3]      [6][7]   [8]
+    // Então, se deslocarmos estes valores teremos:
+    // [0][1][0][0][1][1][0][1][0][1]
+    //    [2]      [5][6]   [8]   [10]
+    // [1][0][0][1][1][0][1][0][1][0]
+    // [1]      [4][5]   [7]   [9]
+    // O número de iterações, é igual ao número de bolas não-fixas.
+
+    // Agora, vamos obter as posições não-fixas.
+    indice_nao_fixa := -1;
+
+    for uA := 0 to Pred(chk_rotacao_binaria.Items.Count) do begin
+        if chk_rotacao_binaria.Checked[uA] = false then begin
+            Inc(indice_nao_fixa);
+            // Estamos fazendo uA + 1, pois as bolas na lotofacil, começa
+            // no número 1 e não em zero.
+            indice_a_serem_deslocados[indice_nao_fixa] := uA + 1;
+        end;
+    end;
+
+    // O arranjo 'indice_a_serem_deslocados' indica os índices do
+    // arranjo que serão deslocados, iremos capturar os valores
+    // nas posições do índices e deslocar pra esquerda.
+    ultimo_indice_nao_fixa := indice_nao_fixa;
+    qt_iteracoes := ultimo_indice + 1;
+
+    // Vamos incluir as combinações invertidas horizontalmente.
+    SetLength(combinacoes_rotacionadas, qt_iteracoes * 3 + 1, 26);
+
+    // Armazena o índice do arranjo bidimensional.
+    indice_combinacao := 0;
+    //indice_combinacao_invertida := qt_iteracoes + 1;
+
+    //
+    zero_um_inicial := -1;
+
+    indice_anterior := 0;
+    while qt_iteracoes > 0 do begin
+        // Deslocar pra esquerda e insere o valor que foi
+        // perdido ao deslocar pra esquerda, na última posição
+        // à direita.
+        for uA := 0 to ultimo_indice_nao_fixa do begin
+            // Obtém indice atual.
+            indice_atual := indice_a_serem_deslocados[uA];
+
+            // Se é a primeira vez da iteração, pega o valor mais
+            // a esquerda que será sobrescrito.
+            if uA = 0 then begin
+                zero_um_inicial := zero_um_combinacao[indice_atual];
+                indice_anterior := indice_atual;
+                continue;
+            end;
+
+            // Desloca pra esquerda.
+            zero_um_combinacao[indice_anterior] := zero_um_combinacao[indice_atual];
+            indice_anterior := indice_atual;
+
+            if uA = ultimo_indice_nao_fixa then begin
+                zero_um_combinacao[indice_atual] := zero_um_inicial;
+            end;
+        end;
+
+        // Copia o arranjo.
+        for uA := 1 to 25 do begin
+            combinacoes_rotacionadas[indice_combinacao, uA] := zero_um_combinacao[uA];
+            combinacoes_rotacionadas[indice_combinacao + 1, 26 - uA] := zero_um_combinacao[uA];
+            if (uA >= 1) and (uA <= 5) then begin
+                combinacoes_rotacionadas[indice_combinacao + 2, 6 - uA] := zero_um_combinacao[uA];
+            end
+            else if (uA >= 11) and (uA <= 15) then begin
+                // [indice de origem] => [índice de destino]
+                // [11] => [15]
+                // [12] => [14]
+                // [13] => [13]
+                // [14] => [12]
+                // [15] => [11]
+                // Devemos subtrair uA de 26, pois, quando for
+                // 11 (onze), o resultado será 15 => 26 - 11 = 15.
+                combinacoes_rotacionadas[indice_combinacao + 2, 26 - uA] := zero_um_combinacao[uA];
+            end else begin
+                combinacoes_rotacionadas[indice_combinacao + 2, uA] := zero_um_combinacao[uA];
+            end;
+        end;
+
+        Inc(indice_combinacao, 3);
+
+        Dec(qt_iteracoes);
+    end;
+
+    // Converte zero e um, em número de bolas.
+    for uA := 0 to Pred(indice_combinacao) do begin
+        Write('Iteração: ', uA);
+        for uB := 1 to 25 do begin
+          if combinacoes_rotacionadas[uA, uB] = 1 then begin
+              Write(',', uB);
+          end;
+        end;
+        Writeln('');
+    end;
+
 end;
 
 procedure TForm1.btn_novos_repetidos_ultima_atualizacaoClick(Sender: TObject);
@@ -9522,7 +9878,6 @@ begin
     lista_concurso.Clear;
     lista_concurso.Add(strTexto);
 
-
     lista_concurso_sql := TStringList.Create;
     concurso_sql := 'insert into lotofacil.lotofacil_resultado_importacao (' + 'concurso,' +
         'data, b_1, b_2, b_3, b_4, b_5,' + 'b_6, b_7, b_8, b_9, b_10,' + 'b_11, b_12, b_13, b_14, b_15,' +
@@ -9604,9 +9959,9 @@ begin
 
             while coluna_atual.HasChildNodes do
             begin
-                Writeln('Coluna: ', coluna_atual.NodeName, ', valor = ',
-                    coluna_atual.nodeValue, ', conteudo: ',
-                    coluna_atual.TextContent);
+                //Writeln('Coluna: ', coluna_atual.NodeName, ', valor = ',
+                //    coluna_atual.nodeValue, ', conteudo: ',
+                //    coluna_atual.TextContent);
                 coluna_atual := coluna_atual.ChildNodes[0];
                 valor_coluna_atual := coluna_atual.TextContent;
             end;
@@ -10033,7 +10388,7 @@ end;
 procedure TForm1.lotofacil_novos_repetidos_status_atualizacao(ltf_id: longword; ltf_qt: byte);
 begin
 
-    Writeln('ltf_id: ', ltf_id);
+    // Writeln('ltf_id: ', ltf_id);
 
 end;
 
@@ -10485,7 +10840,7 @@ begin
         sqlRegistros.sql.Add('And to_char(data,');
         sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
         sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
-        Writeln(sqlRegistros.SQL.Text);
+        // Writeln(sqlRegistros.SQL.Text);
 
     end
     else
@@ -10501,7 +10856,7 @@ begin
         sqlRegistros.sql.Add('And to_char(aleatorio_data,');
         sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
         sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
-        Writeln(sqlRegistros.SQL.Text);
+        // Writeln(sqlRegistros.SQL.Text);
 
     end;
 
@@ -10671,67 +11026,53 @@ begin
     configurar_banco_de_dados(sql_conexao);
 end;
 
-
-
 procedure TForm1.btn_obter_status_cmp_de_bolas_na_mesma_colunaClick(Sender: TObject);
-var
-    sql_query: TZQuery;
-    coluna_atual: TGridColumn;
-    uA: integer;
-    qt_registros: longint;
 begin
 
     exibir_status_da_comparacao_de_bolas_na_mesma_coluna(sql_conexao, sgr_cmp_de_bolas_na_mesma_coluna_status);
-    Exit;
+end;
 
-         {
-    sgr_cmp_de_bolas_na_mesma_coluna_status.Columns.Clear;
+procedure TForm1.btn_rotacao_binaria_obter_concursosClick(Sender: TObject);
+begin
+  preencher_combobox_com_concursos(sql_conexao, cmb_rotacao_binaria_concursos, 'desc');
+end;
 
-  sql_query := TZQuery.Create(Nil);
-  sql_query.Connection := sql_conexao;
-  sql_query.Sql.Clear;
-  sql_query.Sql.Add('Select concurso, status from lotofacil.v_ltf_res_comparacao_de_bolas_na_mesma_coluna_status');
-  sql_query.Sql.Add('order by concurso desc');
-  sql_query.Open;
+procedure TForm1.Button1Click(Sender: TObject);
+const
+    LOTOFACIL_TOTAL_DE_COMBINACOES = 6874010;
+const
+    // Não iremos utilizar os campos ltf_id e ltf_qt,
+    campos_da_tabela: string = 'ltf_id,ltf_qt,par_impar_id,prm_id' +
+        ',ext_int_id,hrz_id,vrt_id,dge_id,dgd_id,esq_dir_id' +
+        ',sup_inf_id,sup_esq_inf_dir_id,sup_dir_inf_esq_id' +
+        ',crz_id,lsng_id,qnt_id,trng_id,trio_id,x1_x2_id' + ',dz_id,un_id,alg_id,sm_bolas_id,sm_alg_id,lc_id' +
+        ',bin_par_id,bin_impar_id,bin_primo_id,bin_nao_primo_id' +
+        ',bin_ext_id,bin_int_id,bin_hrz_1_id,bin_hrz_2_id,bin_hrz_3_id' +
+        ',bin_hrz_4_id,bin_hrz_5_id,bin_vrt_1_id,bin_vrt_2_id,bin_vrt_3_id' +
+        ',bin_vrt_4_id,bin_vrt_5_id,bin_dge_1_id,bin_dge_2_id,bin_dge_3_id' +
+        ',bin_dge_4_id,bin_dge_5_id,bin_dgd_1_id,bin_dgd_2_id,bin_dgd_3_id' +
+        ',bin_dgd_4_id,bin_dgd_5_id,bin_esq_id,bin_dir_id,bin_sup_id,bin_inf_id' +
+        ',bin_sup_esq_id,bin_inf_dir_id,bin_sup_dir_id,bin_inf_esq_id,bin_crz_1_id' +
+        ',bin_crz_2_id,bin_crz_3_id,bin_crz_4_id,bin_crz_5_id' +
+        ',bin_lsng_1_id,bin_lsng_2_id,bin_lsng_3_id,bin_lsng_4_id,bin_lsng_5_id' +
+        ',bin_qnt_1_id,bin_qnt_2_id,bin_qnt_3_id,bin_qnt_4_id,bin_qnt_5_id' +
+        ',bin_trng_1_id,bin_trng_2_id,bin_trng_3_id,bin_trng_4_id' +
+        ',bin_trio_1_id,bin_trio_2_id,bin_trio_3_id,bin_trio_4_id,bin_trio_5_id' +
+        ',bin_trio_6_id,bin_trio_7_id,bin_trio_8_id,bin_x1_id,bin_x2_id' +
+        ',bin_dz_0_id,bin_dz_1_id,bin_dz_2_id' + ',bin_lc_1_id,bin_lc_2_id,bin_lc_3_id,bin_lc_4_id,bin_lc_5_id';
+begin
+    fGerar_id_classificado := TLotofacil_id_classificado.Create(True);
+    fGerar_id_classificado.Sql_Conexao := sql_conexao;
+    fGerar_id_classificado.OnStatus := @fGerar_id_classificadoStatus;
+    fGerar_id_classificado.Start;
+end;
 
-  sql_query.First;
-  sql_query.Last;
-  qt_registros := sql_query.RecordCount;
-
-  if qt_registros = 0 then begin
-      MessageDlg('', 'Nenhum registro localizado.', mtError, [mbok], 0);
-      Exit;
-  end;
-
-  sgr_cmp_de_bolas_na_mesma_coluna_status.Columns.Clear;
-  coluna_atual := sgr_cmp_de_bolas_na_mesma_coluna_status.Columns.Add;
-  coluna_atual.Alignment := taCenter;
-  coluna_atual.Title.Caption := 'Concurso';
-  coluna_atual.Title.Alignment := taCenter;
-
-  coluna_atual := sgr_cmp_de_bolas_na_mesma_coluna_status.Columns.Add;
-  coluna_atual.Alignment := taCenter;
-  coluna_atual.Title.Caption := 'Status';
-  coluna_atual.Title.Alignment := taCenter;
-
-  sgr_cmp_de_bolas_na_mesma_coluna_status.FixedRows:=1;
-  sgr_cmp_de_bolas_na_mesma_coluna_status.FixedCols := 0;
-  sgr_cmp_de_bolas_na_mesma_coluna_status.RowCount := qt_registros + 1;
-
-  sql_query.First;
-
-  for uA := 1 to qt_registros do begin
-      sgr_cmp_de_bolas_na_mesma_coluna_status.Cells[0, uA] := sql_query.FieldByName('concurso').AsString;
-      sgr_cmp_de_bolas_na_mesma_coluna_status.Cells[1, uA] := sql_query.FieldByName('status').AsString;
-      sql_query.Next;
-  end;
-  sgr_cmp_de_bolas_na_mesma_coluna_status.AutoSizeColumns;
-
-  sql_query.Close;
-  sql_query.Connection.Connected := false;
-  FreeAndNil(sql_query);
-  }
-
+procedure TForm1.btnInterromperClick(Sender: TObject);
+begin
+    if Assigned(fGerar_id_classificado) then
+    begin
+        fGerar_id_classificado.Interromper := True;
+    end;
 end;
 
 {
@@ -10870,101 +11211,6 @@ begin
     end;
 end;
 
-//procedure TForm1.cmbAlgarismo_na_dezena_consolidado_concurso_finalChange(Sender: TObject);
-//begin
-//    //Algarismo_na_dezena_consolidado_concurso_inicial_final_alterou;
-//end;
-
-//procedure TForm1.cmbAlgarismo_na_dezena_consolidado_concurso_inicialChange(Sender: TObject);
-//begin
-//    //Algarismo_na_dezena_consolidado_concurso_inicial_final_alterou;
-//end;
-
-{
- Atualiza o controle PrimoNaoPrimoConsolidadoConcurso toda vez que
- o controle cmbPrimoNaoPrimoConsolidadoConcursoInicial ou cmbPrimoNaoprimoConsolidadoConcursoFinal
- for alterado.
-}
-//procedure TForm1.Algarismo_na_dezena_consolidado_concurso_inicial_final_alterou;
-//var
-//    indice_concurso_inicial, indice_concurso_final: integer;
-//    concurso_inicial, concurso_final: integer;
-//begin
-//    indice_concurso_inicial :=
-//        cmbAlgarismo_na_dezena_consolidado_concurso_inicial.ItemIndex;
-//    indice_concurso_final := cmbAlgarismo_na_dezena_consolidado_concurso_final.ItemIndex;
-
-//    if (indice_concurso_inicial > -1) and (indice_concurso_final > -1) then
-//    begin
-//        concurso_inicial := StrToInt(cmbAlgarismo_na_dezena_consolidado_concurso_inicial.Items[
-//            indice_concurso_inicial]);
-//        concurso_final := StrToInt(cmbAlgarismo_na_dezena_consolidado_concurso_Final.Items[
-//            indice_concurso_final]);
-//        Carregar_algarismo_na_dezena_consolidado_intervalo_concurso(
-//            sgrAlgarismo_na_dezena_consolidado,
-//            concurso_inicial,
-//            concurso_final);
-//    end;
-//end;
-
-//{
-// Neste caso, o controle sgrFrequenciaNaoSair, terá as bolas marcadas que não
-// devem sair nos jogos.
-// Então, antes de atualizar a caixa de combinação devemos pegar as frequências
-// das bolas.
-//}
-//procedure TForm1.cmbConcursoFrequenciaNaoSairChange(Sender : TObject);
-//var
-//  frequencia_antes_de_atualizar: array[1..25] of AnsiString;
-//  ultimaColuna , uA: Integer;
-//begin
-
-//end;
-
-{
- Toda vez que o usuário altera o número do concurso devemos pegar
- quais foram as bolas selecionadas, antes de atualizar o controle, em seguida,
- devemos atualizar o controle com as novas bolas.
-}
-//procedure TForm1.cmbConcursoFrequenciaSairChange(Sender: TObject);
-//var
-//    frequencia_antes_de_atualizar: array[1..25] of ansistring;
-//    ultimaColuna, uA: integer;
-//begin
-//    // Se não há 25 linhas + 1 linha de cabeçalho, devemos atualizar o controle.
-//    if sgrFrequencia_Bolas_Sair_Nao_Sair.RowCount < 26 then
-//    begin
-//        CarregarFrequenciaPorConcurso(sgrFrequencia_Bolas_Sair_Nao_Sair);
-//        exit;
-//    end;
-
-//    // Pega a frequência das bolas antes de atualizar, pois ao atualizar o controle,
-//    // a frequência será perdida.
-//    ultimaColuna := sgrFrequencia_Bolas_Sair_Nao_Sair.Columns.Count - 1;
-//    for uA := 1 to 25 do
-//    begin
-//        frequencia_antes_de_atualizar[StrToInt(sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[0, uA])] :=
-//            sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultimaColuna, uA];
-//    end;
-
-//    CarregarFrequenciaPorConcurso(sgrFrequencia_Bolas_Sair_Nao_Sair);
-
-//    if sgrFrequencia_Bolas_Sair_Nao_Sair.RowCount < 26 then
-//    begin
-//        CarregarFrequenciaPorConcurso(sgrFrequencia_Bolas_Sair_Nao_Sair);
-//        exit;
-//    end;
-
-//    // Atualizar o controle com a frequência que estava antes.
-//    for uA := 1 to 25 do
-//    begin
-//        sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[ultimaColuna, uA] :=
-//            frequencia_antes_de_atualizar[StrToInt(sgrFrequencia_Bolas_Sair_Nao_Sair.Cells[0, uA])];
-//    end;
-
-//    AtualizarControleFrequenciaMinimoMaximo;
-//end;
-
 {
  Toda vez que o usuário altera o número do concurso devemos atualizar o controle
  sgrFrequenciaTotalSair.
@@ -11029,33 +11275,13 @@ end;
 
 procedure TForm1.cmbExternoInternoConsolidadoConcursoFinalChange(Sender: TObject);
 begin
-    ExternoInternoConsolidadoConcursoInicialFinalAlterou;
+    //ExternoInternoConsolidadoConcursoInicialFinalAlterou;
 end;
 
 procedure TForm1.cmbExternoInternoConsolidadoConcursoInicialChange(Sender: TObject);
 begin
-    ExternoInternoConsolidadoConcursoInicialFinalAlterou;
+    //ExternoInternoConsolidadoConcursoInicialFinalAlterou;
 end;
-
-procedure TForm1.ExternoInternoConsolidadoConcursoInicialFinalAlterou;
-//var
-//    indice_concurso_inicial, indice_concurso_final: integer;
-//    concurso_inicial, concurso_final: integer;
-begin
-    //indice_concurso_inicial := cmbExternoInternoConsolidadoConcursoInicial.ItemIndex;
-    //indice_concurso_final := cmbExternoInternoConsolidadoConcursoFinal.ItemIndex;
-    //
-    //if (indice_concurso_inicial > -1) and (indice_concurso_final > -1) then
-    //begin
-    //    concurso_inicial := StrToInt(cmbExternoInternoConsolidadoConcursoInicial.Items
-    //        [indice_concurso_inicial]);
-    //    concurso_final := StrToInt(cmbExternoInternoConsolidadoConcursoFinal.Items[indice_concurso_final]);
-    //
-    //    CarregarExternoInternoConsolidadoIntervaloConcurso(sgrExternoInternoConsolidado, concurso_inicial, concurso_final);
-    //end;
-end;
-
-
 
 {
  Toda vez que o usuário alterar o valor da data, devemos atualizar o campo de hora.
@@ -11094,12 +11320,142 @@ begin
     exibir_status_da_comparacao_de_bolas_na_mesma_coluna(sql_conexao, sgr_cmp_de_bolas_na_mesma_coluna_status);
 end;
 
+procedure TForm1.btn_classificados_obter_camposClick(Sender: TObject);
+var
+    sql_query: TZQuery;
+    uA: integer;
+    nome_do_campo: string;
+begin
+    // Obtém os campos.
+    sql_query := TZQuery.Create(nil);
+    sql_query.Connection := sql_conexao;
+    sql_query.Sql.Clear;
+    sql_query.SQL.Add('SELECT column_name FROM information_schema.columns');
+    sql_query.Sql.Add('where table_name = ''lotofacil_id''');
+    sql_query.Sql.Add('order by ordinal_position');
+    sql_query.Open;
+
+    if sql_query.RecordCount <= 0 then
+    begin
+        MessageDlg('', 'Erro, não há nenhuma tabela.', mtError, [mbOK], 0);
+        Exit;
+    end;
+
+    lst_campos_disponiveis.Clear;
+    lst_campos_ordenados.Clear;
+    sql_query.First;
+    for uA := 0 to Pred(sql_query.RecordCount) do
+    begin
+        nome_do_campo := sql_query.Fields[0].AsString;
+        lst_campos_disponiveis.Items.Add(nome_do_campo + ' asc');
+        lst_campos_disponiveis.Items.Add(nome_do_campo + ' desc');
+        sql_query.Next;
+    end;
+    FreeAndNil(sql_query);
+
+    // Inclue outros campos também.
+    lst_campos_disponiveis.Items.Add('novos_repetidos_id asc');
+    lst_campos_disponiveis.Items.Add('novos_repetidos_id desc');
+    lst_campos_disponiveis.Items.Add('novos_repetidos_id_alternado asc');
+    lst_campos_disponiveis.Items.Add('novos_repetidos_id_alternado desc');
+end;
+
+{
+ Move o campo selecionado do controle 'lst_campos_ordenados' pra
+ o controle 'lst_campos_disponiveis'.
+}
+procedure TForm1.btn_classificado_nao_selecionarClick(Sender: TObject);
+var
+    indice_selecionado, indice_outro_campo:   integer;
+    nome_do_campo_atual, nome_do_outro_campo: string;
+begin
+    indice_selecionado := lst_campos_ordenados.ItemIndex;
+    if indice_selecionado = -1 then
+    begin
+        Exit;
+    end;
+    nome_do_campo_atual := lst_campos_ordenados.Items[indice_selecionado];
+    nome_do_outro_campo := '';
+
+    // Obtém o nome do mesmo campo, só que com a ordem de classificação invertida.
+    if AnsiEndsText('asc', nome_do_campo_atual) then
+    begin
+        nome_do_outro_campo := ReplaceText(nome_do_campo_atual, 'asc', 'desc');
+    end
+    else
+    begin
+        nome_do_outro_campo := ReplaceText(nome_do_campo_atual, 'desc', 'asc');
+    end;
+
+    // Obtém o índice do mesmo campo, só que com a ordem invertida,
+    // pois, ao mover, iremos agrupar o mesmo campo juntos.
+    indice_outro_campo := lst_campos_ordenados.Items.IndexOf(nome_do_outro_campo);
+    if indice_outro_campo = -1 then
+    begin
+        lst_campos_disponiveis.Items.Add(nome_do_campo_atual);
+    end
+    else
+    begin
+        lst_campos_disponiveis.Items.Insert(indice_outro_campo, nome_do_campo_atual);
+    end;
+    lst_campos_ordenados.Items.Delete(indice_selecionado);
+end;
+
+procedure TForm1.btn_classificado_selecionarClick(Sender: TObject);
+var
+    indice_selecionado, indice_do_outro_campo: integer;
+    nome_do_campo_atual, nome_do_outro_campo:  string;
+begin
+    indice_selecionado := lst_campos_disponiveis.ItemIndex;
+    if indice_selecionado = -1 then
+    begin
+        exit;
+    end;
+
+    // Verifica se o mesmo campo já foi selecionado.
+    nome_do_campo_atual := lst_campos_disponiveis.Items[indice_selecionado];
+    nome_do_outro_campo := '';
+    if AnsiEndsText('asc', nome_do_campo_atual) then
+    begin
+        nome_do_outro_campo := ReplaceText(nome_do_campo_atual, 'asc', 'desc');
+    end
+    else
+    begin
+        nome_do_outro_campo := ReplaceText(nome_do_campo_atual, 'desc', 'asc');
+    end;
+
+    // Vamos mover o campo selecionado pelo usuário do controle
+    // lst_campos_disponiveis pra o controle 'lst_campos_ordenados'
+    // no controle 'lst_campos_disponiveis' cada campo se repete duas vezes
+    // um pra ordenação crescente e outro pra ordenação decrescente,
+    // então, ao mover, devemos verificar se no controle de destino, já existe
+    // aquele campo, se houver devemos trocar a ordem dos campos.
+
+    // Retira o campo escolhido do controle 'lst_campos_disponiveis'.
+    lst_campos_disponiveis.Items.Delete(indice_selecionado);
+
+    indice_do_outro_campo := lst_campos_ordenados.Items.IndexOf(nome_do_outro_campo);
+    if indice_do_outro_campo = -1 then
+    begin
+        lst_campos_ordenados.Items.Add(nome_do_campo_atual);
+    end
+    else
+    begin
+        // Campo já existe no destino, devemos substituir com o mesmo campo
+        // só que com a ordem de classificação invertida.
+        lst_campos_ordenados.Items[indice_do_outro_campo] := nome_do_campo_atual;
+        lst_campos_disponiveis.Items.Insert(indice_selecionado, nome_do_outro_campo);
+    end;
+
+end;
+
 {
  Nesta procedure, iremos chamar todos os controles que queremos
  popular os filtros.
 }
 procedure TForm1.Atualizar_Todos_os_Filtros;
 begin
+    carregar_filtro_sgr_controle(sgr_dif_par_impar, sql_conexao);
 
     carregar_filtro_sgr_controle(sgr_par_impar, sql_conexao);
     carregar_filtro_sgr_controle(sgr_externo_interno, sql_conexao);
@@ -11152,7 +11508,9 @@ begin
     carregar_filtro_sgr_controle(sgr_soma_algarismo, sql_conexao);
 
     carregar_filtro_sgr_controle(sgr_linha_coluna, sql_conexao);
-    ;
+
+    carregar_filtro_sgr_controle(sgr_dif_par_impar, sql_conexao);
+    carregar_filtro_sgr_controle(sgr_dif_menor_maior, sql_conexao);
 
 end;
 
@@ -11163,19 +11521,6 @@ begin
 
 end;
 
-
-//procedure TForm1.MarcarGrupo2Bolas;
-//var
-//    uLinha, indiceMarcar: integer;
-//begin
-//    //CarregarGrupo2Bolas;
-
-//    indiceMarcar := sgrGrupo2Bolas.Columns.Count - 1;
-//    for uLinha := 1 to sgrGrupo2Bolas.RowCount - 1 do
-//    begin
-//        sgrGrupo2Bolas.Cells[indiceMarcar, uLinha] := '1';
-//    end;
-//end;
 
 {
  Este procedimento é chamando quando o usuário deseja excluir um concurso na
@@ -11218,50 +11563,13 @@ begin
 
     preencher_combobox_com_concursos(sql_conexao, cmb_concurso_deletar, 'desc');
 
-     {
-    // Se chegarmos aqui, quer dizer, que devemos excluir o concurso.
-
-    // Cria o objeto se não existe.
-    if dmLotofacil = nil then
-    begin
-        dmLotofacil := TdmLotofacil.Create(Self);
-    end;
-    sqlRegistro := TSqlQuery.Create(Self);
-    sqlRegistro.DataBase := dmLotofacil.pgLtk;
-    sqlRegistro.UniDirectional := False;
-    sqlRegistro.Active := False;
-
-
-    sqlRegistro.SQL.Clear;
-    sqlRegistro.Sql.Add('Delete from lotofacil.lotofacil_resultado_num');
-    sqlRegistro.Sql.Add('where concurso = :concurso');
-    sqlRegistro.Prepare;
-
-    // Vamos passar o parâmetro, iremos pegar o número do concurso do botão
-    // ed_concurso_manual_numero.
-    sqlRegistro.Params.ParamByName('concurso').AsInteger := uConcurso;
-
-    // Executa a consulta.
-    try
-        sqlRegistro.ExecSQL;
-        dmLotofacil.pgLTK.Transaction.Commit;
-        sqlRegistro.Close;
-    except
-        on Exc: EDataBaseError do
-        begin
-            MessageDlg('Erro', 'Erro: ' + Exc.Message, TMsgDlgType.mtError, [mbOK], 0);
-        end;
-    end;
-    }
-
-    // Atualiza todos os controles que recupera informações do banco de dados.
-    // Em breve, iremos alterei o programa e não será necessário chamar este procedure.
-    //CarregarTodosControles;
 end;
 
 {
  Este procedimento gera o sql das opções escolhidas pelo usuário.
  Praticamente, é o mais importante do sistema.
+
+
  }
 procedure TForm1.btnFiltroGerarClick(Sender: TObject);
 
@@ -11342,424 +11650,424 @@ var
 
 begin
     // Se ocorrer um erro dentro de alguma das funções, indicar pra o usuário.
-    strErro := '';
-
-    sqlNovosRepetidos := GerarSqlNovosRepetidos;
-    sqlParImpar := GerarSqlParImpar;
-    sqlExternoInterno := GerarSqlExternoInterno;
-    sqlPrimoNaoPrimo := GerarSqlPrimo;
-    sqlColunaB := GerarSqlColunaB;
-    sqlFrequencia := GerarSqlFrequencia;
-    sqlDiferenca_qt_dif := GerarSqlDiferenca_qt_dif;
-    sqlDiferenca_qt_alt := GerarSqlDiferenca_qt_alt;
-    sqlLotofacilSoma := GerarSqlLotofacilSoma;
-    sqlBolas_Por_Posicao := GerarSqlBolas_Por_Posicao;
-    sqlAlgarismo_na_dezena := Gerar_sql_algarismo_na_dezena;
-    sql_bolas_na_mesma_coluna :=
-        ulotofacil_bolas_na_mesma_coluna.Gerar_sql_bolas_na_mesma_coluna(sgrBolas_na_mesma_coluna);
-    sql_b1_a_b15 := Gerar_sql_b1_a_b15;
-
-    if strErro <> '' then
-    begin
-        MessageDlg('Erro', 'Erro: ' + strErro, mtError, [mbOK], 0);
-        Exit;
-    end;
-
-    // Inicializa as listas;
-    lista_campo_insert := TStringList.Create;
-    lista_campo_select := TStringList.Create;
-    lista_de_tabelas_relacionadas := TStringList.Create;
-    lista_de_tabelas_selecionadas := TStringList.Create;
-    lista_where := TStringList.Create;
-
-    // Apaga as listas.
-    lista_campo_insert.Clear;
-    lista_campo_select.Clear;
-    lista_de_tabelas_relacionadas.Clear;
-    lista_de_tabelas_selecionadas.Clear;
-    lista_where.Clear;
-
-    // Gerar sql.
-    sqlGerado := TStringList.Create;
-    sqlGerado.Add('Insert into lotofacil.lotofacil_filtros');
-
-    // Insere os campos do insert que são fixos.
-    lista_campo_insert.Add('data');
-    lista_campo_insert.Add('ltf_id');
-    lista_campo_insert.Add('ltf_qt');
-    lista_campo_insert.Add('concurso');
-    lista_campo_insert.Add('acertos');
-    lista_campo_insert.Add('id_seq_cmb_em_grupos');
-
-    // Insere os campos correspondentes do select que corresponde ao insert.
-    lista_campo_select.Add('Now()');                                        // data
-    lista_campo_select.Add('lotofacil.lotofacil_num.ltf_id');               // ltf_id
-    lista_campo_select.Add('lotofacil.lotofacil_num.ltf_qt');               // ltf_qt
-    lista_campo_select.Add(QuotedStr(cmb_concurso_novos_repetidos.Text));      // concurso
-    lista_campo_select.Add('0');                                            // acertos
-    lista_campo_select.Add('id_seq_cmb_em_grupos');
-
-    // Iremos relaciona um tabela com todas as outras tabelas
-    // Depois, em código posteriores iremos retirar desta lista, relacionamento entre tabelas
-    // desnecessários, por exemplo, se o usuário não seleciona
-    // nenhuma informação da tabela de soma, então, não é necessário
-    // fazer este relacionamento
-
-    lista_de_tabelas_relacionadas := TStringList.Create;
-    lista_de_tabelas_relacionadas.Clear;
-    for uA := 1 to High(tabelas_usadas) do
-    begin
-        for uB := uA + 1 to High(tabelas_usadas) do
-        begin
-            lista_de_tabelas_relacionadas.Add('AND ' + tabelas_usadas[uA] + '.ltf_id = ' +
-                tabelas_usadas[uB] + '.ltf_id');
-        end;
-    end;
-
-    lista_de_tabelas_selecionadas := TStringList.Create;
-    for uA := 1 to Length(tabelas_usadas) do
-    begin
-        lista_de_tabelas_selecionadas.Add(tabelas_usadas[uA]);
-    end;
-
-    // No caso do campo 'novos_repetidos_id_alternado' e 'novos_repetidos_id_alternado'
-    // a cada concurso, um identificador de novos x repetidos pode ser
-    // diferente, por este motivo, iremos sempre incluir este campo no filtro.
-    lista_campo_insert.Add('novos_repetidos_id_alternado');
-    lista_campo_select.Add('novos_repetidos_id_alternado');
-    lista_campo_insert.Add('novos_repetidos_id');
-    lista_campo_select.Add('novos_repetidos_id');
-
-    // Se o usuário marcou que somente algumas combinações de novos x repetidos
-    // deve sair devemos filtrar isto.
-    if sqlNovosRepetidos <> '' then
-    begin
-        lista_where.Add('AND ' + sqlNovosRepetidos);
-    end;
-
-
-
-    {TODO: Verificar se deixa este campo na tabela. }
-    //sqlGerado.Add('qt_alt_seq,');
-
-    lista_campo_insert.Add('concurso_soma_frequencia_bolas');
-    lista_campo_select.Add('concurso_soma_frequencia_bolas');
-
-
-    // Será utilizado as tabelas abaixo:
-    // lotofacil_num
-    // lotofacil_id
-    // lotofacil_num_bolas_concurso
-    // lotofacil_diferenca_entre_bolas
-    // lotofacil_soma
-    // lotofacil_bolas
-
-    // Algumas tabelas serão fixas e outras serão adicionadas à consulta
-    // se o usuário selecionou os campos correspondentes.
-
-
-    //sqlGerado.Add('lotofacil.lotofacil_num                   tb_ltf_num,');
-    //sqlGerado.Add('lotofacil.lotofacil_id                    tb_ltf_id,');
-    //sqlGerado.Add('lotofacil.lotofacil_num_bolas_concurso    tb_num_bolas_concurso,');
-    //sqlGerado.Add('lotofacil.lotofacil_diferenca_entre_bolas tb_ltf_dif');
-
-    if sqlBolas_por_posicao <> '' then
-    begin
-        lista_where.Add('AND ' + sqlBolas_por_posicao);
-    end
-    else
-    begin
-        DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
-            'lotofacil.lotofacil_bolas');
-
-        //// Neste caso, devemos retirar a tabela 'lotofacil.lotofacil_bolas' tanto
-        //// da lista de tabelas selecionadas, tanto da lista de tabelas relacionadas.
-        //indice_a_deletar := lista_de_tabelas_selecionadas.IndexOf('lotofacil.lotofacil_bolas');
-        //if indice_a_deletar > -1 then begin
-        //   lista_de_tabelas_selecionadas.Delete(indice_a_deletar);
-        //end;
-
-        //// Agora, da lista de tabelas relacionadas.
-        //uA := 0;
-        //while uA < lista_de_tabelas_relacionadas.Count do
-        //begin
-        //  if AnsiContainsStr(lista_de_tabelas_relacionadas.Strings[uA], 'lotofacil.lotofacil_bolas') then
-        //  begin
-        //    lista_de_tabelas_relacionadas.Delete(uA);
-        //    continue;
-        //  end;
-        //  Inc(uA);
-        //end;
-
-    end;
-    ;
-
-    //if sqlBolas_por_posicao <> '' then begin
-    //  sqlGerado.Add('lotofacil.lotofacil_bolas ltf_bolas');
-    //end;
-
-    if sqlAlgarismo_na_dezena <> '' then
-    begin
-        lista_where.Add('and ' + sqlAlgarismo_na_dezena);
-    end;
-
-    if sql_b1_a_b15 <> '' then
-    begin
-        lista_where.Add('and ' + sql_b1_a_b15);
-    end
-    else
-    begin
-        DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
-            'lotofacil.lotofacil_coluna_b');
-    end;
-
-    if sqlLotofacilSoma <> '' then
-    begin
-        lista_where.Add('and ' + sqlLotofacilSoma);
-    end
-    else
-    begin
-        DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
-            'lotofacil.lotofacil_soma');
-
-    end;
-
-    // A view lotofacil.v_lotofacil_num_nao_sorteado indica todas
-    // as combinações ainda não sorteadas.
-    // Se o usuário marcar, então, iremos pegar somente combinações
-    // que ainda não saíram, entretanto, devemos pegar todas as combinações
-    if chk_excluir_Jogos_Ja_Sorteados.Checked[0] = False then
-    begin
-        // Se é falso, ou seja, usuário não marcou, devemos retirar o relacionamento where entre a view
-        // com as demais tabelas.
-        DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
-            'lotofacil.v_lotofacil_num_nao_sorteado');
-
-    end;
-
-    //if sqlLotofacilSoma <> '' then
+    //strErro := '';
+    //
+    //sqlNovosRepetidos := GerarSqlNovosRepetidos;
+    //sqlParImpar := GerarSqlParImpar;
+    //sqlExternoInterno := GerarSqlExternoInterno;
+    //sqlPrimoNaoPrimo := GerarSqlPrimo;
+    //sqlColunaB := GerarSqlColunaB;
+    //sqlFrequencia := GerarSqlFrequencia;
+    //sqlDiferenca_qt_dif := GerarSqlDiferenca_qt_dif;
+    //sqlDiferenca_qt_alt := GerarSqlDiferenca_qt_alt;
+    //sqlLotofacilSoma := GerarSqlLotofacilSoma;
+    //sqlBolas_Por_Posicao := GerarSqlBolas_Por_Posicao;
+    //sqlAlgarismo_na_dezena := Gerar_sql_algarismo_na_dezena;
+    //sql_bolas_na_mesma_coluna :=
+    //    ulotofacil_bolas_na_mesma_coluna.Gerar_sql_bolas_na_mesma_coluna(sgrBolas_na_mesma_coluna);
+    //sql_b1_a_b15 := Gerar_sql_b1_a_b15;
+    //
+    //if strErro <> '' then
     //begin
-    //  ;
-    //  sqlGerado.Add(', lotofacil.lotofacil_soma tb_ltf_soma');
+    //    MessageDlg('Erro', 'Erro: ' + strErro, mtError, [mbOK], 0);
+    //    Exit;
     //end;
-    // Se o usuário selecionou quer não quer exibir combinados já sorteadas, devemos
-    // listar a tabela.
-    //if chk_excluir_Jogos_Ja_Sorteados.Checked[0] = True then
+    //
+    //// Inicializa as listas;
+    //lista_campo_insert := TStringList.Create;
+    //lista_campo_select := TStringList.Create;
+    //lista_de_tabelas_relacionadas := TStringList.Create;
+    //lista_de_tabelas_selecionadas := TStringList.Create;
+    //lista_where := TStringList.Create;
+    //
+    //// Apaga as listas.
+    //lista_campo_insert.Clear;
+    //lista_campo_select.Clear;
+    //lista_de_tabelas_relacionadas.Clear;
+    //lista_de_tabelas_selecionadas.Clear;
+    //lista_where.Clear;
+    //
+    //// Gerar sql.
+    //sqlGerado := TStringList.Create;
+    //sqlGerado.Add('Insert into lotofacil.lotofacil_filtros');
+    //
+    //// Insere os campos do insert que são fixos.
+    //lista_campo_insert.Add('data');
+    //lista_campo_insert.Add('ltf_id');
+    //lista_campo_insert.Add('ltf_qt');
+    //lista_campo_insert.Add('concurso');
+    //lista_campo_insert.Add('acertos');
+    //lista_campo_insert.Add('id_seq_cmb_em_grupos');
+    //
+    //// Insere os campos correspondentes do select que corresponde ao insert.
+    //lista_campo_select.Add('Now()');                                        // data
+    //lista_campo_select.Add('lotofacil.lotofacil_num.ltf_id');               // ltf_id
+    //lista_campo_select.Add('lotofacil.lotofacil_num.ltf_qt');               // ltf_qt
+    //lista_campo_select.Add(QuotedStr(cmb_concurso_novos_repetidos.Text));      // concurso
+    //lista_campo_select.Add('0');                                            // acertos
+    //lista_campo_select.Add('id_seq_cmb_em_grupos');
+    //
+    //// Iremos relaciona um tabela com todas as outras tabelas
+    //// Depois, em código posteriores iremos retirar desta lista, relacionamento entre tabelas
+    //// desnecessários, por exemplo, se o usuário não seleciona
+    //// nenhuma informação da tabela de soma, então, não é necessário
+    //// fazer este relacionamento
+    //
+    //lista_de_tabelas_relacionadas := TStringList.Create;
+    //lista_de_tabelas_relacionadas.Clear;
+    //for uA := 1 to High(tabelas_usadas) do
     //begin
-    //  sqlGerado.Add(', lotofacil.v_lotofacil_num_nao_sorteado  tb_ltf_nao_sorteado');
+    //    for uB := uA + 1 to High(tabelas_usadas) do
+    //    begin
+    //        lista_de_tabelas_relacionadas.Add('AND ' + tabelas_usadas[uA] + '.ltf_id = ' +
+    //            tabelas_usadas[uB] + '.ltf_id');
+    //    end;
     //end;
-
+    //
+    //lista_de_tabelas_selecionadas := TStringList.Create;
+    //for uA := 1 to Length(tabelas_usadas) do
+    //begin
+    //    lista_de_tabelas_selecionadas.Add(tabelas_usadas[uA]);
+    //end;
+    //
+    //// No caso do campo 'novos_repetidos_id_alternado' e 'novos_repetidos_id_alternado'
+    //// a cada concurso, um identificador de novos x repetidos pode ser
+    //// diferente, por este motivo, iremos sempre incluir este campo no filtro.
+    //lista_campo_insert.Add('novos_repetidos_id_alternado');
+    //lista_campo_select.Add('novos_repetidos_id_alternado');
+    //lista_campo_insert.Add('novos_repetidos_id');
+    //lista_campo_select.Add('novos_repetidos_id');
+    //
+    //// Se o usuário marcou que somente algumas combinações de novos x repetidos
+    //// deve sair devemos filtrar isto.
     //if sqlNovosRepetidos <> '' then
     //begin
-    //  sqlGerado.Add(', lotofacil.lotofacil_novos_repetidos     tb_ltf_novos_repetidos');
+    //    lista_where.Add('AND ' + sqlNovosRepetidos);
     //end;
-
-    // Devemos relacionar as tabelas
-    // lotofacil_num, lotofacil_id, lotofacil_diferenca_entre_bolas,
-    // lotofacil_novos_repetidos e v_lotofacil_num_nao_sorteado.
-
-    //sqlGerado.Add('where');
-    //sqlGerado.Add('    tb_ltf_num.ltf_id = tb_ltf_id.ltf_id');
-    //sqlGerado.Add('AND tb_ltf_num.ltf_id = tb_ltf_dif.ltf_id');
-    //sqlGerado.add('AND tb_ltf_id.ltf_id = tb_ltf_dif.ltf_id');
-
-    //sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_num.ltf_id');
-    //sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_id.ltf_id');
-    //sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_dif.ltf_id');
-
-    // Se o usuário deseja excluir combinações já sorteadas, devemos relacionar
-    // a tabela de novos e repetidos com as outras tabelas.
-    //if chk_excluir_Jogos_Ja_Sorteados.Checked[0] = True then
+    //
+    //
+    //
+    //{TODO: Verificar se deixa este campo na tabela. }
+    ////sqlGerado.Add('qt_alt_seq,');
+    //
+    //lista_campo_insert.Add('concurso_soma_frequencia_bolas');
+    //lista_campo_select.Add('concurso_soma_frequencia_bolas');
+    //
+    //
+    //// Será utilizado as tabelas abaixo:
+    //// lotofacil_num
+    //// lotofacil_id
+    //// lotofacil_num_bolas_concurso
+    //// lotofacil_diferenca_entre_bolas
+    //// lotofacil_soma
+    //// lotofacil_bolas
+    //
+    //// Algumas tabelas serão fixas e outras serão adicionadas à consulta
+    //// se o usuário selecionou os campos correspondentes.
+    //
+    //
+    ////sqlGerado.Add('lotofacil.lotofacil_num                   tb_ltf_num,');
+    ////sqlGerado.Add('lotofacil.lotofacil_id                    tb_ltf_id,');
+    ////sqlGerado.Add('lotofacil.lotofacil_num_bolas_concurso    tb_num_bolas_concurso,');
+    ////sqlGerado.Add('lotofacil.lotofacil_diferenca_entre_bolas tb_ltf_dif');
+    //
+    //if sqlBolas_por_posicao <> '' then
     //begin
-    //  sqlGerado.Add('---[Usuário escolheu excluir combinações já sorteadas]----');
-    //  sqlGerado.Add('AND tb_ltf_num.ltf_id  = tb_ltf_nao_sorteado.ltf_id');
-    //  sqlGerado.Add('AND tb_ltf_id.ltf_id   = tb_ltf_nao_sorteado.ltf_id');
-    //  sqlGerado.Add('AND tb_ltf_dif.ltf_id  = tb_ltf_nao_sorteado.ltf_id');
-    //  sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_nao_sorteado.ltf_id');
-
-    //  if sqlNovosRepetidos <> '' then
-    //  begin
-    //    sqlGerado.Add('AND tb_ltf_novos_repetidos.ltf_id = tb_ltf_nao_sorteado.ltf_id');
-    //  end;
+    //    lista_where.Add('AND ' + sqlBolas_por_posicao);
+    //end
+    //else
+    //begin
+    //    DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
+    //        'lotofacil.lotofacil_bolas');
+    //
+    //    //// Neste caso, devemos retirar a tabela 'lotofacil.lotofacil_bolas' tanto
+    //    //// da lista de tabelas selecionadas, tanto da lista de tabelas relacionadas.
+    //    //indice_a_deletar := lista_de_tabelas_selecionadas.IndexOf('lotofacil.lotofacil_bolas');
+    //    //if indice_a_deletar > -1 then begin
+    //    //   lista_de_tabelas_selecionadas.Delete(indice_a_deletar);
+    //    //end;
+    //
+    //    //// Agora, da lista de tabelas relacionadas.
+    //    //uA := 0;
+    //    //while uA < lista_de_tabelas_relacionadas.Count do
+    //    //begin
+    //    //  if AnsiContainsStr(lista_de_tabelas_relacionadas.Strings[uA], 'lotofacil.lotofacil_bolas') then
+    //    //  begin
+    //    //    lista_de_tabelas_relacionadas.Delete(uA);
+    //    //    continue;
+    //    //  end;
+    //    //  Inc(uA);
+    //    //end;
+    //
     //end;
-
-    if sqlParImpar <> '' then
-    begin
-        lista_where.Add('AND ' + sqlParImpar);
-    end;
-
-    if sqlPrimoNaoPrimo <> '' then
-    begin
-        lista_where.Add('AND ' + sqlPrimoNaoPrimo);
-    end;
-
-    if sqlExternoInterno <> '' then
-    begin
-        lista_where.Add('AND ' + sqlExternoInterno);
-    end;
-
-    if sqlColunaB <> '' then
-    begin
-        lista_where.Add('AND ' + sqlColunaB);
-    end;
-
-    if sql_bolas_na_mesma_coluna <> '' then
-    begin
-        lista_where.Add('AND ' + sql_bolas_na_mesma_coluna);
-    end;
-
-    if sqlFrequencia <> '' then
-    begin
-        lista_where.Add('AND ' + sqlFrequencia);
-    end;
-
-    // O controle 'chkExcluirJogo_LTF_QT' terá 4 checkbox, correspondendo a
-    // jogos que excluídos conforme a quantidade de bolas daquela combinação.
-    sqlTemp := '';
-    for uA := 0 to chk_excluir_jogos_ltf_qt.Items.Count - 1 do
-    begin
-        if chk_excluir_jogos_ltf_qt.Checked[uA] = True then
-        begin
-            if sqlTemp <> '' then
-            begin
-                sqlTemp := sqlTemp + ', ';
-            end;
-            sqlTemp := sqlTemp + IntToStr(15 + uA);
-        end;
-        // Se sqlTemp é diferente de vazio, quer dizer, que devemos excluir algumas
-        // combinações baseado na quantidade de bolas.
-    end;
-
-    // Se houve algo selecionados, devemos retornar ao usuário.
-    if sqlTemp <> '' then
-    begin
-        lista_where.Add('And lotofacil.lotofacil_num.ltf_qt not in (' + sqlTemp + ')');
-    end;
-
-    if sqlDiferenca_qt_alt <> '' then
-    begin
-        // sqlGerado.Add('And ' + sqlDiferenca_qt_alt);
-        lista_where.Add('And ' + sqlDiferenca_qt_alt);
-    end;
-
-    if sqlDiferenca_qt_dif <> '' then
-    begin
-        // sqlGerado.Add('And ' + sqlDiferenca_qt_dif);
-        lista_where.Add('And ' + sqlDiferenca_qt_dif);
-    end;
-
-    // Se os dois strings está vazio, quer dizer que a tabela não está sendo utilizada.
-    if (sqldiferenca_qt_alt = '') and (sqldiferenca_qt_dif = '') then
-    begin
-        DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
-            'lotofacil.lotofacil_diferenca_entre_bolas');
-    end;
-
-    // Agora montar o sql dinamicamente.
-    sqlGerado := TStringList.Create;
-    sqlGerado.Clear;
-    sqlGerado.Add('Insert into lotofacil.lotofacil_filtros(');
-
-    lista_campo_insert.Delimiter := ',';
-    sqlGerado.Add(lista_campo_insert.DelimitedText);
-    sqlGerado.Add(')');
-
-    sqlGerado.Add('Select');
-    lista_campo_select.Delimiter := ',';
-    sqlGerado.Add(lista_campo_select.DelimitedText);
-
-    sqlGerado.Add('from ');
-    lista_de_tabelas_selecionadas.Delimiter := ',';
-    sqlGerado.Add(lista_de_tabelas_selecionadas.DelimitedText);
-
-    sqlGerado.Add('where');
-
-    // Na lista de tabelas relacionadas devemos apagar o primeiro and
-    if lista_de_tabelas_relacionadas.Count > 0 then
-    begin
-        lista_de_tabelas_relacionadas.Strings[0] :=
-            LowerCase(lista_de_tabelas_relacionadas.Strings[0]).TrimLeft('and');
-        lista_de_tabelas_relacionadas.Strings[0] :=
-            lista_de_tabelas_relacionadas.Strings[0].Trim;
-    end;
-    sqlGerado.Add(lista_de_tabelas_relacionadas.Text);
-    sqlGerado.Add(lista_where.Text);
-
-    // Ordenar sempre pelo campos abaixo.
-    sqlGerado.Add('order by');
-    sqlGerado.Add('ltf_qt asc');
-
-    // Ordenar conforme escolha do usuário.
-    indice_escolhido := rd_filtro_ordenar_campo.ItemIndex;
-    if indice_escolhido <= -1 then
-    begin
-        sqlgerado.Add(', concurso_soma_frequencia_bolas_desc');
-    end
-    else
-    begin
-        sqlgerado.Add(', ' + filtro_campo_ordenacao[indice_escolhido]);
-    end;
-
-    try
-        total_registros := StrToInt(Trim(msk_filtro_total_de_registros.Text));
-        if total_registros > 0 then
-        begin
-            sqlGerado.Add('LIMIT ' + IntToStr(total_registros));
-
-            // No controle 'rdDeslocamento' o índice 0 corresponde a opção
-            // aleatório.
-            if rdDeslocamento.ItemIndex = 0 then
-            begin
-                limite_aleatorio := StrToInt(mskDeslocamento.Text);
-                deslocamento_inicial := Random(limite_aleatorio);
-            end
-            else
-            if rdDeslocamento.ItemIndex = 1 then
-            begin
-                deslocamento_inicial := StrToInt(mskDeslocamento.Text);
-            end;
-            sqlGerado.Add('OFFSET ' + IntToStr(deslocamento_inicial));
-        end;
-    except
-    end;
-
-    mmFiltroSql.Clear;
-    mmFiltroSql.Lines.AddStrings(sqlGerado);
-
-    // TODO: Descomentar código abaixo, após teste.
-    InserirNovoFiltro(sqlGerado);
+    //;
+    //
+    ////if sqlBolas_por_posicao <> '' then begin
+    ////  sqlGerado.Add('lotofacil.lotofacil_bolas ltf_bolas');
+    ////end;
+    //
+    //if sqlAlgarismo_na_dezena <> '' then
+    //begin
+    //    lista_where.Add('and ' + sqlAlgarismo_na_dezena);
+    //end;
+    //
+    //if sql_b1_a_b15 <> '' then
+    //begin
+    //    lista_where.Add('and ' + sql_b1_a_b15);
+    //end
+    //else
+    //begin
+    //    DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
+    //        'lotofacil.lotofacil_coluna_b');
+    //end;
+    //
+    //if sqlLotofacilSoma <> '' then
+    //begin
+    //    lista_where.Add('and ' + sqlLotofacilSoma);
+    //end
+    //else
+    //begin
+    //    DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
+    //        'lotofacil.lotofacil_soma');
+    //
+    //end;
+    //
+    //// A view lotofacil.v_lotofacil_num_nao_sorteado indica todas
+    //// as combinações ainda não sorteadas.
+    //// Se o usuário marcar, então, iremos pegar somente combinações
+    //// que ainda não saíram, entretanto, devemos pegar todas as combinações
+    //if chk_excluir_Jogos_Ja_Sorteados.Checked[0] = False then
+    //begin
+    //    // Se é falso, ou seja, usuário não marcou, devemos retirar o relacionamento where entre a view
+    //    // com as demais tabelas.
+    //    DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
+    //        'lotofacil.v_lotofacil_num_nao_sorteado');
+    //
+    //end;
+    //
+    ////if sqlLotofacilSoma <> '' then
+    ////begin
+    ////  ;
+    ////  sqlGerado.Add(', lotofacil.lotofacil_soma tb_ltf_soma');
+    ////end;
+    //// Se o usuário selecionou quer não quer exibir combinados já sorteadas, devemos
+    //// listar a tabela.
+    ////if chk_excluir_Jogos_Ja_Sorteados.Checked[0] = True then
+    ////begin
+    ////  sqlGerado.Add(', lotofacil.v_lotofacil_num_nao_sorteado  tb_ltf_nao_sorteado');
+    ////end;
+    //
+    ////if sqlNovosRepetidos <> '' then
+    ////begin
+    ////  sqlGerado.Add(', lotofacil.lotofacil_novos_repetidos     tb_ltf_novos_repetidos');
+    ////end;
+    //
+    //// Devemos relacionar as tabelas
+    //// lotofacil_num, lotofacil_id, lotofacil_diferenca_entre_bolas,
+    //// lotofacil_novos_repetidos e v_lotofacil_num_nao_sorteado.
+    //
+    ////sqlGerado.Add('where');
+    ////sqlGerado.Add('    tb_ltf_num.ltf_id = tb_ltf_id.ltf_id');
+    ////sqlGerado.Add('AND tb_ltf_num.ltf_id = tb_ltf_dif.ltf_id');
+    ////sqlGerado.add('AND tb_ltf_id.ltf_id = tb_ltf_dif.ltf_id');
+    //
+    ////sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_num.ltf_id');
+    ////sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_id.ltf_id');
+    ////sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_dif.ltf_id');
+    //
+    //// Se o usuário deseja excluir combinações já sorteadas, devemos relacionar
+    //// a tabela de novos e repetidos com as outras tabelas.
+    ////if chk_excluir_Jogos_Ja_Sorteados.Checked[0] = True then
+    ////begin
+    ////  sqlGerado.Add('---[Usuário escolheu excluir combinações já sorteadas]----');
+    ////  sqlGerado.Add('AND tb_ltf_num.ltf_id  = tb_ltf_nao_sorteado.ltf_id');
+    ////  sqlGerado.Add('AND tb_ltf_id.ltf_id   = tb_ltf_nao_sorteado.ltf_id');
+    ////  sqlGerado.Add('AND tb_ltf_dif.ltf_id  = tb_ltf_nao_sorteado.ltf_id');
+    ////  sqlGerado.Add('AND tb_num_bolas_concurso.ltf_id = tb_ltf_nao_sorteado.ltf_id');
+    //
+    ////  if sqlNovosRepetidos <> '' then
+    ////  begin
+    ////    sqlGerado.Add('AND tb_ltf_novos_repetidos.ltf_id = tb_ltf_nao_sorteado.ltf_id');
+    ////  end;
+    ////end;
+    //
+    //if sqlParImpar <> '' then
+    //begin
+    //    lista_where.Add('AND ' + sqlParImpar);
+    //end;
+    //
+    //if sqlPrimoNaoPrimo <> '' then
+    //begin
+    //    lista_where.Add('AND ' + sqlPrimoNaoPrimo);
+    //end;
+    //
+    //if sqlExternoInterno <> '' then
+    //begin
+    //    lista_where.Add('AND ' + sqlExternoInterno);
+    //end;
+    //
+    //if sqlColunaB <> '' then
+    //begin
+    //    lista_where.Add('AND ' + sqlColunaB);
+    //end;
+    //
+    //if sql_bolas_na_mesma_coluna <> '' then
+    //begin
+    //    lista_where.Add('AND ' + sql_bolas_na_mesma_coluna);
+    //end;
+    //
+    //if sqlFrequencia <> '' then
+    //begin
+    //    lista_where.Add('AND ' + sqlFrequencia);
+    //end;
+    //
+    //// O controle 'chkExcluirJogo_LTF_QT' terá 4 checkbox, correspondendo a
+    //// jogos que excluídos conforme a quantidade de bolas daquela combinação.
+    //sqlTemp := '';
+    //for uA := 0 to chk_excluir_jogos_ltf_qt.Items.Count - 1 do
+    //begin
+    //    if chk_excluir_jogos_ltf_qt.Checked[uA] = True then
+    //    begin
+    //        if sqlTemp <> '' then
+    //        begin
+    //            sqlTemp := sqlTemp + ', ';
+    //        end;
+    //        sqlTemp := sqlTemp + IntToStr(15 + uA);
+    //    end;
+    //    // Se sqlTemp é diferente de vazio, quer dizer, que devemos excluir algumas
+    //    // combinações baseado na quantidade de bolas.
+    //end;
+    //
+    //// Se houve algo selecionados, devemos retornar ao usuário.
+    //if sqlTemp <> '' then
+    //begin
+    //    lista_where.Add('And lotofacil.lotofacil_num.ltf_qt not in (' + sqlTemp + ')');
+    //end;
+    //
+    //if sqlDiferenca_qt_alt <> '' then
+    //begin
+    //    // sqlGerado.Add('And ' + sqlDiferenca_qt_alt);
+    //    lista_where.Add('And ' + sqlDiferenca_qt_alt);
+    //end;
+    //
+    //if sqlDiferenca_qt_dif <> '' then
+    //begin
+    //    // sqlGerado.Add('And ' + sqlDiferenca_qt_dif);
+    //    lista_where.Add('And ' + sqlDiferenca_qt_dif);
+    //end;
+    //
+    //// Se os dois strings está vazio, quer dizer que a tabela não está sendo utilizada.
+    //if (sqldiferenca_qt_alt = '') and (sqldiferenca_qt_dif = '') then
+    //begin
+    //    DeletarSqlTabela(lista_de_tabelas_selecionadas, lista_de_tabelas_relacionadas,
+    //        'lotofacil.lotofacil_diferenca_entre_bolas');
+    //end;
+    //
+    //// Agora montar o sql dinamicamente.
+    //sqlGerado := TStringList.Create;
+    //sqlGerado.Clear;
+    //sqlGerado.Add('Insert into lotofacil.lotofacil_filtros(');
+    //
+    //lista_campo_insert.Delimiter := ',';
+    //sqlGerado.Add(lista_campo_insert.DelimitedText);
+    //sqlGerado.Add(')');
+    //
+    //sqlGerado.Add('Select');
+    //lista_campo_select.Delimiter := ',';
+    //sqlGerado.Add(lista_campo_select.DelimitedText);
+    //
+    //sqlGerado.Add('from ');
+    //lista_de_tabelas_selecionadas.Delimiter := ',';
+    //sqlGerado.Add(lista_de_tabelas_selecionadas.DelimitedText);
+    //
+    //sqlGerado.Add('where');
+    //
+    //// Na lista de tabelas relacionadas devemos apagar o primeiro and
+    //if lista_de_tabelas_relacionadas.Count > 0 then
+    //begin
+    //    lista_de_tabelas_relacionadas.Strings[0] :=
+    //        LowerCase(lista_de_tabelas_relacionadas.Strings[0]).TrimLeft('and');
+    //    lista_de_tabelas_relacionadas.Strings[0] :=
+    //        lista_de_tabelas_relacionadas.Strings[0].Trim;
+    //end;
+    //sqlGerado.Add(lista_de_tabelas_relacionadas.Text);
+    //sqlGerado.Add(lista_where.Text);
+    //
+    //// Ordenar sempre pelo campos abaixo.
+    //sqlGerado.Add('order by');
+    //sqlGerado.Add('ltf_qt asc');
+    //
+    //// Ordenar conforme escolha do usuário.
+    //indice_escolhido := rd_filtro_ordenar_campo.ItemIndex;
+    //if indice_escolhido <= -1 then
+    //begin
+    //    sqlgerado.Add(', concurso_soma_frequencia_bolas_desc');
+    //end
+    //else
+    //begin
+    //    sqlgerado.Add(', ' + filtro_campo_ordenacao[indice_escolhido]);
+    //end;
+    //
+    //try
+    //    total_registros := StrToInt(Trim(msk_filtro_total_de_registros.Text));
+    //    if total_registros > 0 then
+    //    begin
+    //        sqlGerado.Add('LIMIT ' + IntToStr(total_registros));
+    //
+    //        // No controle 'rdDeslocamento' o índice 0 corresponde a opção
+    //        // aleatório.
+    //        if rdDeslocamento.ItemIndex = 0 then
+    //        begin
+    //            limite_aleatorio := StrToInt(mskDeslocamento.Text);
+    //            deslocamento_inicial := Random(limite_aleatorio);
+    //        end
+    //        else
+    //        if rdDeslocamento.ItemIndex = 1 then
+    //        begin
+    //            deslocamento_inicial := StrToInt(mskDeslocamento.Text);
+    //        end;
+    //        sqlGerado.Add('OFFSET ' + IntToStr(deslocamento_inicial));
+    //    end;
+    //except
+    //end;
+    //
+    //mmFiltroSql.Clear;
+    //mmFiltroSql.Lines.AddStrings(sqlGerado);
+    //
+    //// TODO: Descomentar código abaixo, após teste.
+    //InserirNovoFiltro(sqlGerado);
 end;
 
 procedure TForm1.InserirNovoFiltro(sqlFiltro: TStringList);
 var
     sqlRegistros: TSqlQuery;
 begin
-    if dmLotofacil = nil then
-    begin
-        dmLotofacil := TDmLotofacil.Create(Self);
-    end;
-
-    sqlRegistros := TSqlQuery.Create(Self);
-    sqlRegistros.Database := dmLotofacil.pgLTK;
-
-    sqlRegistros.Active := False;
-    sqlRegistros.Close;
-    sqlRegistros.SQL.Clear;
-    sqlRegistros.Sql.Text := sqlFiltro.Text;
-
-    try
-        sqlRegistros.ExecSQL;
-        dmLotofacil.pgLTK.Transaction.Commit;
-        sqlRegistros.Close;
-    except
-        on Exc: EDatabaseError do
-        begin
-            MessageDlg('Erro', Exc.Message, TMsgDlgType.mtError, [mbOK], 0);
-            exit;
-        end;
-    end;
-
-    MessageDlg('', 'Filtros gerados com sucesso!!!', TMsgDlgType.mtError, [mbOK], 0);
+    //if dmLotofacil = nil then
+    //begin
+    //    dmLotofacil := TDmLotofacil.Create(Self);
+    //end;
+    //
+    //sqlRegistros := TSqlQuery.Create(Self);
+    //sqlRegistros.Database := dmLotofacil.pgLTK;
+    //
+    //sqlRegistros.Active := False;
+    //sqlRegistros.Close;
+    //sqlRegistros.SQL.Clear;
+    //sqlRegistros.Sql.Text := sqlFiltro.Text;
+    //
+    //try
+    //    sqlRegistros.ExecSQL;
+    //    dmLotofacil.pgLTK.Transaction.Commit;
+    //    sqlRegistros.Close;
+    //except
+    //    on Exc: EDatabaseError do
+    //    begin
+    //        MessageDlg('Erro', Exc.Message, TMsgDlgType.mtError, [mbOK], 0);
+    //        exit;
+    //    end;
+    //end;
+    //
+    //MessageDlg('', 'Filtros gerados com sucesso!!!', TMsgDlgType.mtError, [mbOK], 0);
 end;
 
 procedure TForm1.btnFrequenciaAtualizarClick(Sender: TObject);
@@ -11772,11 +12080,11 @@ var
     lotofacil_ltf_id: integer;
 begin
     lotofacil_ltf_id := identificador_grupo_16_bolas(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    Writeln('id: ', lotofacil_ltf_id);
+    // Writeln('id: ', lotofacil_ltf_id);
 
     lotofacil_ltf_id := identificador_grupo_17_bolas(9, 10, 11, 12, 13, 14, 15, 16, 17,
         18, 19, 20, 21, 22, 23, 24, 25);
-    Writeln('id: ', lotofacil_ltf_id);
+    // Writeln('id: ', lotofacil_ltf_id);
 
 end;
 
@@ -12772,7 +13080,7 @@ begin
         18: lista_sql.Add(', b_16, b_17, b_18');
     end;
     lista_sql.Add(')values');
-    Writeln(lista_sql.Text);
+    // Writeln(lista_sql.Text);
 
     for uA := 0 to High(ltf_aleatorio) do
     begin
@@ -12845,7 +13153,7 @@ begin
             sql_registro.Sql.Add('ltf_bolas.b_' + IntToStr(uA));
         end;
 
-        Writeln(sql_registro.Sql.Text);
+        // Writeln(sql_registro.Sql.Text);
 
         sql_registro.ExecSql;
         dmLotofacil.pgLTK.Transaction.Commit;
@@ -13299,7 +13607,7 @@ begin
         lista_sql.Append(')');
     end;
 
-    Writeln(lista_sql.Text);
+    // Writeln(lista_sql.Text);
     Exit(lista_sql.Text);
 
 end;
@@ -13634,7 +13942,7 @@ begin
         lista_sql.Append(')');
     end;
 
-    Writeln(lista_sql.Text);
+    // Writeln(lista_sql.Text);
     Exit(lista_sql.Text);
 
 end;
@@ -14936,6 +15244,26 @@ begin
     atualizar_filtro_controle_binario(tag_id, sql_conexao);
 end;
 
+procedure TForm1.btn_atualizar_concursos_ja_inseridosClick(Sender: TObject);
+var
+  indice_escolhido: Integer;
+begin
+  indice_escolhido := rd_concursos_ja_inseridos_classificar.ItemIndex;
+  if indice_escolhido <= -1 then begin
+      MessageDlg('', 'Erro, vc deve escolher a ordem de classificação', mtError, [mbok], 0);
+      Exit;
+  end;
+
+  // Índice 0, é igual a 'decrescente'.
+  // índice 1, é igual a 'crescente'.
+  if indice_escolhido = 0 then begin
+      preencher_combinacoes_com_todos_os_concursos(sql_conexao, sgr_concursos_ja_inseridos, 'desc');
+  end else begin
+      preencher_combinacoes_com_todos_os_concursos(sql_conexao, sgr_concursos_ja_inseridos, 'asc');
+  end;
+
+end;
+
 procedure TForm1.btnAtualizar_Combinacao_ComplementarClick(Sender: TObject);
 var
     uA: integer;
@@ -15177,7 +15505,7 @@ begin
             sql_registro.Sql.Add(sql_texto);
         end;
 
-        Writeln(sql_registro.Sql.Text);
+        // Writeln(sql_registro.Sql.Text);
 
         try
             sql_registro.Open;
@@ -15198,7 +15526,7 @@ begin
             Exit;
         end;
 
-        Writeln(sql_registro.RecordCount);
+        // Writeln(sql_registro.RecordCount);
 
         if (sql_registro.RecordCount <> 3) then
         begin
@@ -15852,7 +16180,7 @@ procedure TForm1.AlterarMarcador(Sender: TObject; aCol, aRow: integer; var CanSe
 var
     gradeTemp,
     //obj_controle_b1_a_b15,
-    sgr_controle: TStringGrid;
+    sgr_controle:    TStringGrid;
     titulo_coluna:   TCaption;
     indice_na_lista: integer;
     indice_b1_a_b15: longint;
@@ -15924,7 +16252,7 @@ begin
         indice_b1_a_b15 := f_sgr_bx_a_by_lista.IndexOf(gradeTemp);
         if indice_b1_a_b15 >= 0 then
         begin
-            Writeln(gradeTemp.Name);
+            //Writeln(gradeTemp.Name);
             sgr_bx_a_by_atualizar_dependentes(gradeTemp);
         end;
 
@@ -16535,64 +16863,67 @@ end;
 
 procedure TForm1.atualizar_frequencia;
 const
-   FONTE_NOME_CABECALHO = 'Consolas';
-   FONTE_SIZE_CABECALHO = 12;
-   FONTE_NOME_CELULA = 'Consolas';
-   FONTE_SIZE_CELULA = 12;
-   controle_cabecalho : array[0..28] of string = (
-                      'concurso',
-                      '1', '2', '3', '4', '5',
-                      '6', '7', '8', '9', '10',
-                      '11', '12', '13', '14', '15',
-                      '16', '17', '18', '19', '20',
-                      '21', '22', '23', '24', '25',
-                      'sm_df', 'sm_df_ps', 'sm_df_neg');
+    FONTE_NOME_CABECALHO = 'Consolas';
+    FONTE_SIZE_CABECALHO = 12;
+    FONTE_NOME_CELULA    = 'Consolas';
+    FONTE_SIZE_CELULA    = 12;
+    controle_cabecalho: array[0..28] of string = (
+        'concurso',
+        '1', '2', '3', '4', '5',
+        '6', '7', '8', '9', '10',
+        '11', '12', '13', '14', '15',
+        '16', '17', '18', '19', '20',
+        '21', '22', '23', '24', '25',
+        'sm_df', 'sm_df_ps', 'sm_df_neg');
 var
-  indice_concurso_inicio, indice_concurso_fim, uA,
-    controle_coluna_atual, uB, soma_frequencia: Integer;
-  concurso_inicio, concurso_fim: String;
-  sql_query: TZQuery;
-  qt_registros, frequencia_atual: LongInt;
-  coluna_atual: TGridColumn;
+    indice_concurso_inicio, indice_concurso_fim, uA, controle_coluna_atual, uB, soma_frequencia: integer;
+    concurso_inicio, concurso_fim: string;
+    sql_query:    TZQuery;
+    qt_registros, frequencia_atual: longint;
+    coluna_atual: TGridColumn;
 begin
     sgr_concursos.Columns.Clear;
-    sgr_concursos.AutoFillColumns:=False;
+    sgr_concursos.AutoFillColumns := False;
 
     indice_concurso_inicio := cmb_frequencia_inicio.ItemIndex;
     indice_concurso_fim := cmb_frequencia_fim.ItemIndex;
 
-    if indice_concurso_inicio = -1 then begin
-        MessageDlg('', 'Erro, concurso de início não selecionado.', mtError, [mbok], 0);
+    if indice_concurso_inicio = -1 then
+    begin
+        MessageDlg('', 'Erro, concurso de início não selecionado.', mtError, [mbOK], 0);
         Exit;
     end;
 
-    if indice_concurso_fim = -1 then begin
-        MessageDlg('', 'Erro, concurso de início não selecionado.', mtError, [mbok], 0);
+    if indice_concurso_fim = -1 then
+    begin
+        MessageDlg('', 'Erro, concurso de início não selecionado.', mtError, [mbOK], 0);
         Exit;
     end;
 
     try
-    concurso_inicio := cmb_frequencia_inicio.Items[indice_concurso_inicio];
-    concurso_fim := cmb_frequencia_fim.Items[indice_concurso_fim];
+        concurso_inicio := cmb_frequencia_inicio.Items[indice_concurso_inicio];
+        concurso_fim := cmb_frequencia_fim.Items[indice_concurso_fim];
 
     except
-        ON Exc: Exception do begin
+        ON Exc: Exception do
+        begin
             Exit;
         end;
     end;
 
     // Gera o sql.
     try
-    sql_query := TZQuery.Create(Nil);
-    sql_query.Connection := sql_conexao;
-    sql_query.Sql.Clear;
-    sql_query.Sql.Add('Select * from lotofacil.lotofacil_resultado_num_frequencia');
-    sql_query.Sql.Add(Format('where concurso between %s and %s', [concurso_inicio, concurso_fim]));
-    sql_query.Sql.Add('order by concurso desc');
-    sql_query.Open;
+        sql_query := TZQuery.Create(nil);
+        sql_query.Connection := sql_conexao;
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select * from lotofacil.lotofacil_resultado_num_frequencia');
+        sql_query.Sql.Add(Format('where concurso between %s and %s', [concurso_inicio, concurso_fim]));
+        sql_query.Sql.Add('order by concurso desc');
+        sql_query.Open;
 
     except
-        On Exc: Exception do begin
+        On Exc: Exception do
+        begin
 
             Exit;
         end;
@@ -16602,70 +16933,75 @@ begin
     sql_query.Last;
     qt_registros := sql_query.RecordCount;
 
-    if 0 = qt_registros then begin
+    if 0 = qt_registros then
+    begin
         sgr_concursos.Columns.Clear;
         sgr_concursos.RowCount := 1;
         sgr_concursos.ColCount := 1;
         sgr_concursos.Columns[0].Alignment := taCenter;
-        sgr_concursos.Cells[0,0] := 'Nenhum registro localizado.';
+        sgr_concursos.Cells[0, 0] := 'Nenhum registro localizado.';
         Exit;
     end;
 
     // ========================= CONFIGURA CONTROLE ========================
     sgr_concursos.Columns.Clear;
-    sgr_concursos.RowCount:=1;
-    sgr_concursos.FixedRows:=1;
+    sgr_concursos.RowCount := 1;
+    sgr_concursos.FixedRows := 1;
 
     coluna_atual := sgr_concursos.Columns.Add;
     coluna_atual.Title.Caption := 'concurso';
     coluna_atual.Title.Alignment := taCenter;
     coluna_atual.Title.Font.Name := FONTE_NOME_CABECALHO;
     coluna_atual.Title.Font.Size := FONTE_SIZE_CABECALHO;
-    sgr_concursos.Cells[0,0] := 'concurso';
+    sgr_concursos.Cells[0, 0] := 'concurso';
 
     // Colunas num_1 a num_25.
-    for uA := 1 to 25 do begin
+    for uA := 1 to 25 do
+    begin
         coluna_atual := sgr_concursos.Columns.Add;
 
-        coluna_atual.Title.Alignment:=taCenter;
+        coluna_atual.Title.Alignment := taCenter;
         coluna_atual.Title.Caption := IntToStr(uA);
         coluna_atual.Title.Font.Name := FONTE_NOME_CELULA;
         coluna_atual.Title.Font.Size := FONTE_SIZE_CELULA;
 
-        coluna_atual.Alignment:=taCenter;
+        coluna_atual.Alignment := taCenter;
         coluna_atual.Font.Name := FONTE_NOME_CELULA;
         coluna_atual.Font.Size := FONTE_SIZE_CELULA;
 
-        sgr_concursos.Cells[uA,0] := IntToStr(uA);
+        sgr_concursos.Cells[uA, 0] := IntToStr(uA);
 
     end;
 
     // Colunas num_26 a num_28
-    for uA := 26 to 28 do begin
+    for uA := 26 to 28 do
+    begin
         coluna_atual := sgr_concursos.Columns.Add;
 
-        coluna_atual.Title.Alignment:=taCenter;
+        coluna_atual.Title.Alignment := taCenter;
         coluna_atual.Title.Caption := controle_cabecalho[uA];
         coluna_atual.Title.Font.Name := FONTE_NOME_CELULA;
         coluna_atual.Title.Font.Size := FONTE_SIZE_CELULA;
 
-        coluna_atual.Alignment:=taCenter;
+        coluna_atual.Alignment := taCenter;
         coluna_atual.Font.Name := FONTE_NOME_CELULA;
         coluna_atual.Font.Size := FONTE_SIZE_CELULA;
 
-        sgr_concursos.Cells[uA,0] := controle_cabecalho[uA];
+        sgr_concursos.Cells[uA, 0] := controle_cabecalho[uA];
     end;
 
-    sgr_concursos.RowCount:=qt_registros + 1;
+    sgr_concursos.RowCount := qt_registros + 1;
     sgr_concursos.BeginUpdate;
 
     sql_query.First;
-    for uA := 1 to qt_registros do begin
-        sgr_concursos.Cells[0,uA] := sql_query.FieldByName('concurso').AsString;
+    for uA := 1 to qt_registros do
+    begin
+        sgr_concursos.Cells[0, uA] := sql_query.FieldByName('concurso').AsString;
 
         controle_coluna_atual := 1;
         soma_frequencia := 0;
-        for uB := 1 to 25 do begin
+        for uB := 1 to 25 do
+        begin
             frequencia_atual := sql_query.FieldByName('num_' + IntToStr(uB)).AsInteger;
             soma_frequencia := soma_frequencia + frequencia_atual;
 
@@ -16678,7 +17014,7 @@ begin
     end;
     sql_query.Close;
     sgr_concursos.AutoSizeColumns;
-    sgr_concursos.EndUpdate(true);
+    sgr_concursos.EndUpdate(True);
 
     FreeAndNil(sql_query);
 end;

@@ -10,16 +10,24 @@ uses
 
 type
     TArrayInt = array of integer;
+    TArrayByte = array of Byte;
+    TConcurso_Asc_Desc = (CONCURSO_ASC, CONCURSO_DESC);
+    TConcursos_ja_inseridos_opcao = record
+      concurso_ordem_asc_desc : TConcurso_Asc_Desc;
+    end;
 
 function obter_concursos(sql_conexao: TZConnection; var lista_de_concursos: TArrayInt; ordem_asc: string): boolean;
 
 function obter_bolas_do_concurso(sql_conexao: TZConnection; concurso: integer;
     var bolas_do_concurso: TArrayInt): boolean;
 
+function preencher_combinacoes_com_todos_os_concursos(sql_conexao: TZConnection; sgr_controle: TStringGrid; ordem_asc_desc: String):boolean;
+function preencher_combinacoes_intervalo_de_concursos(
+    sql_conexao: TZConnection; sgr_controle: TStringGrid; ordem_asc_desc: String;
+    concurso_inicial: Integer; concurso_final:Integer): boolean;
+
 function concurso_excluir(sql_conexao: TZConnection; concurso_numero: integer; status_erro: string): boolean;
-
 procedure preencher_combobox_com_concursos(sql_conexao: TZConnection; cmb_controle: TComboBox; ordem_asc: string);
-
 procedure baixar_novos_concursos(sql_conexao: TZConnection; sgr_controle: TStringGrid);
 procedure exibir_concursos_importados(sql_conexao: TZConnection; sgr_controle: TStringGrid);
 function gerar_sql_dinamicamente(lista_de_resultado_json: TStringList): string;
@@ -97,6 +105,8 @@ end;
  Retorna as bolas do concurso, se o número do concurso foi localizado
  na tabela 'lotofacil.lotofacil_resultado_bolas'.
  Se o concurso existe, a função retorna true, falso, caso contrário.
+ A variável 'bolas_do_concurso' retorna um arranjo com 16 posições, entretanto,
+ retornamos 15 bolas, começando da posição 1.
 }
 function obter_bolas_do_concurso(sql_conexao: TZConnection; concurso: integer;
     var bolas_do_concurso: TArrayInt): boolean;
@@ -119,7 +129,7 @@ begin
     end;
 
     // Há 15 bolas, iremos criar um arranjo com 16 bolas, iremos
-    // usar índices de 1 a 7.
+    // usar índices de 1 a 15.
     SetLength(bolas_do_concurso, 16);
 
     sql_query.First;
@@ -133,6 +143,96 @@ begin
     FreeAndNil(sql_query);
 
     Exit(True);
+end;
+
+{
+ Preenche um controle 'TStringGrid', com todas as combinações já sorteadas da lotofacil.
+}
+function preencher_combinacoes_com_todos_os_concursos(sql_conexao: TZConnection;
+  sgr_controle: TStringGrid; ordem_asc_desc: String): boolean;
+var
+  sql_query: TZQuery;
+  coluna_atual: TGridColumn;
+  concurso_numero, bola_atual, qt_registros: LongInt;
+  sgr_controle_linha, uA: Integer;
+begin
+    ordem_asc_desc := LowerCase(ordem_asc_desc);
+    if (ordem_asc_desc <> 'asc') and (ordem_asc_desc <> 'desc') then begin
+        Exit(False);
+    end;
+
+    try
+
+      sql_query := TZQuery.Create(Nil);
+      sql_query.Connection := sql_conexao;
+      sql_query.SQL.Clear;
+      sql_query.Sql.Add('Select concurso');
+      sql_query.Sql.Add(',b_1,b_2,b_3,b_4,b_5,b_6,b_7,b_8,b_9,b_10,b_11,b_12,b_13,b_14,b_15');
+      sql_query.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
+      sql_query.Sql.Add('order by concurso');
+      sql_query.Sql.Add(ordem_asc_desc);
+      sql_query.Open;
+      sql_query.First;
+      sql_query.Last;
+
+      qt_registros := sql_query.RecordCount;
+      if qt_registros = 0 then begin
+          FreeAndNil(sql_query);
+          Exit(False);
+      end;
+
+      // Configura o controle
+      sgr_controle.Columns.Clear;
+      // Haverá uma linha pra o cabeçalho.
+      sgr_controle.RowCount := qt_registros + 1;
+
+      // Aqui, iremos configurar os nomes dos títulos das colunas
+      // por isso, precisamos definir 1 (uma) linha fixa no controle.
+      sgr_controle.FixedRows:=1;
+      for uA := 0 to 15 do begin
+          coluna_atual := sgr_controle.Columns.Add;
+          if uA = 0 then begin
+             coluna_atual.Title.Caption := 'Concurso'
+          end else begin
+            coluna_atual.Title.Caption := 'B' + IntToStr(uA);
+          end;
+      end;
+
+      // Agora iremos popular os dados da consulta.
+      sgr_controle_linha := 1;
+      sql_query.First;
+      sgr_controle.BeginUpdate;
+      while (Not sql_query.Eof) and (qt_registros > 0) do begin
+          concurso_numero := sql_query.FieldByName('concurso').AsInteger;
+          sgr_controle.Cells[0, sgr_controle_linha] := IntToStr(concurso_numero);
+          for uA := 1 to 15 do begin
+              bola_atual := sql_query.FieldByName('b_' + IntToStr(uA)).AsInteger;
+              sgr_controle.Cells[uA, sgr_controle_linha] := IntToStr(bola_atual);
+          end;
+          Inc(sgr_controle_linha);
+          sql_query.Next;
+          Dec(qt_registros);
+      end;
+      sgr_controle.AutoAdjustColumns;
+      sgr_controle.EndUpdate(true);
+      FreeAndNil(sql_query);
+
+    Except
+        On Exc: Exception do begin
+            FreeAndNil(sql_query);
+            MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbok], 0);
+            Exit(False);
+        end;
+    end;
+
+    Exit(True);
+end;
+
+function preencher_combinacoes_intervalo_de_concursos(
+  sql_conexao: TZConnection; sgr_controle: TStringGrid; ordem_asc_desc: String;
+  concurso_inicial: Integer; concurso_final: Integer): boolean;
+begin
+
 end;
 
 {
@@ -335,12 +435,6 @@ begin
             conteudo_recebido := obj_http.Get(url_lotofacil, IndyTextEncoding_UTF8);
             conteudo_recebido := LowerCase(conteudo_recebido);
             lista_de_resultado_json.Add(conteudo_recebido);
-            //if uA = 1707 then begin
-            //    Writeln('');
-            //end;
-
-            Writeln('uA: ', uA);
-
         except
             On exc: Exception do
             begin
@@ -349,12 +443,8 @@ begin
                 // Depois, irei criar um sql separadamente pra o concurso de número 1.
                 if (obj_http.ResponseCode >= 500) and (obj_http.ResponseCode <= 599) then
                 begin
-                    //MessageDlg('', 'Erro: ' + exc.Message, mtError, [mbOK], 0);
                     continue;
                 end;
-
-                //MessageDlg('', 'Erro: ' + exc.Message, mtError, [mbOK], 0);
-                //Exit;
             end;
         end;
     end;
@@ -573,7 +663,7 @@ begin
 
 
 
-                Writeln('campo: ', nome_do_campo, ', valor: ', valor_campo_atual);
+                //Writeln('campo: ', nome_do_campo, ', valor: ', valor_campo_atual);
 
 
                 // No banco de dados, os campos que tem o tipo decimal, o separador

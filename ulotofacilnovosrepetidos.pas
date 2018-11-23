@@ -344,45 +344,45 @@ uses
 //end;
 
 procedure ConfigurarControlesNovosRepetidosPorConcurso(objControle: TStringGrid);
-const
-  // Nome das colunas que estarão no controle.
-  novos_repetidos_campo: array[0..2] of string = (
-    'concurso',
-    'par',
-    'impar'
-    );
-var
-  indice_ultima_coluna, uA: integer;
-  coluna_atual: TGridColumn;
+//const
+//  // Nome das colunas que estarão no controle.
+//  novos_repetidos_campo: array[0..2] of string = (
+//    'concurso',
+//    'par',
+//    'impar'
+//    );
+//var
+//  indice_ultima_coluna, uA: integer;
+//  coluna_atual: TGridColumn;
 begin
 
-  // Evitar que adicionemos novas colunas, se já houver.
-  objControle.Columns.Clear;
-
-  // Adicionar colunas.
-  indice_ultima_coluna := High(novos_repetidos_campo);
-  for uA := 0 to indice_ultima_coluna do
-  begin
-    coluna_atual := objControle.Columns.Add;
-    coluna_atual.title.Alignment := TAlignment.taCenter;
-    coluna_atual.Alignment := TAlignment.taCenter;
-    coluna_atual.title.Caption := novos_repetidos_campo[uA];
-    objControle.Cells[uA, 0] := novos_repetidos_campo[uA];
-  end;
-
-  // A primeira coluna é o campo id, que passou quando iremos gerar os ids,
-  // necessita ficar oculta.
-  // objControle.Columns[0].Visible := False;
-
-  // A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
-  // da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
-  //objControle.Columns[indice_ultima_coluna].ButtonStyle :=     TColumnButtonStyle.cbsCheckboxColumn;
-
-  // Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
-  objControle.RowCount := 1;
-  objControle.FixedRows := 1;
-  objControle.FixedCols := 0;
-
+  //// Evitar que adicionemos novas colunas, se já houver.
+  //objControle.Columns.Clear;
+  //
+  //// Adicionar colunas.
+  //indice_ultima_coluna := High(novos_repetidos_campo);
+  //for uA := 0 to indice_ultima_coluna do
+  //begin
+  //  coluna_atual := objControle.Columns.Add;
+  //  coluna_atual.title.Alignment := TAlignment.taCenter;
+  //  coluna_atual.Alignment := TAlignment.taCenter;
+  //  coluna_atual.title.Caption := novos_repetidos_campo[uA];
+  //  objControle.Cells[uA, 0] := novos_repetidos_campo[uA];
+  //end;
+  //
+  //// A primeira coluna é o campo id, que passou quando iremos gerar os ids,
+  //// necessita ficar oculta.
+  //// objControle.Columns[0].Visible := False;
+  //
+  //// A coluna Marcar terá um checkBox, pois, se o usuário clicar em uma célula
+  //// da coluna Marcar, quer dizer, que ele quer selecionar aquela linha.
+  ////objControle.Columns[indice_ultima_coluna].ButtonStyle :=     TColumnButtonStyle.cbsCheckboxColumn;
+  //
+  //// Indica a primeira linha como fixa, pois, é onde fica o nome dos campos.
+  //objControle.RowCount := 1;
+  //objControle.FixedRows := 1;
+  //objControle.FixedCols := 0;
+  //
 end;
 
 {
@@ -2518,24 +2518,24 @@ begin
 
          tamanho_do_string := str_sql_a_inserir.Length;
 
-         Writeln('Antes do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
-         Writeln('Tamanho do string: ', tamanho_do_string);
-         Writeln('qt_max_de_bytes_ja_alocados: ', qt_max_de_bytes_ja_alocados);
+         //Writeln('Antes do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+         //Writeln('Tamanho do string: ', tamanho_do_string);
+         //Writeln('qt_max_de_bytes_ja_alocados: ', qt_max_de_bytes_ja_alocados);
          if tamanho_do_string >= qt_max_de_bytes_ja_alocados then begin
             // Se já foi alocado memória, deslocar da memória.
-            Writeln('Dentro do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
-            Writeln('Tamanho do string: ', tamanho_do_string);
-            Writeln('qt_max_de_bytes_ja_alocados', qt_max_de_bytes_ja_alocados);
+            //Writeln('Dentro do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+            //Writeln('Tamanho do string: ', tamanho_do_string);
+            //Writeln('qt_max_de_bytes_ja_alocados', qt_max_de_bytes_ja_alocados);
 
             if qt_max_de_bytes_ja_alocados <> 0 then begin
-               Writeln('Antes de liberar: FreemMem');
-               Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+               //Writeln('Antes de liberar: FreemMem');
+               //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
                FreeMem(buffer_texto);
-               Writeln('Após liberar');
+               //Writeln('Após liberar');
                Format('Após liberar: buffer_texto: %p', [Addr(buffer_texto)]);
                buffer_texto := nil;
             end;
-            Writeln('Expandindo memória de ', qt_max_de_bytes_ja_alocados, ' pra ', tamanho_do_string);
+            //Writeln('Expandindo memória de ', qt_max_de_bytes_ja_alocados, ' pra ', tamanho_do_string);
             // Devemos colocar 1 caractere a mais por causa do caractere 'nulo', que será utilizada
             // quando usarmos strlcat
             qt_max_de_bytes_ja_alocados:= tamanho_do_string + 1;
@@ -2549,24 +2549,22 @@ begin
          //Writeln('Antes de buffer_texto^');
          //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
          buffer_texto^ := #0;
-         Writeln('Antes de strlcat');
+         //Writeln('Antes de strlcat');
          strlcat(buffer_texto, PChar(str_sql_a_inserir), tamanho_do_string);
-         Writeln('Apos strlcat');
-         Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+         //Writeln('Apos strlcat');
+         //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
 
-         Writeln('Antes de sql_memory');
+         //Writeln('Antes de sql_memory');
          sql_memory.Write(buffer_texto^, tamanho_do_string);
          str_sql_a_inserir := '';
 
-         Writeln('ltf_id: ', pt_buffer^.ltf_id, ', tam_string: ',
-                          tamanho_do_string, ', qt_max_de_bytes_ja_alocados:', qt_max_de_bytes_ja_alocados);
-
-         Writeln('sql_memory.size: ', sql_memory.Size, ', TOTAL_DE_BYTES_MAXIMO: ', TOTAL_DE_BYTES_MAXIMO);
+         // Writeln('ltf_id: ', pt_buffer^.ltf_id, ', tam_string: ', tamanho_do_string, ', qt_max_de_bytes_ja_alocados:', qt_max_de_bytes_ja_alocados);
+         // Writeln('sql_memory.size: ', sql_memory.Size, ', TOTAL_DE_BYTES_MAXIMO: ', TOTAL_DE_BYTES_MAXIMO);
 
          // A cada 250000 registros lidos, ou quando atingir mais de 500 mb
          Inc(qt_registros_lidos);
          if sql_memory.Size > TOTAL_DE_BYTES_MAXIMO then begin
-            Writeln('Entrou no if..');
+            // Writeln('Entrou no if..');
             sql_query.SQL.Clear;
             sql_query.Sql.Add(str_sql_inicio);
             sql_query.Sql.Add(sql_memory.DataString);
@@ -2578,13 +2576,13 @@ begin
             // Deve-se mover pra a posição 0 e também definir o tamanho do fluxo pra 0.
             // Senão haverá erro ao tentar inserir pois, iremos inserir dados já inseridos
             // no banco de dados.
-            Writeln('Antes de sql_memory.Position=0');
+            //Writeln('Antes de sql_memory.Position=0');
             sql_memory.Position:=0;
-            Writeln('Apos de sql_memory.Position=0');
+            //Writeln('Apos de sql_memory.Position=0');
 
-            Writeln('Antes de sql_memory.Size = 0');
+            //Writeln('Antes de sql_memory.Size = 0');
             sql_memory.Size := 0;
-            Writeln('Depois de sql_memory.Size = 0');
+            //Writeln('Depois de sql_memory.Size = 0');
 
             fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) + ' de 6874010 [' +
              Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
@@ -2594,7 +2592,7 @@ begin
 
 
          // Aponta pra o próximo registro.
-         Writeln('Inc(pt_buffer);');
+         // Writeln('Inc(pt_buffer);');
          Inc(pt_buffer);
 
          // Verifica se o usuário solicitou cancelamento.
@@ -2663,7 +2661,7 @@ begin
      // Tudo ocorreu normalmente, então, confirmar transação.
      dmLotofacil.pgLTK.Transaction.Commit;
 
-     Writeln('Executou o commit');
+     //Writeln('Executou o commit');
      dmLotofacil.pgLTK.Close(true);
 
      //Writeln('Fechou o banco.');
@@ -2699,17 +2697,13 @@ begin
         end;
   end;
 
-
-
   // Se chegarmos aqui, quer dizer, que todos os ítens foram atualizados com sucesso!!!;
   fStatus_Mensagem := 'Itens atualizado com sucesso!!!';
   Exibir_Mensagem_de_Termino;
 
-  Writeln('Antes de sair da procedure, antes de @doStatusConcluido');
+  //Writeln('Antes de sair da procedure, antes de @doStatusConcluido');
   Synchronize(@DoStatusConcluido);
-  Writeln('Antes de sair da procedure, depois de @doStatusConcluido');
-
-
+  //Writeln('Antes de sair da procedure, depois de @doStatusConcluido');
 
 end;
 
