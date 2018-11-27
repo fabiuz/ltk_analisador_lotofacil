@@ -188,6 +188,97 @@ const
     ID_BIN_X1 = 62;
     ID_BIN_X2 = 63;
 
+    // Constantes utilizar pra serem utilizadas
+    // nos controles de estatística por concurso.
+
+    ID_POR_CONCURSO_PAR_IMPAR = 65;
+    ID_POR_CONCURSO_PRIMO_NAO_PRIMO = 67;
+    ID_POR_CONCURSO_EXTERNO_INTERNO = 69;
+
+    // Horizontal.
+    ID_POR_CONCURSO_HORIZONTAL = 71;
+    ID_POR_CONCURSO_HRZ_2 = 72;
+    ID_POR_CONCURSO_HRZ_3 = 73;
+    ID_POR_CONCURSO_HRZ_4 = 74;
+    ID_POR_CONCURSO_HRZ_5 = 75;
+
+    // Vertical.
+    ID_POR_CONCURSO_VRT_1 = 76;
+    ID_POR_CONCURSO_VRT_2 = 77;
+    ID_POR_CONCURSO_VRT_3 = 78;
+    ID_POR_CONCURSO_VRT_4 = 79;
+    ID_POR_CONCURSO_VRT_5 = 80;
+
+    // Diagonal esquerda.
+    ID_POR_CONCURSO_DGE_1 = 81;
+    ID_POR_CONCURSO_DGE_2 = 82;
+    ID_POR_CONCURSO_DGE_3 = 83;
+    ID_POR_CONCURSO_DGE_4 = 84;
+    ID_POR_CONCURSO_DGE_5 = 85;
+
+    // Diagonal direita.
+    ID_POR_CONCURSO_DGD_1 = 86;
+    ID_POR_CONCURSO_DGD_2 = 87;
+    ID_POR_CONCURSO_DGD_3 = 88;
+    ID_POR_CONCURSO_DGD_4 = 89;
+    ID_POR_CONCURSO_DGD_5 = 90;
+
+    // Esquerda, direita.
+    // Superior, inferior.
+    ID_POR_CONCURSO_ESQ = 91;
+    ID_POR_CONCURSO_DIR = 92;
+    ID_POR_CONCURSO_SUP = 93;
+    ID_POR_CONCURSO_INF = 94;
+
+    // Superior esquerda, inferior direita
+    // Superior direita,  inferior esquerda
+    ID_POR_CONCURSO_SUP_ESQ = 95;
+    ID_POR_CONCURSO_INF_DIR = 96;
+    ID_POR_CONCURSO_SUP_DIR = 97;
+    ID_POR_CONCURSO_INF_ESQ = 98;
+
+    // Cruzeta.
+    ID_POR_CONCURSO_CRZ_1 = 99;
+    ID_POR_CONCURSO_CRZ_2 = 100;
+    ID_POR_CONCURSO_CRZ_3 = 101;
+    ID_POR_CONCURSO_CRZ_4 = 38;
+    ID_POR_CONCURSO_CRZ_5 = 39;
+
+    // Losango.
+    ID_POR_CONCURSO_LSNG_1 = 40;
+    ID_POR_CONCURSO_LSNG_2 = 41;
+    ID_POR_CONCURSO_LSNG_3 = 42;
+    ID_POR_CONCURSO_LSNG_4 = 43;
+    ID_POR_CONCURSO_LSNG_5 = 44;
+
+    // Quinteto.
+    ID_POR_CONCURSO_QNT_1 = 45;
+    ID_POR_CONCURSO_QNT_2 = 46;
+    ID_POR_CONCURSO_QNT_3 = 47;
+    ID_POR_CONCURSO_QNT_4 = 48;
+    ID_POR_CONCURSO_QNT_5 = 49;
+
+    // Triângulo.
+    ID_POR_CONCURSO_TRNG_1 = 50;
+    ID_POR_CONCURSO_TRNG_2 = 51;
+    ID_POR_CONCURSO_TRNG_3 = 52;
+    ID_POR_CONCURSO_TRNG_4 = 53;
+
+    // Trio.
+    ID_POR_CONCURSO_TRIO_1 = 54;
+    ID_POR_CONCURSO_TRIO_2 = 55;
+    ID_POR_CONCURSO_TRIO_3 = 56;
+    ID_POR_CONCURSO_TRIO_4 = 57;
+    ID_POR_CONCURSO_TRIO_5 = 58;
+    ID_POR_CONCURSO_TRIO_6 = 59;
+    ID_POR_CONCURSO_TRIO_7 = 60;
+    ID_POR_CONCURSO_TRIO_8 = 61;
+
+    ID_POR_CONCURSO_X1 = 62;
+    ID_POR_CONCURSO_X2 = 63;
+
+    ID_POR_CONCURSO_NOVOS_REPETIDOS = 64;
+
 const
     ID_MARCAR_NAO     = 0;
     ID_MARCAR_SIM     = 1;

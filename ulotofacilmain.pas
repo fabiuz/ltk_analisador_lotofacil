@@ -635,11 +635,21 @@ type
         btn_bin_dgd_3: TButton;
         btn_bin_dgd_4: TButton;
         btn_bin_dgd_5: TButton;
+        btn_bin_x2: TButton;
+        btn_bin_x1: TButton;
         btn_bin_lsng_1: TButton;
         btn_bin_lsng_2: TButton;
         btn_bin_lsng_3: TButton;
         btn_bin_lsng_4: TButton;
         btn_bin_lsng_5: TButton;
+        btn_bin_trio_2: TButton;
+        btn_bin_trio_3: TButton;
+        btn_bin_trio_4: TButton;
+        btn_bin_trio_5: TButton;
+        btn_bin_trio_6: TButton;
+        btn_bin_trio_7: TButton;
+        btn_bin_trio_8: TButton;
+        btn_bin_trng_1: TButton;
         btn_bin_superior: TButton;
         btn_bin_crz_4: TButton;
         btn_bin_crz_5: TButton;
@@ -673,6 +683,10 @@ type
         btn_bin_qnt_3: TButton;
         btn_bin_qnt_4: TButton;
         btn_bin_qnt_5: TButton;
+        btn_bin_trng_2: TButton;
+        btn_bin_trng_3: TButton;
+        btn_bin_trng_4: TButton;
+        btn_bin_trio_1: TButton;
         btn_bin_vrt_1: TButton;
         btn_bin_vrt_2: TButton;
         btn_bin_vrt_3: TButton;
@@ -680,6 +694,7 @@ type
         btn_bin_vrt_5: TButton;
         btn_bin_dge_1: TButton;
         btn_classificados_obter_campos: TButton;
+        btn_primo_nao_primo_por_concurso: TButton;
         btn_frequencia_novos_concursos1: TButton;
         btn_frequencia_atualizar: TButton;
         btn_gerar_estatistica_frequencia_num: TButton;
@@ -1156,6 +1171,8 @@ type
         btn_novos_repetidos_ultima_atualizacao: TButton;
         btn_frequencia_novos_concursos: TButton;
         btn_frequencia_obter_concursos_2: TButton;
+        btn_externo_interno_por_concurso: TButton;
+        btn_novos_repetidos_por_concurso: TButton;
         btn_rotacao_binaria_obter_concursos1: TButton;
         btn_gerador_aleatorio_obter_concursos: TButton;
         Button1: TButton;
@@ -1167,7 +1184,22 @@ type
         btn_rotacao_binaria_obter_concursos: TButton;
         btn_gerar_rotacao_binaria: TButton;
         btn_atualizar_concursos_ja_inseridos: TButton;
+        btn_par_impar_por_concurso: TButton;
         CheckGroup1: TCheckGroup;
+        chk_bin_x2: TCheckGroup;
+        chk_bin_x1: TCheckGroup;
+        chk_bin_trio_2: TCheckGroup;
+        chk_bin_trio_3: TCheckGroup;
+        chk_bin_trio_4: TCheckGroup;
+        chk_bin_trio_5: TCheckGroup;
+        chk_bin_trio_6: TCheckGroup;
+        chk_bin_trio_7: TCheckGroup;
+        chk_bin_trio_8: TCheckGroup;
+        chk_bin_trng_1: TCheckGroup;
+        chk_bin_trng_2: TCheckGroup;
+        chk_bin_trng_3: TCheckGroup;
+        chk_bin_trng_4: TCheckGroup;
+        chk_bin_trio_1: TCheckGroup;
         chk_gerador_aleatorio_bolas_novas: TCheckGroup;
         chk_rotacao_binaria: TCheckGroup;
         chk_bin_dgd_2: TCheckGroup;
@@ -1673,6 +1705,20 @@ type
         GroupBox260: TGroupBox;
         GroupBox261: TGroupBox;
         GroupBox262: TGroupBox;
+        grp_bin_x2: TGroupBox;
+        grp_bin_x1: TGroupBox;
+        grp_bin_trio_2: TGroupBox;
+        grp_bin_trio_3: TGroupBox;
+        grp_bin_trio_4: TGroupBox;
+        grp_bin_trio_5: TGroupBox;
+        grp_bin_trio_6: TGroupBox;
+        grp_bin_trio_7: TGroupBox;
+        grp_bin_trio_8: TGroupBox;
+        grp_bin_trng_1: TGroupBox;
+        grp_bin_trng_2: TGroupBox;
+        grp_bin_trng_3: TGroupBox;
+        grp_bin_trng_4: TGroupBox;
+        grp_bin_trio_1: TGroupBox;
         grp_rotacao_binaria: TGroupBox;
         GroupBox27: TGroupBox;
         GroupBox28: TGroupBox;
@@ -1763,7 +1809,7 @@ type
         grpConcursoFrequenciaTotalSair: TGroupBox;
         grpExternoInterno15Bolas: TGroupBox;
         grpExternoInternoConsolidado: TGroupBox;
-        grpExternoInternoPorConcurso: TGroupBox;
+        grp_externo_interno_por_concurso: TGroupBox;
         grpFrequenciaBolas: TGroupBox;
         grpFrequenciaDeixouDeSair: TGroupBox;
         grpFrequenciaDeixouDeSair1: TGroupBox;
@@ -1780,10 +1826,10 @@ type
         grpFrequenciaInicio2: TGroupBox;
         grpFrequenciaInicio3: TGroupBox;
         grpNovosRepetidosConsolidado: TGroupBox;
-        grpNovosRepetidosPorConcurso: TGroupBox;
-        grpParImpar15Bolas: TGroupBox;
+        grp_novos_repetidos_por_concurso: TGroupBox;
+        grp_par_impar: TGroupBox;
         grpParImparConsolidado: TGroupBox;
-        grpParImparPorConcurso: TGroupBox;
+        grp_par_impar_por_concurso: TGroupBox;
         grpPrimoNaoPrimoConsolidado: TGroupBox;
         grpPrimoNaoPrimoConsolidadoConcurso: TGroupBox;
         grpPrimoNaoPrimoConsolidadoConcurso1: TGroupBox;
@@ -2405,6 +2451,7 @@ type
         PageControl63: TPageControl;
         PageControl64: TPageControl;
         PageControl65: TPageControl;
+        PageControl66: TPageControl;
         Panel10: TPanel;
         Panel11: TPanel;
         Panel12: TPanel;
@@ -2421,11 +2468,21 @@ type
         pn_bin_dgd_3: TPanel;
         pn_bin_dgd_4: TPanel;
         pn_bin_dgd_5: TPanel;
+        pn_bin_direita1: TPanel;
+        pn_bin_esquerda1: TPanel;
         pn_bin_lsng_1: TPanel;
         pn_bin_lsng_2: TPanel;
         pn_bin_lsng_3: TPanel;
         pn_bin_lsng_4: TPanel;
         pn_bin_lsng_5: TPanel;
+        pn_bin_trio_2: TPanel;
+        pn_bin_trio_3: TPanel;
+        pn_bin_trio_4: TPanel;
+        pn_bin_trio_5: TPanel;
+        pn_bin_trio_6: TPanel;
+        pn_bin_trio_7: TPanel;
+        pn_bin_trio_8: TPanel;
+        pn_bin_trng_1: TPanel;
         pn_bin_superior: TPanel;
         pn_bin_crz_4: TPanel;
         pn_bin_crz_5: TPanel;
@@ -2460,6 +2517,10 @@ type
         pn_bin_qnt_3: TPanel;
         pn_bin_qnt_4: TPanel;
         pn_bin_qnt_5: TPanel;
+        pn_bin_trng_2: TPanel;
+        pn_bin_trng_3: TPanel;
+        pn_bin_trng_4: TPanel;
+        pn_bin_trio_1: TPanel;
         pn_bin_vrt_1: TPanel;
         pn_bin_vrt_2: TPanel;
         pn_bin_vrt_3: TPanel;
@@ -2470,11 +2531,25 @@ type
         pn_sup_bin_dgd_3: TPanel;
         pn_sup_bin_dgd_4: TPanel;
         pn_sup_bin_dgd_5: TPanel;
+        pn_sup_bin_direita1: TPanel;
+        pn_sup_bin_esquerda1: TPanel;
         pn_sup_bin_lsng_1: TPanel;
         pn_sup_bin_lsng_2: TPanel;
         pn_sup_bin_lsng_3: TPanel;
         pn_sup_bin_lsng_4: TPanel;
         pn_sup_bin_lsng_5: TPanel;
+        pn_sup_bin_qnt_10: TPanel;
+        pn_sup_bin_qnt_11: TPanel;
+        pn_sup_bin_qnt_12: TPanel;
+        pn_sup_bin_qnt_13: TPanel;
+        pn_sup_bin_qnt_14: TPanel;
+        pn_sup_bin_qnt_15: TPanel;
+        pn_sup_bin_qnt_16: TPanel;
+        pn_sup_bin_qnt_17: TPanel;
+        pn_sup_bin_qnt_6: TPanel;
+        pn_sup_bin_qnt_7: TPanel;
+        pn_sup_bin_qnt_8: TPanel;
+        pn_sup_bin_qnt_9: TPanel;
         pn_sup_bin_superior: TPanel;
         pn_sup_bin_crz_4: TPanel;
         pn_sup_bin_crz_5: TPanel;
@@ -2840,6 +2915,20 @@ type
         pn_sup_bin_vrt_3: TPanel;
         pn_sup_bin_vrt_4: TPanel;
         pn_sup_bin_dge_1: TPanel;
+        rd_bin_x2: TRadioGroup;
+        rd_bin_x1: TRadioGroup;
+        rd_bin_trio_2: TRadioGroup;
+        rd_bin_trio_3: TRadioGroup;
+        rd_bin_trio_4: TRadioGroup;
+        rd_bin_trio_5: TRadioGroup;
+        rd_bin_trio_6: TRadioGroup;
+        rd_bin_trio_7: TRadioGroup;
+        rd_bin_trio_8: TRadioGroup;
+        rd_bin_trng_1: TRadioGroup;
+        rd_bin_trng_2: TRadioGroup;
+        rd_bin_trng_3: TRadioGroup;
+        rd_bin_trng_4: TRadioGroup;
+        rd_bin_trio_1: TRadioGroup;
         rd_concursos_ja_inseridos_classificar: TRadioGroup;
         rd_gerar_aleatorio_opcoes: TRadioGroup;
         rdDeslocamento: TRadioGroup;
@@ -2909,15 +2998,15 @@ type
         rd_novos_repetidos_sim_nao1: TRadioGroup;
         rd_df_par_impar: TRadioGroup;
         rd_par_impar_sim_nao: TRadioGroup;
-        rd_par_impar_sim_nao1: TRadioGroup;
-        rd_par_impar_sim_nao10: TRadioGroup;
+        rd_novos_repetidos_por_concurso: TRadioGroup;
+        rd_primo_nao_primo_por_concurso: TRadioGroup;
         rd_par_impar_sim_nao11: TRadioGroup;
         rd_par_impar_sim_nao13: TRadioGroup;
         rd_par_impar_sim_nao14: TRadioGroup;
         rd_par_impar_sim_nao2: TRadioGroup;
-        rd_par_impar_sim_nao4: TRadioGroup;
+        rd_par_impar_por_concurso: TRadioGroup;
         rd_par_impar_sim_nao5: TRadioGroup;
-        rd_par_impar_sim_nao7: TRadioGroup;
+        rd_externo_interno_por_concurso: TRadioGroup;
         rd_par_impar_sim_nao8: TRadioGroup;
         rd_primo_nao_primo_sim_nao: TRadioGroup;
         rd_quinteto: TRadioGroup;
@@ -2937,23 +3026,33 @@ type
         sgrAlgarismo_na_dezena_consolidado: TStringGrid;
         sgrAlgarismo_na_dezena_por_concurso: TStringGrid;
         sgrExternoInternoConsolidado: TStringGrid;
-        sgrExternoInternoPorConcurso: TStringGrid;
+        sgr_externo_interno_por_concurso: TStringGrid;
         sgrFrequenciaTotalSair: TStringGrid;
         sgrFrequencia_Bolas_Sair_Nao_Sair: TStringGrid;
         sgrNovosRepetidosConsolidado: TStringGrid;
-        sgrNovosRepetidosPorConcurso: TStringGrid;
+        sgr_novos_repetidos_por_concurso: TStringGrid;
         sgrParImparConsolidado: TStringGrid;
-        sgrParImparPorConcurso: TStringGrid;
+        sgr_par_impar_por_concurso: TStringGrid;
         sgrPrimoNaoPrimoConsolidado: TStringGrid;
         sgr_bin_dgd_2: TStringGrid;
         sgr_bin_dgd_3: TStringGrid;
         sgr_bin_dgd_4: TStringGrid;
         sgr_bin_dgd_5: TStringGrid;
+        sgr_bin_x2: TStringGrid;
+        sgr_bin_x1: TStringGrid;
         sgr_bin_lsng_1: TStringGrid;
         sgr_bin_lsng_2: TStringGrid;
         sgr_bin_lsng_3: TStringGrid;
         sgr_bin_lsng_4: TStringGrid;
         sgr_bin_lsng_5: TStringGrid;
+        sgr_bin_trio_2: TStringGrid;
+        sgr_bin_trio_3: TStringGrid;
+        sgr_bin_trio_4: TStringGrid;
+        sgr_bin_trio_5: TStringGrid;
+        sgr_bin_trio_6: TStringGrid;
+        sgr_bin_trio_7: TStringGrid;
+        sgr_bin_trio_8: TStringGrid;
+        sgr_bin_trng_1: TStringGrid;
         sgr_bin_superior: TStringGrid;
         sgr_bin_crz_4: TStringGrid;
         sgr_bin_crz_5: TStringGrid;
@@ -2987,6 +3086,10 @@ type
         sgr_bin_qnt_3: TStringGrid;
         sgr_bin_qnt_4: TStringGrid;
         sgr_bin_qnt_5: TStringGrid;
+        sgr_bin_trng_2: TStringGrid;
+        sgr_bin_trng_3: TStringGrid;
+        sgr_bin_trng_4: TStringGrid;
+        sgr_bin_trio_1: TStringGrid;
         sgr_bin_vrt_1: TStringGrid;
         sgr_bin_vrt_2: TStringGrid;
         sgr_bin_vrt_3: TStringGrid;
@@ -3317,6 +3420,8 @@ type
         TabSheet106: TTabSheet;
         TabSheet107: TTabSheet;
         TabSheet112: TTabSheet;
+        tab_bin_x2: TTabSheet;
+        tab_bin_x1: TTabSheet;
         tab_concursos_ja_inseridos: TTabSheet;
         tab_rotacao_binaria: TTabSheet;
         tab_dif_menor_maior: TTabSheet;
@@ -3367,8 +3472,8 @@ type
         TabSheet140: TTabSheet;
         TabSheet141: TTabSheet;
         TabSheet142: TTabSheet;
-        TabSheet143: TTabSheet;
-        TabSheet144: TTabSheet;
+        tab_filtro_trio_por_quantidade: TTabSheet;
+        tab_trio_por_bolas: TTabSheet;
         TabSheet145: TTabSheet;
         TabSheet146: TTabSheet;
         TabSheet147: TTabSheet;
@@ -3910,6 +4015,7 @@ type
         procedure btn_configurar_conexaoClick(Sender: TObject);
         procedure btn_obter_resultado_do_webserviceClick(Sender: TObject);
         procedure btn_obter_status_cmp_de_bolas_na_mesma_colunaClick(Sender: TObject);
+        procedure btn_par_impar_por_concursoClick(Sender: TObject);
         procedure btn_rotacao_binaria_obter_concursosClick(Sender: TObject);
         procedure Button1Click(Sender: TObject);
         procedure btnInterromperClick(Sender: TObject);
@@ -4003,7 +4109,7 @@ type
         procedure sgrColunaB1_B8_B15_18BolasSelectCell(Sender: TObject; aCol, aRow: integer;
             var CanSelect: boolean);
         procedure AlterarMarcador(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
-        procedure sgrExternoInternoPorConcursoSelectCell(Sender: TObject; aCol, aRow: integer;
+        procedure sgr_externo_interno_por_concursoSelectCell(Sender: TObject; aCol, aRow: integer;
             var CanSelect: boolean);
         procedure sgr_concursosDrawCell(Sender: TObject; aCol, aRow: integer; aRect: TRect;
             aState: TGridDrawState);
@@ -4085,6 +4191,7 @@ type
         procedure Atualizar_Todos_os_Filtros;
         procedure configurar_banco_de_dados(var obj_conexao: TZConnection);
         procedure configurar_controle_binario;
+        procedure configurar_controle_estatistica_por_concurso;
         procedure configurar_opcoes_do_filtro;
         procedure configurar_todos_os_controles_de_filtros;
         procedure fGerar_id_classificadoStatus(AStatus: string);
@@ -4345,10 +4452,92 @@ begin
     CarregarControlesTG;
     Resetar_Antes_de_atualizar;
     configurar_controle_binario;
+    configurar_controle_estatistica_por_concurso;
 end;
 
 procedure TForm1.preencher_listbox_campos_disponiveis(sql_conexao: TZConnection);
 begin
+end;
+
+procedure TForm1.configurar_controle_estatistica_por_concurso;
+var
+    //p_filtro_info: PR_Filtro_Binario_Controle;
+    //filtro_info:   R_Filtro_Binario_Controle;
+
+    p_filtro_info : PR_Filtro_Info;
+    filtro_info: R_Filtro_Info;
+begin
+    mapa_filtro_estatistica_por_concurso := TMapa_Filtro_Info.Create;
+    mapa_filtro_estatistica_por_concurso.Clear;
+
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_par_impar';
+    filtro_info.sql_order_by := 'order by concurso desc';
+    filtro_info.sql_campos := 'concurso,par,impar';
+    filtro_info.sql_campos_id := '';
+    filtro_info.btn_controle := btn_par_impar_por_concurso;
+    filtro_info.btn_controle.Tag := ID_POR_CONCURSO_PAR_IMPAR;
+    filtro_info.sgr_controle := sgr_par_impar_por_concurso;
+    filtro_info.sgr_controle.Tag := ID_POR_CONCURSO_PAR_IMPAR;
+    // Não teremos os campos 'nao' e 'sim'.
+    filtro_info.sgr_controle_cabecalho := 'concurso,par,impar';
+    filtro_info.chk_controle := nil;
+    filtro_info.rd_controle := nil;
+    mapa_filtro_estatistica_por_concurso.Add(ID_POR_CONCURSO_PAR_IMPAR, filtro_info);
+    Dispose(p_filtro_info);
+
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_externo_interno';
+    filtro_info.sql_order_by := 'order by concurso desc';
+    filtro_info.sql_campos := 'concurso,externo,interno';
+    filtro_info.sql_campos_id := '';
+    filtro_info.btn_controle := btn_externo_interno_por_concurso;
+    filtro_info.btn_controle.Tag := ID_POR_CONCURSO_EXTERNO_INTERNO;
+    filtro_info.sgr_controle := sgr_externo_interno_por_concurso;
+    filtro_info.sgr_controle.Tag := ID_POR_CONCURSO_EXTERNO_INTERNO;
+    // Não teremos os campos 'nao' e 'sim'.
+    filtro_info.sgr_controle_cabecalho := 'concurso,externo,interno';
+    filtro_info.chk_controle := nil;
+    filtro_info.rd_controle := nil;
+    mapa_filtro_estatistica_por_concurso.Add(ID_POR_CONCURSO_EXTERNO_INTERNO, filtro_info);
+    Dispose(p_filtro_info);
+
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_primo_nao_primo';
+    filtro_info.sql_order_by := 'order by concurso desc';
+    filtro_info.sql_campos := 'concurso,primo,nao_primo';
+    filtro_info.sql_campos_id := '';
+    filtro_info.btn_controle := btn_primo_nao_primo_por_concurso;
+    filtro_info.btn_controle.Tag := ID_POR_CONCURSO_PRIMO_NAO_PRIMO;
+    filtro_info.sgr_controle := sgr_primo_nao_primo_por_concurso;
+    filtro_info.sgr_controle.Tag := ID_POR_CONCURSO_PRIMO_NAO_PRIMO;
+    // Não teremos os campos 'nao' e 'sim'.
+    filtro_info.sgr_controle_cabecalho := 'concurso,primo,nao_primo';
+    filtro_info.chk_controle := nil;
+    filtro_info.rd_controle := nil;
+    mapa_filtro_estatistica_por_concurso.Add(ID_POR_CONCURSO_PRIMO_NAO_PRIMO, filtro_info);
+    Dispose(p_filtro_info);
+
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_novos_repetidos';
+    filtro_info.sql_order_by := 'order by concurso desc';
+    filtro_info.sql_campos := 'concurso,novos,repetidos';
+    filtro_info.sql_campos_id := '';
+    filtro_info.btn_controle := btn_novos_repetidos_por_concurso;
+    filtro_info.btn_controle.Tag := ID_POR_CONCURSO_NOVOS_REPETIDOS;
+    filtro_info.sgr_controle := sgr_novos_repetidos_por_concurso;
+    filtro_info.sgr_controle.Tag := ID_POR_CONCURSO_NOVOS_REPETIDOS;
+    // Não teremos os campos 'nao' e 'sim'.
+    filtro_info.sgr_controle_cabecalho := 'concurso,novos,repetidos';
+    filtro_info.chk_controle := nil;
+    filtro_info.rd_controle := nil;
+    mapa_filtro_estatistica_por_concurso.Add(ID_POR_CONCURSO_NOVOS_REPETIDOS, filtro_info);
+    Dispose(p_filtro_info);
+
 end;
 
 {
@@ -4391,7 +4580,6 @@ begin
     sgr_bin_qnt_3.Tag := -1;
     sgr_bin_qnt_4.Tag := -1;
     sgr_bin_qnt_5.Tag := -1;
-
 
     mapa_filtro_binario_info := T_mapa_filtro_binario.Create;
     mapa_filtro_binario_info.Clear;
@@ -5193,7 +5381,7 @@ begin
     filtro_info := p_filtro_info^;
     filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_lsng_2';
     filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
-    filtro_info.sql_campos := 'bin_id,bin_qt,bin_4,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
     filtro_info.sql_campo_id := 'lotofacil_id.bin_lsng_2_id';
     filtro_info.btn_controle := btn_bin_lsng_2;
     filtro_info.btn_controle.Tag := ID_BIN_lsng_2;
@@ -5359,6 +5547,275 @@ begin
     filtro_info.rd_controle := rd_bin_qnt_5;
     filtro_info.rd_controle.Tag := ID_BIN_QNT_5;
     mapa_filtro_binario_info.Add(ID_BIN_QNT_5, filtro_info);
+
+    // ============================ trng_1 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trng_1';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trng_1_id';
+    filtro_info.btn_controle := btn_bin_trng_1;
+    filtro_info.btn_controle.Tag := ID_BIN_trng_1;
+    filtro_info.sgr_controle := sgr_bin_trng_1;
+    filtro_info.sgr_controle.Tag := ID_BIN_trng_1;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trng_1;
+    filtro_info.chk_controle.Tag := ID_BIN_trng_1;
+    filtro_info.rd_controle := rd_bin_trng_1;
+    filtro_info.rd_controle.Tag := ID_BIN_trng_1;
+    mapa_filtro_binario_info.Add(ID_BIN_trng_1, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trng_2 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trng_2';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_3,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trng_2_id';
+    filtro_info.btn_controle := btn_bin_trng_2;
+    filtro_info.btn_controle.Tag := ID_BIN_trng_2;
+    filtro_info.sgr_controle := sgr_bin_trng_2;
+    filtro_info.sgr_controle.Tag := ID_BIN_trng_2;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_3,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trng_2;
+    filtro_info.chk_controle.Tag := ID_BIN_trng_2;
+    filtro_info.rd_controle := rd_bin_trng_2;
+    filtro_info.rd_controle.Tag := ID_BIN_trng_2;
+    mapa_filtro_binario_info.Add(ID_BIN_trng_2, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trng_3 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trng_3';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_8,bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trng_3_id';
+    filtro_info.btn_controle := btn_bin_trng_3;
+    filtro_info.btn_controle.Tag := ID_BIN_trng_3;
+    filtro_info.sgr_controle := sgr_bin_trng_3;
+    filtro_info.sgr_controle.Tag := ID_BIN_trng_3;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_8,bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trng_3;
+    filtro_info.chk_controle.Tag := ID_BIN_trng_3;
+    filtro_info.rd_controle := rd_bin_trng_3;
+    filtro_info.rd_controle.Tag := ID_BIN_trng_3;
+    mapa_filtro_binario_info.Add(ID_BIN_trng_3, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trng_4 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trng_4';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_3,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trng_4_id';
+    filtro_info.btn_controle := btn_bin_trng_4;
+    filtro_info.btn_controle.Tag := ID_BIN_trng_4;
+    filtro_info.sgr_controle := sgr_bin_trng_4;
+    filtro_info.sgr_controle.Tag := ID_BIN_trng_4;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_3,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trng_4;
+    filtro_info.chk_controle.Tag := ID_BIN_trng_4;
+    filtro_info.rd_controle := rd_bin_trng_4;
+    filtro_info.rd_controle.Tag := ID_BIN_trng_4;
+    mapa_filtro_binario_info.Add(ID_BIN_trng_4, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_1 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_1';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_1_id';
+    filtro_info.btn_controle := btn_bin_trio_1;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_1;
+    filtro_info.sgr_controle := sgr_bin_trio_1;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_1;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_1;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_1;
+    filtro_info.rd_controle := rd_bin_trio_1;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_1;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_1, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_2 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_2';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_2_id';
+    filtro_info.btn_controle := btn_bin_trio_2;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_2;
+    filtro_info.sgr_controle := sgr_bin_trio_2;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_2;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_2;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_2;
+    filtro_info.rd_controle := rd_bin_trio_2;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_2;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_2, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_3 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_3';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_3_id';
+    filtro_info.btn_controle := btn_bin_trio_3;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_3;
+    filtro_info.sgr_controle := sgr_bin_trio_3;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_3;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_3;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_3;
+    filtro_info.rd_controle := rd_bin_trio_3;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_3;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_3, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_4 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_4';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_4_id';
+    filtro_info.btn_controle := btn_bin_trio_4;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_4;
+    filtro_info.sgr_controle := sgr_bin_trio_4;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_4;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_4;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_4;
+    filtro_info.rd_controle := rd_bin_trio_4;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_4;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_4, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_5 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_5';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_5_id';
+    filtro_info.btn_controle := btn_bin_trio_5;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_5;
+    filtro_info.sgr_controle := sgr_bin_trio_5;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_5;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_5;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_5;
+    filtro_info.rd_controle := rd_bin_trio_5;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_5;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_5, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_6 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_6';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_6_id';
+    filtro_info.btn_controle := btn_bin_trio_6;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_6;
+    filtro_info.sgr_controle := sgr_bin_trio_6;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_6;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_6;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_6;
+    filtro_info.rd_controle := rd_bin_trio_6;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_6;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_6, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_7 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_7';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_7_id';
+    filtro_info.btn_controle := btn_bin_trio_7;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_7;
+    filtro_info.sgr_controle := sgr_bin_trio_7;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_7;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_7;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_7;
+    filtro_info.rd_controle := rd_bin_trio_7;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_7;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_7, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ trio_8 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_trio_8';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_3,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_trio_8_id';
+    filtro_info.btn_controle := btn_bin_trio_8;
+    filtro_info.btn_controle.Tag := ID_BIN_trio_8;
+    filtro_info.sgr_controle := sgr_bin_trio_8;
+    filtro_info.sgr_controle.Tag := ID_BIN_trio_8;
+    filtro_info.sgr_controle_cabecalho := 'bin_id,bin_qt,bin_3,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_trio_8;
+    filtro_info.chk_controle.Tag := ID_BIN_trio_8;
+    filtro_info.rd_controle := rd_bin_trio_8;
+    filtro_info.rd_controle.Tag := ID_BIN_trio_8;
+    mapa_filtro_binario_info.Add(ID_BIN_trio_8, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ x1 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_x1';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_8' +
+        ',bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_sup_id';
+    filtro_info.btn_controle := btn_bin_x1;
+    filtro_info.btn_controle.Tag := ID_BIN_x1;
+    filtro_info.sgr_controle := sgr_bin_x1;
+    filtro_info.sgr_controle.Tag := ID_BIN_x1;
+    filtro_info.sgr_controle_cabecalho :=
+        'bin_id,bin_qt,bin_8,bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_x1;
+    filtro_info.chk_controle.Tag := ID_BIN_x1;
+    filtro_info.rd_controle := rd_bin_x1;
+    filtro_info.rd_controle.Tag := ID_BIN_x1;
+    mapa_filtro_binario_info.Add(ID_BIN_x1, filtro_info);
+    Dispose(p_filtro_info);
+
+    // ============================ x2 ==========================
+    New(p_filtro_info);
+    filtro_info := p_filtro_info^;
+    filtro_info.sql := 'Select * from lotofacil.v_lotofacil_resultado_binario_x2';
+    filtro_info.sql_order_by := 'order by qt_vz desc, bin_qt desc';
+    filtro_info.sql_campos := 'bin_id,bin_qt,bin_8' +
+        ',bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz';
+    filtro_info.sql_campo_id := 'lotofacil_id.bin_sup_id';
+    filtro_info.btn_controle := btn_bin_x2;
+    filtro_info.btn_controle.Tag := ID_BIN_x2;
+    filtro_info.sgr_controle := sgr_bin_x2;
+    filtro_info.sgr_controle.Tag := ID_BIN_x2;
+    filtro_info.sgr_controle_cabecalho :=
+        'bin_id,bin_qt,bin_8,bin_7,bin_6,bin_5,bin_4,bin_3,bin_2,bin_1,bin_0,qt_vz,nao,sim';
+    filtro_info.chk_controle := chk_bin_x2;
+    filtro_info.chk_controle.Tag := ID_BIN_x2;
+    filtro_info.rd_controle := rd_bin_x2;
+    filtro_info.rd_controle.Tag := ID_BIN_x2;
+    mapa_filtro_binario_info.Add(ID_BIN_x2, filtro_info);
     Dispose(p_filtro_info);
 
 end;
@@ -5638,8 +6095,6 @@ begin
 
     sgr_b15_qt_vz.Tag := ID_b15_QT_VZ;
     sgr_filtro_controle[ID_b15_QT_VZ] := sgr_b15_qt_vz;
-
-
 
     //====================== B1_QT_VZ ===========================
     sgr_filtro_controle_info[ID_CMP_B1_QT_VZ].sgr_controle_cabecalho := 'b_1,cmp_p_id,qt_vz,nao,sim';
@@ -6071,7 +6526,6 @@ begin
     sgr_filtro_controle_info[ID_DF_PAR_IMPAR].rd_controle := rd_df_par_impar;
     sgr_filtro_controle_info[ID_DF_PAR_IMPAR].sgr_controle.Tag := ID_DF_PAR_IMPAR;
     sgr_filtro_controle_info[ID_DF_PAR_IMPAR].rd_controle.Tag := ID_DF_PAR_IMPAR;
-
 
     //========================= DIFERENÇA MENOR X MAIOR ==========================
     // Alguns campos não tem um identificador exclusivo pra cada combinação
@@ -11028,8 +11482,18 @@ end;
 
 procedure TForm1.btn_obter_status_cmp_de_bolas_na_mesma_colunaClick(Sender: TObject);
 begin
-
     exibir_status_da_comparacao_de_bolas_na_mesma_coluna(sql_conexao, sgr_cmp_de_bolas_na_mesma_coluna_status);
+end;
+
+procedure TForm1.btn_par_impar_por_concursoClick(Sender: TObject);
+var
+    btn_controle: TButton;
+    tag_id: integer;
+begin
+    btn_controle := TButton(Sender);
+    tag_id := btn_controle.Tag;
+    //atualizar_filtro_controle_binario(tag_id, sql_conexao);
+    atualizar_estatistica_por_concurso(tag_id, sql_conexao);
 end;
 
 procedure TForm1.btn_rotacao_binaria_obter_concursosClick(Sender: TObject);
@@ -16094,7 +16558,7 @@ begin
     AlterarMarcador(Sender, aCol, aRow, CanSelect);
 end;
 
-procedure TForm1.sgrExternoInternoPorConcursoSelectCell(Sender: TObject; aCol, aRow: integer;
+procedure TForm1.sgr_externo_interno_por_concursoSelectCell(Sender: TObject; aCol, aRow: integer;
     var CanSelect: boolean);
 begin
     AlterarMarcador(Sender, aCol, aRow, CanSelect);

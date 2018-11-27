@@ -2350,6 +2350,9 @@ begin
          end;
       end;
     end;
+    pt_buffer^.qt_de_bolas_comuns_b1_a_b15:= qt_de_bolas_comuns_na_mesma_coluna;
+    pt_buffer^.qt_de_bolas_descendo_b1_a_b15:=qt_de_bolas_descendo_na_mesma_coluna;
+    pt_buffer^.qt_de_bolas_subindo_b1_a_b15:=qt_de_bolas_subindo_na_mesma_coluna;
 
     // Validar dados.
     //pt_buffer^.cmp_b_id:= Obter_id_de_comparacao_de_bolas_na_mesma_coluna(qt_de_bolas_comuns_na_mesma_coluna,
@@ -2487,6 +2490,10 @@ begin
        str_sql_inicio := str_sql_inicio + ', cmp_b' + IntToStr(uA);
      end;
 
+     str_sql_inicio := str_sql_inicio + ', qt_bolas_subindo_na_mesma_coluna';
+     str_sql_inicio := str_sql_inicio + ', qt_bolas_descendo_na_mesma_coluna';
+     str_sql_inicio := str_sql_inicio + ', qt_bolas_iguais_na_mesma_coluna';
+
      str_sql_inicio := str_sql_inicio + ',concurso,qt_alt_seq)values';
 
      qt_max_de_bytes_ja_alocados := 0;
@@ -2512,6 +2519,9 @@ begin
          for uB := 1 to 15 do begin
              str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.bolas[uB]) + ',';
          end;
+         str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_subindo_b1_a_b15) + ',';
+         str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_descendo_b1_a_b15) + ',';
+         str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_comuns_b1_a_b15) + ',';
 
          str_sql_a_inserir := str_sql_a_inserir + IntToStr(fConcurso) + ',';
          str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.id_sequencial) + ')';
@@ -2540,9 +2550,9 @@ begin
             // quando usarmos strlcat
             qt_max_de_bytes_ja_alocados:= tamanho_do_string + 1;
 
-            Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
+            //Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
             buffer_texto:= GetMem(qt_max_de_bytes_ja_alocados);
-            Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
+            //Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
          end;
 
          // Garantir que o string termino em nulo.

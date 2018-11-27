@@ -50,6 +50,22 @@ type
     end;
     PR_Filtro_Binario_Controle = ^R_Filtro_Binario_Controle;
 
+type
+        R_Filtro_Info = record
+            sql: string;
+            sql_campos: string;
+            sql_order_by: string;
+            sql_campos_id: string;
+            sgr_controle: TStringGrid;
+            sgr_controle_cabecalho: string;
+            btn_controle: TButton;
+            chk_controle: TCheckGroup;
+            rd_controle: TRadioGroup;
+        end;
+        PR_Filtro_Info = ^R_Filtro_Info;
+//type
+        TLista_Filtro_Info = specialize TFPGList<PR_Filtro_Info>;
+        TMapa_Filtro_Info = specialize TFPGMap<Integer, R_Filtro_Info>;
 
 type
     T_lista_filtro_binario = specialize TFPGList<PR_Filtro_Binario_Controle>;
@@ -83,6 +99,11 @@ var
     lista_filtro_binario:     T_lista_filtro_binario;
     mapa_filtro_binario_info: T_mapa_filtro_binario;
 
+    lista_filtro_info: TLista_Filtro_Info;
+    mapa_filtro_info: TMapa_Filtro_Info;
+
+    lista_filtro_estatistica_por_concurso: TLista_Filtro_Info;
+    mapa_filtro_estatistica_por_concurso: TMapa_Filtro_Info;
 
 implementation
 

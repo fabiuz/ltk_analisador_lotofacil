@@ -9,7 +9,8 @@ interface
 
 uses
     Classes, SysUtils, Grids, ZConnection, ZDataset, lotofacil_var_global, Controls,
-    lotofacil_sgr_controle, strutils, ExtCtrls;
+    //lotofacil_sgr_controle,
+    strutils, ExtCtrls;
 
 procedure carregar_filtro_sgr_controle(sgr_controle: TStringGrid; sql_conexao: TZConnection);
 procedure marcar_sim_nao_pra_coluna(sgr_controle: TStringGrid; sim_ou_nao: string);
@@ -21,6 +22,11 @@ procedure Filtro_Excluir(filtro_data_hora_brasil: ansistring; sql_conexao: TZCon
 
 procedure filtro_chk_controle_obter_opcoes_selecionadas(chk_controle: TCheckGroup);
 procedure atualizar_filtro_controle_binario(controle_tag_id: integer; sql_conexao: TZConnection);
+
+function configurar_filtro_estatistica_por_concurso(sgr_controle: TStringGrid): boolean;
+procedure atualizar_estatistica_por_concurso(controle_tag_id: Integer; sql_conexao: TZConnection);
+procedure obter_estatistica_por_concurso(sgr_controle: TStringGrid; sql_conexao: TZConnection);
+
 procedure obter_filtro_binario(sgr_controle: TStringGrid; sql_conexao: TZConnection);
 function configurar_filtro_binario_sgr_controle(sgr_controle: TStringGrid): boolean;
 procedure filtro_binario_rd_controle_alterou(rd_controle: TRadioGroup);
@@ -159,6 +165,12 @@ begin
     //configurar_filtro_binario_sgr_controle(sgr_controle);
 end;
 
+procedure atualizar_filtro_por_concurso(controle_tag_id: Integer;
+  sql_conexao: TZConnection);
+begin
+
+end;
+
 {
  Obtém as opções selecionadas pelo usuário referente às bolas por combinação
  que deve ser excluída dos filtros.
@@ -291,6 +303,182 @@ begin
     sgr_controle.AutoSizeColumns;
 
     Exit(True);
+end;
+
+{
+    ************************** ESTATÍSTICA POR CONCURSO *************************
+
+}
+function configurar_filtro_estatistica_por_concurso(sgr_controle: TStringGrid): boolean;
+var
+    ultima_coluna, uA: integer;
+    coluna_atual:    TGridColumn;
+    cabecalho_do_controle: array of string;
+    indice_tag:      integer;
+    //sgr_controle_info: R_Filtro_Controle;
+    controle_tag_id: integer;
+    filtro_info:     R_Filtro_Info;
+begin
+    controle_tag_id := sgr_controle.Tag;
+    if mapa_filtro_estatistica_por_concurso.IndexOf(controle_tag_id) = -1 then
+    begin
+        Exit(False);
+    end;
+    filtro_info := mapa_filtro_estatistica_por_concurso.KeyData[controle_tag_id];
+
+    // Vamos colocar o string todo em maiúsculas antes de retornar o arranjo.
+    cabecalho_do_controle := filtro_info.sgr_controle_cabecalho.Split(',');
+    ultima_coluna := High(cabecalho_do_controle);
+
+    sgr_controle.Columns.Clear;
+    for uA := 0 to ultima_coluna do
+    begin
+        coluna_atual := sgr_controle.Columns.Add;
+        coluna_atual.Title.Caption := cabecalho_do_controle[uA];
+        coluna_atual.Title.Alignment := taCenter;
+        coluna_atual.Alignment := taCenter;
+    end;
+
+    // Na estatística por concurso, não temos id.
+    // Coluna 0 contém o id, deve está oculta.
+    //sgr_controle.columns[0].Visible := False;
+
+    // As duas últimas colunas 'SIM', 'NAO'
+    // Nos controles de estatísticas por concurso, não haverá as colunas 'nao' e 'sim'.
+    //sgr_controle.Columns[ultima_coluna].ButtonStyle := cbsCheckboxColumn;
+    //sgr_controle.Columns[ultima_coluna - 1].ButtonStyle := cbsCheckboxColumn;
+
+    sgr_controle.RowCount := 1;
+    sgr_controle.FixedRows := 1;
+    sgr_controle.AutoSizeColumns;
+
+    Exit(True);
+end;
+
+
+procedure atualizar_estatistica_por_concurso(controle_tag_id: Integer;
+  sql_conexao: TZConnection);
+var
+    chk_controle: TCheckGroup;
+    //filtro_info: R_Filtro_Binario_Controle;
+    filtro_info: R_Filtro_Info;
+    bolas_a_excluir: string;
+    uA: integer;
+    sgr_controle: TStringGrid;
+begin
+    if mapa_filtro_estatistica_por_concurso.IndexOf(controle_tag_id) = -1 then
+    begin
+        Exit;
+    end;
+
+    // Obter informações dos controles que iremos utilizar.
+    filtro_info := mapa_filtro_estatistica_por_concurso.KeyData[controle_tag_id];
+    //chk_controle := filtro_info.chk_controle;
+    //filtro_chk_controle_obter_opcoes_selecionadas(chk_controle);
+
+    // Popula o controle com os filtros.
+    sgr_controle := filtro_info.sgr_controle;
+    //obter_filtro_binario(sgr_controle, sql_conexao);
+    obter_estatistica_por_concurso(sgr_controle, sql_conexao);
+
+    // Configura o controle, antes de atualizar.
+    //sgr_controle := filtro_info.sgr_controle;
+    //configurar_filtro_binario_sgr_controle(sgr_controle);
+end;
+
+procedure obter_estatistica_por_concurso(sgr_controle: TStringGrid; sql_conexao: TZConnection);
+var
+    ultima_coluna: integer;
+    sql_query:     TZQuery;
+    sql_campos:    array of string;
+    qt_registros, linha_sgr_controle, uA: integer;
+    valor_do_campo_atual: string;
+    //sgr_controle_info: R_Filtro_Controle;
+    controle_tag_id: integer;
+    filtro_info:   R_Filtro_Info;
+begin
+    // Verifica se a tag existe no mapa de filtros.
+    controle_tag_id := sgr_controle.Tag;
+    if mapa_filtro_estatistica_por_concurso.IndexOf(controle_tag_id) = -1 then
+    begin
+        Exit;
+    end;
+
+    // Configura o controle.
+    if configurar_filtro_estatistica_por_concurso(sgr_controle) = False then
+    begin
+        Exit;
+    end;
+
+    filtro_info := mapa_filtro_estatistica_por_concurso.KeyData[controle_tag_id];
+    sql_campos := filtro_info.sql_campos.Split(',');
+
+    ultima_coluna := High(sql_campos);
+    try
+        sql_query := TZQuery.Create(nil);
+        sql_query.Connection := sql_conexao;
+
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add(filtro_info.sql);
+        sql_query.Sql.Add(filtro_info.sql_order_by);
+
+        sql_query.Open;
+
+        // Vamos do primeiro ao último registro pra descobrir a quantidade de registros.
+        sql_query.First;
+        sql_query.Last;
+        qt_registros := sql_query.RecordCount;
+
+        // Se não há registros, apagar o controle e exibir mensagem.
+        if qt_registros <= 0 then
+        begin
+            sgr_controle.Columns.Clear;
+            sgr_controle.Columns.Add;
+            sgr_controle.Columns[0].Alignment := tacenter;
+            sgr_controle.FixedRows := 0;
+            sgr_controle.cells[0, 0] := 'Erro, não há filtros';
+            sgr_controle.AutoSizeColumns;
+            Exit;
+        end;
+
+        // Será 1 linha a mais por causa do cabeçalho na linha 0.
+        sgr_controle.RowCount := qt_registros + 1;
+        linha_sgr_controle := 1;
+        sgr_controle.BeginUpdate;
+        // Iremos percorre todos os registros e iremos inserir no controle
+        sql_query.First;
+        while sql_query.EOF = False do
+        begin
+            for uA := 0 to ultima_coluna do
+            begin
+                valor_do_campo_atual := sql_query.FieldByName(sql_campos[uA]).AsString;
+                sgr_controle.Cells[uA, linha_sgr_controle] := valor_do_campo_atual;
+            end;
+            // Observe no loop for acima, que somente populamos as colunas que vem dados
+            // da tabela, há duas outras colunas 'SIM' e 'NAO' que não está incluída no loop
+            // for acima, devemos definir o valor de ambas pra zero.
+            // Na guia por concurso não haverá os campos 'nao' e 'sim'.
+            //sgr_controle.Cells[ultima_coluna + 1, linha_sgr_controle] := '0';
+            //sgr_controle.Cells[ultima_coluna + 2, linha_sgr_controle] := '0';
+
+            sql_query.Next;
+            Inc(linha_sgr_controle);
+        end;
+        sgr_controle.EndUpdate(True);
+        sql_query.Close;
+        FreeAndNil(sql_query);
+    except
+        On exc: Exception do
+        begin
+            sql_query.Close;
+            FreeAndNil(sql_query);
+            MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbOK], 0);
+            Exit;
+        end;
+    end;
+
+    FreeAndNil(sql_query);
+    sgr_controle.AutoSizeColumns;
 end;
 
 {
