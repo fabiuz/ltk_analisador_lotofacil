@@ -22,29 +22,27 @@ Gere filtros baseados nas estatísticas escolhidas.
 
 Atualize a tabela de resultados com um único clique.
 
-![Imagens/Novos_Repetidos.png](Imagens/Novos_Repetidos.png)
+![Imagens/Novos_Repetidos.png](Imagens/novos_repetidos.png)
 
-![Imagens/Par_Impar.png](Imagens/Par_Impar.png)
+![Imagens/par_impar_por_quantidade.png](Imagens/par_impar_por_quantidade.png)
 
-![Imagens/Primo_Nao_Primo.png](Imagens/Primo_Nao_Primo.png)
+![Imagens/par_impar_por_bolas.png](Imagens/par_impar_por_bolas.png)
 
-![Imagens/Externo_Interno.png](Imagens/Externo_Interno.png)
+![Imagens/primo_nao_primo_por_bolas.png](Imagens/primo_nao_primo_por_bolas.png)
 
-![Imagens/Bolas_Nas_Colunas.png](Imagens/Bolas_Nas_Colunas.png)
+![Imagens/horizontal_por_quantidade.png](Imagens/horizontal_por_quantidade.png)
 
-![Imagens/Bolas_na_mesma_coluna.png](Imagens/Bolas_na_mesma_coluna.png)
-
-![Imagens/Algarismo_na_casa_das_dezenas.png](Imagens/algarismo_na_casa_das_dezenas.png)
-
-![Imagens/Diferenca_entre_bolas.png](Imagens/diferenca_entre_bolas.png)
+![Imagens/horizontal_por_bolas.png](Imagens/horizontal_por_bolas.png)
 
 ![Imagens/frequencia.png](Imagens/frequencia.png)
 
-![Imagens/Bolas_Na_Posicao_do_Sorteio.png](Imagens/Bolas_Na_Posicao_do_Sorteio.png)
+![Imagens/concurso_insercao_manual.png](Imagens/concurso_insercao_manual.png)
 
-![Imagens/gerar_filtros.png](Imagens/gerar_filtros.png)
+![Imagens/frequencia_2.png](Imagens/frequencia_2.png)
 
-![Imagens/analise_b1_a_b15.png](Imagens/analise_b1_a_b15.png)
+![Imagens/jogos_filtrados.png](Imagens/jogos_filtrados.png)
+
+![Imagens/concurso_insercao_automatica.png](Imagens/concurso_insercao_automatica.png)
 
 
 
