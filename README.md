@@ -41,7 +41,7 @@ pra o programa 'Analisador Lotofacil', haverá tags que identifica a qual banco 
 Haverá dentro da pasta, 8 arquivos de nome: 'lotofacil_aa', 'lotofacil_ab', 'lotofacil_ac', 'lotofacil_ad', 'lotofacil_ae',
 'lotofacil_af', 'lotofacil_ag', 'lotofacil_ah' e 'lotofacil_ai'.
 
-O que foi feito, foi dividir um arquivo grande 'lotofacil_2018_12_05.7z' de 2.1 GiB (Gibibyte) em 4 arquivos com no máximo 250 MiB (Megabibyte), pra facilitar o processo de dowload.
+O que foi feito, foi dividir um arquivo grande 'lotofacil_2018_12_05.7z' de 2.1 GiB (Gibibyte) em 9 arquivos com no máximo 250 MiB (Megabibyte), pra facilitar o processo de dowload.
 
 Eu estou utilizando linux, e utilizei o comando 'split -b=250m lotofacil_2018_12_05.7z' pra separar os arquivos
 em partes de 250MiB.
