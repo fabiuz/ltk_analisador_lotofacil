@@ -1159,7 +1159,6 @@ type
         btn_obter_novos_filtros: TButton;
         btnSelecionar: TButton;
         btnAleatorio_Verificar_Acerto: TButton;
-        btnAtualizar_Combinacao_Complementar: TButton;
         btnAtualizarSomaFrequencia: TButton;
         btn_configurar_conexao: TButton;
         btn_obter_concursos_bolas_na_mesma_coluna: TButton;
@@ -1238,7 +1237,6 @@ type
         chk_bin_dgd_1: TCheckGroup;
         chk_bin_hrz_1: TCheckGroup;
         chkSomaFrequenciaCombinacoes: TCheckGroup;
-        chkComplementar_Bolas_por_combinacao: TCheckGroup;
         chk_bin_qnt_2: TCheckGroup;
         chk_bin_qnt_3: TCheckGroup;
         chk_bin_qnt_4: TCheckGroup;
@@ -3418,7 +3416,7 @@ type
         TabSheet102: TTabSheet;
         TabSheet103: TTabSheet;
         TabSheet106: TTabSheet;
-        TabSheet107: TTabSheet;
+        tab_gerador_aleatorio: TTabSheet;
         TabSheet112: TTabSheet;
         tab_bin_x2: TTabSheet;
         tab_bin_x1: TTabSheet;
@@ -3922,7 +3920,6 @@ type
         tab_b1_a_b15: TTabSheet;
         TabSheet15: TTabSheet;
         TabSheet2: TTabSheet;
-        TabSheet3: TTabSheet;
         tabBanco_de_dados: TTabSheet;
         TabSheet5: TTabSheet;
         tabExternoInterno: TTabSheet;
@@ -3975,7 +3972,7 @@ type
         //procedure btnAtualizarNovosRepetidosAntigoClick(Sender: TObject);
         procedure btnAtualizarSomaFrequenciaClick(Sender: TObject);
         procedure btnAtualizarTabelaResultadosClick(Sender: TObject);
-        procedure btnAtualizar_Combinacao_ComplementarClick(Sender: TObject);
+        //procedure btnAtualizar_Combinacao_ComplementarClick(Sender: TObject);
         procedure btnFiltroExcluirTodosClick(Sender: TObject);
         procedure btnFiltroGerarClick(Sender: TObject);
         procedure btnFrequenciaAtualizarClick(Sender: TObject);
@@ -4292,7 +4289,7 @@ type
         function GerarSqlPrimo: string;
         function Gerar_Combinacao_Complementar(lotofacil_bolas: array of integer;
             bolas_por_combinacao: integer; out lotofacil_aleatorio: TAleatorio_Resultado): boolean;
-        function Gerar_Complementar_15_Numeros: boolean;
+        //function Gerar_Complementar_15_Numeros: boolean;
         function Gerar_Lotofacil_Aleatorio(var lotofacil_aleatorio: TAleatorio_Resultado;
             bolas_por_combinacao: integer; qt_de_combinacoes: integer): boolean;
         function Gerar_Lotofacil_Aleatorio_Novo(var lotofacil_aleatorio: TAleatorio_Resultado;
@@ -9305,7 +9302,12 @@ begin
         begin
             campos_order_by := campos_order_by + ',';
         end;
+        // A maioria dos campos é da tabela 'lotofacil.lotofacil_id_classificado',
+        // alguns outros campos, é de outra tabela.
         if AnsiStartsStr('novos_repetidos', lst_campos_ordenados.Items[uA]) then begin
+            campos_order_by := campos_order_by + 'lotofacil_novos_repetidos.' +
+            lst_campos_ordenados.Items[uA];
+        end else if AnsiStartsStr('sm_frq_grp_', lst_campos_ordenados.Items[uA]) then begin
             campos_order_by := campos_order_by + 'lotofacil_novos_repetidos.' +
             lst_campos_ordenados.Items[uA];
         end else begin
@@ -9336,8 +9338,7 @@ begin
 end;
 
 {
- Gera a rotação binária relativo ao número do concurso escolhido
- pelo usuário.
+ Gera a rotação binária relativa ao número do concurso escolhido pelo usuário.
 }
 procedure TForm1.btn_gerar_rotacao_binariaClick(Sender: TObject);
 var
@@ -11822,6 +11823,17 @@ begin
     lst_campos_disponiveis.Items.Add('novos_repetidos_id desc');
     lst_campos_disponiveis.Items.Add('novos_repetidos_id_alternado asc');
     lst_campos_disponiveis.Items.Add('novos_repetidos_id_alternado desc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_1 asc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_1 desc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_2 asc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_2 desc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_3 asc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_3 desc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_4 asc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_4 desc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_5 asc');
+    lst_campos_disponiveis.Items.Add('sm_frq_grp_5 desc');
+
 end;
 
 {
@@ -13879,7 +13891,6 @@ begin
         sql_bolas_nao_sair := '(' + sql_bolas_nao_sair + ' = 0)';
     end;
 
-
     // ==================== BOLAS AINDA NAO SAIU =========================
     sql_bolas_ainda_nao_saiu := '';
     if lista_ainda_nao_saiu.Count <> 0 then
@@ -15728,23 +15739,29 @@ begin
 
 end;
 
-procedure TForm1.btnAtualizar_Combinacao_ComplementarClick(Sender: TObject);
-var
-    uA: integer;
-begin
-
-    if Gerar_Complementar_15_Numeros = False then
-    begin
-        MessageDlg('Erro', 'Erro: ' + strErro, mtError, [mbOK], 0);
-        exit;
-    end
-    else
-    begin
-        MessageDlg('', 'Combinação complementares com 15 bolas gerado com sucesso.',
-            mtError, [mbOK], 0);
-    end;
-
-end;
+//procedure TForm1.btnAtualizar_Combinacao_ComplementarClick(Sender: TObject);
+//var
+//    uA: integer;
+//begin
+//   // TODO: Esta procedure futuramente será excluída, não iremos utilizar mais
+//  // combinações complementares.
+//  //MessageDlg('', 'Erro, Combinações complementares não serão mais utilizadas' +
+//  //               'será excluída na próxima versão', mtError, [mbok], 0);
+//  //Exit;
+//
+//
+//    //if Gerar_Complementar_15_Numeros = False then
+//    //begin
+//    //    MessageDlg('Erro', 'Erro: ' + strErro, mtError, [mbOK], 0);
+//    //    exit;
+//    //end
+//    //else
+//    //begin
+//    //    MessageDlg('', 'Combinação complementares com 15 bolas gerado com sucesso.',
+//    //        mtError, [mbOK], 0);
+//    //end;
+//
+//end;
 
 {
  Ao clicar no botão btnFiltroExcluirTodos, exibe mensagem pra o usuário
@@ -16041,314 +16058,315 @@ begin
 end;
 
 {
+ TODO: Nao_usado_mais: Gerar_complementar_15_numeros.
  Gerar complementar 15 números.
 }
 {TODO: Nõa existe mais o complementar de uma combinação.
 }
-function TForm1.Gerar_Complementar_15_Numeros: boolean;
-const
-    LOTOFACIL_COMBINACOES = 3268760;
-var
-    b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, lotofacil_ltf_id: integer;
-    lista_id_sequencial: TStringList;
-
-    lotofacil_id:    array of array of integer;
-    lotofacil_bolas: array[0..25] of integer;
-    lotofacil_aleatorio: TAleatorio_Resultado;
-
-    // Na tabela, há um campo 'ltf_id', que é o identificador lotofacil da
-    // combinação.
-    ltf_id_1, ltf_id_2, ltf_id_3, ltf_id_4, id_lotofacil, uA, uB, qt_itens: integer;
-    indice_lista, id_sequencial: longint;
-
-    lista_sql:    TStringList;
-    sql_registro: TSQLQuery;
-begin
-
-    // Pra cada id, haverá 3 combinações complementares,
-    // então, iremos gerar ids sequencialmente pra
-    // 4 números, a combinação principal e as combinações
-    // complementares, pra isso devemos armazenar na lista
-    // somente o primeiro id das combinações principais.
-    // Pois, esta os números desta lista, serão sorteados aleatoriamente.
-    // Nos iremos percorrer todas as combinações possíveis começando
-    // do menor identificador pra esta combinação, então pra evitar
-    // que as combinações estejam sequencialmente, iremos
-    // sortear os números desta lista.
-    lista_id_sequencial := TStringList.Create;
-    uA := 1;
-    while uA <= 13075041 do
-    begin
-        lista_id_sequencial.Add(IntToStr(uA));
-        Inc(uA, 4);
-    end;
-
-    SetLength(lotofacil_id, 3268761, 2);
-    SetLength(lotofacil_aleatorio, 3, 26);
-
-    lista_sql := TStringList.Create;
-    lista_sql.Clear;
-
-    // A cada iteração do loop, esta variável terá o valor incrementado.
-    // E também serve pra comparar este valor com o valor retornado
-    // pela função 'identificador_grupo_15_bolas'.
-    id_lotofacil := 0;
-    for b1 := 1 to 25 do
-        for b2 := b1 + 1 to 25 do
-            for b3 := b2 + 1 to 25 do
-                for b4 := b3 + 1 to 25 do
-                    for b5 := b4 + 1 to 25 do
-                        for b6 := b5 + 1 to 25 do
-                            for b7 := b6 + 1 to 25 do
-                                for b8 := b7 + 1 to 25 do
-                                    for b9 := b8 + 1 to 25 do
-                                        for b10 := b9 + 1 to 25 do
-                                            for b11 := b10 + 1 to 25 do
-                                                for b12 := b11 + 1 to 25 do
-                                                    for b13 := b12 + 1 to 25 do
-                                                        for b14 := b13 + 1 to 25 do
-                                                            for b15 := b14 + 1 to 25 do
-                                                            begin
-                                                                // Pega o identificador da combinação atual.
-                                                                ltf_id_1 :=
-                                                                    identificador_grupo_15_bolas(
-                                                                    b1, b2,
-                                                                    b3, b4, b5, b6, b7,
-                                                                    b8, b9,
-                                                                    b10, b11, b12, b13, b14, b15);
-
-                                                                // Valida o identificador retornado pela função.
-                                                                Inc(id_lotofacil);
-                                                                if ltf_id_1 <>
-                                                                    id_lotofacil then
-                                                                begin
-                                                                    strErro :=
-                                                                        Format(
-                                                                        'Identificador inválido: ltf_id=%d, retornado pela função: %d',
-                                                                        [id_lotofacil,
-                                                                        ltf_id_1]);
-                                                                    Exit(False);
-                                                                end;
-
-                                                                // Verifica se este identificador já foi sorteado.
-                                                                if
-                                                                lotofacil_id[ltf_id_1]
-                                                                    [0] <> 0 then
-                                                                begin
-                                                                    continue;
-                                                                end;
-
-                                                                // Vamos zerar o arranjo e obter as três combinações complementares.
-                                                                FillChar(
-                                                                    lotofacil_bolas,
-                                                                    26 * sizeof(integer), 0);
-
-                                                                // Atribui valor 1 pra as bolas sorteadas.
-                                                                lotofacil_bolas[b1] := 1;
-                                                                lotofacil_bolas[b2] := 1;
-                                                                lotofacil_bolas[b3] := 1;
-                                                                lotofacil_bolas[b4] := 1;
-                                                                lotofacil_bolas[b5] := 1;
-                                                                lotofacil_bolas[b6] := 1;
-                                                                lotofacil_bolas[b7] := 1;
-                                                                lotofacil_bolas[b8] := 1;
-                                                                lotofacil_bolas[b9] := 1;
-                                                                lotofacil_bolas
-                                                                    [b10] := 1;
-                                                                lotofacil_bolas
-                                                                    [b11] := 1;
-                                                                lotofacil_bolas
-                                                                    [b12] := 1;
-                                                                lotofacil_bolas
-                                                                    [b13] := 1;
-                                                                lotofacil_bolas
-                                                                    [b14] := 1;
-                                                                lotofacil_bolas
-                                                                    [b15] := 1;
-
-                                                                if
-                                                                Gerar_Combinacao_Complementar(
-                                                                    lotofacil_bolas,
-                                                                    15,
-                                                                    lotofacil_aleatorio) = False then
-                                                                begin
-                                                                    Exit(False);
-                                                                end;
-
-                                                                // Aqui, iremos pegar o próximo id aleatoriamente que será utilizado
-                                                                // no campo 'id_complementar_sequencial'.
-                                                                if
-                                                                lista_id_sequencial.Count
-                                                                    = 0 then
-                                                                begin
-                                                                    MessageDlg(
-                                                                        'Erro',
-                                                                        'Aumentar a quantidade de ítens',
-                                                                        mtError,
-                                                                        [mbOK], 0);
-                                                                    Exit(False);
-                                                                end;
-
-                                                                indice_lista :=
-                                                                    Random(lista_id_sequencial.Count);
-                                                                id_sequencial :=
-                                                                    StrToInt(
-                                                                    lista_id_sequencial.Strings
-                                                                    [indice_lista]);
-                                                                lista_id_sequencial.Delete(indice_lista);
-
-                                                                lotofacil_id[
-                                                                    ltf_id_1][0] := 1;
-                                                                lotofacil_id[ltf_id_1][1]
-                                                                := id_sequencial;
-
-                                                                // Agora, vamos pegar os 3 identificadores das três combinações complementares
-                                                                // Somente iremos inserir, se nenhum valor foi definido pra aquela combinação.
-                                                                for uA := 0 to 2 do
-                                                                begin
-                                                                    for uB := 1 to 15 do
-                                                                    begin
-                                                                        lotofacil_bolas
-                                                                            [uB] :=
-                                                                            lotofacil_aleatorio[uA, uB];
-                                                                    end;
-
-                                                                    lotofacil_ltf_id :=
-                                                                        identificador_grupo_15_bolas(
-                                                                        lotofacil_bolas
-                                                                        [1],
-                                                                        lotofacil_bolas
-                                                                        [2],
-                                                                        lotofacil_bolas[3],
-                                                                        lotofacil_bolas
-                                                                        [4],
-                                                                        lotofacil_bolas
-                                                                        [5],
-                                                                        lotofacil_bolas
-                                                                        [6],
-                                                                        lotofacil_bolas[7],
-                                                                        lotofacil_bolas
-                                                                        [8],
-                                                                        lotofacil_bolas
-                                                                        [9],
-                                                                        lotofacil_bolas
-                                                                        [10], lotofacil_bolas[11],
-                                                                        lotofacil_bolas
-                                                                        [12],
-                                                                        lotofacil_bolas[
-                                                                        13],
-                                                                        lotofacil_bolas[14],
-                                                                        lotofacil_bolas[15]);
-
-                                                                    // Só gerar o sql, se a combinação ainda não foi sorteada.
-                                                                    if
-                                                                    lotofacil_id
-                                                                        [lotofacil_ltf_id][0] = 0 then
-                                                                    begin
-                                                                        Inc(
-                                                                            id_sequencial);
-
-                                                                        lotofacil_id[
-                                                                            lotofacil_ltf_id]
-                                                                            [0] := 1;
-                                                                        lotofacil_id[
-                                                                            lotofacil_ltf_id]
-                                                                            [1] := id_sequencial;
-
-                                                                    end;
-
-                                                                end;
-                                                            end;
-
-    // Agora, salvar no banco de dados, primeiro, deletar o registro que está lá
-    sql_registro := TSqlQuery.Create(Self);
-
-    if not Assigned(dmLotofacil) then
-    begin
-        dmLotofacil := TDmLotofacil.Create(Self);
-    end;
-
-    sql_registro.DataBase := dmLotofacil.pgLTK;
-    sql_registro.SQL.Clear;
-    sql_registro.Sql.Add('Delete from lotofacil.lotofacil_complementar');
-    sql_registro.Sql.Add('where ltf_qt = 15');
-
-    try
-        sql_registro.ExecSql;
-    except
-        on exc: Exception do
-        begin
-            strErro := exc.Message;
-            Exit(False);
-        end;
-    end;
-
-    // Evitar linha em branco no final
-    lista_sql.Clear;
-    lista_sql.SkipLastLineBreak := True;
-
-    qt_itens := 0;
-    for uA := 1 to LOTOFACIL_COMBINACOES do
-    begin
-
-        if qt_itens = 0 then
-        begin
-            sql_registro.Sql.Add(
-                'Insert lotofacil.lotofacil_complementar(ltf_id, ltf_qt,');
-            sql_registro.Sql.Add('id_complementar_sequencial)values');
-            sql_registro.Sql.Add(Format('(%d,%d,%d)', [lotofacil_id[uA, 0], 15, lotofacil_id[uA, 1]]));
-        end
-        else
-        begin
-            sql_registro.Sql.Add(Format(',(%d,%d,%d)', [lotofacil_id[uA, 0], 15, lotofacil_id[uA, 1]]));
-        end;
-
-        Inc(qt_itens);
-
-        // Pra evitar que exaurimos a memória, iremos fazer inserções
-        // incrementais, a cada 50000 ítens, iremos inserir no banco de dados.
-        if qt_itens = 50000 then
-        begin
-            qt_itens := 0;
-
-            // Em seguida, inserir os dados.
-            sql_registro.Close;
-            sql_registro.SQL.Clear;
-            sql_registro.Sql.Text := lista_sql.Text;
-            lista_sql.Clear;
-            try
-                sql_registro.ExecSql;
-            except
-                on exc: Exception do
-                begin
-                    strErro := exc.Message;
-                    Exit(False);
-                end;
-            end;
-        end;
-    end;
-
-    // Se há ainda registros não inseridos, devemos fazer agora
-    if lista_sql.Count <> 0 then
-    begin
-        // Em seguida, inserir os dados.
-        sql_registro.Close;
-        sql_registro.SQL.Clear;
-        sql_registro.Sql.Text := lista_sql.Text;
-        lista_sql.Clear;
-        try
-            sql_registro.ExecSql;
-        except
-            on exc: Exception do
-            begin
-                strErro := exc.Message;
-                Exit(False);
-            end;
-        end;
-    end;
-
-    Exit(True);
-end;
+//function TForm1.Gerar_Complementar_15_Numeros: boolean;
+//const
+//    LOTOFACIL_COMBINACOES = 3268760;
+//var
+//    b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, lotofacil_ltf_id: integer;
+//    lista_id_sequencial: TStringList;
+//
+//    lotofacil_id:    array of array of integer;
+//    lotofacil_bolas: array[0..25] of integer;
+//    lotofacil_aleatorio: TAleatorio_Resultado;
+//
+//    // Na tabela, há um campo 'ltf_id', que é o identificador lotofacil da
+//    // combinação.
+//    ltf_id_1, ltf_id_2, ltf_id_3, ltf_id_4, id_lotofacil, uA, uB, qt_itens: integer;
+//    indice_lista, id_sequencial: longint;
+//
+//    lista_sql:    TStringList;
+//    sql_registro: TSQLQuery;
+//begin
+//
+//    // Pra cada id, haverá 3 combinações complementares,
+//    // então, iremos gerar ids sequencialmente pra
+//    // 4 números, a combinação principal e as combinações
+//    // complementares, pra isso devemos armazenar na lista
+//    // somente o primeiro id das combinações principais.
+//    // Pois, esta os números desta lista, serão sorteados aleatoriamente.
+//    // Nos iremos percorrer todas as combinações possíveis começando
+//    // do menor identificador pra esta combinação, então pra evitar
+//    // que as combinações estejam sequencialmente, iremos
+//    // sortear os números desta lista.
+//    lista_id_sequencial := TStringList.Create;
+//    uA := 1;
+//    while uA <= 13075041 do
+//    begin
+//        lista_id_sequencial.Add(IntToStr(uA));
+//        Inc(uA, 4);
+//    end;
+//
+//    SetLength(lotofacil_id, 3268761, 2);
+//    SetLength(lotofacil_aleatorio, 3, 26);
+//
+//    lista_sql := TStringList.Create;
+//    lista_sql.Clear;
+//
+//    // A cada iteração do loop, esta variável terá o valor incrementado.
+//    // E também serve pra comparar este valor com o valor retornado
+//    // pela função 'identificador_grupo_15_bolas'.
+//    id_lotofacil := 0;
+//    for b1 := 1 to 25 do
+//        for b2 := b1 + 1 to 25 do
+//            for b3 := b2 + 1 to 25 do
+//                for b4 := b3 + 1 to 25 do
+//                    for b5 := b4 + 1 to 25 do
+//                        for b6 := b5 + 1 to 25 do
+//                            for b7 := b6 + 1 to 25 do
+//                                for b8 := b7 + 1 to 25 do
+//                                    for b9 := b8 + 1 to 25 do
+//                                        for b10 := b9 + 1 to 25 do
+//                                            for b11 := b10 + 1 to 25 do
+//                                                for b12 := b11 + 1 to 25 do
+//                                                    for b13 := b12 + 1 to 25 do
+//                                                        for b14 := b13 + 1 to 25 do
+//                                                            for b15 := b14 + 1 to 25 do
+//                                                            begin
+//                                                                // Pega o identificador da combinação atual.
+//                                                                ltf_id_1 :=
+//                                                                    identificador_grupo_15_bolas(
+//                                                                    b1, b2,
+//                                                                    b3, b4, b5, b6, b7,
+//                                                                    b8, b9,
+//                                                                    b10, b11, b12, b13, b14, b15);
+//
+//                                                                // Valida o identificador retornado pela função.
+//                                                                Inc(id_lotofacil);
+//                                                                if ltf_id_1 <>
+//                                                                    id_lotofacil then
+//                                                                begin
+//                                                                    strErro :=
+//                                                                        Format(
+//                                                                        'Identificador inválido: ltf_id=%d, retornado pela função: %d',
+//                                                                        [id_lotofacil,
+//                                                                        ltf_id_1]);
+//                                                                    Exit(False);
+//                                                                end;
+//
+//                                                                // Verifica se este identificador já foi sorteado.
+//                                                                if
+//                                                                lotofacil_id[ltf_id_1]
+//                                                                    [0] <> 0 then
+//                                                                begin
+//                                                                    continue;
+//                                                                end;
+//
+//                                                                // Vamos zerar o arranjo e obter as três combinações complementares.
+//                                                                FillChar(
+//                                                                    lotofacil_bolas,
+//                                                                    26 * sizeof(integer), 0);
+//
+//                                                                // Atribui valor 1 pra as bolas sorteadas.
+//                                                                lotofacil_bolas[b1] := 1;
+//                                                                lotofacil_bolas[b2] := 1;
+//                                                                lotofacil_bolas[b3] := 1;
+//                                                                lotofacil_bolas[b4] := 1;
+//                                                                lotofacil_bolas[b5] := 1;
+//                                                                lotofacil_bolas[b6] := 1;
+//                                                                lotofacil_bolas[b7] := 1;
+//                                                                lotofacil_bolas[b8] := 1;
+//                                                                lotofacil_bolas[b9] := 1;
+//                                                                lotofacil_bolas
+//                                                                    [b10] := 1;
+//                                                                lotofacil_bolas
+//                                                                    [b11] := 1;
+//                                                                lotofacil_bolas
+//                                                                    [b12] := 1;
+//                                                                lotofacil_bolas
+//                                                                    [b13] := 1;
+//                                                                lotofacil_bolas
+//                                                                    [b14] := 1;
+//                                                                lotofacil_bolas
+//                                                                    [b15] := 1;
+//
+//                                                                if
+//                                                                Gerar_Combinacao_Complementar(
+//                                                                    lotofacil_bolas,
+//                                                                    15,
+//                                                                    lotofacil_aleatorio) = False then
+//                                                                begin
+//                                                                    Exit(False);
+//                                                                end;
+//
+//                                                                // Aqui, iremos pegar o próximo id aleatoriamente que será utilizado
+//                                                                // no campo 'id_complementar_sequencial'.
+//                                                                if
+//                                                                lista_id_sequencial.Count
+//                                                                    = 0 then
+//                                                                begin
+//                                                                    MessageDlg(
+//                                                                        'Erro',
+//                                                                        'Aumentar a quantidade de ítens',
+//                                                                        mtError,
+//                                                                        [mbOK], 0);
+//                                                                    Exit(False);
+//                                                                end;
+//
+//                                                                indice_lista :=
+//                                                                    Random(lista_id_sequencial.Count);
+//                                                                id_sequencial :=
+//                                                                    StrToInt(
+//                                                                    lista_id_sequencial.Strings
+//                                                                    [indice_lista]);
+//                                                                lista_id_sequencial.Delete(indice_lista);
+//
+//                                                                lotofacil_id[
+//                                                                    ltf_id_1][0] := 1;
+//                                                                lotofacil_id[ltf_id_1][1]
+//                                                                := id_sequencial;
+//
+//                                                                // Agora, vamos pegar os 3 identificadores das três combinações complementares
+//                                                                // Somente iremos inserir, se nenhum valor foi definido pra aquela combinação.
+//                                                                for uA := 0 to 2 do
+//                                                                begin
+//                                                                    for uB := 1 to 15 do
+//                                                                    begin
+//                                                                        lotofacil_bolas
+//                                                                            [uB] :=
+//                                                                            lotofacil_aleatorio[uA, uB];
+//                                                                    end;
+//
+//                                                                    lotofacil_ltf_id :=
+//                                                                        identificador_grupo_15_bolas(
+//                                                                        lotofacil_bolas
+//                                                                        [1],
+//                                                                        lotofacil_bolas
+//                                                                        [2],
+//                                                                        lotofacil_bolas[3],
+//                                                                        lotofacil_bolas
+//                                                                        [4],
+//                                                                        lotofacil_bolas
+//                                                                        [5],
+//                                                                        lotofacil_bolas
+//                                                                        [6],
+//                                                                        lotofacil_bolas[7],
+//                                                                        lotofacil_bolas
+//                                                                        [8],
+//                                                                        lotofacil_bolas
+//                                                                        [9],
+//                                                                        lotofacil_bolas
+//                                                                        [10], lotofacil_bolas[11],
+//                                                                        lotofacil_bolas
+//                                                                        [12],
+//                                                                        lotofacil_bolas[
+//                                                                        13],
+//                                                                        lotofacil_bolas[14],
+//                                                                        lotofacil_bolas[15]);
+//
+//                                                                    // Só gerar o sql, se a combinação ainda não foi sorteada.
+//                                                                    if
+//                                                                    lotofacil_id
+//                                                                        [lotofacil_ltf_id][0] = 0 then
+//                                                                    begin
+//                                                                        Inc(
+//                                                                            id_sequencial);
+//
+//                                                                        lotofacil_id[
+//                                                                            lotofacil_ltf_id]
+//                                                                            [0] := 1;
+//                                                                        lotofacil_id[
+//                                                                            lotofacil_ltf_id]
+//                                                                            [1] := id_sequencial;
+//
+//                                                                    end;
+//
+//                                                                end;
+//                                                            end;
+//
+//    // Agora, salvar no banco de dados, primeiro, deletar o registro que está lá
+//    sql_registro := TSqlQuery.Create(Self);
+//
+//    if not Assigned(dmLotofacil) then
+//    begin
+//        dmLotofacil := TDmLotofacil.Create(Self);
+//    end;
+//
+//    sql_registro.DataBase := dmLotofacil.pgLTK;
+//    sql_registro.SQL.Clear;
+//    sql_registro.Sql.Add('Delete from lotofacil.lotofacil_complementar');
+//    sql_registro.Sql.Add('where ltf_qt = 15');
+//
+//    try
+//        sql_registro.ExecSql;
+//    except
+//        on exc: Exception do
+//        begin
+//            strErro := exc.Message;
+//            Exit(False);
+//        end;
+//    end;
+//
+//    // Evitar linha em branco no final
+//    lista_sql.Clear;
+//    lista_sql.SkipLastLineBreak := True;
+//
+//    qt_itens := 0;
+//    for uA := 1 to LOTOFACIL_COMBINACOES do
+//    begin
+//
+//        if qt_itens = 0 then
+//        begin
+//            sql_registro.Sql.Add(
+//                'Insert lotofacil.lotofacil_complementar(ltf_id, ltf_qt,');
+//            sql_registro.Sql.Add('id_complementar_sequencial)values');
+//            sql_registro.Sql.Add(Format('(%d,%d,%d)', [lotofacil_id[uA, 0], 15, lotofacil_id[uA, 1]]));
+//        end
+//        else
+//        begin
+//            sql_registro.Sql.Add(Format(',(%d,%d,%d)', [lotofacil_id[uA, 0], 15, lotofacil_id[uA, 1]]));
+//        end;
+//
+//        Inc(qt_itens);
+//
+//        // Pra evitar que exaurimos a memória, iremos fazer inserções
+//        // incrementais, a cada 50000 ítens, iremos inserir no banco de dados.
+//        if qt_itens = 50000 then
+//        begin
+//            qt_itens := 0;
+//
+//            // Em seguida, inserir os dados.
+//            sql_registro.Close;
+//            sql_registro.SQL.Clear;
+//            sql_registro.Sql.Text := lista_sql.Text;
+//            lista_sql.Clear;
+//            try
+//                sql_registro.ExecSql;
+//            except
+//                on exc: Exception do
+//                begin
+//                    strErro := exc.Message;
+//                    Exit(False);
+//                end;
+//            end;
+//        end;
+//    end;
+//
+//    // Se há ainda registros não inseridos, devemos fazer agora
+//    if lista_sql.Count <> 0 then
+//    begin
+//        // Em seguida, inserir os dados.
+//        sql_registro.Close;
+//        sql_registro.SQL.Clear;
+//        sql_registro.Sql.Text := lista_sql.Text;
+//        lista_sql.Clear;
+//        try
+//            sql_registro.ExecSql;
+//        except
+//            on exc: Exception do
+//            begin
+//                strErro := exc.Message;
+//                Exit(False);
+//            end;
+//        end;
+//    end;
+//
+//    Exit(True);
+//end;
 
 function TForm1.Gerar_Combinacao_Complementar(lotofacil_bolas: array of integer;
     bolas_por_combinacao: integer; out lotofacil_aleatorio: TAleatorio_Resultado): boolean;

@@ -181,10 +181,12 @@ var
     lista_de_campos_insert, lista_de_campos_select, lista_de_tabelas_relacionadas,
     lista_de_tabelas_selecionadas, lista_where, sql_gerado: TStringList;
     uA, uB:    integer;
-    ltf_qt_excluir, sql_excluir_ltf_qt, tabela_esquerda, tabela_direita: string;
+    ltf_qt_excluir, sql_excluir_ltf_qt, tabela_esquerda, tabela_direita,
+      arquivo_sql: string;
 
     // Armazena true, se o usuário deseja excluir ou false.
     excluir_ltf_qt: array[15..18] of boolean;
+    sql_stream: TFileStream;
 begin
     lista_de_campos_insert := TStringList.Create;
     lista_de_campos_select := TStringList.Create;
@@ -325,6 +327,29 @@ begin
     if opcoes_do_filtro.sql_limit <> 0 then
     begin
         sql_gerado.Add('limit ' + IntToStr(opcoes_do_filtro.sql_limit));
+    end;
+
+    // Vamos salvar temporiamente, o sql gerado na pasta tmp.
+    {$ifdef LINUX}
+            arquivo_sql := '/tmp/lotofacil_sql_gerado.sql';
+    {$else}
+           {$ifdef windows}
+                   if not DirectoryExists('c:\tmp\') then
+                   begin
+                        CreateDir('c:\tmp');
+                   end;
+                   arquivo_sql := 'c:\tmp\lotofacil_sql_gerado.sql';
+           {$else}
+                  arquivo_sql := '/tmp/lotofacil_sql_gerado.sql';
+           {$endif}
+    {$endif}
+
+    try
+       sql_stream := TFileStream.Create(arquivo_sql, fmCreate or fmOpenWrite);
+       sql_stream.WriteAnsiString(sql_gerado.Text);
+       FreeAndNil(sql_stream);
+    finally
+
     end;
 
     try

@@ -1,20 +1,20 @@
 object Form1: TForm1
-  Left = 1
-  Height = 835
-  Top = 1
-  Width = 1599
+  Left = 70
+  Height = 532
+  Top = 82
+  Width = 1437
   Caption = 'Analisador Lotofacil'
-  ClientHeight = 835
-  ClientWidth = 1599
+  ClientHeight = 532
+  ClientWidth = 1437
   OnClose = FormClose
   OnCreate = FormCreate
   SessionProperties = 'config_de_conexao.Strings'
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.0.0.2'
   object tab_principal: TPageControl
     Left = 5
-    Height = 825
+    Height = 522
     Top = 5
-    Width = 1589
+    Width = 1427
     ActivePage = sheetFiltro
     Align = alClient
     BorderSpacing.Left = 5
@@ -25,8 +25,8 @@ object Form1: TForm1
     TabOrder = 0
     object tabBanco_de_dados: TTabSheet
       Caption = 'Banco de dados'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object config_de_conexao: TValueListEditor
         Left = 16
         Height = 184
@@ -45,7 +45,7 @@ object Form1: TForm1
         )
         ColWidths = (
           64
-          214
+          212
         )
       end
       object btn_configurar_conexao: TButton
@@ -60,33 +60,33 @@ object Form1: TForm1
     end
     object sheetFiltro: TTabSheet
       Caption = 'Filtros'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object pageFiltros: TPageControl
         Left = 5
-        Height = 738
+        Height = 435
         Hint = 'Selecione grupos de 2, 3, 4 ou 5 bolas.'
         Top = 60
-        Width = 1575
-        ActivePage = tab_direcao
+        Width = 1413
+        ActivePage = tab_mais_usados
         Align = alClient
         BorderSpacing.Left = 5
         BorderSpacing.Top = 10
         BorderSpacing.Right = 5
         MultiLine = True
-        TabIndex = 3
+        TabIndex = 0
         TabOrder = 0
         OnChange = pageFiltrosChange
         Options = [nboMultiLine]
         object tab_mais_usados: TTabSheet
           Caption = 'Mais usados'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl28: TPageControl
             Left = 10
-            Height = 441
+            Height = 388
             Top = 10
-            Width = 1203
+            Width = 1389
             ActivePage = tab_novos_repetidos
             Align = alClient
             BorderSpacing.Around = 10
@@ -94,22 +94,22 @@ object Form1: TForm1
             TabOrder = 0
             object tab_novos_repetidos: TTabSheet
               Caption = 'Novos x repetidos'
-              ClientHeight = 437
-              ClientWidth = 1199
+              ClientHeight = 361
+              ClientWidth = 1385
               object grp_novos_repetidos: TGroupBox
                 Left = 5
-                Height = 404
+                Height = 351
                 Top = 5
                 Width = 300
                 Align = alLeft
                 BorderSpacing.Around = 5
                 Caption = 'Estatística geral:'
-                ClientHeight = 385
+                ClientHeight = 332
                 ClientWidth = 296
                 TabOrder = 0
                 object sgr_novos_repetidos: TStringGrid
                   Left = 0
-                  Height = 259
+                  Height = 206
                   Top = 0
                   Width = 296
                   Align = alClient
@@ -124,11 +124,11 @@ object Form1: TForm1
                 object pnGrupo2Bolas20: TPanel
                   Left = 0
                   Height = 38
-                  Top = 347
+                  Top = 294
                   Width = 296
                   Align = alBottom
-                  ClientHeight = 34
-                  ClientWidth = 292
+                  ClientHeight = 38
+                  ClientWidth = 296
                   TabOrder = 1
                   object btnGrupo2BolasDesmarcarTodos20: TButton
                     Left = 165
@@ -154,7 +154,7 @@ object Form1: TForm1
                 object rd_novos_repetidos_sim_nao: TRadioGroup
                   Left = 0
                   Height = 88
-                  Top = 259
+                  Top = 206
                   Width = 296
                   Align = alBottom
                   AutoFill = True
@@ -182,18 +182,18 @@ object Form1: TForm1
               end
               object grp_novos_repetidos_por_concurso: TGroupBox
                 Left = 310
-                Height = 404
+                Height = 351
                 Top = 5
                 Width = 200
                 Align = alLeft
                 BorderSpacing.Around = 5
                 Caption = 'Estatística por concurso:'
-                ClientHeight = 385
+                ClientHeight = 332
                 ClientWidth = 196
                 TabOrder = 1
                 object sgr_novos_repetidos_por_concurso: TStringGrid
                   Left = 0
-                  Height = 209
+                  Height = 156
                   Top = 0
                   Width = 196
                   Align = alClient
@@ -207,11 +207,11 @@ object Form1: TForm1
                 object pnGrupo2Bolas21: TPanel
                   Left = 0
                   Height = 38
-                  Top = 347
+                  Top = 294
                   Width = 196
                   Align = alBottom
-                  ClientHeight = 34
-                  ClientWidth = 192
+                  ClientHeight = 38
+                  ClientWidth = 196
                   TabOrder = 1
                   Visible = False
                   object btnGrupo2BolasDesmarcarTodos21: TButton
@@ -238,7 +238,7 @@ object Form1: TForm1
                 object rd_novos_repetidos_por_concurso: TRadioGroup
                   Left = 0
                   Height = 88
-                  Top = 259
+                  Top = 206
                   Width = 196
                   Align = alBottom
                   AutoFill = True
@@ -266,7 +266,7 @@ object Form1: TForm1
                 object btn_novos_repetidos_por_concurso: TButton
                   Left = 10
                   Height = 30
-                  Top = 219
+                  Top = 166
                   Width = 176
                   Align = alBottom
                   BorderSpacing.Around = 10
@@ -277,18 +277,18 @@ object Form1: TForm1
               end
               object grpNovosRepetidosConsolidado: TGroupBox
                 Left = 515
-                Height = 404
+                Height = 351
                 Top = 5
                 Width = 300
                 Align = alLeft
                 BorderSpacing.Around = 5
                 Caption = 'Estatística por intervalo de concurso:'
-                ClientHeight = 385
+                ClientHeight = 332
                 ClientWidth = 296
                 TabOrder = 2
                 object sgrNovosRepetidosConsolidado: TStringGrid
                   Left = 0
-                  Height = 166
+                  Height = 113
                   Top = 93
                   Width = 296
                   Align = alClient
@@ -302,11 +302,11 @@ object Form1: TForm1
                 object pnGrupo2Bolas22: TPanel
                   Left = 0
                   Height = 38
-                  Top = 347
+                  Top = 294
                   Width = 296
                   Align = alBottom
-                  ClientHeight = 34
-                  ClientWidth = 292
+                  ClientHeight = 38
+                  ClientWidth = 296
                   TabOrder = 1
                   object btnGrupo2BolasDesmarcarTodos22: TButton
                     Left = 165
@@ -390,7 +390,7 @@ object Form1: TForm1
                 object rd_par_impar_sim_nao2: TRadioGroup
                   Left = 0
                   Height = 88
-                  Top = 259
+                  Top = 206
                   Width = 296
                   Align = alBottom
                   AutoFill = True
@@ -511,7 +511,7 @@ object Form1: TForm1
                 Left = 928
                 Height = 152
                 Top = 264
-                Width = 259
+                Width = 445
                 Anchors = [akTop, akLeft, akRight]
                 BorderStyle = sbsSunken
                 TabOrder = 5
@@ -519,8 +519,8 @@ object Form1: TForm1
             end
             object tab_par_impar: TTabSheet
               Caption = 'Par x ímpar'
-              ClientHeight = 437
-              ClientWidth = 1199
+              ClientHeight = 361
+              ClientWidth = 1385
               object PageControl32: TPageControl
                 Left = 10
                 Height = 394
@@ -1145,8 +1145,8 @@ object Form1: TForm1
         end
         object tabExternoInterno: TTabSheet
           Caption = 'Externo x Interno'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl30: TPageControl
             Left = 10
             Height = 441
@@ -1769,8 +1769,8 @@ object Form1: TForm1
         end
         object tabPrimo: TTabSheet
           Caption = 'Primos x Não-Primos'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl31: TPageControl
             Left = 10
             Height = 441
@@ -1783,7 +1783,7 @@ object Form1: TForm1
             TabOrder = 0
             object TabSheet62: TTabSheet
               Caption = 'Estatística por quantidade'
-              ClientHeight = 414
+              ClientHeight = 437
               ClientWidth = 1199
               object grp_primo_nao_primo: TGroupBox
                 Left = 5
@@ -1816,8 +1816,8 @@ object Form1: TForm1
                   Top = 347
                   Width = 296
                   Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 296
+                  ClientHeight = 34
+                  ClientWidth = 292
                   TabOrder = 1
                   object btnGrupo2BolasDesmarcarTodos36: TButton
                     Left = 165
@@ -1900,8 +1900,8 @@ object Form1: TForm1
                   Top = 347
                   Width = 296
                   Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 296
+                  ClientHeight = 34
+                  ClientWidth = 292
                   TabOrder = 1
                   object btnGrupo2BolasDesmarcarTodos30: TButton
                     Left = 165
@@ -1994,8 +1994,8 @@ object Form1: TForm1
                   Top = 347
                   Width = 296
                   Align = alBottom
-                  ClientHeight = 38
-                  ClientWidth = 296
+                  ClientHeight = 34
+                  ClientWidth = 292
                   TabOrder = 1
                   object btnGrupo2BolasDesmarcarTodos27: TButton
                     Left = 165
@@ -2106,7 +2106,7 @@ object Form1: TForm1
             end
             object TabSheet63: TTabSheet
               Caption = 'Estatística por bolas'
-              ClientHeight = 414
+              ClientHeight = 437
               ClientWidth = 1199
               object PageControl36: TPageControl
                 Left = 10
@@ -2120,7 +2120,7 @@ object Form1: TForm1
                 TabOrder = 0
                 object TabSheet72: TTabSheet
                   Caption = 'Primo'
-                  ClientHeight = 367
+                  ClientHeight = 390
                   ClientWidth = 1175
                   object pn_bin_primo: TPanel
                     Left = 0
@@ -2129,8 +2129,8 @@ object Form1: TForm1
                     Width = 750
                     Align = alLeft
                     Caption = 'pn_bin_primo'
-                    ClientHeight = 367
-                    ClientWidth = 750
+                    ClientHeight = 363
+                    ClientWidth = 746
                     TabOrder = 0
                     object grp_bin_primo: TGroupBox
                       Left = 6
@@ -2193,8 +2193,8 @@ object Form1: TForm1
                       Width = 748
                       Align = alTop
                       Caption = 'pn_sup_bin_hrz_1'
-                      ClientHeight = 143
-                      ClientWidth = 748
+                      ClientHeight = 139
+                      ClientWidth = 744
                       TabOrder = 1
                       object chk_bin_primo: TCheckGroup
                         Left = 6
@@ -2250,7 +2250,7 @@ object Form1: TForm1
                 end
                 object TabSheet73: TTabSheet
                   Caption = 'Não-Primo'
-                  ClientHeight = 367
+                  ClientHeight = 390
                   ClientWidth = 1175
                   object pn_bin_nao_primo: TPanel
                     Left = 0
@@ -2259,8 +2259,8 @@ object Form1: TForm1
                     Width = 750
                     Align = alLeft
                     Caption = 'pn_bin_nao_primo'
-                    ClientHeight = 367
-                    ClientWidth = 750
+                    ClientHeight = 363
+                    ClientWidth = 746
                     TabOrder = 0
                     object grp_bin_nao_primo: TGroupBox
                       Left = 6
@@ -2323,8 +2323,8 @@ object Form1: TForm1
                       Width = 748
                       Align = alTop
                       Caption = 'pn_sup_bin_hrz_1'
-                      ClientHeight = 143
-                      ClientWidth = 748
+                      ClientHeight = 139
+                      ClientWidth = 744
                       TabOrder = 1
                       object chk_bin_nao_primo: TCheckGroup
                         Left = 6
@@ -2391,13 +2391,13 @@ object Form1: TForm1
         end
         object tab_direcao: TTabSheet
           Caption = 'Direção'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl24: TPageControl
             Left = 10
-            Height = 691
+            Height = 388
             Top = 10
-            Width = 1551
+            Width = 1389
             ActivePage = tab_horizontal
             Align = alClient
             BorderSpacing.Around = 10
@@ -2405,13 +2405,13 @@ object Form1: TForm1
             TabOrder = 0
             object tab_horizontal: TTabSheet
               Caption = 'Horizontal'
-              ClientHeight = 664
-              ClientWidth = 1547
+              ClientHeight = 384
+              ClientWidth = 1385
               object PageControl33: TPageControl
                 Left = 10
-                Height = 644
+                Height = 341
                 Top = 10
-                Width = 1527
+                Width = 1365
                 ActivePage = TabSheet66
                 Align = alClient
                 BorderSpacing.Around = 10
@@ -2419,22 +2419,22 @@ object Form1: TForm1
                 TabOrder = 0
                 object TabSheet66: TTabSheet
                   Caption = 'Estatística por quantidade'
-                  ClientHeight = 617
-                  ClientWidth = 1523
+                  ClientHeight = 337
+                  ClientWidth = 1361
                   object grp_horizontal: TGroupBox
                     Left = 5
-                    Height = 607
+                    Height = 304
                     Top = 5
                     Width = 450
                     Align = alLeft
                     BorderSpacing.Around = 5
                     Caption = 'Estatística:'
-                    ClientHeight = 588
+                    ClientHeight = 285
                     ClientWidth = 446
                     TabOrder = 0
                     object sgr_horizontal: TStringGrid
                       Left = 0
-                      Height = 462
+                      Height = 159
                       Top = 0
                       Width = 446
                       Align = alClient
@@ -2449,11 +2449,11 @@ object Form1: TForm1
                     object pnGrupo2Bolas389: TPanel
                       Left = 0
                       Height = 38
-                      Top = 550
+                      Top = 247
                       Width = 446
                       Align = alBottom
-                      ClientHeight = 38
-                      ClientWidth = 446
+                      ClientHeight = 34
+                      ClientWidth = 442
                       TabOrder = 1
                       object btnGrupo2BolasDesmarcarTodos381: TButton
                         Left = 315
@@ -2479,7 +2479,7 @@ object Form1: TForm1
                     object rd_horizontal: TRadioGroup
                       Left = 0
                       Height = 88
-                      Top = 462
+                      Top = 159
                       Width = 446
                       Align = alBottom
                       AutoFill = True
@@ -2507,8 +2507,8 @@ object Form1: TForm1
                 end
                 object TabSheet67: TTabSheet
                   Caption = 'Estatística por bolas'
-                  ClientHeight = 617
-                  ClientWidth = 1523
+                  ClientHeight = 337
+                  ClientWidth = 1361
                   object PageControl37: TPageControl
                     Left = 10
                     Height = 347
@@ -2521,7 +2521,7 @@ object Form1: TForm1
                     TabOrder = 0
                     object TabSheet74: TTabSheet
                       Caption = 'HRZ_1'
-                      ClientHeight = 320
+                      ClientHeight = 343
                       ClientWidth = 1151
                       object pn_bin_hrz_1: TPanel
                         Left = 0
@@ -2530,8 +2530,8 @@ object Form1: TForm1
                         Width = 450
                         Align = alLeft
                         Caption = 'pn_bin_hrz_1'
-                        ClientHeight = 320
-                        ClientWidth = 450
+                        ClientHeight = 316
+                        ClientWidth = 446
                         TabOrder = 0
                         object grp_bin_hrz_1: TGroupBox
                           Left = 6
@@ -2594,8 +2594,8 @@ object Form1: TForm1
                           Width = 448
                           Align = alTop
                           Caption = 'pn_sup_bin_hrz_1'
-                          ClientHeight = 95
-                          ClientWidth = 448
+                          ClientHeight = 91
+                          ClientWidth = 444
                           TabOrder = 1
                           object chk_bin_hrz_1: TCheckGroup
                             Left = 6
@@ -2647,7 +2647,7 @@ object Form1: TForm1
                     end
                     object TabSheet75: TTabSheet
                       Caption = 'HRZ_2'
-                      ClientHeight = 320
+                      ClientHeight = 343
                       ClientWidth = 1151
                       object pn_bin_hrz_2: TPanel
                         Left = 0
@@ -2656,8 +2656,8 @@ object Form1: TForm1
                         Width = 450
                         Align = alLeft
                         Caption = 'pn_bin_hrz_2'
-                        ClientHeight = 350
-                        ClientWidth = 450
+                        ClientHeight = 346
+                        ClientWidth = 446
                         TabOrder = 0
                         object grp_bin_hrz_2: TGroupBox
                           Left = 6
@@ -2720,8 +2720,8 @@ object Form1: TForm1
                           Width = 448
                           Align = alTop
                           Caption = 'pn_sup_bin_hrz_1'
-                          ClientHeight = 95
-                          ClientWidth = 448
+                          ClientHeight = 91
+                          ClientWidth = 444
                           TabOrder = 1
                           object chk_bin_hrz_2: TCheckGroup
                             Left = 6
@@ -2773,7 +2773,7 @@ object Form1: TForm1
                     end
                     object TabSheet76: TTabSheet
                       Caption = 'HRZ_3'
-                      ClientHeight = 320
+                      ClientHeight = 343
                       ClientWidth = 1151
                       object pn_bin_hrz_3: TPanel
                         Left = 0
@@ -2782,8 +2782,8 @@ object Form1: TForm1
                         Width = 450
                         Align = alLeft
                         Caption = 'pn_bin_hrz_3'
-                        ClientHeight = 350
-                        ClientWidth = 450
+                        ClientHeight = 346
+                        ClientWidth = 446
                         TabOrder = 0
                         object grp_bin_hrz_3: TGroupBox
                           Left = 6
@@ -2846,8 +2846,8 @@ object Form1: TForm1
                           Width = 448
                           Align = alTop
                           Caption = 'pn_sup_bin_hrz_1'
-                          ClientHeight = 95
-                          ClientWidth = 448
+                          ClientHeight = 91
+                          ClientWidth = 444
                           TabOrder = 1
                           object chk_bin_hrz_3: TCheckGroup
                             Left = 6
@@ -2899,7 +2899,7 @@ object Form1: TForm1
                     end
                     object TabSheet77: TTabSheet
                       Caption = 'HRZ_4'
-                      ClientHeight = 320
+                      ClientHeight = 343
                       ClientWidth = 1151
                       object pn_bin_hrz_4: TPanel
                         Left = 0
@@ -2908,8 +2908,8 @@ object Form1: TForm1
                         Width = 450
                         Align = alLeft
                         Caption = 'pn_bin_hrz_4'
-                        ClientHeight = 350
-                        ClientWidth = 450
+                        ClientHeight = 346
+                        ClientWidth = 446
                         TabOrder = 0
                         object grp_bin_hrz_4: TGroupBox
                           Left = 6
@@ -2972,8 +2972,8 @@ object Form1: TForm1
                           Width = 448
                           Align = alTop
                           Caption = 'pn_sup_bin_hrz_1'
-                          ClientHeight = 95
-                          ClientWidth = 448
+                          ClientHeight = 91
+                          ClientWidth = 444
                           TabOrder = 1
                           object chk_bin_hrz_4: TCheckGroup
                             Left = 6
@@ -3025,7 +3025,7 @@ object Form1: TForm1
                     end
                     object TabSheet78: TTabSheet
                       Caption = 'HRZ_5'
-                      ClientHeight = 320
+                      ClientHeight = 343
                       ClientWidth = 1151
                       object pn_bin_hrz_5: TPanel
                         Left = 0
@@ -3034,8 +3034,8 @@ object Form1: TForm1
                         Width = 450
                         Align = alLeft
                         Caption = 'pn_bin_hrz_5'
-                        ClientHeight = 350
-                        ClientWidth = 450
+                        ClientHeight = 346
+                        ClientWidth = 446
                         TabOrder = 0
                         object grp_bin_hrz_5: TGroupBox
                           Left = 6
@@ -3098,8 +3098,8 @@ object Form1: TForm1
                           Width = 448
                           Align = alTop
                           Caption = 'pn_sup_bin_hrz_1'
-                          ClientHeight = 95
-                          ClientWidth = 448
+                          ClientHeight = 91
+                          ClientWidth = 444
                           TabOrder = 1
                           object chk_bin_hrz_5: TCheckGroup
                             Left = 6
@@ -3155,8 +3155,8 @@ object Form1: TForm1
             end
             object tab_vertical: TTabSheet
               Caption = 'Vertical'
-              ClientHeight = 664
-              ClientWidth = 1547
+              ClientHeight = 384
+              ClientWidth = 1385
               object PageControl34: TPageControl
                 Left = 10
                 Height = 644
@@ -3905,8 +3905,8 @@ object Form1: TForm1
             end
             object TabSheet84: TTabSheet
               Caption = 'Diagonal Esquerda'
-              ClientHeight = 664
-              ClientWidth = 1547
+              ClientHeight = 384
+              ClientWidth = 1385
               object PageControl39: TPageControl
                 Left = 10
                 Height = 337
@@ -4655,8 +4655,8 @@ object Form1: TForm1
             end
             object TabSheet85: TTabSheet
               Caption = 'Diagonal Direita'
-              ClientHeight = 664
-              ClientWidth = 1547
+              ClientHeight = 384
+              ClientWidth = 1385
               object PageControl41: TPageControl
                 Left = 10
                 Height = 644
@@ -5407,8 +5407,8 @@ object Form1: TForm1
         end
         object tab_lado: TTabSheet
           Caption = 'Laterais e Cantos'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl27: TPageControl
             Left = 10
             Height = 441
@@ -6971,8 +6971,8 @@ object Form1: TForm1
         end
         object tab_cruzeta: TTabSheet
           Caption = 'Cruzeta'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl25: TPageControl
             Left = 10
             Height = 441
@@ -7723,8 +7723,8 @@ object Form1: TForm1
         end
         object tab_losango: TTabSheet
           Caption = 'Losango'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl52: TPageControl
             Left = 10
             Height = 441
@@ -8477,8 +8477,8 @@ object Form1: TForm1
         end
         object tab_quinteto: TTabSheet
           Caption = 'Quinteto'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl54: TPageControl
             Left = 10
             Height = 441
@@ -9227,8 +9227,8 @@ object Form1: TForm1
         end
         object tab_triangulo: TTabSheet
           Caption = 'Triângulo'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl56: TPageControl
             Left = 10
             Height = 441
@@ -9856,8 +9856,8 @@ object Form1: TForm1
         end
         object tab_trio: TTabSheet
           Caption = 'Trio'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl58: TPageControl
             Left = 10
             Height = 441
@@ -10969,8 +10969,8 @@ object Form1: TForm1
         end
         object tab_x1_x2: TTabSheet
           Caption = 'x1_x2'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl60: TPageControl
             Left = 10
             Height = 441
@@ -11356,8 +11356,8 @@ object Form1: TForm1
         end
         object tab_dezena: TTabSheet
           Caption = 'Dezena'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl61: TPageControl
             Left = 10
             Height = 441
@@ -11686,8 +11686,8 @@ object Form1: TForm1
         end
         object tab_linha_coluna: TTabSheet
           Caption = 'Linha x Coluna'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl62: TPageControl
             Left = 10
             Height = 456
@@ -11793,8 +11793,8 @@ object Form1: TForm1
         end
         object tabBolasNasColunas: TTabSheet
           Caption = 'Bolas nas colunas'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl3: TPageControl
             Left = 10
             Height = 441
@@ -15289,8 +15289,8 @@ object Form1: TForm1
         end
         object tabDiferencaEntreBolas: TTabSheet
           Caption = 'Diferenca Entre Bolas'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl4: TPageControl
             Left = 10
             Height = 441
@@ -15773,8 +15773,8 @@ object Form1: TForm1
         end
         object tabGrupos: TTabSheet
           Caption = 'Grupos'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           TabVisible = False
           object grGrupo3Bolas: TGroupBox
             Left = 280
@@ -15999,19 +15999,19 @@ object Form1: TForm1
         end
         object tab_frequencia: TTabSheet
           Caption = 'Frequência'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object ScrollBox2: TScrollBox
             Left = 10
             Height = 441
             Top = 10
             Width = 1203
             HorzScrollBar.Page = 1140
-            VertScrollBar.Page = 439
+            VertScrollBar.Page = 441
             Align = alClient
             BorderSpacing.Around = 10
-            ClientHeight = 439
-            ClientWidth = 1188
+            ClientHeight = 437
+            ClientWidth = 1196
             TabOrder = 0
             object grp_frequencia: TGroupBox
               Left = 5
@@ -16475,8 +16475,8 @@ object Form1: TForm1
         end
         object tabGerarFiltros: TTabSheet
           Caption = 'Gerar filtros'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object btnFiltroGerar: TButton
             Left = 784
             Height = 33
@@ -16509,8 +16509,8 @@ object Form1: TForm1
         end
         object TabSheet7: TTabSheet
           Caption = 'TabSheet7'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           TabVisible = False
           object grpFrequenciaTotalNaoSair: TGroupBox
             Left = 525
@@ -17003,8 +17003,8 @@ object Form1: TForm1
         end
         object tabLotofacilSoma: TTabSheet
           Caption = 'Soma de bolas'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object grpDiferenca_qt_alt3: TGroupBox
             Left = 360
             Height = 466
@@ -17471,8 +17471,8 @@ object Form1: TForm1
         end
         object tab_b1_a_b15: TTabSheet
           Caption = 'B1_A_B15'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object PageControl7: TPageControl
             Left = 5
             Height = 466
@@ -40836,8 +40836,8 @@ object Form1: TForm1
         end
         object tab_unidade: TTabSheet
           Caption = 'Unidade'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object grp_unidade: TGroupBox
             Left = 5
             Height = 466
@@ -40924,8 +40924,8 @@ object Form1: TForm1
         end
         object tab_algarismo: TTabSheet
           Caption = 'Algarismo'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object grp_algarismo: TGroupBox
             Left = 5
             Height = 466
@@ -41012,8 +41012,8 @@ object Form1: TForm1
         end
         object tab_soma_algarismo: TTabSheet
           Caption = 'Soma de algarismo'
-          ClientHeight = 711
-          ClientWidth = 1571
+          ClientHeight = 408
+          ClientWidth = 1409
           object grp_soma_algarismo: TGroupBox
             Left = 5
             Height = 466
@@ -41106,10 +41106,10 @@ object Form1: TForm1
         Left = 0
         Height = 50
         Top = 0
-        Width = 1585
+        Width = 1423
         Align = alTop
         ClientHeight = 50
-        ClientWidth = 1585
+        ClientWidth = 1423
         TabOrder = 1
         object btn_atualizar_filtros: TButton
           Left = 8
@@ -41133,8 +41133,8 @@ object Form1: TForm1
     end
     object tab_filtro_opcoes: TTabSheet
       Caption = 'Opções do filtro'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object chk_excluir_jogos_ltf_qt: TCheckGroup
         Left = 8
         Height = 112
@@ -41211,7 +41211,7 @@ object Form1: TForm1
           ChildSizing.ShrinkVertical = crsScaleChilds
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 2
-          ClientHeight = 13
+          ClientHeight = 28
           ClientWidth = 177
           Columns = 2
           ItemIndex = 0
@@ -41244,7 +41244,6 @@ object Form1: TForm1
           Min = 0
           Position = 0
           TabOrder = 2
-          Wrap = False
         end
       end
       object GroupBox26: TGroupBox
@@ -41265,7 +41264,6 @@ object Form1: TForm1
           Min = 0
           Position = 0
           TabOrder = 0
-          Wrap = False
         end
         object msk_filtro_total_de_registros: TMaskEdit
           Left = 5
@@ -41358,7 +41356,7 @@ object Form1: TForm1
             Width = 196
             Align = alClient
             ItemHeight = 0
-            ScrollWidth = 192
+            ScrollWidth = 194
             TabOrder = 0
             TopIndex = -1
           end
@@ -41399,7 +41397,7 @@ object Form1: TForm1
             Width = 196
             Align = alClient
             ItemHeight = 0
-            ScrollWidth = 192
+            ScrollWidth = 194
             TabOrder = 0
             TopIndex = -1
           end
@@ -41433,8 +41431,8 @@ object Form1: TForm1
     end
     object tabFrequencia: TTabSheet
       Caption = 'Frequência'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object Panel1: TPanel
         Left = 0
         Height = 72
@@ -41778,8 +41776,8 @@ object Form1: TForm1
     end
     object tab_concursos: TTabSheet
       Caption = 'Concursos'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object PageControl1: TPageControl
         Left = 10
         Height = 528
@@ -42179,13 +42177,7 @@ object Form1: TForm1
                 Top = 24
                 Width = 118
                 Alignment = taCenter
-                EditLabel.AnchorSideLeft.Control = ed_concurso_manual_numero
-                EditLabel.AnchorSideRight.Control = ed_concurso_manual_numero
-                EditLabel.AnchorSideRight.Side = asrBottom
-                EditLabel.AnchorSideBottom.Control = ed_concurso_manual_numero
-                EditLabel.Left = 8
                 EditLabel.Height = 17
-                EditLabel.Top = 4
                 EditLabel.Width = 118
                 EditLabel.Caption = 'Concurso:'
                 EditLabel.ParentColor = False
@@ -42413,8 +42405,8 @@ object Form1: TForm1
     end
     object TabSheet5: TTabSheet
       Caption = 'Jogos Filtrados'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object Panel3: TPanel
         Left = 0
         Height = 563
@@ -42737,26 +42729,26 @@ object Form1: TForm1
     end
     object TabSheet1: TTabSheet
       Caption = 'Gerador Aleatorio'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object Panel5: TPanel
         Left = 0
-        Height = 563
+        Height = 794
         Top = 0
-        Width = 1237
+        Width = 1423
         Align = alClient
         Anchors = [akTop, akLeft, akBottom]
-        ClientHeight = 563
-        ClientWidth = 1237
+        ClientHeight = 794
+        ClientWidth = 1423
         TabOrder = 0
         object Panel6: TPanel
           Left = 1
           Height = 87
           Top = 1
-          Width = 1235
+          Width = 1421
           Align = alTop
           ClientHeight = 87
-          ClientWidth = 1235
+          ClientWidth = 1421
           TabOrder = 0
           object tgAleatorioExibirCampos: TToggleBox
             Left = 885
@@ -42921,30 +42913,30 @@ object Form1: TForm1
         end
         object Splitter2: TSplitter
           Left = 1
-          Height = 474
+          Height = 705
           Top = 88
           Width = 5
         end
         object PageControl5: TPageControl
           Left = 6
-          Height = 474
+          Height = 705
           Top = 88
-          Width = 1230
+          Width = 1416
           ActivePage = TabSheet10
           Align = alClient
           TabIndex = 0
           TabOrder = 2
           object TabSheet10: TTabSheet
             Caption = 'TabSheet10'
-            ClientHeight = 470
-            ClientWidth = 1226
+            ClientHeight = 701
+            ClientWidth = 1412
             object pnVerificarAcertos1: TPanel
               Left = 0
-              Height = 447
+              Height = 678
               Top = 0
               Width = 199
               Align = alLeft
-              ClientHeight = 443
+              ClientHeight = 674
               ClientWidth = 195
               TabOrder = 0
               object GroupBox28: TGroupBox
@@ -42987,7 +42979,7 @@ object Form1: TForm1
               end
               object sgrAleatorioVerificarAcertos: TStringGrid
                 Left = 1
-                Height = 369
+                Height = 604
                 Top = 121
                 Width = 197
                 Align = alTop
@@ -43010,27 +43002,27 @@ object Form1: TForm1
             end
             object pnExibirCampos1: TPanel
               Left = 199
-              Height = 447
+              Height = 678
               Top = 0
               Width = 152
               Align = alLeft
               Caption = 'pnExibirCampos'
-              ClientHeight = 443
+              ClientHeight = 674
               ClientWidth = 148
               TabOrder = 1
               object grpSelecionarCampos1: TGroupBox
                 Left = 1
-                Height = 445
+                Height = 676
                 Top = 1
                 Width = 150
                 Align = alClient
                 Caption = 'Exibir campos'
-                ClientHeight = 426
+                ClientHeight = 657
                 ClientWidth = 146
                 TabOrder = 0
                 object chkExibirCampos1: TCheckListBox
                   Left = 0
-                  Height = 426
+                  Height = 657
                   Top = 0
                   Width = 146
                   Align = alClient
@@ -43088,9 +43080,9 @@ object Form1: TForm1
             end
             object sgrGeradorAleatorio: TStringGrid
               Left = 648
-              Height = 447
+              Height = 678
               Top = 0
-              Width = 578
+              Width = 764
               Align = alClient
               AutoEdit = False
               ColCount = 0
@@ -43101,12 +43093,12 @@ object Form1: TForm1
             end
             object pnGerador_Opcoes: TPanel
               Left = 351
-              Height = 447
+              Height = 678
               Top = 0
               Width = 297
               Align = alLeft
               Caption = 'pnGerador_Opcoes'
-              ClientHeight = 443
+              ClientHeight = 674
               ClientWidth = 293
               TabOrder = 3
               Visible = False
@@ -43139,13 +43131,13 @@ object Form1: TForm1
               end
               object GroupBox29: TGroupBox
                 Left = 1
-                Height = 364
+                Height = 595
                 Top = 82
                 Width = 295
                 Align = alClient
                 BorderSpacing.Top = 10
                 Caption = 'Combinações geradas:'
-                ClientHeight = 345
+                ClientHeight = 576
                 ClientWidth = 291
                 TabOrder = 1
                 object GroupBox30: TGroupBox
@@ -43211,9 +43203,9 @@ object Form1: TForm1
             end
             object sgrGeradorEspelho: TStringGrid
               Left = 648
-              Height = 447
+              Height = 678
               Top = 0
-              Width = 578
+              Width = 764
               Align = alClient
               AutoEdit = False
               ColCount = 0
@@ -43228,53 +43220,10 @@ object Form1: TForm1
         end
       end
     end
-    object TabSheet3: TTabSheet
-      Caption = 'Combinação Complementar'
-      ClientHeight = 798
-      ClientWidth = 1585
-      object btnAtualizar_Combinacao_Complementar: TButton
-        Left = 376
-        Height = 48
-        Top = 16
-        Width = 163
-        Caption = '&Atualizar'
-        OnClick = btnAtualizar_Combinacao_ComplementarClick
-        TabOrder = 0
-      end
-      object chkComplementar_Bolas_por_combinacao: TCheckGroup
-        Left = 16
-        Height = 57
-        Top = 8
-        Width = 352
-        AutoFill = True
-        Caption = 'Bolas por combinação:'
-        ChildSizing.LeftRightSpacing = 6
-        ChildSizing.TopBottomSpacing = 6
-        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-        ChildSizing.EnlargeVertical = crsHomogenousChildResize
-        ChildSizing.ShrinkHorizontal = crsScaleChilds
-        ChildSizing.ShrinkVertical = crsScaleChilds
-        ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 4
-        ClientHeight = 38
-        ClientWidth = 348
-        Columns = 4
-        Items.Strings = (
-          '15 bolas'
-          '16 bolas'
-          '17 bolas'
-          '18 bolas'
-        )
-        TabOrder = 1
-        Data = {
-          0400000002020202
-        }
-      end
-    end
     object tabFrequenciaSoma: TTabSheet
       Caption = 'Soma das frequências:'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object rdSomaFrequenciaPrecisaoBolas: TRadioGroup
         Left = 8
         Height = 73
@@ -43407,8 +43356,8 @@ object Form1: TForm1
     end
     object TabSheet4: TTabSheet
       Caption = 'Manutenção de Banco de Dados'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object Button1: TButton
         Left = 8
         Height = 25
@@ -43438,13 +43387,13 @@ object Form1: TForm1
     end
     object tab_rotacao_binaria: TTabSheet
       Caption = 'Rotação binária'
-      ClientHeight = 798
-      ClientWidth = 1585
+      ClientHeight = 495
+      ClientWidth = 1423
       object PageControl64: TPageControl
         Left = 10
-        Height = 543
+        Height = 475
         Top = 10
-        Width = 1217
+        Width = 1403
         ActivePage = TabSheet106
         Align = alClient
         BorderSpacing.Around = 10
@@ -43452,8 +43401,8 @@ object Form1: TForm1
         TabOrder = 0
         object TabSheet106: TTabSheet
           Caption = 'TabSheet106'
-          ClientHeight = 539
-          ClientWidth = 1213
+          ClientHeight = 448
+          ClientWidth = 1399
           object grp_rotacao_binaria: TGroupBox
             Left = 8
             Height = 104
@@ -43552,10 +43501,10 @@ object Form1: TForm1
         end
       end
     end
-    object TabSheet107: TTabSheet
-      Caption = 'TabSheet107'
-      ClientHeight = 798
-      ClientWidth = 1585
+    object tab_gerador_aleatorio: TTabSheet
+      Caption = 'Gerador aleatorio 2'
+      ClientHeight = 495
+      ClientWidth = 1423
       object grp_rotacao_binaria1: TGroupBox
         Left = 152
         Height = 104
@@ -43594,18 +43543,18 @@ object Form1: TForm1
       end
       object PageControl65: TPageControl
         Left = 10
-        Height = 543
+        Height = 475
         Top = 10
-        Width = 1217
+        Width = 1403
         ActivePage = TabSheet112
         Align = alClient
         BorderSpacing.Around = 10
         TabIndex = 0
         TabOrder = 1
         object TabSheet112: TTabSheet
-          Caption = 'TabSheet106'
-          ClientHeight = 539
-          ClientWidth = 1213
+          Caption = 'Gerar aleatorio'
+          ClientHeight = 448
+          ClientWidth = 1399
           object grp_gerador_aleatorio: TGroupBox
             Left = 8
             Height = 104
@@ -43694,9 +43643,9 @@ object Form1: TForm1
           end
           object sgr_gerador_aleatorio: TStringGrid
             Left = 8
-            Height = 388
+            Height = 297
             Top = 120
-            Width = 1200
+            Width = 1386
             Anchors = [akTop, akLeft, akRight, akBottom]
             TabOrder = 3
           end
