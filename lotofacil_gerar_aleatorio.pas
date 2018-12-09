@@ -320,7 +320,7 @@ begin
     Inc(indice_cmb_geradas);
 
     // Preenche o arranjo com bola da lista 'bolas_nao_sorteadas'.
-//    Inc(indice_cmb_geradas);
+    //    Inc(indice_cmb_geradas);
     for uB := 0 to Pred(bolas_nao_sorteadas.Count) do begin
       bola_atual := bolas_nao_sorteadas.Items[uB];
       combinacoes_geradas[indice_cmb_geradas, bola_atual] := 1;

@@ -5,6 +5,7 @@ Autor: *Fábio Moura de Oliveira*
 Aumente suas chances de acertar no jogo da lotofacil
 
 Este programa realiza as seguintes análises estatísticas:
+
 * novos x repetidos
 * par x ímpar
 * primo x não-primos
@@ -31,9 +32,12 @@ Este programa realiza as seguintes análises estatísticas:
 
 Pra utilizar o analisador lotofacil.
 =====================================
-* Baixe postgresql em ![https://www.postgresql.org/download/](https://www.postgresql.org/download/)
+
+* Baixe postgresql em https://www.postgresql.org/download.
+
 * Instale postgresql.
-* Baixe o banco de dados 'lotofacil' em: ![https://mega.nz/#F!R1okhQoZ!rKyIsQgxicUsVvczjeubZA](https://mega.nz/#F!R1okhQoZ!rKyIsQgxicUsVvczjeubZA):
+
+* Baixe o banco de dados 'lotofacil' em: https://mega.nz/#F!R1okhQoZ!rKyIsQgxicUsVvczjeubZA
 
 Ao baixar haverá uma pasta com o nome 'lotofacil_2018_12_05', que indica o ano, mês e dia que o banco de dados se refere, também,
 pra o programa 'Analisador Lotofacil', haverá tags que identifica a qual banco de dados, o programa se refere.
@@ -47,10 +51,13 @@ Eu estou utilizando linux, e utilizei o comando 'split -b=250m lotofacil_2018_12
 em partes de 250MiB.
 
 Então, ao baixar a pasta, vc precisa unir os arquivos novamente, pra isto utilize:
+
 # No windows:
+
 `copy /B lotofacil_aa + lotofacil_ab + lotofacil_ac + lotofacil_ad + lotofacil_ae + lotofacil_af + lotofacil_ag + lotofacil_ah + lotofacil_ai  lotofacil_2018_12_05.7z`
 
-# No linux e no Mac:
+# No linux e no Mac: 
+
 `cat lotofacil_aa lotofacil_ab lotofacil_ac lotofacil_ad lotofacil_ae lotofacil_af lotofacil_ag lotofacil_ah lotofacil_ai > lotofacil_2018_12_05.7z`
 
 Em seguida, temos um arquivo comprimido, descompacte este arquivo, em uma pasta temporária ou qualquer outra pasta.
