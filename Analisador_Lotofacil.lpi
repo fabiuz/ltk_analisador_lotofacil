@@ -16,6 +16,9 @@
     </i18n>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
+      <SharedMatrixOptions Count="1">
+        <Item1 ID="357475956058" Type="IDEMacro" MacroName="fpGUIPlatform" Value="gdi"/>
+      </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>

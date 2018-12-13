@@ -25,8 +25,9 @@ type
         ltf_qt:    byte;
         ltf_bolas: array [0..17] of byte;
     end;
+
 type
-    Tlotofacil_5_bolas = array [0..5] of Byte;
+    Tlotofacil_5_bolas = array [0..5] of byte;
 
 type
 
@@ -56,7 +57,7 @@ type
         // Armazena a soma total das frequencia em cada grupo;
         sm_frq_grupo: array of array of integer;
 
-        fbTeste: array [0..3268760] of Tlotofacil_5_bolas;
+        //fbTeste: array [0..3268760] of Tlotofacil_5_bolas;
 
         f_ltf_id_bolas_na_mesma_coluna: array of array of array of byte;
 
@@ -73,11 +74,14 @@ type
         // procedure AtualizarNovosRepetidos_2;
         //procedure AtualizarNovosRepetidos_3;
         procedure AtualizarNovosRepetidos_4;
+        procedure AtualizarNovosRepetidos_5;
+        procedure AtualizarNovosRepetidos_6;
         procedure atualizar_resultado_novos_repetidos;
         procedure Exibir_Mensagem_de_Termino;
         procedure gerar_frequencia_das_combinacoes;
         //procedure GravarLinhasNoArquivo(arquivo_novos_repetidos : TFileStream; str_linhas : AnsiString);
         function ObterBolasDoConcurso(numero_do_concurso: integer): boolean;
+        function obter_bolas_do_concurso(numero_do_concurso: integer): boolean;
         procedure AtualizarInterface;
 
         procedure DoStatus;
@@ -528,7 +532,7 @@ end;
 procedure TLotofacilNovosRepetidos.Execute;
 begin
 
-    if not ObterBolasDoConcurso(fConcurso) then
+    if not obter_bolas_do_concurso(fconcurso) then
     begin
         Exit;
     end;
@@ -550,7 +554,9 @@ begin
     //AtualizarNovosRepetidos;
     //AtualizarNovosRepetidos_2
     //AtualizarNovosRepetidos_3;
-    AtualizarNovosRepetidos_4;
+    //AtualizarNovosRepetidos_4;
+    //AtualizarNovosRepetidos_5;
+    AtualizarNovosRepetidos_6;
 
 end;
 
@@ -759,48 +765,48 @@ begin
 end;
 
 function TLotofacilNovosRepetidos.obter_frequencia_das_bolas(numero_do_concurso: integer): boolean;
-var
-    sql_query: TZQuery;
-    uA: integer;
-    bola_atual, qt_registros: longint;
+    //var
+    //    sql_query: TZQuery;
+    //    uA: integer;
+    //    bola_atual, qt_registros: longint;
 begin
-    try
-        sql_query := TZQuery.Create(nil);
-        sql_query.Connection := f_sql_conexao;
-        sql_query.SQL.Clear;
+    //try
+    //    sql_query := TZQuery.Create(nil);
+    //    sql_query.Connection := f_sql_conexao;
+    //    sql_query.SQL.Clear;
 
-        sql_query.Sql.Add('Select * from lotofacil.lotofacil_resultado_bolas_frequencia_total');
-        sql_query.Sql.Add('where concurso = ' + QuotedStr(IntToStr(numero_do_concurso)));
-        sql_query.Open;
-        sql_query.First;
-        sql_query.Last;
+    //    sql_query.Sql.Add('Select * from lotofacil.lotofacil_resultado_bolas_frequencia_total');
+    //    sql_query.Sql.Add('where concurso = ' + QuotedStr(IntToStr(numero_do_concurso)));
+    //    sql_query.Open;
+    //    sql_query.First;
+    //    sql_query.Last;
 
-        qt_registros := sql_query.RecordCount;
-        if qt_registros = 0 then
-        begin
-            fStatus('Erro, nenhuma frequência localizada pra o concurso: ' + IntToStr(numero_do_concurso));
-            fStatus_Mensagem_Erro:='Erro, nenhuma frequencia localizada pra o concurso: ' + IntToStr(numero_do_concurso);
-            Synchronize(@DoStatusConcluido);
-            Exit(False);
-        end;
+    //    qt_registros := sql_query.RecordCount;
+    //    if qt_registros = 0 then
+    //    begin
+    //        fStatus('Erro, nenhuma frequência localizada pra o concurso: ' + IntToStr(numero_do_concurso));
+    //        fStatus_Mensagem_Erro:='Erro, nenhuma frequencia localizada pra o concurso: ' + IntToStr(numero_do_concurso);
+    //        Synchronize(@DoStatusConcluido);
+    //        Exit(False);
+    //    end;
 
-        FillChar(lotofacil_frequencia_bolas[0], sizeof(integer) * 26, 0);
+    //    FillChar(lotofacil_frequencia_bolas[0], sizeof(integer) * 26, 0);
 
-        sql_query.First;
-        for uA := 1 to 25 do
-        begin
-            bola_atual := sql_query.FieldByName('bola').AsInteger;
-            lotofacil_frequencia_bolas[bola_atual] := sql_query.FieldByName('frequencia').AsInteger;
-            sql_query.Next;
-        end;
-        FreeAndNil(sql_query);
-    except
-        On Exc: Exception do
-        begin
-            FreeAndNil(sql_query);
-            Exit(False);
-        end;
-    end;
+    //    sql_query.First;
+    //    for uA := 1 to 25 do
+    //    begin
+    //        bola_atual := sql_query.FieldByName('bola').AsInteger;
+    //        lotofacil_frequencia_bolas[bola_atual] := sql_query.FieldByName('frequencia').AsInteger;
+    //        sql_query.Next;
+    //    end;
+    //    FreeAndNil(sql_query);
+    //except
+    //    On Exc: Exception do
+    //    begin
+    //        FreeAndNil(sql_query);
+    //        Exit(False);
+    //    end;
+    //end;
 
     gerar_frequencia_das_combinacoes;
 
@@ -823,8 +829,7 @@ begin
 
     FillChar(lotofacil_cmb[0], 19 * sizeof(byte), 0);
 
-
-    fStatus_Mensagem:= 'Gerando frequência, aguarde...';
+    fStatus_Mensagem := 'Gerando frequência, aguarde...';
     Synchronize(@DoStatus);
 
     for b1 := 1 to 25 do
@@ -891,7 +896,8 @@ begin
                                                                         begin
                                                                             bola_b2 := lotofacil_cmb[uB];
                                                                             soma_grupo_2 :=
-                                                                                soma_grupo_2 + frq_grp_2[bola_b1, bola_b2];
+                                                                                soma_grupo_2 +
+                                                                                frq_grp_2[bola_b1, bola_b2];
                                                                         end;
                                                                     end;
 
@@ -908,7 +914,8 @@ begin
                                                                             begin
                                                                                 bola_b3 := lotofacil_cmb[uC];
                                                                                 soma_grupo_3 :=
-                                                                                    soma_grupo_3 + frq_grp_3[bola_b1, bola_b2, bola_b3];
+                                                                                    soma_grupo_3 +
+                                                                                    frq_grp_3[bola_b1, bola_b2, bola_b3];
                                                                             end;
                                                                         end;
                                                                     end;
@@ -931,7 +938,8 @@ begin
                                                                                     bola_b4 := lotofacil_cmb[uD];
                                                                                     soma_grupo_4 :=
                                                                                         soma_grupo_4 +
-                                                                                        frq_grp_4[bola_b1, bola_b2, bola_b3, bola_b4];
+                                                                                        frq_grp_4[bola_b1,
+                                                                                        bola_b2, bola_b3, bola_b4];
                                                                                 end;
                                                                             end;
                                                                         end;
@@ -959,7 +967,8 @@ begin
                                                                                         bola_b5 := lotofacil_cmb[uE];
                                                                                         soma_grupo_5 :=
                                                                                             soma_grupo_5 +
-                                                                                            frq_grp_5[bola_b1, bola_b2, bola_b3, bola_b4, bola_b5];
+                                                                                            frq_grp_5[bola_b1,
+                                                                                            bola_b2, bola_b3, bola_b4, bola_b5];
                                                                                     end;
                                                                                 end;
                                                                             end;
@@ -1064,7 +1073,8 @@ begin
                                                                             begin
                                                                                 bola_b2 := lotofacil_cmb[uB];
                                                                                 soma_grupo_2 :=
-                                                                                    soma_grupo_2 + frq_grp_2[bola_b1, bola_b2];
+                                                                                    soma_grupo_2 +
+                                                                                    frq_grp_2[bola_b1, bola_b2];
                                                                             end;
                                                                         end;
 
@@ -1081,7 +1091,8 @@ begin
                                                                                 begin
                                                                                     bola_b3 := lotofacil_cmb[uC];
                                                                                     soma_grupo_3 :=
-                                                                                        soma_grupo_3 + frq_grp_3[bola_b1, bola_b2, bola_b3];
+                                                                                        soma_grupo_3 +
+                                                                                        frq_grp_3[bola_b1, bola_b2, bola_b3];
                                                                                     ;
                                                                                 end;
                                                                             end;
@@ -1105,7 +1116,8 @@ begin
                                                                                         bola_b4 := lotofacil_cmb[uD];
                                                                                         soma_grupo_4 :=
                                                                                             soma_grupo_4 +
-                                                                                            frq_grp_4[bola_b1, bola_b2, bola_b3, bola_b4];
+                                                                                            frq_grp_4[bola_b1,
+                                                                                            bola_b2, bola_b3, bola_b4];
                                                                                     end;
                                                                                 end;
                                                                             end;
@@ -1134,7 +1146,8 @@ begin
                                                                                                 lotofacil_cmb[uE];
                                                                                             soma_grupo_5 :=
                                                                                                 soma_grupo_5 +
-                                                                                                frq_grp_5[bola_b1, bola_b2, bola_b3, bola_b4, bola_b5];
+                                                                                                frq_grp_5[bola_b1,
+                                                                                                bola_b2, bola_b3, bola_b4, bola_b5];
                                                                                             ;
                                                                                         end;
                                                                                     end;
@@ -1237,7 +1250,8 @@ begin
                                                                                 begin
                                                                                     bola_b2 := lotofacil_cmb[uB];
                                                                                     soma_grupo_2 :=
-                                                                                        soma_grupo_2 + frq_grp_2[bola_b1, bola_b2];
+                                                                                        soma_grupo_2 +
+                                                                                        frq_grp_2[bola_b1, bola_b2];
                                                                                 end;
                                                                             end;
 
@@ -1254,7 +1268,8 @@ begin
                                                                                     begin
                                                                                         bola_b3 := lotofacil_cmb[uC];
                                                                                         soma_grupo_3 :=
-                                                                                            soma_grupo_3 + frq_grp_3[bola_b1, bola_b2, bola_b3];
+                                                                                            soma_grupo_3 +
+                                                                                            frq_grp_3[bola_b1, bola_b2, bola_b3];
                                                                                     end;
                                                                                 end;
                                                                             end;
@@ -1278,7 +1293,8 @@ begin
                                                                                                 lotofacil_cmb[uD];
                                                                                             soma_grupo_4 :=
                                                                                                 soma_grupo_4 +
-                                                                                                frq_grp_4[bola_b1, bola_b2, bola_b3, bola_b4];
+                                                                                                frq_grp_4[bola_b1,
+                                                                                                bola_b2, bola_b3, bola_b4];
                                                                                         end;
                                                                                     end;
                                                                                 end;
@@ -1308,7 +1324,8 @@ begin
                                                                                                     lotofacil_cmb[uE];
                                                                                                 soma_grupo_5 :=
                                                                                                     soma_grupo_5 +
-                                                                                                    frq_grp_5[bola_b1, bola_b2, bola_b3, bola_b4, bola_b5];
+                                                                                                    frq_grp_5[bola_b1,
+                                                                                                    bola_b2, bola_b3, bola_b4, bola_b5];
                                                                                             end;
                                                                                         end;
                                                                                     end;
@@ -1402,7 +1419,8 @@ begin
                                                                                 begin
                                                                                     bola_b1 := lotofacil_cmb[uA];
                                                                                     soma_grupo_1 :=
-                                                                                        soma_grupo_1 + frq_grp_1[bola_b1];
+                                                                                        soma_grupo_1 +
+                                                                                        frq_grp_1[bola_b1];
                                                                                 end;
 
                                                                                 soma_grupo_2 := 0;
@@ -1414,7 +1432,8 @@ begin
                                                                                     begin
                                                                                         bola_b2 := lotofacil_cmb[uB];
                                                                                         soma_grupo_2 :=
-                                                                                            soma_grupo_2 + frq_grp_2[bola_b1, bola_b2];
+                                                                                            soma_grupo_2 +
+                                                                                            frq_grp_2[bola_b1, bola_b2];
                                                                                     end;
                                                                                 end;
 
@@ -1432,7 +1451,8 @@ begin
                                                                                             bola_b3 :=
                                                                                                 lotofacil_cmb[uC];
                                                                                             soma_grupo_3 :=
-                                                                                                soma_grupo_3 + frq_grp_3[bola_b1, bola_b2, bola_b3];
+                                                                                                soma_grupo_3 +
+                                                                                                frq_grp_3[bola_b1, bola_b2, bola_b3];
                                                                                         end;
                                                                                     end;
                                                                                 end;
@@ -1457,7 +1477,8 @@ begin
                                                                                                     lotofacil_cmb[uD];
                                                                                                 soma_grupo_4 :=
                                                                                                     soma_grupo_4 +
-                                                                                                    frq_grp_4[bola_b1, bola_b2, bola_b3, bola_b4];
+                                                                                                    frq_grp_4[bola_b1,
+                                                                                                    bola_b2, bola_b3, bola_b4];
                                                                                             end;
                                                                                         end;
                                                                                     end;
@@ -1486,7 +1507,8 @@ begin
                                                                                                     uD + 1 to 18 do
                                                                                                 begin
                                                                                                     bola_b5 :=
-                                                                                                        lotofacil_cmb[uE];
+                                                                                                        lotofacil_cmb
+                                                                                                        [uE];
                                                                                                     soma_grupo_5 :=
                                                                                                         soma_grupo_5 +
                                                                                                         frq_grp_5[bola_b1, bola_b2, bola_b3, bola_b4, bola_b5];
@@ -1534,62 +1556,118 @@ begin
     SetLength(frq_grp_5, 0);
 end;
 
-{
- Obtém todas as bolas do concurso.
-}
-function TLotofacilNovosRepetidos.ObterBolasDoConcurso(numero_do_concurso: integer): boolean;
+function TLotofacilNovosRepetidos.obter_bolas_do_concurso(numero_do_concurso: integer): boolean;
 var
-    sql_registro: TSqlQuery;
+    //sql_registro: TSqlQuery;
     qt_registros: longint;
     uA: integer;
+    sql_query: TZQuery;
 begin
-    if not Assigned(dmLotofacil) or (dmLotofacil = nil) then
-    begin
-        dmLotofacil := TdmLotofacil.Create(nil);
-    end;
 
     try
-        sql_registro := dmLotofacil.sqlLotofacil;
-        sql_registro.Active := False;
-        sql_registro.Database := dmLotofacil.pgLtk;
+        sql_query := TZQuery.Create(nil);
+        sql_query.Connection := f_sql_conexao;
 
-        sql_registro.Sql.Clear;
-        sql_registro.Sql.Add('Select b_1, b_2, b_3, b_4, b_5,');
-        sql_registro.Sql.Add('b_6, b_7, b_8, b_9, b_10, b_11, b_12, b_13, b_14, b_15');
-        sql_registro.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
-        sql_registro.Sql.Add('where concurso = ' + IntToStr(numero_do_concurso));
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select b_1, b_2, b_3, b_4, b_5,');
+        sql_query.Sql.Add('b_6, b_7, b_8, b_9, b_10, b_11, b_12, b_13, b_14, b_15');
+        sql_query.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
+        sql_query.Sql.Add('where concurso = ' + IntToStr(numero_do_concurso));
 
-        sql_registro.UniDirectional := False;
-        sql_registro.Open;
+        sql_query.Open;
 
-        sql_registro.First;
-        sql_registro.Last;
-        qt_registros := sql_registro.RecordCount;
-        sql_registro.First;
+        sql_query.First;
+        sql_query.Last;
+        qt_registros := sql_query.RecordCount;
+        sql_query.First;
 
         if qt_registros = 0 then
         begin
-            fStatus('Nenhum registro encontrado pra o concurso: ' + IntToStr(numero_do_concurso));
+            fStatus_Mensagem := 'Nenhum registro encontrado pra o concurso: ' +
+                IntToStr(numero_do_concurso);
+            Synchronize(@DoStatus);
+            Synchronize(@DoStatusConcluido);
             Exit(False);
         end;
 
         for uA := 1 to 15 do
         begin
-            lotofacil_bolas_do_concurso[uA] := sql_registro.FieldByName('b_' + IntToStr(uA)).AsInteger;
+            lotofacil_bolas_do_concurso[uA] := sql_query.FieldByName('b_' + IntToStr(uA)).AsInteger;
         end;
 
-        sql_registro.Close;
-        dmLotofacil.pgLTK.CloseDataSets;
+        sql_query.Close;
+        FreeAndNil(sql_query);
 
     except
         On exc: Exception do
         begin
             fStatus_Mensagem_Erro := 'Erro: ' + Exc.Message;
+            fStatus_Mensagem_Erro := 'Erro: ' + Exc.Message;
+            Synchronize(@DoStatus);
+            Synchronize(@DoStatusConcluido);
             Exit(False);
         end;
     end;
 
     Exit(True);
+end;
+
+{
+ Obtém todas as bolas do concurso.
+}
+function TLotofacilNovosRepetidos.ObterBolasDoConcurso(numero_do_concurso: integer): boolean;
+    //var
+    //    sql_registro: TSqlQuery;
+    //    qt_registros: longint;
+    //    uA: integer;
+begin
+    //if not Assigned(dmLotofacil) or (dmLotofacil = nil) then
+    //begin
+    //    dmLotofacil := TdmLotofacil.Create(nil);
+    //end;
+
+    //try
+    //    sql_registro := dmLotofacil.sqlLotofacil;
+    //    sql_registro.Active := False;
+    //    sql_registro.Database := dmLotofacil.pgLtk;
+
+    //    sql_registro.Sql.Clear;
+    //    sql_registro.Sql.Add('Select b_1, b_2, b_3, b_4, b_5,');
+    //    sql_registro.Sql.Add('b_6, b_7, b_8, b_9, b_10, b_11, b_12, b_13, b_14, b_15');
+    //    sql_registro.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
+    //    sql_registro.Sql.Add('where concurso = ' + IntToStr(numero_do_concurso));
+
+    //    sql_registro.UniDirectional := False;
+    //    sql_registro.Open;
+
+    //    sql_registro.First;
+    //    sql_registro.Last;
+    //    qt_registros := sql_registro.RecordCount;
+    //    sql_registro.First;
+
+    //    if qt_registros = 0 then
+    //    begin
+    //        fStatus('Nenhum registro encontrado pra o concurso: ' + IntToStr(numero_do_concurso));
+    //        Exit(False);
+    //    end;
+
+    //    for uA := 1 to 15 do
+    //    begin
+    //        lotofacil_bolas_do_concurso[uA] := sql_registro.FieldByName('b_' + IntToStr(uA)).AsInteger;
+    //    end;
+
+    //    sql_registro.Close;
+    //    dmLotofacil.pgLTK.CloseDataSets;
+
+    //except
+    //    On exc: Exception do
+    //    begin
+    //        fStatus_Mensagem_Erro := 'Erro: ' + Exc.Message;
+    //        Exit(False);
+    //    end;
+    //end;
+
+    //Exit(True);
 end;
 
 //procedure TLotofacilNovosRepetidos.GravarLinhasNoArquivo(arquivo_novos_repetidos: TFileStream; str_linhas: AnsiString);
@@ -2710,7 +2788,7 @@ end;
 //   qt_linhas := -1;
 //   // Ao gravar, devemos verificar por possíveis erros.
 //   try
-//      //GravarLinhasNoArquivo(arq_novos_repetidos, str_linhas);
+//GravarLinhasNoArquivo(arq_novos_repetidos, str_linhas);
 //   except
 //     On exc:Exception do
 //     begin
@@ -3153,6 +3231,1557 @@ end;
 
 //end;
 
+procedure TLotofacilNovosRepetidos.AtualizarNovosRepetidos_6;
+const
+    ARQUIVO_LTF_NUM_BOLAS = '../analisador_lotofacil_dados/lotofacil_bolas_novos_repetidos.ltf_bin';
+const
+  {$IFDEF LINUX}
+    CRLF = #10;
+         {$ELSE}
+                {$IFDEF WINDOWS}
+    CRLF = #10#13;
+                {$ELSE}
+    CRLF = #13;
+                 {$ENDIF}
+         {$ENDIF}
+    TOTAL_DE_REGISTROS = 6874010;
+    QT_REGISTROS_ANTES_DE_EXIBIR = 250000;
+    TOTAL_DE_BYTES_MAXIMO = 10240;
+type
+    // ********************
+    // A estrutura abaixo é usada no arquivo 'lotofacil_num_bolas.ltf_bin'.
+    // A ordem dos campos abaixo é importante, não modifica, pois, o arquivo
+    // é armazenada conforme a estrutura abaixo.
+    // ********************
+  {$ALIGN 1}
+    ltf_novos_repetidos = record
+        ltf_id:    cardinal;                         // 4 bytes: de 1 a 6874010.
+        ltf_qt:    byte;                             // 1 byte: de 15 a 18.
+        novos_repetidos_id: byte;                 // 1 byte: de 0 a 10.
+        qt_de_bolas_comuns_b1_a_b15: byte;        // 1 byte: de 0 a 10.
+        qt_de_bolas_subindo_b1_a_b15: byte;
+        qt_de_bolas_descendo_b1_a_b15: byte;
+        cmp_b_id:  byte;
+        nao_usado: array[0..1] of byte;           // Não usado, somente pra alinhar o próximo campo
+        novos_repetidos_id_alternado: cardinal;
+        id_sequencial: integer;                   // id sequencial.
+        bolas:     array[0..19] of shortint;          // No código, pode acontecer ao realizar a diferença
+        // o número ser negativo.
+        // 1 byte.
+    end;
+    pt_ltf_novos_repetidos = ^ltf_novos_repetidos;
+var
+    pt_buffer_ltf_novos_repetidos: pt_ltf_novos_repetidos;
+    pt_buffer: pt_ltf_novos_repetidos;
+
+    // ltf_id, ltf_qt,
+    total_de_bytes_lidos: longint;
+    // b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18: byte;
+    lotofacil_concurso:   array[0..25] of byte;
+
+    // Armazena pra cada id de novos x repetidos um identificador sequencial independente.
+    novos_repetidos_id_sequencial: array[0..10] of cardinal;
+
+    qt_repetidos, qt_id_novos_repetidos: integer;
+
+    //arquivo_novos_repetidos: Text;
+    //arq_novos_repetidos : TFileStream;
+
+    bola_atual, total_de_bytes_alocados, qt_registros, qt_registros_lidos, id_novos_repetidos,
+    qt_bolas_iguais_na_mesma_coluna, qt_bolas_subindo_na_mesma_coluna, qt_bolas_descendo_na_mesma_coluna,
+    tamanho_do_string, qt_max_de_bytes_ja_alocados, qt_de_bolas_comuns_na_mesma_coluna,
+    qt_de_bolas_subindo_na_mesma_coluna, qt_de_bolas_descendo_na_mesma_coluna, soma_grupo_1,
+    soma_grupo_2, soma_grupo_3, soma_grupo_4, soma_grupo_5: integer;
+    arquivo_novos_repetidos, arquivo_insert: TFileStream;
+    str_sql_inicio, str_sql_a_inserir, sql_insert_campos, sql_comando_copy: string;
+
+    buffer_texto: PChar;
+    sql_memory:   TStringStream;
+
+    //sql_query: TSQLQuery;
+
+    sql_query: TZQuery;
+
+    //sm_frq_grp : array of array of Int64;
+    bola_b1, bola_b2, bola_b3, bola_b4, bola_b5: shortint;
+    uA, uB, uC, uD, uE, uF, uG, uH, uI: integer;
+
+begin
+    // Armazena o horário de início da atualização.
+    fInicio_da_atualizacao := Now;
+
+    // Vamos alocar memória.
+    total_de_bytes_alocados := sizeof(ltf_novos_repetidos) * TOTAL_DE_REGISTROS;
+    try
+        pt_buffer_ltf_novos_repetidos := GetMem(total_de_bytes_alocados);
+    except
+        On exc: Exception do
+        begin
+            fStatus_Mensagem_Erro := 'Erro: ' + exc.Message;
+            Synchronize(@DoStatusErro);
+        end;
+    end;
+
+    // Zera buffer de memória.
+    FillChar(pt_buffer_ltf_novos_repetidos^, total_de_bytes_alocados, 0);
+    FillChar(lotofacil_concurso, sizeof(byte) * 26, 0);
+    FillChar(novos_repetidos_id_sequencial, sizeof(cardinal) * 11, 0);
+
+    // Preenche o arranjo com as bolas do concurso.
+    for uA := 1 to 15 do
+    begin
+        bola_atual := lotofacil_bolas_do_concurso[uA];
+        lotofacil_concurso[bola_atual] := 1;
+    end;
+
+    // Verifica se arquivo existe, antes de abrir.
+    if not FileExists(ARQUIVO_LTF_NUM_BOLAS) then
+    begin
+        fStatus_Mensagem_Erro := 'Erro, arquivo ' + ARQUIVO_LTF_NUM_BOLAS + ' não existe.';
+        Synchronize(@DoStatusErro);
+        Exit;
+    end;
+
+    // Tenta abrir arquivo, se houver erro, devemos sair da atualização.
+    try
+        arquivo_novos_repetidos := TFileStream.Create(ARQUIVO_LTF_NUM_BOLAS, fmOpenRead);
+    except
+        On exc: Exception do
+        begin
+            fStatus_Mensagem_Erro := 'Erro ao abrir arquivo.';
+            Synchronize(@DoStatusErro);
+            Exit;
+        end;
+    end;
+
+    // Verifica se o tamanho do arquivo, é igual ao número de bytes alocados.
+    if arquivo_novos_repetidos.Size <> total_de_bytes_alocados then
+    begin
+        fStatus_Mensagem_Erro := 'Quantidade de bytes do arquivo inválido.';
+        Synchronize(@DoStatusErro);
+        Exit;
+    end;
+
+    // Aloca todo o conteúdo do arquivo na memória, é um arquivo binário de 275 Megabytes.
+    total_de_bytes_lidos := arquivo_novos_repetidos.Read(pt_buffer_ltf_novos_repetidos^, total_de_bytes_alocados);
+    if total_de_bytes_lidos <> total_de_bytes_alocados then
+    begin
+        fStatus_Mensagem_Erro := 'Arquivo incompleto, possíveis combinações em falta.';
+        Synchronize(@DoStatusErro);
+        Exit;
+    end;
+
+    // Cria um arquivo em uma pasta temporária pra ser utilizada posteriormente pelo
+    // comando copy.
+    {$IFDEF LINUX}
+    arquivo_insert := TFileStream.Create('/tmp/lotofacil_novos_repetidos.csv', fmCreate);
+    {$ELSE}
+           {$IFDEF WINDOWS}
+    if not DirectoryExists('c:\tmp\') then
+    begin
+        CreateDir('c:\tmp\');
+    end;
+    arquivo_insert := TFileStream.Create('/tmp/lotofacil_novos_repetidos.csv', fmOpenReadWrite);
+           {$else}
+    arquivo_insert := TFileStream.Create('/tmp/lotofacil_novos_repetidos.csv', fmOpenReadWrite);
+           {$endif}
+    {$endif}
+
+    // Gera o cabeçalho.
+    sql_insert_campos := 'ltf_id,ltf_qt';
+    sql_insert_campos := sql_insert_campos + ',novos_repetidos_id';
+    sql_insert_campos := sql_insert_campos + ',novos_repetidos_id_alternado';
+    sql_insert_campos := sql_insert_campos + ',cmp_b_id';
+
+    for uB := 1 to 15 do
+    begin
+        sql_insert_campos := sql_insert_campos + ',cmp_b' + IntToStr(uB);
+    end;
+
+    sql_insert_campos := sql_insert_campos + ',qt_bolas_subindo_na_mesma_coluna';
+    sql_insert_campos := sql_insert_campos + ',qt_bolas_descendo_na_mesma_coluna';
+    sql_insert_campos := sql_insert_campos + ',qt_bolas_iguais_na_mesma_coluna';
+
+    sql_insert_campos := sql_insert_campos + ',sm_frq_grp_1';
+    sql_insert_campos := sql_insert_campos + ',sm_frq_grp_2';
+    sql_insert_campos := sql_insert_campos + ',sm_frq_grp_3';
+    sql_insert_campos := sql_insert_campos + ',sm_frq_grp_4';
+    sql_insert_campos := sql_insert_campos + ',sm_frq_grp_5';
+    sql_insert_campos := sql_insert_campos + ',concurso';
+    sql_insert_campos := sql_insert_campos + ',qt_alt_seq';
+
+    arquivo_insert.Write(sql_insert_campos[1], Length(sql_insert_campos));
+
+    try
+        sql_query := TZquery.Create(nil);
+        sql_query.Connection := f_sql_conexao;
+        sql_query.Connection.AutoCommit := False;
+
+        // Vamos apagar as restrições:
+        fStatus_Mensagem := 'Truncando tabela.... aguarde...';
+        Synchronize(@DoStatus);
+
+        sql_query.SQL.Clear;
+        sql_query.Sql.Add('truncate lotofacil.lotofacil_novos_repetidos');
+        sql_query.ExecSQL;
+
+        // Apagar restrições da tabela pra inserção ser mais rápida.
+        fStatus_Mensagem := 'Tabela truncada, Apagando restrições.... aguarde...';
+        Synchronize(@DoStatus);
+
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_drop_constraint()');
+        sql_query.ExecSql;
+
+        pt_buffer := pt_buffer_ltf_novos_repetidos;
+        qt_registros_lidos := 0;
+        for uA := 1 to TOTAL_DE_REGISTROS do
+        begin
+            qt_repetidos := 0;
+
+            // Verifica se o campo ltf é válido.
+            if (pt_buffer^.ltf_qt < 15) or (pt_buffer^.ltf_qt > 18) then
+            begin
+                fStatus_Mensagem_Erro := 'Erro, ltf_qt inválido: ' + IntToStr(pt_buffer^.ltf_id);
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+            // No próximo loop, iremos comparar a combinação do concurso escolhido pelo
+            // usuário com cada combinação possível da lotofacil.
+            // Esta comparação será realização por coluna, será comparada a mesma coluna
+            // de ambas as combinações.
+            // A comparação será realizada comparando uma bola de uma combinação com
+            // a outra bola da outra combinação na mesma coluna.
+            qt_de_bolas_comuns_na_mesma_coluna := 0;
+            qt_de_bolas_subindo_na_mesma_coluna := 0;
+            qt_de_bolas_descendo_na_mesma_coluna := 0;
+
+            //pt_buffer^.qt_de_bolas_descendo_b1_a_b15 := 0;
+            //pt_buffer^.qt_de_bolas_comuns_b1_a_b15 := 0;
+            //pt_buffer^.qt_de_bolas_subindo_b1_a_b15 := 0;
+
+            // No loop abaixo, iremos verificar se a mesma bola está em ambas as combinações
+            // E também iremos verificar se na mesma coluna em ambas as combinações,
+            // é a mesma bola ou bolas diferentes.
+            for uB := 1 to pt_buffer^.ltf_qt do
+            begin
+                // As bolas estão organizadas em ordem crescente, então devemos saber
+                // qual bola está naquela coluna, pra em seguida, verifica se está bola
+                // também está na outra combinação.
+                bola_atual := pt_buffer^.bolas[uB];
+                if (lotofacil_concurso[bola_atual] = 1) then
+                begin
+                    Inc(qt_repetidos);
+                end;
+
+                // Iremos comparar a combinação do concurso escolhido pelo usuário com cada
+                // combinação possível da lotofacil, neste caso, a comparação será por coluna.
+                // As colunas a serem comparadas, serão as colunas b1 a b15, pois, são comuns
+                // a todas as combinações de 15, 16, 17 e 18 bolas.
+                // Iremos comparar a bola de uma combinação com a bola de outra combinação
+                // que estão na mesma coluna.
+                // No registro que criamos, ao ler o conteúdo, o arranjo bolas contém
+                // as bolas de cada combinação, como não iremos armazenar na tabela do banco
+                // de dados tais as bolas, somente outros campos do registro, então
+                // iremos usar o próprio arranjo pra armazenar os cálculos de comparação.
+
+                // Só iremos comparar bolas das colunas b_1 a b_15 pois elas são comuns
+                // a todas as combinações de 15 a 18 bolas.
+                if uB <= 15 then
+                begin
+                    pt_buffer^.bolas[uB] := pt_buffer^.bolas[uB] - lotofacil_bolas_do_concurso[uB];
+
+                    // Se a diferença for:
+                    // Zero, as bolas são iguais.
+                    // Negativo, a bola da combinação atual é menor que a bola da combinação do concurso.
+                    // Positivo, a bola da combinação atual é maior que a bola da combinação do concurso.
+                    case sign(pt_buffer^.bolas[uB]) of
+                        -1: Inc(qt_de_bolas_descendo_na_mesma_coluna);
+                        0: Inc(qt_de_bolas_comuns_na_mesma_coluna);
+                        1: Inc(qt_de_bolas_subindo_na_mesma_coluna);
+                        else
+                        begin
+                            fStatus_Mensagem_Erro :=
+                                'Bug: Função sign nunca retornar valores diferente de -1, 0, 1' +
+                                'ltf_id: ' + IntToStr(pt_buffer^.ltf_id) + ', ' +
+                                'uB: ' + IntToStr(uB) + ', bola atual: ' + IntToStr(pt_buffer^.bolas[uB]);
+                            Exibir_Mensagem_de_Termino;
+                            Synchronize(@DoStatusErro);
+                            FreeMem(pt_buffer_ltf_novos_repetidos);
+                            Exit;
+                        end;
+                    end;
+                end;
+            end;
+            pt_buffer^.qt_de_bolas_comuns_b1_a_b15 := qt_de_bolas_comuns_na_mesma_coluna;
+            pt_buffer^.qt_de_bolas_descendo_b1_a_b15 := qt_de_bolas_descendo_na_mesma_coluna;
+            pt_buffer^.qt_de_bolas_subindo_b1_a_b15 := qt_de_bolas_subindo_na_mesma_coluna;
+
+            // Vamos garantir que está na faixa válida.
+            if not ((qt_de_bolas_comuns_na_mesma_coluna in [0..15]) and
+                (qt_de_bolas_subindo_na_mesma_coluna in [0..15]) and
+                (qt_de_bolas_descendo_na_mesma_coluna in [0..15])) then
+            begin
+                fStatus_Mensagem_Erro := 'Soma dos valores dos campos: ' +
+                    QuotedStr('qt_de_bolas_comuns_na_mesma_coluna') + ', ' +
+                    QuotedStr('qt_de_bolas_subindo_na_mesma_coluna') + ', ' +
+                    QuotedStr('qt_de_bolas_descendo_na_mesma_coluna') + ' não é igual a 15.';
+                Exibir_Mensagem_de_Termino;
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+            // Verifica se a quantidade de repetidos está dentro da faixa válida pra lotofacil.
+            if (qt_repetidos < 5) and (qt_repetidos > 15) then
+            begin
+                fStatus_Mensagem_Erro := 'Erro, quantidade de repetidos x novos fora do intervalo de 0 a 10';
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+            // Sempre estamos comparando todas as combinações de 15, 16, 17 e 18 bolas,
+            // com a combinação de 15 bolas que é a combinação de 15 bolas que é sempre sorteada
+            // no jogo da lotofacil.
+            // A quantidade de bolas repetidas é no mínimo de 5 bolas e no máximo de 15 bolas.
+            // A quantidade de novos é no mínimo de 0 bolas e no máximo de 10 bolas.
+            // Pra obter a quantidade de bolas novas, fazemos a diferença de 15 bolas -
+            // a quantidade de bolas repetidas.
+            id_novos_repetidos := 15 - qt_repetidos;
+
+            // Pra cada quantidade de novos x repetidos, haverá um identificador sequencial,
+            // ou seja, cada quantidade terá um identificador sequencial indepedente das
+            // outras quantidades.
+            novos_repetidos_id_sequencial[id_novos_repetidos] := novos_repetidos_id_sequencial[id_novos_repetidos] + 1;
+            pt_buffer^.novos_repetidos_id_alternado := novos_repetidos_id_sequencial[id_novos_repetidos];
+
+            // A quantidade de novos na tabela lotofacil.lotofacil_novos_repetidos é
+            // igual ao identificador 'novos_repetidos_id'.
+            pt_buffer^.novos_repetidos_id := id_novos_repetidos;
+
+            // Verifica se o usuário solicitou parar o processamento.
+            if self.Terminated then
+            begin
+                fStatus_Mensagem_Erro := 'Cancelamento solicitado pelo usuário!';
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+            // Exibe a tela pra o usuário
+            if qt_registros_lidos mod 500000 = 0 then
+            begin
+                fStatus_Mensagem := 'Gerando id novos x repetidos, ltf_id: ' + IntToStr(pt_buffer^.ltf_id);
+                Synchronize(@DoStatus);
+                Synchronize(@DoStatusAtualizacao);
+            end;
+
+            // Gera uma linha pra cada registro, interseparado pelo caractere ',' (vírgula).
+            // pois, posteriormente será utilizado na sentença copy do banco de dados.
+          {$ifdef linux}
+            str_sql_a_inserir := #10;
+          {$else}
+                 {$ifdef windows}
+            str_sql_a_inserir := #10#13;
+                 {$else}
+            str_sql_a_inserir := #13;
+                 {$endif}
+          {$endif}
+
+            str_sql_a_inserir := str_sql_a_inserir + Format('%d,%d,%d,%d,%d' +
+                ',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d' +
+                ',%d,%d,%d,%d,%d,%d,%d,%d' + ',%d,%d',
+                [pt_buffer^.ltf_id,
+                pt_buffer^.ltf_qt, pt_buffer^.novos_repetidos_id,
+                pt_buffer^.novos_repetidos_id_alternado,
+                pt_buffer^.cmp_b_id, pt_buffer^.bolas[1],
+                pt_buffer^.bolas[2], pt_buffer^.bolas[3], pt_buffer^.bolas[4],
+                pt_buffer^.bolas[5], pt_buffer^.bolas[6],
+                pt_buffer^.bolas[7], pt_buffer^.bolas[8],
+                pt_buffer^.bolas[9], pt_buffer^.bolas[10],
+                pt_buffer^.bolas[11], pt_buffer^.bolas[12],
+                pt_buffer^.bolas[13], pt_buffer^.bolas[14],
+                pt_buffer^.bolas[15],
+                pt_buffer^.qt_de_bolas_subindo_b1_a_b15,
+                pt_buffer^.qt_de_bolas_descendo_b1_a_b15,
+                pt_buffer^.qt_de_bolas_comuns_b1_a_b15,
+                sm_frq_grupo[uA, 1], sm_frq_grupo[uA, 2],
+                sm_frq_grupo[uA, 3], sm_frq_grupo[uA, 4],
+                sm_frq_grupo[uA, 5], fConcurso,
+                pt_buffer^.id_sequencial]);
+
+            arquivo_insert.Write(str_sql_a_inserir[1], Length(str_sql_a_inserir));
+
+            Inc(pt_buffer);
+            Inc(qt_registros_lidos);
+
+        end;
+
+        fStatus_Mensagem := 'Gerando id novos x repetidos, ltf_id: ' + IntToStr(6874010);
+        fStatus_Mensagem := fStatus_Mensagem + ', Gerando copy... pra a tabela.';
+        Synchronize(@DoStatus);
+
+        sql_comando_copy := 'Copy lotofacil.lotofacil_novos_repetidos(' +
+            sql_insert_campos + ') from ';
+
+      {$ifdef linux}
+        sql_comando_copy := sql_comando_copy + QuotedStr('/tmp/lotofacil_novos_repetidos.csv');
+      {$else}
+             {$ifdef windows}
+        sql_comando_copy := sql_comando_copy + QuotedStr('c:\tmp\lotofacil_novos_repetidos.csv');
+             {$else}
+        sql_comando_copy := sql_comando_copy + QuotedStr('/tmp/lotofacil_novos_repetidos.csv');
+             {$endif}
+      {$endif}
+        sql_comando_copy := sql_comando_copy + ' with (delimiter ' + QuotedStr(',') +
+            ',header true, format csv)';
+
+        sql_query.SQL.Clear;
+        sql_query.Sql.Add(sql_comando_copy);
+        sql_query.ExecSQL;
+
+        Synchronize(@DoStatus);
+        Synchronize(@DoStatusAtualizacao);
+
+        // Ativar novamente as restrições:
+        // Liberar a memória.
+        FreeMem(pt_buffer_ltf_novos_repetidos);
+
+        fStatus_mensagem := 'Registros inseridos.';
+        Synchronize(@DoStatusAtualizacao);
+
+        fStatus_mensagem := 'Reativando constraints da tabela';
+        Synchronize(@DoStatusAtualizacao);
+
+        // Em seguida, devemos ativar as restrições novamente (constraint) da tabela.
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_add_constraint()');
+        sql_query.ExecSql;
+
+        fStatus_Mensagem := 'Realizando commit...';
+        Synchronize(@DoStatus);
+
+        sql_query.Connection.Commit;
+
+        // Verifica se a tabela lotofacil_id_novos_repetidos_agrupados e
+        // lotofacil_id_novos_repetidos_agrupados_por_qt está vazia, se sim
+        // devemos atualizar
+        fStatus_Mensagem := 'Verificando tabela de id novos x repetidos';
+        Synchronize(@DoStatus);
+        verificar_tabela_de_id_novos_repetidos;
+
+        // Em seguida, atualiza a tabela lotofacil.lotofacil_resultado_novos_repetidos;
+        fStatus_Mensagem := 'Atualizando tabela lotofacil.lotofacil_resultado_novos_repetidos';
+        Synchronize(@DoStatus);
+        atualizar_resultado_novos_repetidos;
+
+        // Fecha o arquivo.
+        FreeAndNil(arquivo_novos_repetidos);
+
+        /////////////
+        /// Aqui.
+        //////////////
+        sql_query.Close;
+        FreeAndNil(sql_query);
+
+        Synchronize(@DoStatus);
+        Synchronize(@DoStatusAtualizacao);
+
+    except
+        ON Exc: EDatabaseError do
+        begin
+            fStatus_Mensagem := 'Erro: ' + Exc.Message;
+            Exibir_Mensagem_de_Termino;
+            Synchronize(@DoStatus);
+            Synchronize(@DoStatusConcluido);
+            SetLength(sm_frq_grupo, 0);
+            SetLength(frq_grp_1, 0);
+            SetLength(frq_grp_2, 0);
+            SetLength(frq_grp_3, 0);
+            SetLength(frq_grp_4, 0);
+            SetLength(frq_grp_5, 0);
+            Exit;
+        end;
+        On Exc: Exception do begin
+            fStatus_Mensagem := 'Erro: ' + Exc.Message;
+            Exibir_Mensagem_de_Termino;
+            Synchronize(@DoStatus);
+            Synchronize(@DoStatusConcluido);
+            SetLength(sm_frq_grupo, 0);
+            SetLength(frq_grp_1, 0);
+            SetLength(frq_grp_2, 0);
+            SetLength(frq_grp_3, 0);
+            SetLength(frq_grp_4, 0);
+            SetLength(frq_grp_5, 0);
+        end;
+    end;
+
+    try
+        //sql_query := dmLotofacil.sqlLotofacil;
+        //sql_query.DataBase := dmLotofacil.pgLTK;
+
+        //if not dmLotofacil.pgLTK.Transaction.Active then
+        //begin
+        //    dmLotofacil.pgLTK.StartTransaction;
+        //end;
+
+        //fStatus_Mensagem := fStatus_Mensagem + #10#13 + 'Atualizando novos x repetidos, aguarde....';
+        //Synchronize(@DoStatus);
+
+        //sql_query.SQL.Clear;
+        //sql_query.Sql.Add('truncate lotofacil.lotofacil_novos_repetidos');
+        //sql_query.ExecSQL;
+
+        // Apagar restrições da tabela pra inserção ser mais rápida.
+        //sql_query.Sql.Clear;
+        //sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_drop_constraint()');
+        //sql_query.ExecSql;
+
+        // Percorre todos os registros inserindo no banco de dados;
+        //qt_registros_lidos := 0;
+
+        // A parte inicial do sql
+        //str_sql_inicio := 'Insert into lotofacil.lotofacil_novos_repetidos';
+        //str_sql_inicio := str_sql_inicio + '(ltf_id,ltf_qt';
+        //str_sql_inicio := str_sql_inicio + ',novos_repetidos_id';
+        //str_sql_inicio := str_sql_inicio + ',novos_repetidos_id_alternado';
+        //str_sql_inicio := str_sql_inicio + ', cmp_b_id';
+
+        //for uA := 1 to 15 do
+        //begin
+        //    str_sql_inicio := str_sql_inicio + ', cmp_b' + IntToStr(uA);
+        //end;
+
+        //str_sql_inicio := str_sql_inicio + ', qt_bolas_subindo_na_mesma_coluna';
+        //str_sql_inicio := str_sql_inicio + ', qt_bolas_descendo_na_mesma_coluna';
+        //str_sql_inicio := str_sql_inicio + ', qt_bolas_iguais_na_mesma_coluna';
+
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_1';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_2';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_3';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_4';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_5';
+
+        //str_sql_inicio := str_sql_inicio + ',concurso,qt_alt_seq)values';
+
+        //qt_max_de_bytes_ja_alocados := 0;
+        //sql_memory := TStringStream.Create('');
+
+        //str_sql_a_inserir := '';
+        //pt_buffer := pt_buffer_ltf_novos_repetidos;
+        //for uA := 1 to TOTAL_DE_REGISTROS do
+        //begin
+
+        //if sql_memory.Position <> 0 then
+        //begin
+        //    str_sql_a_inserir := ',';
+        //end;
+
+        //writeln('Antes de atribuir str_sql_a_inserir.');
+        //str_sql_a_inserir := str_sql_a_inserir + '(';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.ltf_id) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.ltf_qt) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.novos_repetidos_id) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.novos_repetidos_id_alternado) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.cmp_b_id) + ', ';
+        //writeln('Apos de atribuir str_sql_a_inserir.');
+        //for uB := 1 to 15 do
+        //begin
+        //    str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.bolas[uB]) + ',';
+        //end;
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_subindo_b1_a_b15) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_descendo_b1_a_b15) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_comuns_b1_a_b15) + ',';
+
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 1]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 2]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 3]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 4]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 5]) + ',';
+
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(fConcurso) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.id_sequencial) + ')';
+
+        //tamanho_do_string := str_sql_a_inserir.Length;
+
+        //Writeln('Antes do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+        //Writeln('Tamanho do string: ', tamanho_do_string);
+        //Writeln('qt_max_de_bytes_ja_alocados: ', qt_max_de_bytes_ja_alocados);
+        //if tamanho_do_string >= qt_max_de_bytes_ja_alocados then
+        //begin
+        //    // Se já foi alocado memória, deslocar da memória.
+        //    //Writeln('Dentro do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+        //    //Writeln('Tamanho do string: ', tamanho_do_string);
+        //    //Writeln('qt_max_de_bytes_ja_alocados', qt_max_de_bytes_ja_alocados);
+
+        //    if qt_max_de_bytes_ja_alocados <> 0 then
+        //    begin
+        //        //Writeln('Antes de liberar: FreemMem');
+        //        //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+        //        FreeMem(buffer_texto);
+        //        //Writeln('Após liberar');
+        //        Format('Após liberar: buffer_texto: %p', [Addr(buffer_texto)]);
+        //        buffer_texto := nil;
+        //    end;
+        //    //Writeln('Expandindo memória de ', qt_max_de_bytes_ja_alocados, ' pra ', tamanho_do_string);
+        //    // Devemos colocar 1 caractere a mais por causa do caractere 'nulo', que será utilizada
+        //    // quando usarmos strlcat
+        //    qt_max_de_bytes_ja_alocados := tamanho_do_string + 1;
+
+        //    //Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
+        //    buffer_texto := GetMem(qt_max_de_bytes_ja_alocados);
+        //    //Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
+        //end;
+
+        // Garantir que o string termino em nulo.
+        //Writeln('Antes de buffer_texto^');
+        //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+        //buffer_texto^ := #0;
+        ////Writeln('Antes de strlcat');
+        //strlcat(buffer_texto, PChar(str_sql_a_inserir), tamanho_do_string);
+        ////Writeln('Apos strlcat');
+        ////Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+
+        ////Writeln('Antes de sql_memory');
+        //sql_memory.Write(buffer_texto^, tamanho_do_string);
+        //str_sql_a_inserir := '';
+
+        //// Writeln('ltf_id: ', pt_buffer^.ltf_id, ', tam_string: ', tamanho_do_string, ', qt_max_de_bytes_ja_alocados:', qt_max_de_bytes_ja_alocados);
+        //// Writeln('sql_memory.size: ', sql_memory.Size, ', TOTAL_DE_BYTES_MAXIMO: ', TOTAL_DE_BYTES_MAXIMO);
+
+        //// A cada 250000 registros lidos, ou quando atingir mais de 500 mb
+        //Inc(qt_registros_lidos);
+        //if sql_memory.Size > TOTAL_DE_BYTES_MAXIMO then
+        //begin
+        //    // Writeln('Entrou no if..');
+        //    sql_query.SQL.Clear;
+        //    sql_query.Sql.Add(str_sql_inicio);
+        //    sql_query.Sql.Add(sql_memory.DataString);
+        //    sql_query.ExecSQL;
+        //    Writeln('Executou sql_query.ExecSql');
+
+        //    str_sql_a_inserir := '';
+
+        //    // Deve-se mover pra a posição 0 e também definir o tamanho do fluxo pra 0.
+        //    // Senão haverá erro ao tentar inserir pois, iremos inserir dados já inseridos
+        //    // no banco de dados.
+        //    //Writeln('Antes de sql_memory.Position=0');
+        //    sql_memory.Position := 0;
+        //    //Writeln('Apos de sql_memory.Position=0');
+
+        //    //Writeln('Antes de sql_memory.Size = 0');
+        //    sql_memory.Size := 0;
+        //    //Writeln('Depois de sql_memory.Size = 0');
+
+        //    if pt_buffer^.ltf_id mod 500000 = 0 then
+        //    begin
+        //        fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) +
+        //            ' de 6874010 [' + Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
+        //        Synchronize(@DoStatus);
+
+        //    end;
+        //end;
+
+        //if uA mod 250000 = 0 then
+        //begin
+        //    fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) +
+        //        ' de 6874010 [' + Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
+        //    Synchronize(@DoStatus);
+        //end;
+
+        // Aponta pra o próximo registro.
+        // Writeln('Inc(pt_buffer);');
+        //Inc(pt_buffer);
+
+        // Verifica se o usuário solicitou cancelamento.
+        // Se sim, fazer rollback.
+        //if self.Terminated then
+        //begin
+        //    fStatus_Mensagem_Erro := 'Cancelamento solicitado pelo usuário!';
+        //    Synchronize(@DoStatusErro);
+
+        //    dmLotofacil.pgLTK.Transaction.Rollback;
+        //    dmLotofacil.pgLTK.Close(True);
+        //    sql_query.Close;
+        //    FreeAndNil(dmLotofacil);
+        //    FreeMem(pt_buffer_ltf_novos_repetidos);
+        //    Exit;
+        //end;
+        //end;
+
+        //Dec(pt_Buffer);
+        //fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) + ' de 6874010 [' +
+        //    Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
+        //Synchronize(@DoStatusAtualizacao);
+
+        // Se ainda há registros ainda pra inserir, então, devemos inserí-los.
+        //if sql_memory.Position <> 0 then
+        //begin
+        //    ;
+        //    sql_query.SQL.Clear;
+        //    sql_query.Sql.Add(str_sql_inicio);
+        //    sql_query.Sql.Add(sql_memory.DataString);
+        //    sql_query.ExecSQL;
+        //end;
+
+        // Liberar a memória.
+        //FreeMem(pt_buffer_ltf_novos_repetidos);
+
+        //fStatus_mensagem := 'Registros inseridos.';
+        //Synchronize(@DoStatusAtualizacao);
+
+        //fStatus_mensagem := 'Reativando constraints da tabela';
+        //Synchronize(@DoStatusAtualizacao);
+
+        //// Em seguida, devemos ativar as restrições novamente (constraint) da tabela.
+        //sql_query.Sql.Clear;
+        //sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_add_constraint()');
+        //sql_query.ExecSql;
+
+        //fStatus_Mensagem := 'Realizando commit...';
+        //Synchronize(@DoStatus);
+
+        //// Tudo ocorreu normalmente, então, confirmar transação.
+        //dmLotofacil.pgLTK.Transaction.Commit;
+
+        // Verifica se a tabela lotofacil_id_novos_repetidos_agrupados e
+        // lotofacil_id_novos_repetidos_agrupados_por_qt está vazia, se sim
+        // devemos atualizar
+        //fStatus_Mensagem := 'Verificando tabela de id novos x repetidos';
+        //Synchronize(@DoStatus);
+        //verificar_tabela_de_id_novos_repetidos;
+
+        // Em seguida, atualiza a tabela lotofacil.lotofacil_resultado_novos_repetidos;
+        //fStatus_Mensagem := 'Atualizando tabela lotofacil.lotofacil_resultado_novos_repetidos';
+        //Synchronize(@DoStatus);
+        //atualizar_resultado_novos_repetidos;
+
+        //Writeln('Executou... sql_query.Execsql na linha 2595');
+
+        // Tudo ocorreu normalmente, então, confirmar transação.
+        //dmLotofacil.pgLTK.Transaction.Commit;
+
+        //Writeln('Executou o commit');
+        //dmLotofacil.pgLTK.Close(True);
+
+        //Writeln('Fechou o banco.');
+        //sql_query.Close;
+        //Writeln('Fechou sql_query.');
+
+        //FreeAndNil(dmLotofacil);
+
+        //Writeln('Desalocou sql_memory');
+        //FreeAndNil(sql_memory);
+
+        //Writeln('Antes de executar @doSTatus');
+        //Synchronize(@DoStatus);
+        //Synchronize(@DoStatusAtualizacao);
+        //Writeln('Após executar @doStatus');
+
+    except
+        On Exc: EDatabaseError do
+        begin
+            dmLotofacil.pgLTK.Transaction.Rollback;
+            dmLotofacil.pgLTK.Close;
+            fStatus_Mensagem_Erro := 'Erro: ' + Exc.Message;
+            Synchronize(@DoStatusErro);
+            Exit;
+        end;
+        On Exc: Exception do
+        begin
+            dmLotofacil.pgLTK.Transaction.Rollback;
+            dmLotofacil.pgLTK.Close;
+            fStatus_Mensagem_Erro := 'Erro: ' + Exc.Message;
+            Synchronize(@DoStatusErro);
+            Exit;
+        end;
+    end;
+
+    // Desaloca memória alocada
+    SetLength(sm_frq_grupo, 0);
+    SetLength(frq_grp_1, 0);
+    SetLength(frq_grp_2, 0);
+    SetLength(frq_grp_3, 0);
+    SetLength(frq_grp_4, 0);
+    SetLength(frq_grp_5, 0);
+
+    // Se chegarmos aqui, quer dizer, que todos os ítens foram atualizados com sucesso!!!;
+    fStatus_Mensagem := 'Itens atualizado com sucesso!!!';
+    Exibir_Mensagem_de_Termino;
+
+    //Writeln('Antes de sair da procedure, antes de @doStatusConcluido');
+    Synchronize(@DoStatusConcluido);
+    //Writeln('Antes de sair da procedure, depois de @doStatusConcluido');
+
+end;
+
+
+
+procedure TLotofacilNovosRepetidos.AtualizarNovosRepetidos_5;
+const
+    ARQUIVO_LTF_NUM_BOLAS = '../analisador_lotofacil_dados/lotofacil_bolas_novos_repetidos.ltf_bin';
+const
+  {$IFDEF LINUX}
+    CRLF = #10;
+         {$ELSE}
+                {$IFDEF WINDOWS}
+    CRLF = #10#13;
+                {$ELSE}
+    CRLF = #13;
+                 {$ENDIF}
+         {$ENDIF}
+    TOTAL_DE_REGISTROS = 6874010;
+    QT_REGISTROS_ANTES_DE_EXIBIR = 250000;
+    TOTAL_DE_BYTES_MAXIMO = 10240;
+type
+    // ********************
+    // A estrutura abaixo é usada no arquivo 'lotofacil_num_bolas.ltf_bin'.
+    // A ordem dos campos abaixo é importante, não modifica, pois, o arquivo
+    // é armazenada conforme a estrutura abaixo.
+    // ********************
+  {$ALIGN 1}
+    ltf_novos_repetidos = record
+        ltf_id:    cardinal;                         // 4 bytes: de 1 a 6874010.
+        ltf_qt:    byte;                             // 1 byte: de 15 a 18.
+        novos_repetidos_id: byte;                 // 1 byte: de 0 a 10.
+        qt_de_bolas_comuns_b1_a_b15: byte;        // 1 byte: de 0 a 10.
+        qt_de_bolas_subindo_b1_a_b15: byte;
+        qt_de_bolas_descendo_b1_a_b15: byte;
+        cmp_b_id:  byte;
+        nao_usado: array[0..1] of byte;           // Não usado, somente pra alinhar o próximo campo
+        novos_repetidos_id_alternado: cardinal;
+        id_sequencial: integer;                   // id sequencial.
+        bolas:     array[0..19] of shortint;          // No código, pode acontecer ao realizar a diferença
+        // o número ser negativo.
+        // 1 byte.
+    end;
+    pt_ltf_novos_repetidos = ^ltf_novos_repetidos;
+var
+    pt_buffer_ltf_novos_repetidos: pt_ltf_novos_repetidos;
+    pt_buffer: pt_ltf_novos_repetidos;
+
+    // ltf_id, ltf_qt,
+    total_de_bytes_lidos: longint;
+    // b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18: byte;
+    lotofacil_concurso:   array[0..25] of byte;
+
+    // Armazena pra cada id de novos x repetidos um identificador sequencial independente.
+    novos_repetidos_id_sequencial: array[0..10] of cardinal;
+
+    qt_repetidos, qt_id_novos_repetidos: integer;
+
+    //arquivo_novos_repetidos: Text;
+    //arq_novos_repetidos : TFileStream;
+
+    bola_atual, total_de_bytes_alocados, qt_registros, qt_registros_lidos, id_novos_repetidos,
+    qt_bolas_iguais_na_mesma_coluna, qt_bolas_subindo_na_mesma_coluna, qt_bolas_descendo_na_mesma_coluna,
+    tamanho_do_string, qt_max_de_bytes_ja_alocados, qt_de_bolas_comuns_na_mesma_coluna,
+    qt_de_bolas_subindo_na_mesma_coluna, qt_de_bolas_descendo_na_mesma_coluna, soma_grupo_1,
+    soma_grupo_2, soma_grupo_3, soma_grupo_4, soma_grupo_5: integer;
+    arquivo_novos_repetidos: TFileStream;
+    str_sql_inicio, str_sql_a_inserir, sql_insert_campos: string;
+
+    buffer_texto: PChar;
+    sql_memory:   TStringStream;
+
+    //sql_query: TSQLQuery;
+
+    sql_query: TZQuery;
+
+    //sm_frq_grp : array of array of Int64;
+    bola_b1, bola_b2, bola_b3, bola_b4, bola_b5: shortint;
+    uA, uB, uC, uD, uE, uF, uG, uH, uI: integer;
+
+begin
+    // Armazena o horário de início da atualização.
+    fInicio_da_atualizacao := Now;
+
+    // Vamos alocar memória.
+    total_de_bytes_alocados := sizeof(ltf_novos_repetidos) * TOTAL_DE_REGISTROS;
+    try
+        pt_buffer_ltf_novos_repetidos := GetMem(total_de_bytes_alocados);
+    except
+        On exc: Exception do
+        begin
+            fStatus_Mensagem_Erro := 'Erro: ' + exc.Message;
+            Synchronize(@DoStatusErro);
+        end;
+    end;
+
+    // Zera buffer de memória.
+    FillChar(pt_buffer_ltf_novos_repetidos^, total_de_bytes_alocados, 0);
+    FillChar(lotofacil_concurso, sizeof(byte) * 26, 0);
+    FillChar(novos_repetidos_id_sequencial, sizeof(cardinal) * 11, 0);
+
+    // Preenche o arranjo com as bolas do concurso.
+    for uA := 1 to 15 do
+    begin
+        bola_atual := lotofacil_bolas_do_concurso[uA];
+        lotofacil_concurso[bola_atual] := 1;
+    end;
+
+    // Verifica se arquivo existe, antes de abrir.
+    if not FileExists(ARQUIVO_LTF_NUM_BOLAS) then
+    begin
+        fStatus_Mensagem_Erro := 'Erro, arquivo ' + ARQUIVO_LTF_NUM_BOLAS + ' não existe.';
+        Synchronize(@DoStatusErro);
+        Exit;
+    end;
+
+    // Tenta abrir arquivo, se houver erro, devemos sair da atualização.
+    try
+        arquivo_novos_repetidos := TFileStream.Create(ARQUIVO_LTF_NUM_BOLAS, fmOpenRead);
+    except
+        On exc: Exception do
+        begin
+            fStatus_Mensagem_Erro := 'Erro ao abrir arquivo.';
+            Synchronize(@DoStatusErro);
+            Exit;
+        end;
+    end;
+
+    // Verifica se o tamanho do arquivo, é igual ao número de bytes alocados.
+    if arquivo_novos_repetidos.Size <> total_de_bytes_alocados then
+    begin
+        fStatus_Mensagem_Erro := 'Quantidade de bytes do arquivo inválido.';
+        Synchronize(@DoStatusErro);
+        Exit;
+    end;
+
+    // Aloca todo o conteúdo do arquivo na memória, é um arquivo binário de 275 Megabytes.
+    total_de_bytes_lidos := arquivo_novos_repetidos.Read(pt_buffer_ltf_novos_repetidos^, total_de_bytes_alocados);
+    if total_de_bytes_lidos <> total_de_bytes_alocados then
+    begin
+        fStatus_Mensagem_Erro := 'Arquivo incompleto, possíveis combinações em falta.';
+        Synchronize(@DoStatusErro);
+        Exit;
+    end;
+
+    // Colunas do insert.
+    sql_insert_campos := 'Insert into lotofacil.lotofacil_novos_repetidos';
+    sql_insert_campos := sql_insert_campos + '(ltf_id,ltf_qt';
+    sql_insert_campos := sql_insert_campos + ',novos_repetidos_id';
+    sql_insert_campos := sql_insert_campos + ',novos_repetidos_id_alternado';
+    sql_insert_campos := sql_insert_campos + ', cmp_b_id';
+
+    for uB := 1 to 15 do
+    begin
+        sql_insert_campos := sql_insert_campos + ', cmp_b' + IntToStr(uB);
+    end;
+
+    sql_insert_campos := sql_insert_campos + ', qt_bolas_subindo_na_mesma_coluna';
+    sql_insert_campos := sql_insert_campos + ', qt_bolas_descendo_na_mesma_coluna';
+    sql_insert_campos := sql_insert_campos + ', qt_bolas_iguais_na_mesma_coluna';
+
+    sql_insert_campos := sql_insert_campos + ', sm_frq_grp_1';
+    sql_insert_campos := sql_insert_campos + ', sm_frq_grp_2';
+    sql_insert_campos := sql_insert_campos + ', sm_frq_grp_3';
+    sql_insert_campos := sql_insert_campos + ', sm_frq_grp_4';
+    sql_insert_campos := sql_insert_campos + ', sm_frq_grp_5';
+    sql_insert_campos := sql_insert_campos + ',concurso,qt_alt_seq)values';
+
+    try
+        sql_query := TZquery.Create(nil);
+        sql_query.Connection := f_sql_conexao;
+
+        // Vamos apagar as restrições:
+        fStatus_Mensagem := 'Truncando tabela.... aguarde...';
+        Synchronize(@DoStatus);
+
+        sql_query.SQL.Clear;
+        sql_query.Sql.Add('truncate lotofacil.lotofacil_novos_repetidos');
+        sql_query.ExecSQL;
+
+        // Apagar restrições da tabela pra inserção ser mais rápida.
+        fStatus_Mensagem := 'Apagando restrições.... aguarde...';
+        Synchronize(@DoStatus);
+
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_drop_constraint()');
+        sql_query.ExecSql;
+
+        pt_buffer := pt_buffer_ltf_novos_repetidos;
+        qt_registros_lidos := 0;
+        for uA := 1 to TOTAL_DE_REGISTROS do
+        begin
+            qt_repetidos := 0;
+
+            // Verifica se o campo ltf é válido.
+            if (pt_buffer^.ltf_qt < 15) or (pt_buffer^.ltf_qt > 18) then
+            begin
+                fStatus_Mensagem_Erro := 'Erro, ltf_qt inválido: ' + IntToStr(pt_buffer^.ltf_id);
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+            // No próximo loop, iremos comparar a combinação do concurso escolhido pelo
+            // usuário com cada combinação possível da lotofacil.
+            // Esta comparação será realização por coluna, será comparada a mesma coluna
+            // de ambas as combinações.
+            // A comparação será realizada comparando uma bola de uma combinação com
+            // a outra bola da outra combinação na mesma coluna.
+            qt_de_bolas_comuns_na_mesma_coluna := 0;
+            qt_de_bolas_subindo_na_mesma_coluna := 0;
+            qt_de_bolas_descendo_na_mesma_coluna := 0;
+
+            //pt_buffer^.qt_de_bolas_descendo_b1_a_b15 := 0;
+            //pt_buffer^.qt_de_bolas_comuns_b1_a_b15 := 0;
+            //pt_buffer^.qt_de_bolas_subindo_b1_a_b15 := 0;
+
+            // No loop abaixo, iremos verificar se a mesma bola está em ambas as combinações
+            // E também iremos verificar se na mesma coluna em ambas as combinações,
+            // é a mesma bola ou bolas diferentes.
+            for uB := 1 to pt_buffer^.ltf_qt do
+            begin
+                // As bolas estão organizadas em ordem crescente, então devemos saber
+                // qual bola está naquela coluna, pra em seguida, verifica se está bola
+                // também está na outra combinação.
+                bola_atual := pt_buffer^.bolas[uB];
+                if (lotofacil_concurso[bola_atual] = 1) then
+                begin
+                    Inc(qt_repetidos);
+                end;
+
+                // Iremos comparar a combinação do concurso escolhido pelo usuário com cada
+                // combinação possível da lotofacil, neste caso, a comparação será por coluna.
+                // As colunas a serem comparadas, serão as colunas b1 a b15, pois, são comuns
+                // a todas as combinações de 15, 16, 17 e 18 bolas.
+                // Iremos comparar a bola de uma combinação com a bola de outra combinação
+                // que estão na mesma coluna.
+                // No registro que criamos, ao ler o conteúdo, o arranjo bolas contém
+                // as bolas de cada combinação, como não iremos armazenar na tabela do banco
+                // de dados tais as bolas, somente outros campos do registro, então
+                // iremos usar o próprio arranjo pra armazenar os cálculos de comparação.
+
+                // Só iremos comparar bolas das colunas b_1 a b_15 pois elas são comuns
+                // a todas as combinações de 15 a 18 bolas.
+                if uB <= 15 then
+                begin
+                    pt_buffer^.bolas[uB] := pt_buffer^.bolas[uB] - lotofacil_bolas_do_concurso[uB];
+
+                    // Se a diferença for:
+                    // Zero, as bolas são iguais.
+                    // Negativo, a bola da combinação atual é menor que a bola da combinação do concurso.
+                    // Positivo, a bola da combinação atual é maior que a bola da combinação do concurso.
+                    case sign(pt_buffer^.bolas[uB]) of
+                        -1: Inc(qt_de_bolas_descendo_na_mesma_coluna);
+                        0: Inc(qt_de_bolas_comuns_na_mesma_coluna);
+                        1: Inc(qt_de_bolas_subindo_na_mesma_coluna);
+                        else
+                        begin
+                            fStatus_Mensagem_Erro :=
+                                'Bug: Função sign nunca retornar valores diferente de -1, 0, 1' +
+                                'ltf_id: ' + IntToStr(pt_buffer^.ltf_id) + ', ' +
+                                'uB: ' + IntToStr(uB) + ', bola atual: ' + IntToStr(pt_buffer^.bolas[uB]);
+                            Exibir_Mensagem_de_Termino;
+                            Synchronize(@DoStatusErro);
+                            FreeMem(pt_buffer_ltf_novos_repetidos);
+                            Exit;
+                        end;
+                    end;
+                end;
+            end;
+            pt_buffer^.qt_de_bolas_comuns_b1_a_b15 := qt_de_bolas_comuns_na_mesma_coluna;
+            pt_buffer^.qt_de_bolas_descendo_b1_a_b15 := qt_de_bolas_descendo_na_mesma_coluna;
+            pt_buffer^.qt_de_bolas_subindo_b1_a_b15 := qt_de_bolas_subindo_na_mesma_coluna;
+
+
+            // Validar dados.
+            //pt_buffer^.cmp_b_id:= Obter_id_de_comparacao_de_bolas_na_mesma_coluna(qt_de_bolas_comuns_na_mesma_coluna,
+            //   qt_de_bolas_subindo_na_mesma_coluna, qt_de_bolas_descendo_na_mesma_coluna);
+
+
+
+            //if pt_buffer^.cmp_b_id= -1 then
+            //   begin
+            //      FreeMem(pt_buffer_ltf_novos_repetidos);
+            //      Exibir_Mensagem_de_Termino;
+            //      Synchronize(@DoStatusErro);
+            //      Exit;
+            //   end;
+
+
+            // Vamos garantir que está na faixa válida.
+            if not ((qt_de_bolas_comuns_na_mesma_coluna in [0..15]) and
+                (qt_de_bolas_subindo_na_mesma_coluna in [0..15]) and
+                (qt_de_bolas_descendo_na_mesma_coluna in [0..15])) then
+            begin
+                fStatus_Mensagem_Erro := 'Soma dos valores dos campos: ' +
+                    QuotedStr('qt_de_bolas_comuns_na_mesma_coluna') + ', ' +
+                    QuotedStr('qt_de_bolas_subindo_na_mesma_coluna') + ', ' +
+                    QuotedStr('qt_de_bolas_descendo_na_mesma_coluna') + ' não é igual a 15.';
+                Exibir_Mensagem_de_Termino;
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+
+            // TODO: Utilizar posteriormente.
+      {
+      pt_buffer^.cmp_b_id := f_ltf_id_bolas_na_mesma_coluna[qt_de_bolas_comuns_na_mesma_coluna,
+                             qt_de_bolas_subindo_na_mesma_coluna, qt_de_bolas_descendo_na_mesma_coluna];
+                             }
+
+            // Verifica se a quantidade de repetidos está dentro da faixa válida pra lotofacil.
+            if (qt_repetidos < 5) and (qt_repetidos > 15) then
+            begin
+                fStatus_Mensagem_Erro := 'Erro, quantidade de repetidos x novos fora do intervalo de 0 a 10';
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+            // Sempre estamos comparando todas as combinações de 15, 16, 17 e 18 bolas,
+            // com a combinação de 15 bolas que é a combinação de 15 bolas que é sempre sorteada
+            // no jogo da lotofacil.
+            // A quantidade de bolas repetidas é no mínimo de 5 bolas e no máximo de 15 bolas.
+            // A quantidade de novos é no mínimo de 0 bolas e no máximo de 10 bolas.
+            // Pra obter a quantidade de bolas novas, fazemos a diferença de 15 bolas -
+            // a quantidade de bolas repetidas.
+            id_novos_repetidos := 15 - qt_repetidos;
+
+            // Pra cada quantidade de novos x repetidos, haverá um identificador sequencial,
+            // ou seja, cada quantidade terá um identificador sequencial indepedente das
+            // outras quantidades.
+            novos_repetidos_id_sequencial[id_novos_repetidos] := novos_repetidos_id_sequencial[id_novos_repetidos] + 1;
+            pt_buffer^.novos_repetidos_id_alternado := novos_repetidos_id_sequencial[id_novos_repetidos];
+
+            // A quantidade de novos na tabela lotofacil.lotofacil_novos_repetidos é
+            // igual ao identificador 'novos_repetidos_id'.
+            pt_buffer^.novos_repetidos_id := id_novos_repetidos;
+
+            // Aponta pra o próximo registro.
+            ///Inc(pt_buffer);
+
+            // Verifica se o usuário solicitou parar o processamento.
+            if self.Terminated then
+            begin
+                fStatus_Mensagem_Erro := 'Cancelamento solicitado pelo usuário!';
+                Synchronize(@DoStatusErro);
+                Exit;
+            end;
+
+            // Exibe a tela pra o usuário
+            if qt_registros_lidos mod 500000 = 0 then
+            begin
+                fStatus_Mensagem := 'Gerando id novos x repetidos, ltf_id: ' + IntToStr(pt_buffer^.ltf_id);
+                Synchronize(@DoStatus);
+                Synchronize(@DoStatusAtualizacao);
+            end;
+
+            // Gera o sql e insere no banco de dados.
+            str_sql_a_inserir :=
+                sql_insert_campos + Format('(%d,%d,%d,%d,%d' +
+                ',%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d' +
+                ',%d,%d,%d,%d,%d,%d,%d,%d' + ',%d,%d)',
+                [pt_buffer^.ltf_id,
+                pt_buffer^.ltf_qt, pt_buffer^.novos_repetidos_id,
+                pt_buffer^.novos_repetidos_id_alternado,
+                pt_buffer^.cmp_b_id, pt_buffer^.bolas[1],
+                pt_buffer^.bolas[2], pt_buffer^.bolas[3], pt_buffer^.bolas[4],
+                pt_buffer^.bolas[5], pt_buffer^.bolas[6],
+                pt_buffer^.bolas[7], pt_buffer^.bolas[8],
+                pt_buffer^.bolas[9], pt_buffer^.bolas[10],
+                pt_buffer^.bolas[11], pt_buffer^.bolas[12],
+                pt_buffer^.bolas[13], pt_buffer^.bolas[14],
+                pt_buffer^.bolas[15],
+                pt_buffer^.qt_de_bolas_subindo_b1_a_b15,
+                pt_buffer^.qt_de_bolas_descendo_b1_a_b15,
+                pt_buffer^.qt_de_bolas_comuns_b1_a_b15,
+                sm_frq_grupo[uA, 1], sm_frq_grupo[uA, 2],
+                sm_frq_grupo[uA, 3], sm_frq_grupo[uA, 4],
+                sm_frq_grupo[uA, 5], fConcurso,
+                pt_buffer^.id_sequencial]);
+            Inc(pt_buffer);
+
+            sql_query.SQL.Clear;
+            sql_query.SQL.Add(str_sql_a_inserir);
+            Writeln(sql_query.Sql.Text);
+            sql_query.ExecSQL;
+
+            Inc(qt_registros_lidos);
+
+        end;
+
+        fStatus_Mensagem := 'Gerando id novos x repetidos, ltf_id: ' + IntToStr(6874010);
+        Synchronize(@DoStatus);
+        Synchronize(@DoStatusAtualizacao);
+
+        // Ativar novamente as restrições:
+        // Liberar a memória.
+        FreeMem(pt_buffer_ltf_novos_repetidos);
+
+        fStatus_mensagem := 'Registros inseridos.';
+        Synchronize(@DoStatusAtualizacao);
+
+        fStatus_mensagem := 'Reativando constraints da tabela';
+        Synchronize(@DoStatusAtualizacao);
+
+        // Em seguida, devemos ativar as restrições novamente (constraint) da tabela.
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_add_constraint()');
+        sql_query.ExecSql;
+
+        fStatus_Mensagem := 'Realizando commit...';
+        Synchronize(@DoStatus);
+
+        sql_query.Connection.Commit;
+
+        // Verifica se a tabela lotofacil_id_novos_repetidos_agrupados e
+        // lotofacil_id_novos_repetidos_agrupados_por_qt está vazia, se sim
+        // devemos atualizar
+        fStatus_Mensagem := 'Verificando tabela de id novos x repetidos';
+        Synchronize(@DoStatus);
+        verificar_tabela_de_id_novos_repetidos;
+
+        // Em seguida, atualiza a tabela lotofacil.lotofacil_resultado_novos_repetidos;
+        fStatus_Mensagem := 'Atualizando tabela lotofacil.lotofacil_resultado_novos_repetidos';
+        Synchronize(@DoStatus);
+        atualizar_resultado_novos_repetidos;
+
+        // Fecha o arquivo.
+        FreeAndNil(arquivo_novos_repetidos);
+
+        /////////////
+        /// Aqui.
+        //////////////
+        sql_query.Close;
+        FreeAndNil(sql_query);
+
+        Synchronize(@DoStatus);
+        Synchronize(@DoStatusAtualizacao);
+
+
+
+        // Ao saírmos do loop, devemos atualizar a tela pra indicar o último ítem
+        // foi gerado.
+        // Decrementa, pois, ao sair do loop, pt_buffer estará apontado pra um registro
+        // após o último.
+        //Dec(pt_buffer);
+        //fStatus_Mensagem := 'Gerando id novos x repetidos, ltf_id: ' + IntToStr(pt_buffer^.ltf_id);
+        //Synchronize(@DoStatus);
+        //Synchronize(@DoStatusAtualizacao);
+
+        // Agora, inserir os dados no banco de dados.
+        //if not Assigned(dmLotofacil) then
+        //begin
+        //    dmLotofacil := TDmLotofacil.Create(fComponentParent);
+        //end;
+    except
+        ON Exc: EDatabaseError do
+        begin
+            fStatus_Mensagem := 'Erro: ' + Exc.Message;
+            Exibir_Mensagem_de_Termino;
+            Synchronize(@DoStatus);
+            Synchronize(@DoStatusConcluido);
+            SetLength(sm_frq_grupo, 0);
+            SetLength(frq_grp_1, 0);
+            SetLength(frq_grp_2, 0);
+            SetLength(frq_grp_3, 0);
+            SetLength(frq_grp_4, 0);
+            SetLength(frq_grp_5, 0);
+            Exit;
+        end;
+    end;
+
+    try
+        //sql_query := dmLotofacil.sqlLotofacil;
+        //sql_query.DataBase := dmLotofacil.pgLTK;
+
+        //if not dmLotofacil.pgLTK.Transaction.Active then
+        //begin
+        //    dmLotofacil.pgLTK.StartTransaction;
+        //end;
+
+        fStatus_Mensagem := fStatus_Mensagem + #10#13 + 'Atualizando novos x repetidos, aguarde....';
+        Synchronize(@DoStatus);
+
+        //sql_query.SQL.Clear;
+        //sql_query.Sql.Add('truncate lotofacil.lotofacil_novos_repetidos');
+        //sql_query.ExecSQL;
+
+        // Apagar restrições da tabela pra inserção ser mais rápida.
+        //sql_query.Sql.Clear;
+        //sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_drop_constraint()');
+        //sql_query.ExecSql;
+
+        // Percorre todos os registros inserindo no banco de dados;
+        //qt_registros_lidos := 0;
+
+        // A parte inicial do sql
+        //str_sql_inicio := 'Insert into lotofacil.lotofacil_novos_repetidos';
+        //str_sql_inicio := str_sql_inicio + '(ltf_id,ltf_qt';
+        //str_sql_inicio := str_sql_inicio + ',novos_repetidos_id';
+        //str_sql_inicio := str_sql_inicio + ',novos_repetidos_id_alternado';
+        //str_sql_inicio := str_sql_inicio + ', cmp_b_id';
+
+        //for uA := 1 to 15 do
+        //begin
+        //    str_sql_inicio := str_sql_inicio + ', cmp_b' + IntToStr(uA);
+        //end;
+
+        //str_sql_inicio := str_sql_inicio + ', qt_bolas_subindo_na_mesma_coluna';
+        //str_sql_inicio := str_sql_inicio + ', qt_bolas_descendo_na_mesma_coluna';
+        //str_sql_inicio := str_sql_inicio + ', qt_bolas_iguais_na_mesma_coluna';
+
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_1';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_2';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_3';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_4';
+        //str_sql_inicio := str_sql_inicio + ', sm_frq_grp_5';
+
+        //str_sql_inicio := str_sql_inicio + ',concurso,qt_alt_seq)values';
+
+        //qt_max_de_bytes_ja_alocados := 0;
+        //sql_memory := TStringStream.Create('');
+
+        //str_sql_a_inserir := '';
+        //pt_buffer := pt_buffer_ltf_novos_repetidos;
+        //for uA := 1 to TOTAL_DE_REGISTROS do
+        //begin
+
+        //if sql_memory.Position <> 0 then
+        //begin
+        //    str_sql_a_inserir := ',';
+        //end;
+
+        //writeln('Antes de atribuir str_sql_a_inserir.');
+        //str_sql_a_inserir := str_sql_a_inserir + '(';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.ltf_id) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.ltf_qt) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.novos_repetidos_id) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.novos_repetidos_id_alternado) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.cmp_b_id) + ', ';
+        //writeln('Apos de atribuir str_sql_a_inserir.');
+        //for uB := 1 to 15 do
+        //begin
+        //    str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.bolas[uB]) + ',';
+        //end;
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_subindo_b1_a_b15) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_descendo_b1_a_b15) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.qt_de_bolas_comuns_b1_a_b15) + ',';
+
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 1]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 2]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 3]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 4]) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(sm_frq_grupo[uA, 5]) + ',';
+
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(fConcurso) + ',';
+        //str_sql_a_inserir := str_sql_a_inserir + IntToStr(pt_buffer^.id_sequencial) + ')';
+
+        //tamanho_do_string := str_sql_a_inserir.Length;
+
+        //Writeln('Antes do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+        //Writeln('Tamanho do string: ', tamanho_do_string);
+        //Writeln('qt_max_de_bytes_ja_alocados: ', qt_max_de_bytes_ja_alocados);
+        //if tamanho_do_string >= qt_max_de_bytes_ja_alocados then
+        //begin
+        //    // Se já foi alocado memória, deslocar da memória.
+        //    //Writeln('Dentro do if: tamanho_do_string > qt_max_de_bytes_ja_alocados.');
+        //    //Writeln('Tamanho do string: ', tamanho_do_string);
+        //    //Writeln('qt_max_de_bytes_ja_alocados', qt_max_de_bytes_ja_alocados);
+
+        //    if qt_max_de_bytes_ja_alocados <> 0 then
+        //    begin
+        //        //Writeln('Antes de liberar: FreemMem');
+        //        //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+        //        FreeMem(buffer_texto);
+        //        //Writeln('Após liberar');
+        //        Format('Após liberar: buffer_texto: %p', [Addr(buffer_texto)]);
+        //        buffer_texto := nil;
+        //    end;
+        //    //Writeln('Expandindo memória de ', qt_max_de_bytes_ja_alocados, ' pra ', tamanho_do_string);
+        //    // Devemos colocar 1 caractere a mais por causa do caractere 'nulo', que será utilizada
+        //    // quando usarmos strlcat
+        //    qt_max_de_bytes_ja_alocados := tamanho_do_string + 1;
+
+        //    //Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
+        //    buffer_texto := GetMem(qt_max_de_bytes_ja_alocados);
+        //    //Writeln('Antes de fazer: GetMem(qt_max_de_bytes_ja_alocados');
+        //end;
+
+        // Garantir que o string termino em nulo.
+        //Writeln('Antes de buffer_texto^');
+        //Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+        //buffer_texto^ := #0;
+        ////Writeln('Antes de strlcat');
+        //strlcat(buffer_texto, PChar(str_sql_a_inserir), tamanho_do_string);
+        ////Writeln('Apos strlcat');
+        ////Writeln(Format('buffer_texto: %p', [Addr(buffer_texto)]));
+
+        ////Writeln('Antes de sql_memory');
+        //sql_memory.Write(buffer_texto^, tamanho_do_string);
+        //str_sql_a_inserir := '';
+
+        //// Writeln('ltf_id: ', pt_buffer^.ltf_id, ', tam_string: ', tamanho_do_string, ', qt_max_de_bytes_ja_alocados:', qt_max_de_bytes_ja_alocados);
+        //// Writeln('sql_memory.size: ', sql_memory.Size, ', TOTAL_DE_BYTES_MAXIMO: ', TOTAL_DE_BYTES_MAXIMO);
+
+        //// A cada 250000 registros lidos, ou quando atingir mais de 500 mb
+        //Inc(qt_registros_lidos);
+        //if sql_memory.Size > TOTAL_DE_BYTES_MAXIMO then
+        //begin
+        //    // Writeln('Entrou no if..');
+        //    sql_query.SQL.Clear;
+        //    sql_query.Sql.Add(str_sql_inicio);
+        //    sql_query.Sql.Add(sql_memory.DataString);
+        //    sql_query.ExecSQL;
+        //    Writeln('Executou sql_query.ExecSql');
+
+        //    str_sql_a_inserir := '';
+
+        //    // Deve-se mover pra a posição 0 e também definir o tamanho do fluxo pra 0.
+        //    // Senão haverá erro ao tentar inserir pois, iremos inserir dados já inseridos
+        //    // no banco de dados.
+        //    //Writeln('Antes de sql_memory.Position=0');
+        //    sql_memory.Position := 0;
+        //    //Writeln('Apos de sql_memory.Position=0');
+
+        //    //Writeln('Antes de sql_memory.Size = 0');
+        //    sql_memory.Size := 0;
+        //    //Writeln('Depois de sql_memory.Size = 0');
+
+        //    if pt_buffer^.ltf_id mod 500000 = 0 then
+        //    begin
+        //        fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) +
+        //            ' de 6874010 [' + Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
+        //        Synchronize(@DoStatus);
+
+        //    end;
+        //end;
+
+        //if uA mod 250000 = 0 then
+        //begin
+        //    fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) +
+        //        ' de 6874010 [' + Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
+        //    Synchronize(@DoStatus);
+        //end;
+
+        // Aponta pra o próximo registro.
+        // Writeln('Inc(pt_buffer);');
+        //Inc(pt_buffer);
+
+        // Verifica se o usuário solicitou cancelamento.
+        // Se sim, fazer rollback.
+        //if self.Terminated then
+        //begin
+        //    fStatus_Mensagem_Erro := 'Cancelamento solicitado pelo usuário!';
+        //    Synchronize(@DoStatusErro);
+
+        //    dmLotofacil.pgLTK.Transaction.Rollback;
+        //    dmLotofacil.pgLTK.Close(True);
+        //    sql_query.Close;
+        //    FreeAndNil(dmLotofacil);
+        //    FreeMem(pt_buffer_ltf_novos_repetidos);
+        //    Exit;
+        //end;
+        //end;
+
+        //Dec(pt_Buffer);
+        //fStatus_Mensagem := 'Inserindo registros: ' + IntToStr(pt_buffer^.ltf_id) + ' de 6874010 [' +
+        //    Format('%.2f', [pt_buffer^.ltf_id / 6874010 * 100]) + '%]';
+        //Synchronize(@DoStatusAtualizacao);
+
+        // Se ainda há registros ainda pra inserir, então, devemos inserí-los.
+        //if sql_memory.Position <> 0 then
+        //begin
+        //    ;
+        //    sql_query.SQL.Clear;
+        //    sql_query.Sql.Add(str_sql_inicio);
+        //    sql_query.Sql.Add(sql_memory.DataString);
+        //    sql_query.ExecSQL;
+        //end;
+
+        // Liberar a memória.
+        //FreeMem(pt_buffer_ltf_novos_repetidos);
+
+        //fStatus_mensagem := 'Registros inseridos.';
+        //Synchronize(@DoStatusAtualizacao);
+
+        //fStatus_mensagem := 'Reativando constraints da tabela';
+        //Synchronize(@DoStatusAtualizacao);
+
+        //// Em seguida, devemos ativar as restrições novamente (constraint) da tabela.
+        //sql_query.Sql.Clear;
+        //sql_query.Sql.Add('Select from lotofacil.fn_lotofacil_novos_repetidos_add_constraint()');
+        //sql_query.ExecSql;
+
+        //fStatus_Mensagem := 'Realizando commit...';
+        //Synchronize(@DoStatus);
+
+        //// Tudo ocorreu normalmente, então, confirmar transação.
+        //dmLotofacil.pgLTK.Transaction.Commit;
+
+        // Verifica se a tabela lotofacil_id_novos_repetidos_agrupados e
+        // lotofacil_id_novos_repetidos_agrupados_por_qt está vazia, se sim
+        // devemos atualizar
+        //fStatus_Mensagem := 'Verificando tabela de id novos x repetidos';
+        //Synchronize(@DoStatus);
+        //verificar_tabela_de_id_novos_repetidos;
+
+        // Em seguida, atualiza a tabela lotofacil.lotofacil_resultado_novos_repetidos;
+        //fStatus_Mensagem := 'Atualizando tabela lotofacil.lotofacil_resultado_novos_repetidos';
+        //Synchronize(@DoStatus);
+        //atualizar_resultado_novos_repetidos;
+
+        //Writeln('Executou... sql_query.Execsql na linha 2595');
+
+        // Tudo ocorreu normalmente, então, confirmar transação.
+        //dmLotofacil.pgLTK.Transaction.Commit;
+
+        //Writeln('Executou o commit');
+        //dmLotofacil.pgLTK.Close(True);
+
+        //Writeln('Fechou o banco.');
+        //sql_query.Close;
+        //Writeln('Fechou sql_query.');
+
+        //FreeAndNil(dmLotofacil);
+
+        //Writeln('Desalocou sql_memory');
+        //FreeAndNil(sql_memory);
+
+        //Writeln('Antes de executar @doSTatus');
+        //Synchronize(@DoStatus);
+        //Synchronize(@DoStatusAtualizacao);
+        //Writeln('Após executar @doStatus');
+
+    except
+        On Exc: EDatabaseError do
+        begin
+            dmLotofacil.pgLTK.Transaction.Rollback;
+            dmLotofacil.pgLTK.Close;
+            fStatus_Mensagem_Erro := 'Erro: ' + Exc.Message;
+            Synchronize(@DoStatusErro);
+            Exit;
+        end;
+        On Exc: Exception do
+        begin
+            dmLotofacil.pgLTK.Transaction.Rollback;
+            dmLotofacil.pgLTK.Close;
+            fStatus_Mensagem_Erro := 'Erro: ' + Exc.Message;
+            Synchronize(@DoStatusErro);
+            Exit;
+        end;
+    end;
+
+    // Desaloca memória alocada
+    SetLength(sm_frq_grupo, 0);
+    SetLength(frq_grp_1, 0);
+    SetLength(frq_grp_2, 0);
+    SetLength(frq_grp_3, 0);
+    SetLength(frq_grp_4, 0);
+    SetLength(frq_grp_5, 0);
+
+    // Se chegarmos aqui, quer dizer, que todos os ítens foram atualizados com sucesso!!!;
+    fStatus_Mensagem := 'Itens atualizado com sucesso!!!';
+    Exibir_Mensagem_de_Termino;
+
+    //Writeln('Antes de sair da procedure, antes de @doStatusConcluido');
+    Synchronize(@DoStatusConcluido);
+    //Writeln('Antes de sair da procedure, depois de @doStatusConcluido');
+
+end;
+
+
 procedure TLotofacilNovosRepetidos.AtualizarNovosRepetidos_4;
 const
     ARQUIVO_LTF_NUM_BOLAS = '../analisador_lotofacil_dados/lotofacil_bolas_novos_repetidos.ltf_bin';
@@ -3268,7 +4897,7 @@ begin
     except
         On exc: Exception do
         begin
-            fStatus_Mensagem_Erro := 'Erro ao abrir arquivo.';
+            fStatus_Mensagem_Erro := 'Erro ao abrir arquivo.' + ARQUIVO_LTF_NUM_BOLAS;
             Synchronize(@DoStatusErro);
             Exit;
         end;
@@ -3996,10 +5625,10 @@ end;
 procedure TLotofacilNovosRepetidos.Exibir_Mensagem_de_Termino;
 begin
     fFim_da_atualizacao := Now;
-    fStatus_Mensagem := fStatus_Mensagem + #10#13 + 'Início: ' + FormatDateTime(
-        'hh:nn:ss.zzz', fInicio_da_atualizacao) + #10#13 + 'Fim: ' + FormatDateTime('hh:nn:ss.zzz',
-        fFim_da_atualizacao);
-    fStatus_Mensagem := fStatus_Mensagem + #10#13 + 'Tempo decorrido:' + #10#13 +
+    fStatus_Mensagem := fStatus_Mensagem + LineEnding + 'Início: ' + FormatDateTime(
+        'hh:nn:ss.zzz', fInicio_da_atualizacao) + LineEnding + 'Fim: ' +
+        FormatDateTime('hh:nn:ss.zzz', fFim_da_atualizacao);
+    fStatus_Mensagem := fStatus_Mensagem + LineEnding + 'Tempo decorrido:' + LineEnding +
         IntToStr(HoursBetween(fInicio_da_atualizacao, fFim_da_atualizacao)) + ':' +
         IntToStr(MinutesBetween(fInicio_da_atualizacao, fFim_da_atualizacao) mod 60) + ':' +
         IntToStr(SecondsBetween(fInicio_da_atualizacao, fFim_da_atualizacao) mod 60);

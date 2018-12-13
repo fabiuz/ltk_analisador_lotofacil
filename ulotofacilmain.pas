@@ -4145,6 +4145,7 @@ type
         procedure AtualizarFiltroData(Sender: TObject; strWhere: string);
         procedure AtualizarFrequencia;
         procedure AtualizarFrequenciaBolas;
+        procedure atualizar_frequencia_bolas(sql_conexao: TZConnection);
         procedure atualizar_cmb_minimo_maximo;
         //procedure AtualizarNovosRepetidos(concurso : Integer);
         procedure Atualizar_Combinacao_Complementar(bolas_por_combinacao: integer);
@@ -9055,6 +9056,7 @@ var
     strSql:      TStringList;
     sqlRegistro: TSqlQuery;
     uConcurso:   integer;
+    sql_query: TZQuery;
 
 begin
     // Garante que o controle está preenchido.
@@ -9077,39 +9079,44 @@ begin
     end;
 
     // Cria o objeto se não existe.
-    if dmLotofacil = nil then
-    begin
-        dmLotofacil := TdmLotofacil.Create(Self);
-    end;
-    sqlRegistro := TSqlQuery.Create(Self);
-    sqlRegistro.DataBase := dmLotofacil.pgLtk;
-    sqlRegistro.UniDirectional := False;
-    sqlRegistro.Active := False;
+    //if dmLotofacil = nil then
+    //begin
+    //    dmLotofacil := TdmLotofacil.Create(Self);
+    //end;
+    //sqlRegistro := TSqlQuery.Create(Self);
+    //sqlRegistro.DataBase := dmLotofacil.pgLtk;
+    //sqlRegistro.UniDirectional := False;
+    //sqlRegistro.Active := False;
+    //
 
+    sql_query := TZQuery.Create(Nil);
+    sql_query.Connection := sql_conexao;
+    sql_query.Connection.AutoCommit := false;
 
-    sqlRegistro.SQL.Clear;
-    sqlRegistro.Sql.Add('Select concurso from lotofacil.lotofacil_resultado_num');
-    sqlRegistro.Sql.Add('where concurso = :concurso');
-    sqlRegistro.Prepare;
+    sql_query.SQL.Clear;
+    sql_query.Sql.Add('Select concurso from lotofacil.lotofacil_resultado_num');
+    sql_query.Sql.Add('where concurso = :concurso');
+    sql_query.Prepare;
 
     // Vamos passar o parâmetro, iremos pegar o número do concurso do botão
     // ed_concurso_manual_numero.
-    sqlRegistro.Params.ParamByName('concurso').AsInteger := uConcurso;
-    sqlRegistro.Open;
+    sql_query.Params.ParamByName('concurso').AsInteger := uConcurso;
+    sql_query.Open;
 
-    sqlRegistro.First;
-    sqlRegistro.Last;
+    sql_query.First;
+    sql_query.Last;
     qt_registros := sqlRegistro.RecordCount;
 
     // Não podemos inserir um concurso que já existe, indicar como um erro e sair.
     if qt_registros <> 0 then
     begin
+        FreeAndNil(sql_query);
         MessageDlg('Erro', 'Registro já existente.', TMsgDlgType.mtError, [mbOK], 0);
         exit;
     end;
 
     // Se não há erros, podemos inserir o novo concurso.
-    sqlRegistro.Close;
+    sql_query.Close;
 
     strSql := TStringList.Create;
     strSql.Clear;
@@ -9150,15 +9157,16 @@ begin
     strSql.Add(strUtils.DupeString(',1', 15));
     strSql.Add(');');
 
-    sqlRegistro.SQL.Text := strSql.Text;
+    sql_query.SQL.Text := strSql.Text;
 
     // Executa a consulta.
     try
-        sqlRegistro.ExecSQL;
-        dmLotofacil.pgLTK.Transaction.Commit;
-        sqlRegistro.Close;
-        dmLotofacil.pgLtk.Close(True);
-
+        sql_query.ExecSQL;
+        sql_query.Connection.Commit;
+        //dmLotofacil.pgLTK.Transaction.Commit;
+        //sqlRegistro.Close;
+        sql_query.Close;
+        //dmLotofacil.pgLtk.Close(True);
     except
         on Exc: EDataBaseError do
         begin
@@ -9267,6 +9275,7 @@ begin
     gerador_aleatorio_opcoes.gerador_controle :=  sgr_gerador_aleatorio;
 
     gerar_combinacoes_aleatorias(sql_conexao, gerador_aleatorio_opcoes);
+    gerar_combinacoes_aleatorias_2(sql_conexao, gerador_aleatorio_opcoes);
 end;
 
 procedure TForm1.btn_gerar_estatistica_frequencia_numClick(Sender: TObject);
@@ -9702,16 +9711,20 @@ var
     sql_insert, nome_do_campo, concurso_data: string;
     bolas_sorteadas: array[1..25] of integer;
     bola_numero, concurso_numero: longint;
+    sql_query: TZQuery;
 begin
-    sql_registro := TSqlQuery.Create(Self);
+    sql_query := TZQuery.Create(Nil);
+    sql_query.connection := sql_conexao;
+
+    //sql_registro := TSqlQuery.Create(Self);
     lista_sql_insert := TStringList.Create;
 
-    if not Assigned(dmLotofacil) then
-    begin
-        dmLotofacil := TDmLotofacil.Create(Self);
-    end;
+    //if not Assigned(dmLotofacil) then
+    //begin
+    //    dmLotofacil := TDmLotofacil.Create(Self);
+    //end;
 
-    sql_registro.DataBase := dmLotofacil.pgLTK;
+//    sql_registro.DataBase := dmLotofacil.pgLTK;
 
     lista_campos := TStringList.Create;
     lista_campos.SkipLastLineBreak := True;
@@ -12548,7 +12561,8 @@ end;
 
 procedure TForm1.btnFrequenciaAtualizarClick(Sender: TObject);
 begin
-    AtualizarFrequenciaBolas;
+    //AtualizarFrequenciaBolas;
+    atualizar_frequencia_bolas(sql_conexao);
 end;
 
 procedure TForm1.btnGeradorAleatorioComFiltroClick(Sender: TObject);
@@ -13714,6 +13728,38 @@ begin
     //cmbConcursoFrequenciaSairChange(cmbConcursoFrequenciaSair);
 
     //CarregarConcursos;
+
+end;
+
+procedure TForm1.atualizar_frequencia_bolas(sql_conexao: TZConnection);
+var
+    //sqlRegistro: TSqlQuery;
+    sql_query: TZQuery;
+begin
+    try
+        sql_query := TZQuery.Create(Nil);
+        sql_query.connection := sql_conexao;
+        sql_query.Connection.AutoCommit:=false;
+        sql_query.Sql.Clear;
+        sql_query.SQL.Add('Select lotofacil.fn_lotofacil_resultado_frequencia_atualizar()');
+        sql_query.ExecSQL;
+        sql_query.Connection.Commit;
+        sql_query.Close;
+        FreeAndNil(sql_query);
+    except
+      on Exc: EDataBaseError do
+      begin
+           MessageDlg('Erro', 'Erro: ' + Exc.Message, TMsgDlgType.mtError, [mbOK], 0);
+           Exit;
+      end;
+      ON Exc: Exception do begin
+          MessageDlg('Erro', 'Erro: ' + Exc.Message, mtError, [mbok], 0);
+          Exit;
+      end;
+    end;
+
+    // Atualiza todos os controles que recupera informações do banco de dados.
+    cmbConcursoFrequenciaTotalSairChange(cmbConcursoFrequenciaTotalSair);
 
 end;
 

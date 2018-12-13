@@ -12,7 +12,7 @@
       },
       "config_de_conexao_Strings" : {
         "Count" : "6",
-        "Item0" : "Host=192.168.88.248",
+        "Item0" : "Host=192.168.88.246",
         "Item1" : "Porta=5432",
         "Item2" : "Banco de dados=lotofacil",
         "Item3" : "Role=",
