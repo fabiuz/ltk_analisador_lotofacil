@@ -694,6 +694,7 @@ type
         btn_bin_vrt_5: TButton;
         btn_bin_dge_1: TButton;
         btn_classificados_obter_campos: TButton;
+        btn_gerar_aleatorio1: TButton;
         btn_primo_nao_primo_por_concurso: TButton;
         btn_frequencia_novos_concursos1: TButton;
         btn_frequencia_atualizar: TButton;
@@ -9105,7 +9106,7 @@ begin
 
     sql_query.First;
     sql_query.Last;
-    qt_registros := sqlRegistro.RecordCount;
+    qt_registros := sql_query.RecordCount;
 
     // Não podemos inserir um concurso que já existe, indicar como um erro e sair.
     if qt_registros <> 0 then
@@ -9274,8 +9275,9 @@ begin
     gerador_aleatorio_opcoes.qt_de_combinacoes:=qt_de_combinacoes;
     gerador_aleatorio_opcoes.gerador_controle :=  sgr_gerador_aleatorio;
 
-    gerar_combinacoes_aleatorias(sql_conexao, gerador_aleatorio_opcoes);
-    gerar_combinacoes_aleatorias_2(sql_conexao, gerador_aleatorio_opcoes);
+    //gerar_combinacoes_aleatorias(sql_conexao, gerador_aleatorio_opcoes);
+    //gerar_combinacoes_aleatorias_2(sql_conexao, gerador_aleatorio_opcoes);
+    gerar_combinacoes_aleatorias_3(sql_conexao, gerador_aleatorio_opcoes);
 end;
 
 procedure TForm1.btn_gerar_estatistica_frequencia_numClick(Sender: TObject);
