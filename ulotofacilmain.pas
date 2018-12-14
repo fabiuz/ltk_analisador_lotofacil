@@ -9565,6 +9565,7 @@ var
     objData:      TComboBox;
     sql_registro: TSqlQuery;
     qt_registros: integer;
+    sql_query: TZQuery;
 begin
     if Sender is TButton then
     begin
@@ -9602,55 +9603,76 @@ begin
         exit;
     end;
 
-    if dmLotofacil = nil then
-    begin
-        dmLotofacil := TdmLotofacil.Create(Self);
-    end;
+    //if dmLotofacil = nil then
+    //begin
+    //    dmLotofacil := TdmLotofacil.Create(Self);
+    //end;
 
-    sql_registro := TSqlQuery.Create(Self);
-    sql_registro.DataBase := dmLotofacil.pgLTK;
-    sql_registro.UniDirectional := False;
-    sql_registro.Active := False;
+    //sql_registro := TSqlQuery.Create(Self);
+    //sql_registro.DataBase := dmLotofacil.pgLTK;
+    //sql_registro.UniDirectional := False;
+    //sql_registro.Active := False;
+
+    sql_query := TZquery.Create(Nil);
+    sql_query.Connection := sql_conexao;
+    sql_query.Sql.Clear;
 
     // Aqui, iremos recuperar as datas, em ordem decrescente.
     if objButton = btn_obter_novos_filtros then
     begin
-        sql_registro.SQL.Add(
+        //sql_registro.SQL.Add(
+        sql_query.Sql.Add(
             'Select data_1 from lotofacil.v_lotofacil_filtros_por_data');
         // O campo data_1, é um campo do tipo string formatado como um data em formato
         // brasileiro, entretanto, não é possível ordenar este tipo string, desta forma
         // pois, a data estará ordenada incorretamente.
         // O formato correto pra classificar é 'yyyy-mm-dd', por isto, há um outro campo
         // de nome 'data_2' em formato americano 'yyyy-mm-dd', assim é possível ordenar.
-        sql_registro.Sql.Add('order by data_2 desc');
+
+        //sql_registro.Sql.Add('order by data_2 desc');
+        sql_query.Sql.Add('order by data_2 desc');
     end
     else
     if objButton = btnAleatorioNovo then
     begin
-        sql_registro.SQL.Add(
+        //sql_registro.SQL.Add(
+        sql_query.Sql.Add(
             'Select data_1 from lotofacil.v_lotofacil_aleatorio_por_data');
-        sql_registro.Sql.Add('order by data_2 desc');
+
+        //sql_registro.Sql.Add('order by data_2 desc');
+        sql_query.Sql.Add('order by data_2 desc');
     end;
 
     try
-        sql_registro.Open;
-        sql_registro.First;
+        //sql_registro.Open;
+        //sql_registro.First;
+        sql_query.Open;
+        sql_query.First;
 
         // Iremos sempre definir a quantidade de registro igual a zero
         // e em seguida, percorrer se houver registro, somente após saberemos
         // a quantidade de registros que há, bem mais prático e eficiente do que
         // realizar 'first' e 'last', pra saber a quantidade de registros.
         qt_registros := 0;
-        while not sql_registro.EOF do
+
+        //while not sql_registro.EOF do
+        while not sql_query.Eof do
         begin
+            //Inc(qt_registros);
+            //objData.Items.Add(sql_registro.FieldByName('data_1').AsString);
+            //sql_registro.Next;
+
             Inc(qt_registros);
-            objData.Items.Add(sql_registro.FieldByName('data_1').AsString);
-            sql_registro.Next;
+            objData.Items.Add(sql_query.FieldByName('data_1').asString);
+            sql_query.Next;
         end;
-        sql_registro.Close;
-        sql_registro.Sql.Clear;
-        dmLotofacil.Free;
-        dmLotofacil := nil;
+        //sql_registro.Close;
+        //sql_registro.Sql.Clear;
+        //dmLotofacil.Free;
+        //dmLotofacil := nil;
+
+        sql_query.Close;
+        FreeAndNil(sql_query);
 
     except
         ON exc: Exception do
@@ -10921,34 +10943,53 @@ var
     sqlRegistros: TSqlQuery;
     qt_registros, uA, linha: integer;
     campo_nome:   string;
+    sql_query: TZQuery;
 begin
-    if dmLotofacil = nil then
-    begin
-        dmLotofacil := tDmLotofacil.Create(Self);
-    end;
+    //if dmLotofacil = nil then
+    //begin
+    //    dmLotofacil := tDmLotofacil.Create(Self);
+    //end;
 
-    sqlRegistros := TSqlQuery.Create(Self);
-    sqlRegistros.DataBase := DmLotofacil.pgLTK;
-    sqlRegistros.Active := False;
-    sqlRegistros.Close;
+    //sqlRegistros := TSqlQuery.Create(Self);
+    //sqlRegistros.DataBase := DmLotofacil.pgLTK;
+    //sqlRegistros.Active := False;
+    //sqlRegistros.Close;
 
-    sqlRegistros.Sql.Clear;
-    sqlRegistros.Sql.Add('Select');
+    sql_query := TZquery.Create(Nil);
+    sql_query.Connection := sql_conexao;
+    sql_query.Sql.Clear;
+
+    //sqlRegistros.Sql.Clear;
+    //sqlRegistros.Sql.Add('Select');
+
+    sql_query.Sql.Clear;
+    sql_query.Sql.Add('Select');
     for uA := 0 to High(lotofacil_filtro_campos) do
     begin
         if uA <> 0 then
         begin
-            sqlRegistros.Sql.Add(', ');
+            //sqlRegistros.Sql.Add(', ');
+            sql_query.Sql.Add(',');
         end;
-        sqlRegistros.Sql.Add(lotofacil_filtro_campos[uA]);
+        //sqlRegistros.Sql.Add(lotofacil_filtro_campos[uA]);
+        sql_query.Sql.Add(lotofacil_filtro_campos[uA]);
     end;
-    sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_filtros');
-    sqlRegistros.sql.Add('Where to_char(data,');
-    sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
-    sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_Data_Hora));
-    sqlRegistros.SQL.Add('order by');
-    sqlRegistros.SQL.Add('filtros_id asc,');
-    sqlRegistros.Sql.Add('ltf_qt asc');
+    sql_query.Sql.Add('from lotofacil.v_lotofacil_filtros');
+    sql_query.sql.Add('Where to_char(data,');
+    sql_query.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+    sql_query.Sql.Add('= ' + QuotedStr(strWhere_Data_Hora));
+    sql_query.SQL.Add('order by');
+    sql_query.SQL.Add('filtros_id asc,');
+    sql_query.Sql.Add('ltf_qt asc');
+
+    //sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_filtros');
+    //sqlRegistros.sql.Add('Where to_char(data,');
+    //sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+    //sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_Data_Hora));
+    //sqlRegistros.SQL.Add('order by');
+    //sqlRegistros.SQL.Add('filtros_id asc,');
+    //sqlRegistros.Sql.Add('ltf_qt asc');
+
     {
     sqlRegistros.Sql.Add('qt_alt asc,');
     sqlRegistros.Sql.Add('qt_dif_1 asc,');
@@ -10967,10 +11008,15 @@ begin
     // Vamos abrir a consulta, e ir pra o primeiro registro e
     // em seguida, pra o último pra conseguirmos determinar
     // a quantidade de registros.
-    sqlRegistros.Open;
-    sqlRegistros.First;
-    sqlRegistros.Last;
-    qt_registros := sqlRegistros.RecordCount;
+    //sqlRegistros.Open;
+    //sqlRegistros.First;
+    //sqlRegistros.Last;
+    //qt_registros := sqlRegistros.RecordCount;
+
+    sql_query.Open;
+    sql_query.First;
+    sql_query.Last;
+    qt_registros := sql_query.RecordCount;
 
     if qt_registros = 0 then
     begin
@@ -10992,25 +11038,33 @@ begin
     end;
 
     linha := 1;
-    sqlRegistros.First;
-    while (not sqlRegistros.EOF) and (qt_registros > 0) do
+    //sqlRegistros.First;
+    sql_query.First;
+    //while (not sqlRegistros.EOF) and (qt_registros > 0) do
+    while (not sql_query.Eof) and (qt_registros > 0) do
     begin
         // Vamos percorrer todos os campos e também ocultar o campo
         // se o usuário não selecionou aquele campo.
         for uA := 0 to High(lotofacil_filtro_campos) do
         begin
             campo_nome := lotofacil_filtro_campos[uA];
-            sgrFiltros.Cells[uA, linha] :=
-                sqlRegistros.FieldByName(campo_nome).AsString;
+            //sgrFiltros.Cells[uA, linha] := sqlRegistros.FieldByName(campo_nome).AsString;
+            sgrFiltros.Cells[uA, linha] := sql_query.FieldByName(campo_nome).AsString;
+
         end;
 
-        sqlRegistros.Next;
+        //sqlRegistros.Next;
+        sql_query.next;
         Dec(qt_Registros);
         Inc(linha);
     end;
-    sqlRegistros.Close;
-    dmLotofacil.Free;
-    dmLotofacil := nil;
+
+    //sqlRegistros.Close;
+    //dmLotofacil.Free;
+    //dmLotofacil := nil;
+
+    sql_query.close;
+    FreeAndNil(sql_query);
 
     sgrFiltros.AutoSizeColumns;
     sgrFiltros.FixedRows := 1;
@@ -11047,6 +11101,7 @@ var
     qt_registros: integer;
     objHora:      TComboBox;
     objData:      TComboBox;
+    sql_query: TZQuery;
 begin
     if Sender = cmbFiltroData then
     begin
@@ -11068,48 +11123,76 @@ begin
         exit;
     end;
 
-    if dmLotofacil = nil then
-    begin
-        dmLotofacil := TDmLotofacil.Create(Self);
-    end;
+    //if dmLotofacil = nil then
+    //begin
+    //    dmLotofacil := TDmLotofacil.Create(Self);
+    //end;
 
-    sqlRegistro := TSqlQuery.Create(Self);
-    sqlRegistro.DataBase := dmLotofacil.pgLTK;
-    sqlRegistro.UniDirectional := False;
-    sqlRegistro.Active := False;
-    sqlRegistro.Close;
+    //sqlRegistro := TSqlQuery.Create(Self);
+    //sqlRegistro.DataBase := dmLotofacil.pgLTK;
+    //sqlRegistro.UniDirectional := False;
+    //sqlRegistro.Active := False;
+    //sqlRegistro.Close;
 
-    sqlRegistro.SQL.Clear;
+    sql_query := TZQuery.Create(Nil);
+    sql_query.Connection := sql_conexao;
+    sql_query.SQl.clear;
+
+    //sqlRegistro.SQL.Clear;
 
     if Sender = cmbFiltroData then
     begin
-        sqlRegistro.Sql.Add(
+        //sqlRegistro.Sql.Add(
+        //    'Select hora_1 from lotofacil.v_lotofacil_filtros_por_data_hora');
+        //sqlRegistro.Sql.Add('where to_char(data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
+        //sqlRegistro.Sql.Add('order by hora_1 desc');
+
+        sql_query.Sql.Add(
             'Select hora_1 from lotofacil.v_lotofacil_filtros_por_data_hora');
-        sqlRegistro.Sql.Add('where to_char(data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
-        sqlRegistro.Sql.Add('order by hora_1 desc');
+        sql_query.Sql.Add('where to_char(data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
+        sql_query.Sql.Add('order by hora_1 desc');
+
+
     end
     else
     begin
-        sqlRegistro.Sql.Add(
+        //sqlRegistro.Sql.Add(
+        //    'Select hora_1 from lotofacil.v_lotofacil_aleatorio_por_data_hora');
+        //sqlRegistro.Sql.Add('where to_char(aleatorio_data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
+        //sqlRegistro.Sql.Add('order by hora_1 desc');
+
+        sql_query.Sql.Add(
             'Select hora_1 from lotofacil.v_lotofacil_aleatorio_por_data_hora');
-        sqlRegistro.Sql.Add('where to_char(aleatorio_data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
-        sqlRegistro.Sql.Add('order by hora_1 desc');
+        sql_query.Sql.Add('where to_char(aleatorio_data, ''DD-MM-YYYY'') = ' + QuotedStr(strWhere));
+        sql_query.Sql.Add('order by hora_1 desc');
     end;
 
     try
-        sqlRegistro.Open;
+        //sqlRegistro.Open;
+        //qt_registros := 0;
+        //sqlRegistro.First;
 
-        sqlRegistro.First;
-        while not sqlRegistro.EOF do
+        qt_registros := 0;
+        sql_query.Open;
+        sql_query.first;
+
+        //while not sqlRegistro.EOF do
+        while not sql_query.Eof do
         begin
-            objHora.Items.Add(sqlRegistro.FieldByName('hora_1').AsString);
+            //objHora.Items.Add(sqlRegistro.FieldByName('hora_1').AsString);
+            //Inc(qt_registros);
+            //sqlRegistro.Next;
 
+            objHora.Items.Add(sql_query.FieldByName('hora_1').AsString);
             Inc(qt_registros);
-            sqlRegistro.Next;
+            sql_query.Next;
         end;
-        sqlRegistro.Close;
-        dmLotofacil.Free;
-        dmLotofacil := nil;
+        sql_query.close;
+        FreeAndNil(sql_query);
+
+        //sqlRegistro.Close;
+        //dmLotofacil.Free;
+        //dmLotofacil := nil;
 
     except
         On Exc: Exception do
@@ -11149,6 +11232,7 @@ var
     objData, objHora: TComboBox;
     obj_sgr_acertos:  TStringGrid;
     obj_cmb_concurso: TComboBox;
+    sql_query: TZQuery;
 begin
     if Sender = btnVerificarAcerto then
     begin
@@ -11226,26 +11310,39 @@ begin
 
     concursoSelecionado := obj_cmb_concurso.Items[indiceSelecionado];
 
-    if dmLotofacil = nil then
-    begin
-        dmLotofacil := TdmLotofacil.Create(Self);
-    end;
+    //if dmLotofacil = nil then
+    //begin
+    //    dmLotofacil := TdmLotofacil.Create(Self);
+    //end;
 
-    sqlRegistros := TSqlQuery.Create(Self);
-    sqlRegistros.DataBase := dmLotofacil.pgLTK;
-    sqlRegistros.Active := False;
-    sqlRegistros.Close;
+    //sqlRegistros := TSqlQuery.Create(Self);
+    //sqlRegistros.DataBase := dmLotofacil.pgLTK;
+    //sqlRegistros.Active := False;
+    //sqlRegistros.Close;
 
-    sqlRegistros.Sql.Clear;
-    sqlRegistros.SQL.Add('Select b_1, b_2, b_3, b_4, b_5,');
-    sqlRegistros.Sql.Add('b_6, b_7, b_8, b_9, b_10,');
-    sqlRegistros.Sql.Add('b_11, b_12, b_13, b_14, b_15');
-    sqlRegistros.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
-    sqlRegistros.Sql.Add('where concurso = ' + concursoSelecionado);
+    //sqlRegistros.Sql.Clear;
+    //sqlRegistros.SQL.Add('Select b_1, b_2, b_3, b_4, b_5,');
+    //sqlRegistros.Sql.Add('b_6, b_7, b_8, b_9, b_10,');
+    //sqlRegistros.Sql.Add('b_11, b_12, b_13, b_14, b_15');
+    //sqlRegistros.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
+    //sqlRegistros.Sql.Add('where concurso = ' + concursoSelecionado);
+
+    sql_query := TZquery.Create(Nil);
+    sql_query.Connection := sql_conexao;
+    sql_query.Connection.AutoCommit := false;
+    sql_query.Sql.Clear;
+    sql_query.SQL.Add('Select b_1, b_2, b_3, b_4, b_5,');
+    sql_query.Sql.Add('b_6, b_7, b_8, b_9, b_10,');
+    sql_query.Sql.Add('b_11, b_12, b_13, b_14, b_15');
+    sql_query.Sql.Add('from lotofacil.lotofacil_resultado_bolas');
+    sql_query.Sql.Add('where concurso = ' + concursoSelecionado);
 
     try
-        sqlRegistros.Open;
-        if sqlRegistros.EOF = True then
+        //sqlRegistros.Open;
+        //if sqlRegistros.EOF = True then
+
+        sql_query.Open;
+        if sql_query.EOF then
         begin
             sgrVerificarAcertos.Columns.Clear;
             sgrVerificarAcertos.Columns.Add;
@@ -11285,54 +11382,81 @@ begin
     strInsert_Set_Acerto := '';
     for uA := 1 to 15 do
     begin
-        bola_concurso := sqlRegistros.FieldByName('b_' + IntToStr(uA)).AsString;
+        //bola_concurso := sqlRegistros.FieldByName('b_' + IntToStr(uA)).AsString;
+        bola_concurso := sql_query.FieldByName('b_' + IntToStr(uA)).AsString;
         if uA <> 1 then
         begin
             strInsert_Set_Acerto := strInsert_Set_Acerto + ' + ';
         end;
         strInsert_Set_Acerto := strInsert_Set_Acerto + 'num_' + bola_concurso;
     end;
-    sqlRegistros.Close;
+    //sqlRegistros.Close;
+    sql_query.Close;
 
     // Agora, iremos atualizar o campo acerto somente do filtro atual selecionado.
     if Sender = btnVerificarAcerto then
     begin
 
-        sqlRegistros.Sql.Clear;
-        sqlRegistros.Sql.Add('Update lotofacil.lotofacil_filtros');
-        sqlRegistros.Sql.Add('set acertos = ');
-        sqlRegistros.Sql.Add(strInsert_Set_Acerto);
-        sqlRegistros.Sql.Add('from lotofacil.lotofacil_num');
-        sqlRegistros.sql.Add('where lotofacil.lotofacil_filtros.ltf_id = ');
-        sqlRegistros.Sql.Add('lotofacil.lotofacil_num.ltf_id');
-        sqlRegistros.sql.Add('And to_char(data,');
-        sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
-        sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
-        // Writeln(sqlRegistros.SQL.Text);
+        //sqlRegistros.Sql.Clear;
+        //sqlRegistros.Sql.Add('Update lotofacil.lotofacil_filtros');
+        //sqlRegistros.Sql.Add('set acertos = ');
+        //sqlRegistros.Sql.Add(strInsert_Set_Acerto);
+        //sqlRegistros.Sql.Add('from lotofacil.lotofacil_num');
+        //sqlRegistros.sql.Add('where lotofacil.lotofacil_filtros.ltf_id = ');
+        //sqlRegistros.Sql.Add('lotofacil.lotofacil_num.ltf_id');
+        //sqlRegistros.sql.Add('And to_char(data,');
+        //sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        //sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Update lotofacil.lotofacil_filtros');
+        sql_query.Sql.Add('set acertos = ');
+        sql_query.Sql.Add(strInsert_Set_Acerto);
+        sql_query.Sql.Add('from lotofacil.lotofacil_num');
+        sql_query.sql.Add('where lotofacil.lotofacil_filtros.ltf_id = ');
+        sql_query.Sql.Add('lotofacil.lotofacil_num.ltf_id');
+        sql_query.sql.Add('And to_char(data,');
+        sql_query.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        sql_query.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
 
     end
     else
     begin
 
-        sqlRegistros.Sql.Clear;
-        sqlRegistros.Sql.Add('Update lotofacil.lotofacil_aleatorio');
-        sqlRegistros.Sql.Add('set acertos = ');
-        sqlRegistros.Sql.Add(strInsert_Set_Acerto);
-        sqlRegistros.Sql.Add('from lotofacil.lotofacil_num');
-        sqlRegistros.sql.Add('where lotofacil.lotofacil_aleatorio.ltf_id = ');
-        sqlRegistros.Sql.Add('lotofacil.lotofacil_num.ltf_id');
-        sqlRegistros.sql.Add('And to_char(aleatorio_data,');
-        sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
-        sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
-        // Writeln(sqlRegistros.SQL.Text);
+        //sqlRegistros.Sql.Clear;
+        //sqlRegistros.Sql.Add('Update lotofacil.lotofacil_aleatorio');
+        //sqlRegistros.Sql.Add('set acertos = ');
+        //sqlRegistros.Sql.Add(strInsert_Set_Acerto);
+        //sqlRegistros.Sql.Add('from lotofacil.lotofacil_num');
+        //sqlRegistros.sql.Add('where lotofacil.lotofacil_aleatorio.ltf_id = ');
+        //sqlRegistros.Sql.Add('lotofacil.lotofacil_num.ltf_id');
+        //sqlRegistros.sql.Add('And to_char(aleatorio_data,');
+        //sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        //sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Update lotofacil.lotofacil_aleatorio');
+        sql_query.Sql.Add('set acertos = ');
+        sql_query.Sql.Add(strInsert_Set_Acerto);
+        sql_query.Sql.Add('from lotofacil.lotofacil_num');
+        sql_query.sql.Add('where lotofacil.lotofacil_aleatorio.ltf_id = ');
+        sql_query.Sql.Add('lotofacil.lotofacil_num.ltf_id');
+        sql_query.sql.Add('And to_char(aleatorio_data,');
+        sql_query.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        sql_query.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
 
     end;
 
     // Vamos executar e realizar o commit.
     try
-        sqlRegistros.ExecSQL;
-        dmLotofacil.pgLTK.Transaction.Commit;
-        sqlRegistros.Close;
+        //sqlRegistros.ExecSQL;
+        //dmLotofacil.pgLTK.Transaction.Commit;
+        //sqlRegistros.Close;
+
+        sql_query.ExecSql;
+        sql_query.Connection.Commit;
+        sql_query.close;
+
     except
         On exc: EDataBaseError do
         begin
@@ -11341,6 +11465,7 @@ begin
             sgrVerificarAcertos.RowCount := 1;
             sgrVerificarAcertos.Cells[0, 0] := Exc.Message;
             sgrVerificarAcertos.AutoSizeColumns;
+            FreeAndNil(sql_query);
             exit;
         end;
     end;
@@ -11349,13 +11474,22 @@ begin
     begin
 
         // Agora, exibe o registro atualizado.
-        sqlRegistros.SQL.Clear;
-        sqlRegistros.SQL.Add('Select acertos, qt_vezes');
-        sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_filtros_acertos_por_data_hora');
-        sqlRegistros.SQL.Add('where to_char(data,');
-        sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
-        sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
-        sqlRegistros.Sql.Add('order by acertos asc');
+        //sqlRegistros.SQL.Clear;
+        //sqlRegistros.SQL.Add('Select acertos, qt_vezes');
+        //sqlRegistros.Sql.Add('from lotofacil.v_lotofacil_filtros_acertos_por_data_hora');
+        //sqlRegistros.SQL.Add('where to_char(data,');
+        //sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        //sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+        //sqlRegistros.Sql.Add('order by acertos asc');
+
+        // Agora, exibe o registro atualizado.
+        sql_query.SQL.Clear;
+        sql_query.SQL.Add('Select acertos, qt_vezes');
+        sql_query.Sql.Add('from lotofacil.v_lotofacil_filtros_acertos_por_data_hora');
+        sql_query.SQL.Add('where to_char(data,');
+        sql_query.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        sql_query.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+        sql_query.Sql.Add('order by acertos asc');
 
     end
     else
@@ -11363,14 +11497,24 @@ begin
     begin
 
         // Agora, exibe o registro atualizado.
-        sqlRegistros.SQL.Clear;
-        sqlRegistros.SQL.Add('Select acertos, qt_vezes');
-        sqlRegistros.Sql.Add(
+        //sqlRegistros.SQL.Clear;
+        //sqlRegistros.SQL.Add('Select acertos, qt_vezes');
+        //sqlRegistros.Sql.Add(
+        //    'from lotofacil.v_lotofacil_aleatorio_acertos_por_data_hora');
+        //sqlRegistros.SQL.Add('where to_char(aleatorio_data,');
+        //sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        //sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+        //sqlRegistros.Sql.Add('order by acertos asc');
+
+        // Agora, exibe o registro atualizado.
+        sql_query.SQL.Clear;
+        sql_query.SQL.Add('Select acertos, qt_vezes');
+        sql_query.Sql.Add(
             'from lotofacil.v_lotofacil_aleatorio_acertos_por_data_hora');
-        sqlRegistros.SQL.Add('where to_char(aleatorio_data,');
-        sqlRegistros.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
-        sqlRegistros.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
-        sqlRegistros.Sql.Add('order by acertos asc');
+        sql_query.SQL.Add('where to_char(aleatorio_data,');
+        sql_query.Sql.Add(QuotedStr('dd-MM-YYYY HH24:MI:SS.US') + ')');
+        sql_query.Sql.Add('= ' + QuotedStr(strWhere_data_hora));
+        sql_query.Sql.Add('order by acertos asc');
 
     end
     else
@@ -11381,15 +11525,21 @@ begin
     end;
 
     try
-        sqlRegistros.Open;
-        sqlRegistros.First;
-        if sqlRegistros.EOF = True then
+        sql_query.Open;
+        sql_query.First;
+
+        //sqlRegistros.Open;
+        //sqlRegistros.First;
+        //if sqlRegistros.EOF = True then
+
+        if sql_query.EOF then
         begin
             sgrVerificarAcertos.Columns.Clear;
             sgrVerificarAcertos.Columns.Add;
             sgrVerificarAcertos.RowCount := 1;
             sgrVerificarAcertos.Cells[0, 0] := 'Não há registros.';
             sgrVerificarAcertos.AutoSizeColumns;
+            FreeAndNil(sql_query);
             exit;
         end;
     except
@@ -11409,22 +11559,32 @@ begin
     obj_sgr_acertos.Columns[1].Title.Caption := 'Qt_vezes';
     obj_sgr_acertos.FixedRows := 1;
 
-
     linha := 1;
     qt_registros := 0;
-    while not sqlRegistros.EOF do
+    //while not sqlRegistros.EOF do
+    while not sql_query.Eof do
     begin
+        //obj_sgr_acertos.RowCount := obj_sgr_acertos.RowCount + 1;
+        //obj_sgr_acertos.Cells[0, linha] := sqlRegistros.FieldByName('acertos').AsString;
+        //obj_sgr_acertos.Cells[1, linha] := sqlRegistros.FieldByName('qt_vezes').AsString;
+        //
+        //sqlRegistros.Next;
+        //Inc(linha);
+
         obj_sgr_acertos.RowCount := obj_sgr_acertos.RowCount + 1;
-        obj_sgr_acertos.Cells[0, linha] := sqlRegistros.FieldByName('acertos').AsString;
-        obj_sgr_acertos.Cells[1, linha] := sqlRegistros.FieldByName('qt_vezes').AsString;
+        obj_sgr_acertos.Cells[0, linha] := sql_query.FieldByName('acertos').AsString;
+        obj_sgr_acertos.Cells[1, linha] := sql_query.FieldByName('qt_vezes').AsString;
 
-        sqlRegistros.Next;
+        sql_query.Next;
         Inc(linha);
-    end;
 
-    sqlRegistros.Close;
-    dmLotofacil.Free;
-    dmLotofacil := nil;
+    end;
+    sql_query.Close;
+    FreeAndNil(sql_query);
+
+    //sqlRegistros.Close;
+    //dmLotofacil.Free;
+    //dmLotofacil := nil;
 end;
 
 
