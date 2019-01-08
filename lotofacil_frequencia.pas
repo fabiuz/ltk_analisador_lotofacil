@@ -5,14 +5,86 @@ unit lotofacil_frequencia;
 interface
 
 uses
-    Classes, SysUtils, fgl, ZConnection, ZDataset, Dialogs, Math;
+    Classes, SysUtils, fgl, ZConnection, ZDataset, Dialogs, Math, db, Grids;
 
 type
     TInt_Int  = specialize TFPGMap<integer, integer>;
     TList_Int = specialize TFPGList<TInt_Int>;
 
+    // No banco de dados, há uma tabela de nome 'lotofacil_resultado_frequencia', que armazena
+    // a frequência das 25 bolas pra cada concurso.
+    // Então, toda vez que um concurso é inserido nas tabelas do banco de dados, uma trigger
+    // é responsável por realizar esta análise.
+    // Na análise da frequência, é considerado os seguintes parâmetros:
+    // Se a bola é nova no concurso atual, em relação ao anterior;
+    // Se a bola é repetida no concurso atual, em relação ao anterior;
+    // Se a bola ainda não saiu no concurso atual, nem no concurso atual;
+    // Se a bola deixou de sair no concurso atual, em relação ao concurso anterior;
+    TFreq_array_bidimensional = array of array of Integer;
+
+    TFrequencia_de_para = record
+      concurso: Integer;
+      bola_rank_de_para: array[1..25] of array[1..25] of Array[1..25] of Byte;
+      bola_freq_de_para: array[1..25] of array[1..25] of array[1..25] of Integer;
+    end;
+
+    TFrequencia_Status = record
+      concurso: Integer;
+
+      bola_da_coluna_atual: array[1..25] of Byte;
+      bola_anterior_da_coluna_atual: array[1..25] of Byte;
+      coluna_anterior_da_bola_atual: array[1..25] of Byte;
+      id_coluna_da_bola: array[1..25] of Byte;
+
+      frequencia_da_bola: array[1..25] of Integer;
+      frequencia_anterior_da_bola: array[1..25] of Integer;
+
+      //bola_na_posicao_do_rank: array [1..25] of Byte;
+      //frequencia_na_posicao_do_rank: array [1..25] of Integer;
+      //rank_da_bola: array[1..25] of Byte;
+
+      //bola_na_posicao_do_rank_anterior: array[1..25] of Byte;
+
+      //frequencia_da_bola: array[1..25] of Integer;
+      //frequencia_da_bola_rank_anterior: array[1..25] of Integer;
+      //frequencia_na_posicao_do_rank_anterior: array[1..25] of Integer;
+      //rank_anterior_da_bola: array[1..25] of Byte;
+
+      bola_se_repetindo: array[1..25] of Boolean;
+      frequencia_se_repetindo: array[1..25] of Boolean;
+
+      bola_qt_vz_mesma_posicao_do_rank: array [1..25] of Byte;
+      frequencia_qt_vz_mesma_posicao_do_rank: array [1..25] of Byte;
+
+      frequencia_status : array [1..25] of string;
+    end;
+    TFrequencia_Status_Array = array of TFrequencia_Status;
+
+    TFrequencia_comparacao_opcoes = record
+      concurso_inicial: Integer;
+      concurso_final: Integer;
+      sql_conexao: TZConnection;
+    end;
+
+    TFrequencia_opcoes = record
+      concurso_inicial: Integer;
+      concurso_final : Integer;
+      sql_conexao: TZConnection;
+      sgr_controle: TStringGrid;
+    end;
+
+
+
 procedure frequencia_gerar_estatistica(sql_conexao: TZConnection);
 procedure frequencia_atualizar_combinacoes_lotofacil(sql_conexao: TZConnection; concurso: integer);
+procedure frequencia_gerar_comparacao(frequencia_opcoes: TFrequencia_opcoes);
+
+function frequencia_obter_todas(frequencia_opcoes: TFrequencia_opcoes;
+  var frequencia_status: TFrequencia_Status_Array
+  ): boolean;
+
+procedure frequencia_exibir_comparacao(frequencia_opcoes: TFrequencia_opcoes;
+  frequencia_status: TFrequencia_Status_Array);
 
 implementation
 
@@ -396,6 +468,295 @@ begin
             Exit;
         end;
     end;
+
+end;
+
+{
+ Gera uma estatística comparando todas as frequências.
+}
+procedure frequencia_gerar_comparacao(frequencia_opcoes: TFrequencia_opcoes);
+var
+  frequencia_status: TFrequencia_Status_Array;
+begin
+    frequencia_opcoes.sql_conexao := frequencia_opcoes.sql_conexao;
+    if frequencia_obter_todas(frequencia_opcoes, frequencia_status) = false then begin
+        Exit;
+    end;
+
+    // Agora, vamos exibir a estatística de frequência.
+    frequencia_exibir_comparacao(frequencia_opcoes, frequencia_status);
+
+end;
+
+{
+ Obtém a informação de cada frequência da tabela 'lotofacil.lotofacil_resultado_frequencia'.
+}
+function frequencia_obter_todas(frequencia_opcoes: TFrequencia_opcoes;
+  var frequencia_status: TFrequencia_Status_Array): boolean;
+var
+  sql_query: TZQuery;
+  qt_registros: LongInt;
+  indice_registro, uA, rank_atual: Integer;
+  concurso_atual, bola_atual, frequencia_atual, concurso_anterior,
+    indice_registro_anterior, frequencia_anterior_da_bola,
+    frequencia_anterior_na_posicao_do_rank,
+    frequencia_na_posicao_do_rank_anterior, id_coluna: Integer;
+  bola_na_posicao_do_rank_anterior, rank_anterior_da_bola,
+    id_coluna_anterior_da_bola_atual, bola_anterior_da_coluna: Byte;
+begin
+  try
+      sql_query := TZQuery.Create(Nil);
+      sql_query.Connection := frequencia_opcoes.sql_conexao;
+      sql_query.Sql.Clear;
+      sql_query.Sql.Add('Select * from lotofacil.v_lotofacil_resultado_bolas_frequencia');
+      sql_query.Sql.Add('order by concurso desc, frequencia desc, bola asc');
+      sql_query.Open;
+      sql_query.First;
+      sql_query.Last;
+
+      qt_registros := sql_query.RecordCount;
+      if qt_registros = 0 then begin
+          Exit(False);
+      end;
+      // Verifica se a quantidade de registros é múltipla de 25.
+      if qt_registros mod 25 <> 0 then begin
+          Exception.Create('Erro, a quantidade de registros retornadas, deve ser uma ' +
+                                  ' quantidade múltipla de 25');
+          Exit(False);
+      end;
+
+      // Cada frequência de bola de cada combinação, é armazenada em um registro
+      // por isso, devemos dividir por 5, pois, ao processar no loop, em breve,
+      // a seguir, iremos colocar todas as bolas, dentro de um única variável
+      // do tipo registro.
+      SetLength(frequencia_status, qt_registros div 25 );
+      Writeln(Length(frequencia_status));
+      if Length(frequencia_status) <= 0 then begin
+          Exception.Create('Não há memória pra alocar o arranjo.');
+          Exit(False);
+      end;
+
+      // Reseta o primeiro arranjo.
+      FillByte(frequencia_status[0], sizeof(TFrequencia_Status), 0);
+
+      sql_query.First;
+      indice_registro := -1;
+      while (qt_registros > 0) and (sql_query.EOF = false) do begin
+          // No sql, iremos percorrer do menor concurso até o último concurso
+          // referente a frequência e de tal forma que as bolas esteja disposta
+          // em ordem decrescente de frequência, caso, duas bolas tenha a mesma
+          // frequência, então, a menor bola aparece primeiro.
+          // Cada concurso, gera a frequência pra cada bola, por isto, há 25 registros
+          // por combinação.
+          // No loop abaixo, iremos percorrer as 25 posições e inserir em uma
+          // única variável do tipo 'record', assim fica fácil manipular
+          // a informação.
+          Inc(indice_registro);
+          if indice_registro = 0 then begin
+              indice_registro_anterior := 0;
+          end else begin
+              indice_registro_anterior := indice_registro - 1;
+          end;
+
+          for uA := 1 to 25 do begin
+              id_coluna := uA;
+              concurso_atual := sql_query.FieldByName('concurso').AsInteger;
+              bola_atual := sql_query.FieldByName('bola').AsInteger;
+              frequencia_atual := sql_query.FieldByName('frequencia').AsInteger;
+
+              // Vamos armazenar os dados.
+              frequencia_status[indice_registro].concurso:= concurso_atual;
+              frequencia_status[indice_registro].bola_da_coluna_atual[id_coluna] := bola_atual;
+              frequencia_status[indice_registro].frequencia_da_bola[bola_atual] := frequencia_atual;
+              frequencia_status[indice_registro].id_coluna_da_bola[bola_atual] := id_coluna;
+
+              if frequencia_atual > 0 then begin
+                  frequencia_status[indice_registro].frequencia_status[uA]:= 'REP';
+              end else if frequencia_atual = 1 then begin
+                  frequencia_status[indice_registro].frequencia_status[uA]:= 'NOVO';
+              end else if frequencia_atual = -1 then begin
+                  frequencia_status[indice_registro].frequencia_status[uA]:= 'DX_S';
+              end else begin
+                  frequencia_status[indice_registro].frequencia_status[uA]:= 'AI_NS';
+              end;
+
+              // Aqui, iremos pegar a estatística da frequência anterior:
+              // Bola que estava na mesma posição do rank, na frequência anterior.
+              bola_anterior_da_coluna := frequencia_status[indice_registro_anterior].bola_anterior_da_coluna_atual[id_coluna];
+              id_coluna_anterior_da_bola_atual := frequencia_status[indice_registro_anterior].coluna_anterior_da_bola_atual[bola_atual];
+
+              //bola_na_posicao_do_rank_anterior := frequencia_status[indice_registro_anterior].bola_na_posicao_do_rank[rank_atual];
+              //rank_anterior_da_bola := frequencia_status[indice_registro_anterior].rank_anterior_da_bola[bola_atual];
+
+              // A frequência anterior da bola atual.
+              frequencia_anterior_da_bola := frequencia_status[indice_registro_anterior].frequencia_da_bola[bola_atual];
+
+              // A frequência na posição do rank anterior.
+              // frequencia_na_posicao_do_rank_anterior := frequencia_status[indice_registro_anterior].frequencia_na_posicao_do_rank[rank_atual];
+
+              // Agora, insere estas informações no registro atual.
+              frequencia_status[indice_registro].bola_anterior_da_coluna_atual[id_coluna] := bola_anterior_da_coluna;
+              frequencia_status[indice_registro].frequencia_anterior_da_bola[bola_atual] := frequencia_anterior_da_bola;
+              //frequencia_status[indice_registro].frequencia_na_posicao_do_rank_anterior[rank_atual] := frequencia_na_posicao_do_rank_anterior;
+              frequencia_status[indice_registro].coluna_anterior_da_bola_atual[bola_atual] := id_coluna_anterior_da_bola_atual;
+
+              // Cada bola é disposta de tal forma, que as bolas que mais sai estão ordenadas da
+              // esquerda pra direita, conforme o valor de frequência, então é possível que
+              // a mesma bola na mesma posição do rank se repita e também pode acontecer
+              // da frequência de um concurso anterior de um rank ser igual à frequência do concurso atual,
+              // no mesmo rank, isto ocorre se a frequência do concurso anterior, de um outro rank,
+              // deslocar pra um outro rank, também, descreveremos isto.
+
+              if bola_atual = bola_na_posicao_do_rank_anterior then begin
+                 Inc(frequencia_status[indice_registro].bola_qt_vz_mesma_posicao_do_rank[rank_atual]);
+              end else begin
+                 frequencia_status[indice_registro].bola_qt_vz_mesma_posicao_do_rank[rank_atual] := 0;
+              end;
+
+              if frequencia_anterior_na_posicao_do_rank = frequencia_atual then begin
+                 Inc(frequencia_status[indice_registro].frequencia_qt_vz_mesma_posicao_do_rank[rank_atual]);
+              end else begin
+                  frequencia_status[indice_registro].frequencia_qt_vz_mesma_posicao_do_rank[rank_atual] := 0;
+              end;
+
+              sql_query.Next;
+              Dec(qt_registros);
+          end;
+      end;
+      FreeAndNil(sql_query);
+  except
+      On Exc: Exception do begin
+          MessageDlg('', 'Erro, ' + Exc.Message, mtError, [mbok], 0);
+          Exit(False);
+      end;
+  end;
+  Exit(True);
+end;
+
+procedure frequencia_exibir_comparacao(frequencia_opcoes: TFrequencia_opcoes;
+  frequencia_status: TFrequencia_Status_Array);
+const
+    sgr_controle_campos : array[0..26] of string = (
+    'Concurso', '#', '1', '2','3', '4','5',
+                     '6', '7','8', '9','10',
+                     '11', '12','13', '14','15',
+                     '16', '17','18', '19','20',
+                     '21', '22','23', '24','25');
+
+var
+  sgr_controle: TStringGrid;
+  coluna_atual: TGridColumn;
+  uA, indice_linha_sgr_controle, indice_coluna, indice_linha,
+    sgr_controle_total_de_linhas, indice_freq_status, frequencia_atual: Integer;
+  concurso_numero: QWord;
+  frequencia_anterior, bola_anterior, frequencia_rank_atual,
+    frequencia_rank_anterior, frequencia_bola_rank_anterior,
+    frequencia_bola_atual, frequencia_anterior_bola_atual: Integer;
+  qt_vz_freq_repetindo, bola_rank_atual, bola_rank_anterior,
+    rank_anterior_da_bola_atual, bola_da_coluna_atual,
+    coluna_anterior_da_bola_atual, bola_anterior_da_coluna_atual: Byte;
+  frq_status: String;
+  bola_se_repetindo, frequencia_se_repetindo: Boolean;
+begin
+  if Length(frequencia_status) <= 0 then begin
+     MessageDlg('', 'Não há nenhum registro.', mtError, [mbok], 0);
+     Exit;
+  end;
+
+  sgr_controle := frequencia_opcoes.sgr_controle;
+  sgr_controle.Columns.Clear;
+  sgr_controle.RowCount := 1;
+  sgr_controle.FixedRows:=1;
+
+  // No controle, haverá as colunas:
+  // concurso, sigla, rnk_1, até rnk_25.
+  // rnk, significa o rank da bola quanto mais a esquerda, mais frequente é a bola.
+  for uA := 0 to High(sgr_controle_campos) do begin
+      coluna_atual := sgr_controle.columns.Add;
+      coluna_atual.Alignment:= taCenter;
+      coluna_atual.Font.Size := 12;
+      coluna_atual.Font.Name := 'Consolas';
+      coluna_atual.Title.Alignment := taCenter;
+      coluna_atual.Title.Caption := sgr_controle_campos[uA];
+      coluna_atual.Title.Font.Name := 'Consolas';
+      coluna_atual.Title.Font.Size := 12;
+  end;
+  // A frequẽncia pra cada combinação, ocupará mais de uma linha,
+  // então, precisamos multiplicar pelo números de linhas.
+  // Haverá 8 linhas, por concurso.
+  sgr_controle_total_de_linhas := Length(frequencia_status) * 10;
+
+  // Haverá 1 linha a mais por causa do cabeçalho.
+  sgr_controle.RowCount := sgr_controle_total_de_linhas + 1;
+
+  // Agora, vamos gerar os dados.
+  indice_linha := 1;
+  indice_coluna := 2;
+  indice_freq_status := 0;
+  while indice_linha <= sgr_controle_total_de_linhas do begin
+      // Concurso.
+      concurso_numero := frequencia_status[indice_freq_status].concurso;
+      sgr_controle.Cells[0, indice_linha] := IntToStr(concurso_numero);
+
+      // Pra cada frequência, haverá 5 linhas, que representa as informações de frequência.
+      sgr_controle.Cells[1, indice_linha] := 'STATUS';
+      sgr_controle.Cells[1, indice_linha + 1] := 'BL_RNK_AT';
+      sgr_controle.Cells[1, indice_linha + 2] := 'BL_RNK_ANT';
+      sgr_controle.Cells[1, indice_linha + 3] := 'RNK_ANT_BL_AT';
+      sgr_controle.Cells[1, indice_linha + 4] := 'BL_RPT';
+      sgr_controle.Cells[1, indice_linha + 5] := 'FRQ_RNK_AT';
+      sgr_controle.Cells[1, indice_linha + 6] := 'FRQ_RNK_ANT';
+      sgr_controle.Cells[1, indice_linha + 7] := 'FRQ_BL_RNK_ANT';
+      //sgr_controle.Cells[1, indice_linha + 7] := 'QT_VZ_BL_RPT';
+      //sgr_controle.Cells[1, indice_linha + 8] := 'FRQ_RPT';
+
+      indice_coluna := 2;
+      for uA := 1 to 25 do begin
+          bola_da_coluna_atual := frequencia_status[indice_freq_status].bola_da_coluna_atual[uA];
+          bola_anterior_da_coluna_atual := frequencia_status[indice_freq_status].bola_anterior_da_coluna_atual[uA];
+          coluna_anterior_da_bola_atual := frequencia_status[indice_freq_status].coluna_anterior_da_bola_atual[bola_rank_atuaL];
+
+          frequencia_bola_atual := frequencia_status[indice_freq_status].frequencia_da_bola[uA];
+          frequencia_anterior_bola_atual := frequencia_status[indice_freq_status].frequencia_anterior_da_bola[uA];
+
+          //frequencia_bola_rank_anterior := frequencia_status[indice_freq_status].frequencia_da_bola_rank_anterior[bola_rank_atual];
+
+
+          bola_se_repetindo := frequencia_status[indice_freq_status].bola_se_repetindo[uA];
+          frequencia_se_repetindo := frequencia_status[indice_freq_status].frequencia_se_repetindo[uA];
+
+          qt_vz_freq_repetindo := frequencia_status[indice_freq_status].frequencia_qt_vz_mesma_posicao_do_rank[uA];
+          frq_status := frequencia_status[indice_freq_status].frequencia_status[uA];
+
+          sgr_controle.Cells[indice_coluna, indice_linha] := frq_status;
+          sgr_controle.Cells[indice_coluna, indice_linha + 1] := IntToStr(bola_da_coluna_atual);
+          sgr_controle.Cells[indice_coluna, indice_linha + 2] := IntToStr(bola_anterior_da_coluna_atual);
+          sgr_controle.Cells[indice_coluna, indice_linha + 3] := IntToStr(rank_anterior_da_bola_atual);
+
+          if bola_se_repetindo then begin
+             sgr_controle.Cells[indice_coluna, indice_linha + 4] := 'BL_S';
+          end else begin
+             sgr_controle.Cells[indice_coluna, indice_linha + 4] := 'BL_N';
+          end;
+
+          sgr_controle.Cells[indice_coluna, indice_linha + 5] := IntToStr(frequencia_rank_atual);
+          sgr_controle.Cells[indice_coluna, indice_linha + 6] := IntToStr(frequencia_rank_anterior);
+          if frequencia_se_repetindo then begin
+             sgr_controle.Cells[indice_coluna, indice_linha + 7] := 'FQ_S';
+          end else begin
+             sgr_controle.Cells[indice_coluna, indice_linha + 7] := 'FQ_N';
+          end;
+
+          sgr_controle.Cells[indice_coluna, indice_linha + 7] := IntToStr(frequencia_bola_rank_anterior);
+
+          Inc(indice_coluna);
+      end;
+
+      Inc(indice_linha, 10);
+      Inc(indice_freq_status);
+  end;
+  sgr_controle.AutoSizeColumns;
+
 
 end;
 

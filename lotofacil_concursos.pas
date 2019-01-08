@@ -6,7 +6,7 @@ interface
 
 uses
     Classes, SysUtils, ZConnection, ZDataset, Dialogs, StdCtrls, lotofacil_constantes, Grids, IdHTTP,
-    fpjson, strUtils, dateutils, IdGlobal, variants;
+    fpjson, strUtils, dateutils, IdGlobal, variants, lotofacil_var_global;
 
 type
     TArrayInt = array of integer;
@@ -20,6 +20,15 @@ function obter_concursos(sql_conexao: TZConnection; var lista_de_concursos: TArr
 
 function obter_bolas_do_concurso(sql_conexao: TZConnection; concurso: integer;
     var bolas_do_concurso: TArrayInt): boolean;
+
+function obter_zero_um_das_bolas_no_intervalo_de_concursos(sql_conexao: TZConnection;
+    var concursos_no_intervalo: TLotofacil_Concurso_Array;
+    concurso_inicial: Integer; concurso_final: Integer; ordem_asc_desc: String): boolean;
+
+function obter_concursos_no_intervalo(
+  sql_conexao: TZConnection; var concursos_no_intervalo: TLotofacil_Concurso_Array;
+  concurso_inicial: Integer; concurso_final: Integer; ordem_asc_desc: String
+  ): boolean;
 
 function preencher_combinacoes_com_todos_os_concursos(sql_conexao: TZConnection; sgr_controle: TStringGrid; ordem_asc_desc: String):boolean;
 function preencher_combinacoes_intervalo_de_concursos(
@@ -142,6 +151,150 @@ begin
     sql_query.Close;
     FreeAndNil(sql_query);
 
+    Exit(True);
+end;
+
+{
+ Retorna todos os concursos no intervalo definido do usuário, os concursos
+ são retornados da tabela lotofacil_resultado_num, neste tabela, cada bola
+ tem um campo de prefixo 'num_', que serve pra identificar qual campo estamos.
+ Em cada campo, há o valor '0', se a bola não faz parte da combinação ou
+ '1', se a bola faz parte da combinação do concurso atual.
+ Se precisamos comparar duas combinações, a maneira mas rápida é percorrer
+ cada bola e comparando com a outra.
+}
+function obter_zero_um_das_bolas_no_intervalo_de_concursos(
+  sql_conexao: TZConnection; var concursos_no_intervalo: TLotofacil_Concurso_Array;
+  concurso_inicial: Integer; concurso_final: Integer; ordem_asc_desc: String
+  ): boolean;
+var
+  sql_query: TZQuery;
+  id_registro, uA: Integer;
+  qt_registros, bola_atual, valor_zero_um_do_campo: LongInt;
+begin
+    ordem_asc_desc := LowerCase(ordem_asc_desc);
+    if (ordem_asc_desc <> 'desc') and (ordem_asc_desc <> 'asc') then begin
+        ordem_asc_desc := 'asc';
+    end;
+
+    TRY
+       sql_query := TZQuery.Create(NIl);
+       sql_query.Connection := sql_conexao;
+       sql_query.Sql.Clear;
+       sql_query.Sql.Add('Select * from lotofacil.lotofacil_resultado_num');
+       sql_query.Sql.Add('where concurso >= ' + IntToStr(concurso_inicial));
+       sql_query.Sql.Add('and concurso <= ' + IntToStr(concurso_final));
+       sql_query.Sql.Add('order by concurso ' + ordem_asc_desc);
+       sql_query.Open;
+
+       sql_query.First;
+       sql_query.Last;
+       qt_registros := sql_query.RecordCount;
+       if qt_registros = 0 then begin
+           FreeAndNil(sql_query);
+           SetLength(concursos_no_intervalo, 0);
+           Exit(False);
+       end;
+
+       SetLength(concursos_no_intervalo, qt_registros);
+       if Length(concursos_no_intervalo) <= 0 then begin
+           Exception.Create('Não foi possível alocar memória pra o arranjo.');
+           Exit(False);
+       end;
+
+       id_registro := 0;
+       sql_query.First;
+       while Not Sql_query.EOF do begin
+           concursos_no_intervalo[id_registro].concurso:= sql_query.FieldByName('concurso').AsInteger;
+           for uA := 1 to 25 do begin
+               valor_zero_um_do_campo := sql_query.FieldByName('num_' + IntToStr(uA)).AsInteger;
+               concursos_no_intervalo[id_registro].num1_a_num_25[uA] := valor_zero_um_do_campo;
+           end;
+           sql_query.Next;
+           Inc(id_registro);
+       end;
+       FreeAndNil(sql_query);
+    EXCEPT
+        On exc: Exception do begin
+           MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbok], 0);
+           Exit(False);
+        end;
+    end;
+    Exit(True);
+end;
+
+{
+ Obtém todas as informações das bolas, nas posições 'b_1' a 'b_15' e os valores '0' ou '1'
+ nos campos 'num_1' a 'num_25' referente a um ou vários concursos no intervalo especificado.
+ Praticamente, aqui, temos todas as informações necessárias, que podem ser utilizadas
+ em outras funções.
+ Ao invés de ter vários funções que obtém informações específicas, aqui, obtemos tudo
+ que precisamos saber sobre os concursos já sorteados.
+}
+function obter_concursos_no_intervalo(
+  sql_conexao: TZConnection; var concursos_no_intervalo: TLotofacil_Concurso_Array;
+  concurso_inicial: Integer; concurso_final: Integer; ordem_asc_desc: String
+  ): boolean;
+var
+  sql_query: TZQuery;
+  id_registro, uA, indice_bola_b1_a_b15: Integer;
+  qt_registros, bola_atual, valor_zero_um_do_campo: LongInt;
+begin
+    ordem_asc_desc := LowerCase(ordem_asc_desc);
+    if (ordem_asc_desc <> 'desc') and (ordem_asc_desc <> 'asc') then begin
+        ordem_asc_desc := 'asc';
+    end;
+
+    TRY
+       sql_query := TZQuery.Create(NIl);
+       sql_query.Connection := sql_conexao;
+       sql_query.Sql.Clear;
+       sql_query.Sql.Add('Select * from lotofacil.lotofacil_resultado_num');
+       sql_query.Sql.Add('where concurso >= ' + IntToStr(concurso_inicial));
+       sql_query.Sql.Add('and concurso <= ' + IntToStr(concurso_final));
+       sql_query.Sql.Add('order by concurso ' + ordem_asc_desc);
+       sql_query.Open;
+
+       sql_query.First;
+       sql_query.Last;
+       qt_registros := sql_query.RecordCount;
+       if qt_registros = 0 then begin
+           FreeAndNil(sql_query);
+           SetLength(concursos_no_intervalo, 0);
+           Exit(False);
+       end;
+
+       SetLength(concursos_no_intervalo, qt_registros);
+       if Length(concursos_no_intervalo) <= 0 then begin
+           Exception.Create('Não foi possível alocar memória pra o arranjo.');
+           Exit(False);
+       end;
+
+       id_registro := 0;
+       sql_query.First;
+       while Not Sql_query.EOF do begin
+           concursos_no_intervalo[id_registro].concurso:= sql_query.FieldByName('concurso').AsInteger;
+           indice_bola_b1_a_b15 := 1;
+           for uA := 1 to 25 do begin
+               valor_zero_um_do_campo := sql_query.FieldByName('num_' + IntToStr(uA)).AsInteger;
+               concursos_no_intervalo[id_registro].num1_a_num_25[uA] := valor_zero_um_do_campo;
+               // Se o valor do campo é 1, quer dizer que a bola faz parte da combinação, então,
+               // iremos preencher o arranjo 'b1_a_b15', com a bola correspondente na posição.
+               if valor_zero_um_do_campo = 1 then begin
+                   concursos_no_intervalo[id_registro].b1_a_b15[indice_bola_b1_a_b15] := uA;
+                   Inc(indice_bola_b1_a_b15);
+               end;
+           end;
+           sql_query.Next;
+           Inc(id_registro);
+       end;
+       FreeAndNil(sql_query);
+    EXCEPT
+        On exc: Exception do begin
+           MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbok], 0);
+           Exit(False);
+        end;
+    end;
     Exit(True);
 end;
 

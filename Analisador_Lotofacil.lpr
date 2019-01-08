@@ -17,7 +17,9 @@ uses
   ulotofacil_bolas_na_mesma_coluna, ulotofacil_b1_a_b15, lotofacil_constantes,
   lotofacil_filtros, lotofacil_var_global, lotofacil_gerar_filtros,
   lotofacil_concursos, lotofacil_comparacao_de_bolas_na_mesma_coluna,
-  lotofacil_frequencia, lotofacil_id_classificado, lotofacil_gerar_aleatorio;
+  lotofacil_frequencia, lotofacil_id_classificado, lotofacil_gerar_aleatorio,
+  lotofacil_matriz_frame, lotofacil_matriz,
+  lotofacil_frequencia_entre_concursos, lotofacil_grupos;
 
 {$R *.res}
 

@@ -26,7 +26,10 @@ uses
     lotofacil_comparacao_de_bolas_na_mesma_coluna,
     //lotofacil_sgr_controle,
     lotofacil_frequencia, lotofacil_id_classificado, lotofacil_gerar_aleatorio,
-    pqconnection;
+    pqconnection,
+    lotofacil_matriz,
+    lotofacil_grupos
+    ;
 
 type
     TList_StringGrid = specialize TFPGList<TStringGrid>;
@@ -594,6 +597,28 @@ type
         btnGrupo2BolasDesmarcarTodos400: TButton;
         btnGrupo2BolasDesmarcarTodos401: TButton;
         btnGrupo2BolasDesmarcarTodos402: TButton;
+        btnGrupo2BolasDesmarcarTodos403: TButton;
+        btnGrupo2BolasDesmarcarTodos404: TButton;
+        btnGrupo2BolasDesmarcarTodos405: TButton;
+        btnGrupo2BolasDesmarcarTodos406: TButton;
+        btnGrupo2BolasDesmarcarTodos407: TButton;
+        btnGrupo2BolasDesmarcarTodos408: TButton;
+        btnGrupo2BolasDesmarcarTodos409: TButton;
+        btnGrupo2BolasDesmarcarTodos410: TButton;
+        btnGrupo2BolasDesmarcarTodos411: TButton;
+        btnGrupo2BolasDesmarcarTodos412: TButton;
+        btnGrupo2BolasDesmarcarTodos413: TButton;
+        btnGrupo2BolasDesmarcarTodos414: TButton;
+        btnGrupo2BolasDesmarcarTodos415: TButton;
+        btnGrupo2BolasDesmarcarTodos416: TButton;
+        btnGrupo2BolasDesmarcarTodos417: TButton;
+        btnGrupo2BolasDesmarcarTodos418: TButton;
+        btnGrupo2BolasDesmarcarTodos419: TButton;
+        btnGrupo2BolasDesmarcarTodos420: TButton;
+        btnGrupo2BolasDesmarcarTodos421: TButton;
+        btnGrupo2BolasDesmarcarTodos422: TButton;
+        btnGrupo2BolasDesmarcarTodos423: TButton;
+        btnGrupo2BolasDesmarcarTodos424: TButton;
         btnGrupo2BolasDesmarcarTodos46: TButton;
         btnGrupo2BolasDesmarcarTodos47: TButton;
         btnGrupo2BolasDesmarcarTodos48: TButton;
@@ -628,9 +653,37 @@ type
         btnGrupo2BolasMarcarTodos400: TButton;
         btnGrupo2BolasMarcarTodos401: TButton;
         btnGrupo2BolasMarcarTodos402: TButton;
+        btnGrupo2BolasMarcarTodos403: TButton;
+        btnGrupo2BolasMarcarTodos404: TButton;
+        btnGrupo2BolasMarcarTodos405: TButton;
+        btnGrupo2BolasMarcarTodos406: TButton;
+        btnGrupo2BolasMarcarTodos407: TButton;
+        btnGrupo2BolasMarcarTodos408: TButton;
+        btnGrupo2BolasMarcarTodos409: TButton;
+        btnGrupo2BolasMarcarTodos410: TButton;
+        btnGrupo2BolasMarcarTodos411: TButton;
+        btnGrupo2BolasMarcarTodos412: TButton;
+        btnGrupo2BolasMarcarTodos413: TButton;
+        btnGrupo2BolasMarcarTodos414: TButton;
+        btnGrupo2BolasMarcarTodos415: TButton;
+        btnGrupo2BolasMarcarTodos416: TButton;
+        btnGrupo2BolasMarcarTodos417: TButton;
+        btnGrupo2BolasMarcarTodos418: TButton;
+        btnGrupo2BolasMarcarTodos419: TButton;
+        btnGrupo2BolasMarcarTodos420: TButton;
+        btnGrupo2BolasMarcarTodos421: TButton;
+        btnGrupo2BolasMarcarTodos422: TButton;
+        btnGrupo2BolasMarcarTodos423: TButton;
+        btnGrupo2BolasMarcarTodos424: TButton;
         btnGrupo2BolasMarcarTodos46: TButton;
         btnGrupo2BolasMarcarTodos47: TButton;
         btnGrupo2BolasMarcarTodos48: TButton;
+        btn_b2_b14_por_concurso: TButton;
+        btn_b3_b13_por_concurso: TButton;
+        btn_b4_b12_por_concurso: TButton;
+        btn_b5_b11_por_concurso: TButton;
+        btn_b6_b10_por_concurso: TButton;
+        btn_b7_b9_por_concurso: TButton;
         btn_bin_dgd_2: TButton;
         btn_bin_dgd_3: TButton;
         btn_bin_dgd_4: TButton;
@@ -694,7 +747,21 @@ type
         btn_bin_vrt_5: TButton;
         btn_bin_dge_1: TButton;
         btn_classificados_obter_campos: TButton;
+        btn_frequencia_entre_concursos: TButton;
+        btn_frequencia_entre_concursos_grupo: TButton;
+        btn_frequencia_entre_concursos_atualizar: TButton;
+        btn_grupo_obter_concursos: TButton;
+        btn_frequencia_entre_concursos_grupo_atualizar: TButton;
+        btn_frequencia_grupo_atualizar: TButton;
         btn_gerar_aleatorio1: TButton;
+        btn_matriz_anterior: TButton;
+        btn_matriz_criar: TButton;
+        btn_matriz_editar: TButton;
+        btn_matriz_primeira: TButton;
+        btn_matriz_posterior: TButton;
+        btn_matriz_ultima: TButton;
+        btn_matriz_obter: TButton;
+        btn_b1_b15_por_concurso: TButton;
         btn_primo_nao_primo_por_concurso: TButton;
         btn_frequencia_novos_concursos1: TButton;
         btn_frequencia_atualizar: TButton;
@@ -1185,7 +1252,13 @@ type
         btn_gerar_rotacao_binaria: TButton;
         btn_atualizar_concursos_ja_inseridos: TButton;
         btn_par_impar_por_concurso: TButton;
+        Button2: TButton;
+        btn_frequencia_estatistica: TButton;
+        Button4: TButton;
+        btn_matriz_cancelar: TButton;
+        btn_matriz_salvar: TButton;
         CheckGroup1: TCheckGroup;
+        chk_frequencia_grupo_atualizar: TCheckGroup;
         chk_bin_x2: TCheckGroup;
         chk_bin_x1: TCheckGroup;
         chk_bin_trio_2: TCheckGroup;
@@ -1283,20 +1356,40 @@ type
         cmbNovo_Minimo: TComboBox;
         cmbNovo_Minimo1: TComboBox;
         cmbParImparConsolidadoConcursoFinal: TComboBox;
+        cmb_b1_b15_concurso_final: TComboBox;
         cmbParImparConsolidadoConcursoInicial: TComboBox;
+        cmb_b2_b14_concurso_final: TComboBox;
+        cmb_b3_b13_concurso_final: TComboBox;
+        cmb_b4_b12_concurso_final: TComboBox;
+        cmb_b5_b11_concurso_final: TComboBox;
+        cmb_b6_b10_concurso_final: TComboBox;
+        cmb_b7_b9_concurso_final: TComboBox;
+        cmb_b1_b15_concurso_inicial: TComboBox;
         cmbPrimoNaoPrimoConsolidadoConcursoFinal: TComboBox;
         cmbPrimoNaoPrimoConsolidadoConcursoInicial: TComboBox;
         cmbRepetindo_Maximo: TComboBox;
         cmbRepetindo_Maximo1: TComboBox;
         cmbRepetindo_Minimo: TComboBox;
         cmbRepetindo_Minimo1: TComboBox;
+        cmb_b2_b14_concurso_inicial: TComboBox;
+        cmb_b3_b13_concurso_inicial: TComboBox;
+        cmb_b4_b12_concurso_inicial: TComboBox;
+        cmb_b5_b11_concurso_inicial: TComboBox;
+        cmb_b6_b10_concurso_inicial: TComboBox;
+        cmb_b7_b9_concurso_inicial: TComboBox;
         cmb_concurso_deletar: TComboBox;
         cmb_concurso_novos_repetidos: TComboBox;
         cmbNovosRepetidosConsolidadoConcursoFinal: TComboBox;
         cmbNovosRepetidosConsolidadoConcursoInicial: TComboBox;
+        cmb_frequencia_entre_concursos_grupo_fim: TComboBox;
+        cmb_frequencia_grupo_concurso_final: TComboBox;
+        cmb_frequencia_entre_concursos_grupo_inicio: TComboBox;
+        cmb_frequencia_grupo_concurso_inicial: TComboBox;
         cmb_frequencia_fim1: TComboBox;
         cmb_frequencia_inicio1: TComboBox;
         cmb_frequencia_atualizar: TComboBox;
+        cmb_frequencia_entre_concursos_inicio: TComboBox;
+        cmb_frequencia_entre_concursos_fim: TComboBox;
         cmb_intervalo_por_concurso_final_b10_a_b11: TComboBox;
         cmb_intervalo_por_concurso_final_b10_a_b12: TComboBox;
         cmb_intervalo_por_concurso_final_b10_a_b13: TComboBox;
@@ -1513,9 +1606,11 @@ type
         cmb_intervalo_por_concurso_inicial_b8_a_b9: TComboBox;
         cmb_concursos_bolas_na_mesma_coluna: TComboBox;
         cmb_frequencia_obter_concursos: TComboBox;
+        cmb_matriz_id: TComboBox;
         cmb_rotacao_binaria_concursos: TComboBox;
         cmb_rotacao_binaria_concursos1: TComboBox;
         cmb_gerador_aleatorio_concursos: TComboBox;
+        ComboBox1: TComboBox;
         dtp_concurso_manual_data: TDateTimePicker;
         ed_concurso_manual_numero: TLabeledEdit;
         grGrupo3Bolas: TGroupBox;
@@ -1704,6 +1799,59 @@ type
         GroupBox260: TGroupBox;
         GroupBox261: TGroupBox;
         GroupBox262: TGroupBox;
+        GroupBox263: TGroupBox;
+        GroupBox264: TGroupBox;
+        GroupBox265: TGroupBox;
+        GroupBox266: TGroupBox;
+        GroupBox267: TGroupBox;
+        GroupBox268: TGroupBox;
+        GroupBox269: TGroupBox;
+        GroupBox270: TGroupBox;
+        GroupBox271: TGroupBox;
+        GroupBox272: TGroupBox;
+        GroupBox273: TGroupBox;
+        GroupBox274: TGroupBox;
+        GroupBox275: TGroupBox;
+        GroupBox276: TGroupBox;
+        GroupBox277: TGroupBox;
+        GroupBox278: TGroupBox;
+        GroupBox279: TGroupBox;
+        GroupBox280: TGroupBox;
+        GroupBox281: TGroupBox;
+        grpFrequenciaDeixouDeSair111: TGroupBox;
+        grpFrequenciaDeixouDeSair112: TGroupBox;
+        grpFrequenciaDeixouDeSair113: TGroupBox;
+        grpFrequenciaDeixouDeSair114: TGroupBox;
+        grpFrequenciaDeixouDeSair115: TGroupBox;
+        grpFrequenciaDeixouDeSair116: TGroupBox;
+        grpFrequenciaDeixouDeSair117: TGroupBox;
+        grpFrequenciaInicio6: TGroupBox;
+        grpFrequenciaInicio7: TGroupBox;
+        grpFrequenciaInicio8: TGroupBox;
+        grpFrequenciaInicio9: TGroupBox;
+        grp_b1_b15_intervalo_concurso: TGroupBox;
+        grp_b2_b14_intervalo_concurso: TGroupBox;
+        grp_b3_b13_intervalo_concurso: TGroupBox;
+        grp_b4_b12_intervalo_concurso: TGroupBox;
+        grp_b5_b11_intervalo_concurso: TGroupBox;
+        grp_b6_b10_intervalo_concurso: TGroupBox;
+        grp_b7_b9_intervalo_concurso: TGroupBox;
+        grp_b2_b14_por_concurso: TGroupBox;
+        grp_b3_b13_por_concurso: TGroupBox;
+        grp_b4_b12_por_concurso: TGroupBox;
+        grp_b5_b11_por_concurso: TGroupBox;
+        grp_b6_b10_por_concurso: TGroupBox;
+        grp_b7_b9_por_concurso: TGroupBox;
+        grp_frequencia_b2_b14: TGroupBox;
+        grp_frequencia_b3_b13: TGroupBox;
+        grp_frequencia_b4_b12: TGroupBox;
+        grp_frequencia_b5_b11: TGroupBox;
+        grp_frequencia_b6_b10: TGroupBox;
+        grp_frequencia_b7_b9: TGroupBox;
+        grp_frequencia_entre_concursos_repetindo: TGroupBox;
+        grpFrequenciaInicio4: TGroupBox;
+        grpFrequenciaInicio5: TGroupBox;
+        grp_matriz_criar: TGroupBox;
         grp_bin_x2: TGroupBox;
         grp_bin_x1: TGroupBox;
         grp_bin_trio_2: TGroupBox;
@@ -1718,6 +1866,11 @@ type
         grp_bin_trng_3: TGroupBox;
         grp_bin_trng_4: TGroupBox;
         grp_bin_trio_1: TGroupBox;
+        grp_editor_matriz: TGroupBox;
+        grp_matriz_navegacao: TGroupBox;
+        grp_frequencia_entre_concursos_grupo: TGroupBox;
+        grp_frequencia_b1_b15: TGroupBox;
+        grp_b1_b15_por_concurso: TGroupBox;
         grp_rotacao_binaria: TGroupBox;
         GroupBox27: TGroupBox;
         GroupBox28: TGroupBox;
@@ -2451,9 +2604,21 @@ type
         PageControl64: TPageControl;
         PageControl65: TPageControl;
         PageControl66: TPageControl;
+        PageControl67: TPageControl;
+        PageControl68: TPageControl;
+        PageControl69: TPageControl;
+        PageControl70: TPageControl;
         Panel10: TPanel;
         Panel11: TPanel;
         Panel12: TPanel;
+        Panel13: TPanel;
+        Panel14: TPanel;
+        Panel15: TPanel;
+        Panel16: TPanel;
+        Panel17: TPanel;
+        Panel18: TPanel;
+        Panel19: TPanel;
+        Panel20: TPanel;
         pnFrequenciaNaoSair: TPanel;
         pnFrequenciaNaoSair1: TPanel;
         pnFrequenciaNaoSair2: TPanel;
@@ -2463,6 +2628,28 @@ type
         pnGrupo2Bolas409: TPanel;
         pnGrupo2Bolas41: TPanel;
         pnGrupo2Bolas410: TPanel;
+        pnGrupo2Bolas411: TPanel;
+        pnGrupo2Bolas412: TPanel;
+        pnGrupo2Bolas413: TPanel;
+        pnGrupo2Bolas414: TPanel;
+        pnGrupo2Bolas415: TPanel;
+        pnGrupo2Bolas416: TPanel;
+        pnGrupo2Bolas417: TPanel;
+        pnGrupo2Bolas418: TPanel;
+        pnGrupo2Bolas419: TPanel;
+        pnGrupo2Bolas420: TPanel;
+        pnGrupo2Bolas421: TPanel;
+        pnGrupo2Bolas422: TPanel;
+        pnGrupo2Bolas423: TPanel;
+        pnGrupo2Bolas424: TPanel;
+        pnGrupo2Bolas425: TPanel;
+        pnGrupo2Bolas426: TPanel;
+        pnGrupo2Bolas427: TPanel;
+        pnGrupo2Bolas428: TPanel;
+        pnGrupo2Bolas429: TPanel;
+        pnGrupo2Bolas430: TPanel;
+        pnGrupo2Bolas431: TPanel;
+        pnGrupo2Bolas432: TPanel;
         pn_bin_dgd_2: TPanel;
         pn_bin_dgd_3: TPanel;
         pn_bin_dgd_4: TPanel;
@@ -2914,6 +3101,24 @@ type
         pn_sup_bin_vrt_3: TPanel;
         pn_sup_bin_vrt_4: TPanel;
         pn_sup_bin_dge_1: TPanel;
+        rd_b2_b14_intervalo_concurso: TRadioGroup;
+        rd_b3_b13_intervalo_concurso: TRadioGroup;
+        rd_b4_b12_intervalo_concurso: TRadioGroup;
+        rd_b5_b11_intervalo_concurso: TRadioGroup;
+        rd_b6_b10_intervalo_concurso: TRadioGroup;
+        rd_b7_b9_intervalo_concurso: TRadioGroup;
+        rd_b1_b14_por_concurso: TRadioGroup;
+        rd_b3_b13_por_concurso: TRadioGroup;
+        rd_b4_b12_por_concurso: TRadioGroup;
+        rd_b5_b11_por_concurso: TRadioGroup;
+        rd_b6_b10_por_concurso: TRadioGroup;
+        rd_b7_b9_por_concurso: TRadioGroup;
+        rd_b2_b14: TRadioGroup;
+        rd_b3_b13: TRadioGroup;
+        rd_b4_b12: TRadioGroup;
+        rd_b5_b11: TRadioGroup;
+        rd_b6_b10: TRadioGroup;
+        rd_b7_b9: TRadioGroup;
         rd_bin_x2: TRadioGroup;
         rd_bin_x1: TRadioGroup;
         rd_bin_trio_2: TRadioGroup;
@@ -2993,11 +3198,17 @@ type
         rd_bin_hrz_1: TRadioGroup;
         rd_linha_coluna: TRadioGroup;
         rd_losango: TRadioGroup;
+        rd_matriz_qt_de_celula_1: TRadioGroup;
+        rd_matriz_qt_de_bolas: TRadioGroup;
         rd_novos_repetidos_sim_nao: TRadioGroup;
         rd_novos_repetidos_sim_nao1: TRadioGroup;
         rd_df_par_impar: TRadioGroup;
+        rd_b1_b15_por_concurso: TRadioGroup;
         rd_par_impar_sim_nao: TRadioGroup;
         rd_novos_repetidos_por_concurso: TRadioGroup;
+        rd_frequencia_entre_concursos_grupo: TRadioGroup;
+        rd_b1_b15: TRadioGroup;
+        rd_b1_b15_intervalo_concurso: TRadioGroup;
         rd_primo_nao_primo_por_concurso: TRadioGroup;
         rd_par_impar_sim_nao11: TRadioGroup;
         rd_par_impar_sim_nao13: TRadioGroup;
@@ -3025,12 +3236,28 @@ type
         sgrAlgarismo_na_dezena_consolidado: TStringGrid;
         sgrAlgarismo_na_dezena_por_concurso: TStringGrid;
         sgrExternoInternoConsolidado: TStringGrid;
+        sgr_b1_b15_intervalo_concurso: TStringGrid;
+        sgr_b2_b14_intervalo_concurso: TStringGrid;
+        sgr_b3_b13_intervalo_concurso: TStringGrid;
+        sgr_b4_b12_intervalo_concurso: TStringGrid;
+        sgr_b5_b11_intervalo_concurso: TStringGrid;
+        sgr_b6_b10_intervalo_concurso: TStringGrid;
+        sgr_b7_b9_intervalo_concurso: TStringGrid;
+        sgr_b2_b14: TStringGrid;
+        sgr_b3_b13: TStringGrid;
+        sgr_b4_b12: TStringGrid;
+        sgr_b5_b11: TStringGrid;
+        sgr_b6_b10: TStringGrid;
+        sgr_b7_b9: TStringGrid;
         sgr_externo_interno_por_concurso: TStringGrid;
         sgrFrequenciaTotalSair: TStringGrid;
         sgrFrequencia_Bolas_Sair_Nao_Sair: TStringGrid;
         sgrNovosRepetidosConsolidado: TStringGrid;
+        sgr_matriz: TStringGrid;
         sgr_novos_repetidos_por_concurso: TStringGrid;
         sgrParImparConsolidado: TStringGrid;
+        sgr_frequencia_entre_concursos_grupo: TStringGrid;
+        sgr_b1_b15: TStringGrid;
         sgr_par_impar_por_concurso: TStringGrid;
         sgrPrimoNaoPrimoConsolidado: TStringGrid;
         sgr_bin_dgd_2: TStringGrid;
@@ -3128,6 +3355,13 @@ type
         sgr_dif_menor_maior: TStringGrid;
         sgr_novos_repetidos1: TStringGrid;
         sgr_dif_par_impar: TStringGrid;
+        sgr_b1_b15_por_concurso: TStringGrid;
+        sgr_b2_b14_por_concurso: TStringGrid;
+        sgr_b3_b13_por_concurso: TStringGrid;
+        sgr_par_impar_por_concurso4: TStringGrid;
+        sgr_b5_b11_por_concurso: TStringGrid;
+        sgr_b6_b10_por_concurso: TStringGrid;
+        sgr_b7_b9_por_concurso: TStringGrid;
         sgr_resultado_importacao: TStringGrid;
         sgr_b6_a_b11_por_concurso: TStringGrid;
         sgr_b6_a_b12_por_concurso: TStringGrid;
@@ -3409,6 +3643,8 @@ type
         sgr_x1_x2: TStringGrid;
         sgr_gerador_aleatorio: TStringGrid;
         sgr_concursos_ja_inseridos: TStringGrid;
+        sgr_frequencia_comparacao: TStringGrid;
+        sgr_frequencia_bolas_repetindo: TStringGrid;
         stx_log_geracao: TStaticText;
         stx_bolas_do_concurso: TStaticText;
         stxtNovosRepetidos: TStaticText;
@@ -3417,6 +3653,26 @@ type
         TabSheet102: TTabSheet;
         TabSheet103: TTabSheet;
         TabSheet106: TTabSheet;
+        TabSheet107: TTabSheet;
+        TabSheet113: TTabSheet;
+        TabSheet116: TTabSheet;
+        TabSheet117: TTabSheet;
+        TabSheet118: TTabSheet;
+        TabSheet119: TTabSheet;
+        TabSheet120: TTabSheet;
+        B5_B11: TTabSheet;
+        TabSheet121: TTabSheet;
+        tab_novos_repetidos_grupos: TTabSheet;
+        TabSheet124: TTabSheet;
+        tab_b7_b9: TTabSheet;
+        tab_b6_b10: TTabSheet;
+        tab_b4_b12: TTabSheet;
+        tab_b3_b13: TTabSheet;
+        tab_b2_b14: TTabSheet;
+        tab_b1_b15: TTabSheet;
+        tab_frequencia_b1_b15: TTabSheet;
+        tab_grupos: TTabSheet;
+        TabSheet3: TTabSheet;
         tab_gerador_aleatorio: TTabSheet;
         TabSheet112: TTabSheet;
         tab_bin_x2: TTabSheet;
@@ -3990,18 +4246,34 @@ type
         procedure btn_concurso_manual_inserirClick(Sender: TObject);
         procedure btn_filtros_atualizar_concursosClick(Sender: TObject);
         procedure btn_frequencia_atualizarClick(Sender: TObject);
+        procedure btn_frequencia_entre_concursosClick(Sender: TObject);
+        procedure btn_frequencia_entre_concursos_atualizarClick(Sender: TObject
+          );
+        procedure btn_frequencia_entre_concursos_grupoClick(Sender: TObject);
+        procedure btn_frequencia_entre_concursos_grupo_atualizarClick(
+          Sender: TObject);
+        procedure btn_frequencia_estatisticaClick(Sender: TObject);
+        procedure btn_frequencia_grupo_atualizarClick(Sender: TObject);
         procedure btn_frequencia_novos_concursosClick(Sender: TObject);
         procedure btn_frequencia_obter_concursosClick(Sender: TObject);
         procedure btn_frequencia_obter_concursos_2Click(Sender: TObject);
         procedure btn_gerador_aleatorio_obter_concursosClick(Sender: TObject);
+        procedure btn_gerar_aleatorio1Click(Sender: TObject);
         procedure btn_gerar_aleatorioClick(Sender: TObject);
         procedure btn_gerar_estatistica_frequencia_numClick(Sender: TObject);
         procedure btn_gerar_filtroClick(Sender: TObject);
         procedure btn_gerar_rotacao_binariaClick(Sender: TObject);
+        procedure btn_grupo_obter_concursosClick(Sender: TObject);
+        procedure btn_matriz_anteriorClick(Sender: TObject);
+        procedure btn_matriz_criarClick(Sender: TObject);
+        procedure btn_matriz_posteriorClick(Sender: TObject);
+        procedure btn_matriz_primeiraClick(Sender: TObject);
+        procedure btn_matriz_salvarClick(Sender: TObject);
         procedure btn_novos_repetidos_ultima_atualizacaoClick(Sender: TObject);
         procedure btn_obter_concursos_bolas_na_mesma_colunaClick(Sender: TObject);
         procedure btn_obter_concursos_novos_repetidosClick(Sender: TObject);
         procedure btn_obter_concursos_pra_excluirClick(Sender: TObject);
+        procedure btn_matriz_obterClick(Sender: TObject);
         //procedure btnGrupo2BolasDesmarcarTodosClick(Sender: TObject);
         procedure btn_obter_novos_filtrosClick(Sender: TObject);
         procedure btnObterResultadosClick(Sender: TObject);
@@ -4111,6 +4383,14 @@ type
             var CanSelect: boolean);
         procedure sgr_concursosDrawCell(Sender: TObject; aCol, aRow: integer; aRect: TRect;
             aState: TGridDrawState);
+        procedure sgr_matrizDblClick(Sender: TObject);
+        procedure sgr_matrizDrawCell(Sender: TObject; aCol, aRow: Integer;
+          aRect: TRect; aState: TGridDrawState);
+        procedure sgr_matrizEnter(Sender: TObject);
+        procedure sgr_matrizPrepareCanvas(sender: TObject; aCol, aRow: Integer;
+          aState: TGridDrawState);
+        procedure sgr_matrizSelectCell(Sender: TObject; aCol, aRow: Integer;
+          var CanSelect: Boolean);
         //procedure sgr_novos_repetidosSelectCell(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
         //procedure sgrGrupo2BolasSelectCell(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
         //procedure sgrGrupo3BolasSelectCell(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
@@ -4189,11 +4469,19 @@ type
         procedure Carregar_sgr_bx_a_by_por_concurso;
         procedure Atualizar_Todos_os_Filtros;
         procedure configurar_banco_de_dados(var obj_conexao: TZConnection);
+        procedure configurar_controles_de_matriz_ao_iniciar;
         procedure configurar_controle_binario;
         procedure configurar_controle_estatistica_por_concurso;
         procedure configurar_opcoes_do_filtro;
         procedure configurar_todos_os_controles_de_filtros;
         procedure fGerar_id_classificadoStatus(AStatus: string);
+        procedure matriz_ativar_desativar_ao_criar(bEditar: boolean);
+        procedure matriz_ativar_desativar_ao_salvar(bEditar: boolean);
+        procedure matriz_ativar_desativar_controle_ao_criar;
+        procedure matriz_ativar_desativar_controle_de_navegacao(bAtivar: boolean
+          );
+        procedure matriz_ativar_desativar_controle_ao_salvar;
+        procedure matriz_editor_alterar_modo_de_edicao(bEditar: boolean);
         procedure novos_repetidos_ultima_atualizacao;
         function obter_id_da_frequencia: string;
         procedure preencher_listbox_campos_disponiveis(sql_conexao: TZConnection);
@@ -4409,6 +4697,14 @@ type
     private
         fGerar_id_classificado: TLotofacil_id_Classificado;
 
+    private
+        // Tudo relacionado a matrizes.
+        mapa_de_matriz : TMap_Matriz_Arquivo;
+        matriz_atual_conteudo: TMatriz_Arquivo;
+        // Indica se o editor de matriz está no modo editar.
+        matriz_editor_modo_editar: boolean;
+        matriz_indice_atual_navegacao: Integer;
+        matriz_id_maior: Integer;
     end;
 
 const
@@ -4452,10 +4748,26 @@ begin
     Resetar_Antes_de_atualizar;
     configurar_controle_binario;
     configurar_controle_estatistica_por_concurso;
+    configurar_controles_de_matriz_ao_iniciar;
 end;
 
 procedure TForm1.preencher_listbox_campos_disponiveis(sql_conexao: TZConnection);
 begin
+end;
+
+procedure TForm1.configurar_controles_de_matriz_ao_iniciar;
+begin
+    btn_matriz_obter.Enabled := true;
+    btn_matriz_primeira.Enabled := false;
+    btn_matriz_anterior.Enabled := false;
+    cmb_matriz_id.Enabled := false;
+    btn_matriz_posterior.Enabled := false;
+    btn_matriz_ultima.Enabled := false;
+    btn_matriz_editar.Enabled := false;
+    btn_matriz_salvar.Enabled := false;
+    btn_matriz_cancelar.Enabled := false;
+    rd_matriz_qt_de_bolas.Enabled := true;
+    rd_matriz_qt_de_celula_1.Enabled := true;
 end;
 
 procedure TForm1.configurar_controle_estatistica_por_concurso;
@@ -6544,6 +6856,96 @@ begin
     sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].sgr_controle.Tag := ID_DF_MENOR_MAIOR;
     sgr_filtro_controle_info[ID_DF_MENOR_MAIOR].rd_controle.Tag := ID_DF_MENOR_MAIOR;
 
+    // ================================ B1_B15 ====================================
+    sgr_filtro_controle_info[ID_B1_B15].sgr_controle_cabecalho :=
+        'b1_b15,b1_b15,ltf_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_B1_B15].sql_campos := 'b1_b15,b1_b15_2,ltf_qt,res_qt';
+    sgr_filtro_controle_info[ID_B1_B15].sql :=
+        'Select b1_b15,b1_b15 as b1_b15_2,ltf_qt,res_qt from lotofacil.v_lotofacil_resultado_b1_b15 order by res_qt desc, ltf_qt desc';
+    sgr_filtro_controle_info[ID_B1_B15].sql_campo_id := 'lotofacil.lotofacil_matriz.b1_b15';
+    sgr_filtro_controle_info[ID_B1_B15].sgr_controle := sgr_b1_b15;
+    sgr_filtro_controle_info[ID_B1_B15].rd_controle := rd_b1_b15;
+
+    sgr_b1_b15.Tag := ID_B1_B15;
+    rd_b1_b15.Tag := ID_B1_B15;
+
+    // ================================ b2_b14 ====================================
+    sgr_filtro_controle_info[ID_b2_b14].sgr_controle_cabecalho :=
+        'b2_b14,b2_b14,ltf_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_b2_b14].sql_campos := 'b2_b14,b2_b14_2,ltf_qt,res_qt';
+    sgr_filtro_controle_info[ID_b2_b14].sql :=
+        'Select b2_b14,b2_b14 as b2_b14_2,ltf_qt,res_qt from lotofacil.v_lotofacil_resultado_b2_b14 order by res_qt desc, ltf_qt desc';
+    sgr_filtro_controle_info[ID_b2_b14].sql_campo_id := 'lotofacil.lotofacil_matriz.b2_b14';
+    sgr_filtro_controle_info[ID_b2_b14].sgr_controle := sgr_b2_b14;
+    sgr_filtro_controle_info[ID_b2_b14].rd_controle := rd_b2_b14;
+
+    sgr_b2_b14.Tag := ID_b2_b14;
+    rd_b2_b14.Tag := ID_b2_b14;
+
+     // ================================ b3_b13 ====================================
+    sgr_filtro_controle_info[ID_b3_b13].sgr_controle_cabecalho :=
+        'b3_b13,b3_b13,ltf_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_b3_b13].sql_campos := 'b3_b13,b3_b13_2,ltf_qt,res_qt';
+    sgr_filtro_controle_info[ID_b3_b13].sql :=
+        'Select b3_b13,b3_b13 as b3_b13_2,ltf_qt,res_qt from lotofacil.v_lotofacil_resultado_b3_b13 order by res_qt desc, ltf_qt desc';
+    sgr_filtro_controle_info[ID_b3_b13].sql_campo_id := 'lotofacil.lotofacil_matriz.b3_b13';
+    sgr_filtro_controle_info[ID_b3_b13].sgr_controle := sgr_b3_b13;
+    sgr_filtro_controle_info[ID_b3_b13].rd_controle := rd_b3_b13;
+
+    sgr_b3_b13.Tag := ID_b3_b13;
+    rd_b3_b13.Tag := ID_b3_b13;
+
+        // ================================ b4_b12 ====================================
+    sgr_filtro_controle_info[ID_b4_b12].sgr_controle_cabecalho :=
+        'b4_b12,b4_b12,ltf_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_b4_b12].sql_campos := 'b4_b12,b4_b12_2,ltf_qt,res_qt';
+    sgr_filtro_controle_info[ID_b4_b12].sql :=
+        'Select b4_b12,b4_b12 as b4_b12_2,ltf_qt,res_qt from lotofacil.v_lotofacil_resultado_b4_b12 order by res_qt desc, ltf_qt desc';
+    sgr_filtro_controle_info[ID_b4_b12].sql_campo_id := 'lotofacil.lotofacil_matriz.b4_b12';
+    sgr_filtro_controle_info[ID_b4_b12].sgr_controle := sgr_b4_b12;
+    sgr_filtro_controle_info[ID_b4_b12].rd_controle := rd_b4_b12;
+
+    sgr_b4_b12.Tag := ID_b4_b12;
+    rd_b4_b12.Tag := ID_b4_b12;
+
+        // ================================ b5_b11 ====================================
+    sgr_filtro_controle_info[ID_b5_b11].sgr_controle_cabecalho :=
+        'b5_b11,b5_b11,ltf_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_b5_b11].sql_campos := 'b5_b11,b5_b11_2,ltf_qt,res_qt';
+    sgr_filtro_controle_info[ID_b5_b11].sql :=
+        'Select b5_b11,b5_b11 as b5_b11_2,ltf_qt,res_qt from lotofacil.v_lotofacil_resultado_b5_b11 order by res_qt desc, ltf_qt desc';
+    sgr_filtro_controle_info[ID_b5_b11].sql_campo_id := 'lotofacil.lotofacil_matriz.b5_b11';
+    sgr_filtro_controle_info[ID_b5_b11].sgr_controle := sgr_b5_b11;
+    sgr_filtro_controle_info[ID_b5_b11].rd_controle := rd_b5_b11;
+
+    sgr_b5_b11.Tag := ID_b5_b11;
+    rd_b5_b11.Tag := ID_b5_b11;
+
+        // ================================ b6_b10 ====================================
+    sgr_filtro_controle_info[ID_b6_b10].sgr_controle_cabecalho :=
+        'b6_b10,b6_b10,ltf_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_b6_b10].sql_campos := 'b6_b10,b6_b10_2,ltf_qt,res_qt';
+    sgr_filtro_controle_info[ID_b6_b10].sql :=
+        'Select b6_b10,b6_b10 as b6_b10_2,ltf_qt,res_qt from lotofacil.v_lotofacil_resultado_b6_b10 order by res_qt desc, ltf_qt desc';
+    sgr_filtro_controle_info[ID_b6_b10].sql_campo_id := 'lotofacil.lotofacil_matriz.b6_b10';
+    sgr_filtro_controle_info[ID_b6_b10].sgr_controle := sgr_b6_b10;
+    sgr_filtro_controle_info[ID_b6_b10].rd_controle := rd_b6_b10;
+
+    sgr_b6_b10.Tag := ID_b6_b10;
+    rd_b6_b10.Tag := ID_b6_b10;
+
+        // ================================ b7_b9 ====================================
+    sgr_filtro_controle_info[ID_b7_b9].sgr_controle_cabecalho :=
+        'b7_b9,b7_b9,ltf_qt,res_qt,nao,sim';
+    sgr_filtro_controle_info[ID_b7_b9].sql_campos := 'b7_b9,b7_b9_2,ltf_qt,res_qt';
+    sgr_filtro_controle_info[ID_b7_b9].sql :=
+        'Select b7_b9, b7_b9 as b7_b9_2,ltf_qt,res_qt from lotofacil.v_lotofacil_resultado_b7_b9 order by res_qt desc, ltf_qt desc';
+    sgr_filtro_controle_info[ID_b7_b9].sql_campo_id := 'lotofacil.lotofacil_matriz.b7_b9';
+    sgr_filtro_controle_info[ID_b7_b9].sgr_controle := sgr_b7_b9;
+    sgr_filtro_controle_info[ID_b7_b9].rd_controle := rd_b7_b9;
+
+    sgr_b7_b9.Tag := ID_b7_b9;
+    rd_b7_b9.Tag := ID_b7_b9;
 
     lista_sgr_controle_filtros := TList_StringGrid.Create;
 
@@ -8498,7 +8900,7 @@ begin
             to High(concurso_insercao_manual_controles) do
         begin
             concurso_insercao_manual_controles[uA].Enabled :=
-                concurso_insercao_manual_controles[uA].Checked;
+            concurso_insercao_manual_controles[uA].Checked;
         end;
     end
     else
@@ -9212,6 +9614,131 @@ begin
     frequencia_atualizar_combinacoes_lotofacil(sql_conexao, concurso);
 end;
 
+procedure TForm1.btn_frequencia_entre_concursosClick(Sender: TObject);
+begin
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_entre_concursos_inicio, 'asc');
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_entre_concursos_fim, 'desc');
+    //cmb_frequencia_inicioChange(cmb_frequencia_entre_concursos_inicio);
+end;
+
+procedure TForm1.btn_frequencia_entre_concursos_atualizarClick(Sender: TObject);
+var
+  indice_escolhido: Integer;
+  concurso_inicial: Integer;
+  concurso_final: LongInt;
+begin
+    indice_escolhido := cmb_frequencia_entre_concursos_inicio.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Erro, vc deve escolher um concurso inicial', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_inicial := StrToInt(cmb_frequencia_entre_concursos_inicio.Items[indice_escolhido]);
+
+    indice_escolhido := cmb_frequencia_entre_concursos_fim.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Erro, vc deve escolher um concurso inicial', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_final := StrToInt(cmb_frequencia_entre_concursos_fim.Items[indice_escolhido]);
+
+end;
+
+procedure TForm1.btn_frequencia_entre_concursos_grupoClick(Sender: TObject);
+begin
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_entre_concursos_grupo_inicio, 'asc');
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_entre_concursos_grupo_fim, 'desc');
+end;
+
+procedure TForm1.btn_frequencia_entre_concursos_grupo_atualizarClick(
+  Sender: TObject);
+var
+  indice_escolhido: Integer;
+  concurso_inicial: Integer;
+  concurso_final: LongInt;
+  lotofacil_concursos: TLotofacil_Concurso_Array;
+begin
+    indice_escolhido := cmb_frequencia_entre_concursos_grupo_inicio.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Erro, vc deve escolher um concurso inicial', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_inicial := StrToInt(cmb_frequencia_entre_concursos_grupo_inicio.Items[indice_escolhido]);
+
+    indice_escolhido := cmb_frequencia_entre_concursos_grupo_fim.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Erro, vc deve escolher um concurso inicial', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_final := StrToInt(cmb_frequencia_entre_concursos_grupo_fim.Items[indice_escolhido]);
+
+    if obter_zero_um_das_bolas_no_intervalo_de_concursos(sql_conexao, lotofacil_concursos,
+    concurso_inicial, concurso_final, 'asc') = false then begin
+        Exit;
+    end;
+
+    gerar_grupos_status_repetindo(sql_conexao, lotofacil_concursos);
+
+    grupos_exibir_qt_entre_concursos(sql_conexao, sgr_frequencia_entre_concursos_grupo, concurso_inicial, concurso_final);
+
+end;
+
+procedure TForm1.btn_frequencia_estatisticaClick(Sender: TObject);
+var
+   frequencia_opcoes: TFrequencia_opcoes;
+begin
+    frequencia_opcoes.sql_conexao := sql_conexao;
+    frequencia_opcoes.sgr_controle := sgr_frequencia_comparacao ;
+    frequencia_gerar_comparacao(frequencia_opcoes);
+end;
+
+procedure TForm1.btn_frequencia_grupo_atualizarClick(Sender: TObject);
+var
+  indice_escolhido: Integer;
+  concurso_inicial, uA: Integer;
+  concurso_final, qt_por_grupo: LongInt;
+  lotofacil_concursos: TLotofacil_Concurso_Array;
+  grupos_selecionados: array[0..15] of Boolean;
+begin
+    indice_escolhido := cmb_frequencia_grupo_concurso_inicial.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Erro, vc deve escolher um concurso inicial', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_inicial := StrToInt(cmb_frequencia_grupo_concurso_inicial.Items[indice_escolhido]);
+
+    indice_escolhido := cmb_frequencia_grupo_concurso_final.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Erro, vc deve escolher um concurso inicial', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_final := StrToInt(cmb_frequencia_grupo_concurso_final.Items[indice_escolhido]);
+
+    if obter_concursos_no_intervalo(sql_conexao, lotofacil_concursos,
+    concurso_inicial, concurso_final, 'asc') = false then begin
+        Exit;
+    end;
+
+    // Copia as opções.
+    for uA := 0 to Pred(chk_frequencia_grupo_atualizar.Items.Count) do begin
+        qt_por_grupo := StrToInt(chk_frequencia_grupo_atualizar.Items[uA]);
+        if (qt_por_grupo >= 2) and (qt_por_grupo <= 15) then begin
+            grupos_selecionados[qt_por_grupo] := chk_frequencia_grupo_atualizar.Checked[uA];
+        end;
+    end;
+
+    gerar_grupos_de_concursos(sql_conexao, lotofacil_concursos, grupos_selecionados);
+
+
+
+
+
+
+    //gerar_grupos(sql_conexao, lotofacil_concursos);
+
+    //grupos_exibir_qt_entre_concursos(sql_conexao, sgr_frequencia_entre_concursos_grupo, concurso_inicial, concurso_final);
+
+end;
+
 procedure TForm1.btn_frequencia_novos_concursosClick(Sender: TObject);
 begin
     preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_inicio, 'asc');
@@ -9232,6 +9759,52 @@ end;
 procedure TForm1.btn_gerador_aleatorio_obter_concursosClick(Sender: TObject);
 begin
     preencher_combobox_com_concursos(sql_conexao, cmb_gerador_aleatorio_concursos, 'desc');
+end;
+
+procedure TForm1.btn_gerar_aleatorio1Click(Sender: TObject);
+var
+  indice_escolhido, uA, qt_checked_true: Integer;
+  concurso_numero, qt_de_combinacoes: LongInt;
+  gerador_aleatorio_opcoes : R_Gerador_Aleatorio_Opcoes;
+begin
+    indice_escolhido := cmb_gerador_aleatorio_concursos.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Nenhum concurso foi escolhido.', mtError, [mbok], 0);
+        Exit;
+    end;
+    concurso_numero := StrToInt(cmb_gerador_aleatorio_concursos.Items[indice_escolhido]);
+
+    indice_escolhido := rd_gerar_aleatorio_opcoes.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('', 'Quantidade de combinações a gerar não foi escolhida', mtError, [mbok], 0);
+        Exit;
+    end;
+    qt_de_combinacoes := StrToInt(rd_gerar_aleatorio_opcoes.Items[indice_escolhido]);
+
+    // Vamos passar os valores marcados no controle TCheckGroup pra o arranjo 'novos_escolhidos'
+    // da variável 'novos_escolhidos' e em seguida, contabilizar a quantidade de marcações
+    // com o valor true.
+    qt_checked_true := 0;
+    for uA := 0 to pred(chk_gerador_aleatorio_bolas_novas.Items.Count) do begin
+        gerador_aleatorio_opcoes.novos_escolhidos[uA] := chk_gerador_aleatorio_bolas_novas.Checked[uA];
+        if gerador_aleatorio_opcoes.novos_escolhidos[uA] then begin
+            Inc(qt_checked_true);
+        end;
+    end;
+
+    if qt_checked_true = 0 then begin
+        MessageDlg('', 'Erro, vc deve selecionar pelo menos uma quantidade ' +
+                       'de bolas novas de cada combinação', mtError, [mbok], 0);
+        Exit;
+    end;
+
+    gerador_aleatorio_opcoes.concurso := concurso_numero;
+    gerador_aleatorio_opcoes.qt_de_combinacoes:=qt_de_combinacoes;
+    gerador_aleatorio_opcoes.gerador_controle :=  sgr_gerador_aleatorio;
+
+    //gerar_combinacoes_aleatorias(sql_conexao, gerador_aleatorio_opcoes);
+    //gerar_combinacoes_aleatorias_2(sql_conexao, gerador_aleatorio_opcoes);
+    gerar_combinacoes_aleatorias_3(sql_conexao, gerador_aleatorio_opcoes);
 end;
 
 procedure TForm1.btn_gerar_aleatorioClick(Sender: TObject);
@@ -9276,8 +9849,8 @@ begin
     gerador_aleatorio_opcoes.gerador_controle :=  sgr_gerador_aleatorio;
 
     //gerar_combinacoes_aleatorias(sql_conexao, gerador_aleatorio_opcoes);
-    //gerar_combinacoes_aleatorias_2(sql_conexao, gerador_aleatorio_opcoes);
-    gerar_combinacoes_aleatorias_3(sql_conexao, gerador_aleatorio_opcoes);
+    gerar_combinacoes_aleatorias_2(sql_conexao, gerador_aleatorio_opcoes);
+    //gerar_combinacoes_aleatorias_3(sql_conexao, gerador_aleatorio_opcoes);
 end;
 
 procedure TForm1.btn_gerar_estatistica_frequencia_numClick(Sender: TObject);
@@ -9526,6 +10099,218 @@ begin
 
 end;
 
+procedure TForm1.btn_grupo_obter_concursosClick(Sender: TObject);
+begin
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_grupo_concurso_inicial, 'asc');
+    preencher_combobox_com_concursos(sql_conexao, cmb_frequencia_grupo_concurso_final, 'desc');
+end;
+
+procedure TForm1.btn_matriz_anteriorClick(Sender: TObject);
+var
+  matriz_conteudo: TMatriz_Arquivo;
+begin
+    if Not Assigned(mapa_de_matriz) then begin
+        matriz_ativar_desativar_controle_de_navegacao(false);
+        Exit;
+    end;
+
+    if matriz_indice_atual_navegacao > 0 then begin
+        Dec(matriz_indice_atual_navegacao);
+    end;
+
+    matriz_conteudo := mapa_de_matriz.KeyData[mapa_de_matriz.Keys[matriz_indice_atual_navegacao]];
+    matriz_atual_conteudo := matriz_conteudo;
+    matriz_exibir_no_controle(sgr_matriz, matriz_conteudo);
+end;
+
+procedure TForm1.btn_matriz_criarClick(Sender: TObject);
+var
+  indice_escolhido: Integer;
+  coluna_atual: TGridColumn;
+  matriz_qt_de_bolas: Integer;
+  matriz_qt_de_celula_1, uA, celula_valor_zero_um, qt_de_celula_1, uB,
+    largura_texto: Integer;
+begin
+     // Vamos validar os dados.
+    indice_escolhido := rd_matriz_qt_de_bolas.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('Erro', 'Vc deve escolher a quantidade de bolas por linha na matriz',
+                           mtError, [mbok], 0);
+        Exit;
+    end;
+    matriz_qt_de_bolas := StrToInt(rd_matriz_qt_de_bolas.Items[indice_escolhido]);
+
+    indice_escolhido := rd_matriz_qt_de_celula_1.ItemIndex;
+    if indice_escolhido = -1 then begin
+        MessageDlg('Erro', 'Vc deve escolher a quantidade de células com valor 1 por linha na matriz.',
+                           mtError, [mbok], 0);
+        Exit;
+    end;
+    matriz_qt_de_celula_1 := StrToInt(rd_matriz_qt_de_celula_1.Items[indice_escolhido]);
+
+    // Cria o controle com os dados.
+
+    // Obtém a largura de três caracteres.
+    largura_texto := sgr_matriz.Canvas.TextWidth('MMM');
+
+    sgr_matriz.Columns.Clear;
+    coluna_atual := sgr_matriz.Columns.Add;
+    coluna_atual.font.Name := 'IBM Plex Mono';
+    coluna_atual.Font.Size := 10;
+    coluna_atual.Alignment:= taCenter;
+    coluna_atual.Title.Caption := '#';
+    coluna_atual.Title.Font.Name := 'IBM Plex Mono';
+    coluna_atual.Title.Font.Size := 10;
+    coluna_atual.Title.Alignment:= taCenter;
+
+    for uA := 1 to matriz_qt_de_bolas do begin
+        coluna_atual := sgr_matriz.Columns.Add;
+        coluna_atual.font.Name := 'IBM Plex Mono';
+        coluna_atual.Font.Size := 10;
+        coluna_atual.Alignment:= taCenter;
+        coluna_atual.Title.Caption := IntToStr(uA);
+        coluna_atual.Title.Font.Name := 'IBM Plex Mono';
+        coluna_atual.Title.Font.Size := 10;
+        coluna_atual.Width := largura_texto;
+    end;
+    sgr_matriz.FixedRows := 1;
+    sgr_matriz.RowCount := matriz_qt_de_celula_1 + 1;
+
+    for uA := 1 to matriz_qt_de_celula_1 do begin
+      qt_de_celula_1 := 0;
+      for uB := 1 to matriz_qt_de_bolas do begin
+        Inc(qt_de_celula_1);
+        if qt_de_celula_1 > matriz_qt_de_celula_1 then begin
+            celula_valor_zero_um := 0;
+        end else begin
+          celula_valor_zero_um := 1;
+        end;
+        sgr_matriz.Cells[uB, uA] := IntToStr(celula_valor_zero_um);
+        matriz_atual_conteudo.matriz_zero_um[uA, uB] := celula_valor_zero_um;
+      end;
+    end;
+    sgr_matriz.Update;
+    sgr_matriz.Refresh;
+
+    // Altera pra o modo editar.
+    matriz_atual_conteudo.matriz_qt_de_bolas:= matriz_qt_de_bolas ;
+    matriz_atual_conteudo.matriz_qt_de_celula_1:= matriz_qt_de_celula_1;
+    matriz_atual_conteudo.matriz_id:= matriz_obter_ultimo_id;
+
+    matriz_editor_alterar_modo_de_edicao(true);
+
+    //matriz_ativar_desativar_ao_criar();
+    matriz_ativar_desativar_controle_ao_criar;
+end;
+
+procedure TForm1.matriz_ativar_desativar_controle_ao_salvar;
+begin
+    btn_matriz_editar.Enabled := true;
+     btn_matriz_salvar.Enabled := false;
+     btn_matriz_criar.Enabled := true;
+     btn_matriz_cancelar.Enabled := false;
+     rd_matriz_qt_de_bolas.Enabled := true;
+     rd_matriz_qt_de_celula_1.Enabled := true;
+end;
+
+procedure TForm1.matriz_ativar_desativar_controle_ao_criar;
+begin
+    btn_matriz_editar.Enabled := false;
+    btn_matriz_salvar.Enabled := True;
+    btn_matriz_criar.Enabled := false;
+    btn_matriz_cancelar.Enabled := true;
+    rd_matriz_qt_de_bolas.Enabled := false;
+    rd_matriz_qt_de_celula_1.Enabled := false;
+end;
+
+procedure TForm1.btn_matriz_posteriorClick(Sender: TObject);
+var
+  matriz_conteudo: TMatriz_Arquivo;
+begin
+    if Not Assigned(mapa_de_matriz) then begin
+      matriz_ativar_desativar_controle_de_navegacao(false);
+      Exit;
+    end;
+
+    if matriz_indice_atual_navegacao < Pred(mapa_de_matriz.Count) then begin
+        Inc(matriz_indice_atual_navegacao);
+    end;
+
+    matriz_conteudo := mapa_de_matriz.KeyData[mapa_de_matriz.Keys[matriz_indice_atual_navegacao]];
+    matriz_atual_conteudo := matriz_conteudo;
+    matriz_exibir_no_controle(sgr_matriz, matriz_conteudo);
+end;
+
+procedure TForm1.btn_matriz_primeiraClick(Sender: TObject);
+var
+  matriz_conteudo: TMatriz_Arquivo;
+begin
+    if Not Assigned(mapa_de_matriz) then begin
+        matriz_ativar_desativar_controle_de_navegacao(false);
+    end;
+    matriz_conteudo := mapa_de_matriz.KeyData[mapa_de_matriz.Keys[0]];
+    matriz_atual_conteudo := matriz_conteudo;
+    matriz_indice_atual_navegacao := 0;
+    matriz_exibir_no_controle(sgr_matriz, matriz_conteudo);
+end;
+
+procedure TForm1.btn_matriz_salvarClick(Sender: TObject);
+var
+  uA, uB, qt_de_celula_valor_um: Integer;
+begin
+  for uA := 1 to matriz_atual_conteudo.matriz_qt_de_celula_1 do begin
+      qt_de_celula_valor_um := 0;
+      for uB := 1 to matriz_atual_conteudo.matriz_qt_de_bolas do begin
+        if matriz_atual_conteudo.matriz_zero_um[uA, uB] = 1 then begin
+            Inc(qt_de_celula_valor_um);
+        end;
+      end;
+      if qt_de_celula_valor_um <> matriz_atual_conteudo.matriz_qt_de_celula_1 then begin
+          MessageDlg('', 'Erro, linha: ' + IntToStr(uA) +
+                         ', a quantidade de células com o valor deve ser igual a ' +
+                         IntToStr(matriz_atual_conteudo.matriz_qt_de_celula_1) + ', entretanto,' +
+                         'foi localizado: ' + IntToStr(qt_de_celula_valor_um), mtError, [mbok], 0);
+          Exit;
+      end;
+  end;
+
+  matriz_gravar_no_arquivo(matriz_atual_conteudo);
+
+  matriz_editor_alterar_modo_de_edicao(false);
+end;
+
+procedure TForm1.matriz_ativar_desativar_ao_salvar(bEditar: boolean);
+begin
+     btn_matriz_salvar.Enabled := Not bEditar;
+     btn_matriz_criar.Enabled := bEditar;
+     rd_matriz_qt_de_bolas.Enabled := bEditar;
+     rd_matriz_qt_de_celula_1.Enabled := bEditar;
+     btn_matriz_editar.Enabled := bEditar;
+end;
+
+
+procedure TForm1.matriz_ativar_desativar_ao_criar(bEditar: boolean);
+begin
+
+end;
+
+procedure TForm1.matriz_editor_alterar_modo_de_edicao(bEditar: boolean);
+begin
+    btn_matriz_criar.Enabled := Not bEditar;
+    btn_matriz_editar.Enabled := Not bEditar;
+    btn_matriz_salvar.Enabled := bEditar;
+    btn_matriz_cancelar.Enabled := bEditar;
+    rd_matriz_qt_de_bolas.Enabled := Not bEditar;
+    rd_matriz_qt_de_celula_1.Enabled := Not bEditar;
+
+    btn_matriz_primeira.Enabled := Not bEditar;
+    btn_matriz_anterior.Enabled := Not bEditar;
+    cmb_matriz_id.Enabled:= Not bEditar;
+    btn_matriz_posterior.Enabled := Not bEditar;
+    btn_matriz_ultima.Enabled := Not bEditar;
+
+end;
+
 procedure TForm1.btn_novos_repetidos_ultima_atualizacaoClick(Sender: TObject);
 begin
     novos_repetidos_ultima_atualizacao;
@@ -9554,6 +10339,72 @@ procedure TForm1.btn_obter_concursos_pra_excluirClick(Sender: TObject);
 begin
     preencher_combobox_com_concursos(sql_conexao, cmb_concurso_deletar, 'desc');
     Exit;
+end;
+
+// Vamos obter o mapa de matriz de arquivos.
+procedure TForm1.btn_matriz_obterClick(Sender: TObject);
+var
+  matriz_arquivo: TFileStream;
+  matriz_conteudo: TMatriz_Arquivo;
+  matriz_id: Integer;
+begin
+    if Not Assigned(mapa_de_matriz) then begin
+        mapa_de_matriz := TMap_Matriz_Arquivo.Create;
+        mapa_de_matriz.Clear;
+    end;
+    mapa_de_matriz.Clear;
+
+    // Vamos criar o arquivo, se ele não existe.
+    if Not FileExists('.lotofacil_matriz.ltf_bin') then begin
+        try
+           matriz_arquivo := TFileStream.Create('.lotofacil_matriz.ltf_bin', fmCreate);
+           FreeAndNil(matriz_arquivo);
+           MessageDlg('', 'Nenhum matriz localizada, crie uma nova matriz.', mtError, [mbok], 0);
+           Exit;
+        Except
+            On Exc: Exception do begin
+              MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbok], 0);
+              Exit;
+            end;
+        end;
+    end;
+
+    // Vamos tentar ler o arquivo.
+    try
+       matriz_arquivo := TFileStream.Create('.lotofacil_matriz.ltf_bin', fmOpenRead);
+    Except
+        On Exc: Exception do begin
+          MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbok], 0);
+          Exit;
+        end;
+    end;
+
+    FillByte(matriz_conteudo, sizeof(TMatriz_Arquivo), 0);
+
+
+    while matriz_arquivo.Read(matriz_conteudo, sizeof(TMatriz_Arquivo)) = sizeof(TMatriz_Arquivo) do begin
+          matriz_id := matriz_conteudo.matriz_id;
+          mapa_de_matriz.Add(matriz_id, matriz_conteudo);
+    end;
+    FreeAndNil(matriz_arquivo);
+
+    if mapa_de_matriz.Count = 0 then begin
+        MessageDlg('', 'O arquivo está vazio.', mtError, [mbok], 0);
+        Exit;
+    end;
+
+    matriz_indice_atual_navegacao:=0;
+
+    matriz_ativar_desativar_controle_de_navegacao(true);
+end;
+
+procedure TForm1.matriz_ativar_desativar_controle_de_navegacao(bAtivar: boolean);
+begin
+  btn_matriz_primeira.Enabled := bAtivar;
+  btn_matriz_anterior.Enabled := bAtivar;
+  cmb_matriz_id.Enabled := bAtivar;
+  btn_matriz_posterior.Enabled := bAtivar;
+  btn_matriz_ultima.Enabled := bAtivar;
 end;
 
 {
@@ -9739,6 +10590,7 @@ var
 begin
     sql_query := TZQuery.Create(Nil);
     sql_query.connection := sql_conexao;
+    sql_query.Connection.AutoCommit := false;
 
     //sql_registro := TSqlQuery.Create(Self);
     lista_sql_insert := TStringList.Create;
@@ -9758,22 +10610,39 @@ begin
     end;
     lista_campos.Delimiter := ',';
 
-    sql_registro.SQL.Clear;
-    sql_registro.SQl.Add('Select');
-    sql_registro.Sql.Add(lista_campos.DelimitedText);
-    sql_registro.Sql.Add('from lotofacil.v_lotofacil_resultado_importacao');
+    //sql_registro.SQL.Clear;
+    //sql_registro.SQl.Add('Select');
+    //sql_registro.Sql.Add(lista_campos.DelimitedText);
+    //sql_registro.Sql.Add('from lotofacil.v_lotofacil_resultado_importacao');
+    //
+    //// Aqui, iremos pegar somente novos registros, neste caso
+    //// o campo que identifica novos registros, chama-se 'status
+    //sql_registro.Sql.Add('where status = ' + QuotedStr('NOVO'));
+    //sql_registro.Sql.Add('order by concurso asc');
+    //sql_registro.Close;
+    //sql_registro.Open;
+
+    // Vamos verificar se houve registros.
+    //sql_registro.First;
+    //sql_registro.Last;
+    //qt_registros := sql_registro.RecordCount;
+
+    sql_query.SQL.Clear;
+    sql_query.SQl.Add('Select');
+    sql_query.Sql.Add(lista_campos.DelimitedText);
+    sql_query.Sql.Add('from lotofacil.v_lotofacil_resultado_importacao');
 
     // Aqui, iremos pegar somente novos registros, neste caso
     // o campo que identifica novos registros, chama-se 'status
-    sql_registro.Sql.Add('where status = ' + QuotedStr('NOVO'));
-    sql_registro.Sql.Add('order by concurso asc');
-    sql_registro.Close;
-    sql_registro.Open;
+    sql_query.Sql.Add('where status = ' + QuotedStr('NOVO'));
+    sql_query.Sql.Add('order by concurso asc');
+    sql_query.Close;
+    sql_query.Open;
 
     // Vamos verificar se houve registros.
-    sql_registro.First;
-    sql_registro.Last;
-    qt_registros := sql_registro.RecordCount;
+    sql_query.First;
+    sql_query.Last;
+    qt_registros := sql_query.RecordCount;
 
     if qt_registros = 0 then
     begin
@@ -9782,9 +10651,11 @@ begin
     end;
 
     // Se chegarmos aqui, há registros novos, devemos, atualizar gerar o sql.
-    sql_registro.First;
+    //sql_registro.First;
+    sql_query.First;
     lista_sql_insert.Clear;
-    while sql_registro.EOF = False do
+    //while sql_registro.EOF = False do
+    while Not sql_query.eof do
     begin
         sql_insert := 'Insert into lotofacil.lotofacil_resultado_num (';
         sql_insert := sql_insert + 'concurso, data';
@@ -9797,21 +10668,22 @@ begin
         // por exemplo, a bola 1 tem o campo num_1, a bola 2 tem o campo num_2
         // e assim por diante.
         // Então, iremos percorrer os campos b_1 até b_15 pra identificar cada bola.
-        concurso_numero := sql_registro.FieldByName('concurso').AsInteger;
-
-
+        //concurso_numero := sql_registro.FieldByName('concurso').AsInteger;
+        concurso_numero := sql_query.FieldByName('concurso').AsInteger;
 
         // Bug[Corrigido]: Se o sistema operacional está indicando o ano com dois dígitos,
         // a expressão abaixo retorna o ano com 2 dígitos, entretanto, ao inserir na
         // tabela no banco de dados, está configurado pra ano de 4 dígitos.
         // concurso_data := sql_registro.FieldByName('data').AsString;
         // A correção foi formatar pra ser um ano de 4 dígitos.
-        concurso_data := FormatDateTime('yyyy-mm-dd', sql_registro.FieldByName('data').AsDateTime);
+        // concurso_data := FormatDateTime('yyyy-mm-dd', sql_registro.FieldByName('data').AsDateTime);
+        concurso_data := FormatDateTime('yyyy-mm-dd', sql_query.FieldByName('data').AsDateTime);
 
         for uA := 1 to 15 do
         begin
             nome_do_campo := 'b_' + IntToStr(uA);
-            bola_numero := sql_registro.FieldByName(nome_do_campo).AsInteger;
+//            bola_numero := sql_registro.FieldByName(nome_do_campo).AsInteger;
+            bola_numero := sql_query.FieldByName(nome_do_campo).AsInteger;
 
             // Verifica a faixa do número.
             if (bola_numero < 1) or (bola_numero > 25) then
@@ -9865,10 +10737,11 @@ begin
 
         lista_sql_insert.Add(sql_insert);
 
-        Writeln(sql_insert);
+        //Writeln(sql_insert);
 
         // Ir pra o próximo registro.
-        sql_registro.Next;
+        //sql_registro.Next;
+        sql_query.Next;
     end;
 
     // Agora, temos o sql gerados, devemos enviar pra o banco.
@@ -9880,16 +10753,26 @@ begin
     end;
 
     // Agora, vamos adicionar nosso sql que foi criado.
-    sql_registro.Close;
-    sql_registro.SQL.Clear;
-    sql_registro.SQL.Text := lista_sql_insert.Text;
+    //sql_registro.Close;
+    //sql_registro.SQL.Clear;
+    //sql_registro.SQL.Text := lista_sql_insert.Text;
+
+    sql_query.Close;
+    sql_query.SQL.Clear;
+    sql_query.SQL.Text := lista_sql_insert.Text;
 
     try
         //sql_registro.DataBase := dmLotofacil.pgLTK;
-        sql_registro.ExecSQL;
-        dmLotofacil.pgLTK.Transaction.Commit;
-        sql_registro.Close;
-        dmLotofacil.pgLtk.Close(True);
+        //sql_registro.ExecSQL;
+        //dmLotofacil.pgLTK.Transaction.Commit;
+        //sql_registro.Close;
+        //dmLotofacil.pgLtk.Close(True);
+
+        sql_query.ExecSql;
+        sql_query.Connection.Commit;
+        sql_query.Close;
+
+        FreeAndNil(sql_query);
     except
         on Exc: EDataBaseError do
         begin
@@ -12162,6 +13045,15 @@ begin
 
     carregar_filtro_sgr_controle(sgr_dif_par_impar, sql_conexao);
     carregar_filtro_sgr_controle(sgr_dif_menor_maior, sql_conexao);
+
+    carregar_filtro_sgr_controle(sgr_b1_b15, sql_conexao);
+    carregar_filtro_sgr_controle(sgr_b2_b14, sql_conexao);
+    carregar_filtro_sgr_controle(sgr_b3_b13, sql_conexao);
+    carregar_filtro_sgr_controle(sgr_b4_b12, sql_conexao);
+    carregar_filtro_sgr_controle(sgr_b5_b11, sql_conexao);
+    carregar_filtro_sgr_controle(sgr_b6_b10, sql_conexao);
+    carregar_filtro_sgr_controle(sgr_b7_b9, sql_conexao);
+
 
 end;
 
@@ -16864,6 +17756,87 @@ begin
     gradeCanvas.TextOut(ARect.Left + textoX,
         ARect.Top + textoY, textoAtual);
 
+end;
+
+procedure TForm1.sgr_matrizDblClick(Sender: TObject);
+begin
+
+end;
+
+{
+ Altera a cor das células, conforme o valor dela.
+}
+procedure TForm1.sgr_matrizDrawCell(Sender: TObject; aCol, aRow: Integer;
+  aRect: TRect; aState: TGridDrawState);
+var
+  sgr_controle: TStringGrid;
+  sgr_controle_canvas: TCanvas;
+  valor_zero_um: String;
+  larguraTexto, alturaTexto, textoX, textoY: Integer;
+begin
+    if ARow <= 0 then
+       Exit;
+
+    if ACol <= 0 then
+       Exit;
+
+    sgr_controle := TStringGrid(Sender);
+    sgr_controle_canvas := sgr_controle.Canvas;
+    valor_zero_um := sgr_controle.Cells[ACol, ARow];
+
+    if valor_zero_um = '1' then begin
+        sgr_controle_canvas.Brush.Color := clGreen;
+        sgr_controle_canvas.Font.Color := clWhite;
+    end else begin
+        sgr_controle_canvas.Brush.Color := clRed;
+        sgr_controle_canvas.Font.Color := clWhite;
+    end;
+
+    sgr_controle_canvas.FillRect(ARect);
+    //sgr_controle_canvas.Pen.Color := corTexto;
+    //sgr_controle_canvas.Font.Color := corTexto;
+
+    // Pega a largura do texto e centraliza o mesmo.
+    larguraTexto := sgr_controle_canvas.TextWidth(valor_zero_um);
+    alturaTexto := sgr_controle_canvas.TextHeight(valor_zero_um);
+
+    textoX := (ARect.Width - larguraTexto) div 2;
+    textoY := (ARect.Height - alturaTexto) div 2;
+    sgr_controle_canvas.TextOut(ARect.Left + textoX, ARect.Top + textoY, valor_zero_um);
+end;
+
+procedure TForm1.sgr_matrizEnter(Sender: TObject);
+begin
+
+end;
+
+procedure TForm1.sgr_matrizPrepareCanvas(sender: TObject; aCol, aRow: Integer;
+  aState: TGridDrawState);
+begin
+
+end;
+
+procedure TForm1.sgr_matrizSelectCell(Sender: TObject; aCol, aRow: Integer;
+  var CanSelect: Boolean);
+var
+  celula_valor_zero_um: String;
+begin
+    if (Acol < 1) or (ARow < 1) then begin
+        Exit;
+    end;
+
+    if (sgr_matriz.RowCount < 15) or (sgr_matriz.RowCount > 18) then begin
+        Exit;
+    end;
+
+    celula_valor_zero_um := sgr_matriz.Cells[aCol, aRow];
+    if celula_valor_zero_um = '1' then begin
+        celula_valor_zero_um := '0';
+    end else begin
+        celula_valor_zero_um := '1';
+    end;
+    sgr_matriz.Cells[aCol, aRow] := celula_valor_zero_um;
+    matriz_atual_conteudo.matriz_zero_um[aRow, aCol] := StrToInt(celula_valor_zero_um);
 end;
 
 procedure TForm1.AlterarMarcador(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);

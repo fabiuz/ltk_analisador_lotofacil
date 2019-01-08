@@ -162,7 +162,7 @@ function gerar_sql_dos_ids_obtidos(id_obtidos: string; sql_conexao: TZConnection
     end;
 
 const
-    tabelas_utilizadas: array [0..6] of string = (
+    tabelas_utilizadas: array [0..7] of string = (
         'lotofacil.lotofacil_num',
         'lotofacil.lotofacil_bolas',
         'lotofacil.lotofacil_novos_repetidos',
@@ -174,7 +174,8 @@ const
         //'lotofacil.lotofacil_combinacoes_em_grupos',
         //'lotofacil.lotofacil_algarismo_na_dezena',
         'lotofacil.lotofacil_id_classificado',
-        'lotofacil.lotofacil_diferenca_entre_bolas'
+        'lotofacil.lotofacil_diferenca_entre_bolas',
+        'lotofacil.lotofacil_matriz'
         );
 var
     sql_query: TZQuery;
@@ -241,7 +242,20 @@ begin
             begin
                 lista_de_tabelas_relacionadas.Add('and');
             end;
-            lista_de_tabelas_relacionadas.add(tabela_esquerda + '.ltf_id = ' + tabela_direita + '.ltf_id');
+            // A única tabela que tem o nome do campo diferente é a tabela 'lotofacil_matriz'
+            // que tem o campo 'mtz_id'.
+            if (tabela_esquerda = 'lotofacil.lotofacil_matriz') or
+               (tabela_direita = 'lotofacil.lotofacil_matriz') then
+            begin
+                if tabela_esquerda = 'lotofacil.lotofacil_matriz' then begin
+                   lista_de_tabelas_relacionadas.add(tabela_esquerda + '.mtz_id = ' + tabela_direita + '.ltf_id')
+                end else begin
+                   lista_de_tabelas_relacionadas.add(tabela_esquerda + '.ltf_id = ' + tabela_direita + '.mtz_id');
+                end;
+            end else
+            begin
+                lista_de_tabelas_relacionadas.add(tabela_esquerda + '.ltf_id = ' + tabela_direita + '.ltf_id');
+            end;
         end;
     end;
 
@@ -346,7 +360,9 @@ begin
 
     try
        sql_stream := TFileStream.Create(arquivo_sql, fmCreate or fmOpenWrite);
-       sql_stream.WriteAnsiString(sql_gerado.Text);
+       //sql_stream.WriteAnsiString(sql_gerado.Text);
+       // Comentei a linha anterior e coloquei esta, vamos verificar se haverá erro.
+       sql_stream.WriteBuffer(sql_gerado.Text[1], Length(sql_gerado.Text));
        FreeAndNil(sql_stream);
     finally
 

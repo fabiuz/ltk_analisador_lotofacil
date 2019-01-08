@@ -19,6 +19,7 @@ type
         sgr_controle: TStringGrid;
         rd_controle: TRadioGroup;
         sql_campo_id: string;
+        exibir_campo_id: boolean;
     end;
 
     T_Filtro_Controle = class
@@ -27,6 +28,14 @@ type
         sgr_controle: TStringGrid;
         sql: string;
     end;
+
+type
+    TLotofacil_Concurso = record
+        concurso: Integer;
+        b1_a_b15: array[0..15] of Byte;
+        num1_a_num_25: array[0..25] of Byte;
+    end;
+    TLotofacil_Concurso_Array = array of TLotofacil_Concurso;
 
 
 type

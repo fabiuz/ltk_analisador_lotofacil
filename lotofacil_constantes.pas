@@ -89,11 +89,27 @@ const
     ID_DF_QT_DF_1_A_QT_DF_2 = 59;
     ID_DF_QT_DF_1_A_QT_DF_3 = 60;
 
-    ID_ULTIMO = 60;
+    ID_B1_B15 = 61;
+    ID_B2_B14 = 62;
+    ID_B3_B13 = 63;
+    ID_B4_B12 = 64;
+    ID_B5_B11 = 65;
+    ID_B6_B10 = 66;
+    ID_B7_B9 = 67;
+
+    ID_B1_B8_B15 = 68;
+    ID_B2_B8_B14 = 69;
+    ID_B3_B8_B13 = 70;
+    ID_B4_B8_B12 = 71;
+    ID_B5_B8_B11 = 72;
+    ID_B6_B8_B10 = 73;
+    ID_B7_B8_B9 = 74;
+
+    ID_ULTIMO = 67;
     TOTAL_DE_FILTROS = ID_ULTIMO + 1;
 
     // Indica qual é o último controle implementado.
-    ID_ULTIMO_IMPLEMENTADO = ID_B15_QT_VZ;
+    ID_ULTIMO_IMPLEMENTADO = ID_B7_B9;
 
 // Constantes utilizadas pra serem atribuídas na propriedade 'tag'
 // de cada controle que é utilizada nos filtros por bola, que seria

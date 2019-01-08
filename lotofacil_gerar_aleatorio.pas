@@ -390,13 +390,12 @@ begin
 end;
 
 {
- Na procedure abaixo, as combinações são geradas aleatoriamente da seguinte forma:
- Identificar quais são as bolas novas e quais são as repetidas referente ao concurso
- escolhido pelo usuário, em seguida,
- gerar a primeira combinação com 10 bolas novas e 5 bolas repetidas, repete-se
- este processo até que todas as bolas novas tenha sido gerada, ou seja, haverá
- no máximo 3 combinações. Pra gerar novas combinações, captura a próxima combinação
- que foi gerada e identifica as bolas novas e repetidas e repete-se o processo.
+ Obtém as bolas novas e as bolas repetidas relativo ao um concurso, em seguida,
+ gera combinações tendo sempre 10 bolas novas x 5 repetidas, a cada 3 combinações,
+ todas as bolas que são repetidas deverá sair.
+ Quando todas as bolas repetidas saíram, pega-se a próxima combinação que
+ foi gerada e gera também combinações de 10 bolas novas x 5 repetidas.
+ E assim por diante.
 }
 procedure gerar_combinacoes_aleatorias_3(sql_conexao: TZConnection;
   gerador_opcoes: R_Gerador_Aleatorio_Opcoes);
@@ -835,6 +834,11 @@ begin
 
 end;
 
+{
+ Gera as combinações aleatória, relativo ao número do concurso escolhido pelo usuário,
+ por exemplo, se o usuário selecionou que quer que todas as combinações tenha 5 bolas
+ novas, então, haverá em todas as combinação 5 bolas novas.
+}
 procedure gerar_combinacoes_aleatorias_2(sql_conexao: TZConnection;
   gerador_opcoes: R_Gerador_Aleatorio_Opcoes);
 type
