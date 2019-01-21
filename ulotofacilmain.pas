@@ -1254,10 +1254,12 @@ type
         btn_par_impar_por_concurso: TButton;
         Button2: TButton;
         btn_frequencia_estatistica: TButton;
+        btn_bolas_combinadas_atualizar: TButton;
         Button4: TButton;
         btn_matriz_cancelar: TButton;
         btn_matriz_salvar: TButton;
         CheckGroup1: TCheckGroup;
+        chk_bolas_combinadas: TCheckGroup;
         chk_frequencia_grupo_atualizar: TCheckGroup;
         chk_bin_x2: TCheckGroup;
         chk_bin_x1: TCheckGroup;
@@ -3645,6 +3647,7 @@ type
         sgr_concursos_ja_inseridos: TStringGrid;
         sgr_frequencia_comparacao: TStringGrid;
         sgr_frequencia_bolas_repetindo: TStringGrid;
+        sgr_bolas_combinadas: TStringGrid;
         stx_log_geracao: TStaticText;
         stx_bolas_do_concurso: TStaticText;
         stxtNovosRepetidos: TStaticText;
@@ -3662,6 +3665,7 @@ type
         TabSheet120: TTabSheet;
         B5_B11: TTabSheet;
         TabSheet121: TTabSheet;
+        tab_acertos: TTabSheet;
         tab_novos_repetidos_grupos: TTabSheet;
         TabSheet124: TTabSheet;
         tab_b7_b9: TTabSheet;
@@ -4238,6 +4242,7 @@ type
         //procedure btnGrupo2BolasMarcarTodosClick(Sender: TObject);
         procedure btn_atualizar_filtrosClick(Sender: TObject);
         procedure btn_atualizar_status_cmp_de_bolas_na_mesma_colunaClick(Sender: TObject);
+        procedure btn_bolas_combinadas_atualizarClick(Sender: TObject);
         procedure btn_classificados_obter_camposClick(Sender: TObject);
         procedure btn_classificado_nao_selecionarClick(Sender: TObject);
         procedure btn_classificado_selecionarClick(Sender: TObject);
@@ -10338,7 +10343,6 @@ end;
 procedure TForm1.btn_obter_concursos_pra_excluirClick(Sender: TObject);
 begin
     preencher_combobox_com_concursos(sql_conexao, cmb_concurso_deletar, 'desc');
-    Exit;
 end;
 
 // Vamos obter o mapa de matriz de arquivos.
@@ -12841,6 +12845,82 @@ procedure TForm1.btn_atualizar_status_cmp_de_bolas_na_mesma_colunaClick(Sender: 
 begin
     atualizar_status_da_comparacao_de_bolas_na_mesma_coluna(sql_conexao);
     exibir_status_da_comparacao_de_bolas_na_mesma_coluna(sql_conexao, sgr_cmp_de_bolas_na_mesma_coluna_status);
+end;
+
+procedure TForm1.btn_bolas_combinadas_atualizarClick(Sender: TObject);
+const
+   campos: array[0..1] of string = ('Acertos', 'Qt_vz');
+var
+  bolas_combinadas: String;
+  uA, numero_da_bola, indice_linha: Integer;
+  sql_query: TZQuery;
+  qt_registros: LongInt;
+  coluna_atual: TGridColumn;
+begin
+    bolas_combinadas := '';
+    numero_da_bola := 1;
+    for uA := 0 to Pred(chk_bolas_combinadas.Items.Count) do begin
+        if chk_bolas_combinadas.Checked[uA] then begin;
+          if bolas_combinadas <> '' then begin
+              bolas_combinadas := bolas_combinadas + '_';
+          end;
+          bolas_combinadas := bolas_combinadas + IntToStr(numero_da_bola);
+          Inc(numero_da_bola);
+        end;
+    end;
+    // Transforma um texto da forma: a_b_c, em, num_a + num_b + num_c.
+    bolas_combinadas := StringReplace(bolas_combinadas, '_', ' + num_', [rfIgnoreCase, rfReplaceAll]);
+    bolas_combinadas := 'num_' + bolas_combinadas;
+
+    try
+        sql_query := TZQuery.Create(Nil);
+        sql_query.Connection := sql_conexao;
+        sql_query.Sql.Clear;
+        sql_query.Sql.Add('Select ' + bolas_combinadas + ' as acertos,');
+        sql_query.Sql.Add('count(*) as qt_vz');
+        sql_query.Sql.Add('from lotofacil.lotofacil_resultado_num');
+        sql_query.Sql.Add('group by acertos');
+        sql_query.Sql.Add('order by qt_vz desc, acertos asc');
+        sql_query.Open;
+        sql_query.First;
+        sql_query.Last;
+
+        qt_registros := sql_query.RecordCount;
+        if qt_registros <= 0 then begin
+          Exit;
+        end;
+
+        // Configura o controle
+        sgr_bolas_combinadas.Columns.Clear;
+        for uA := 0 to 1 do begin
+            coluna_atual := sgr_bolas_combinadas.Columns.Add;
+            coluna_atual.Alignment := taCenter;
+            coluna_atual.Title.Caption := campos[uA];
+            coluna_atual.Title.Alignment := taCenter;
+        end;
+
+        sgr_bolas_combinadas.RowCount := qt_registros + 1;
+        sgr_bolas_combinadas.FixedRows := 1;
+        sql_query.First;
+
+        indice_linha := 1;
+        while (not sql_query.EOF) and (qt_registros > 0) do begin
+            sgr_bolas_combinadas.Cells[0, indice_linha] := IntToStr(sql_query.FieldByName('acertos').AsInteger);
+            sgr_bolas_combinadas.Cells[1, indice_linha] := IntToStr(sql_query.FieldByName('qt_vz').AsInteger);
+
+            Inc(indice_linha);
+            Dec(qt_registros);
+            sql_query.Next;
+        end;
+        FreeAndNil(sql_query);
+
+    except
+        On Exc: Exception do begin
+            MessageDlg('', 'Erro: ' + Exc.Message, mtError, [mbok], 0);
+            Exit;
+        end;
+    end;
+
 end;
 
 procedure TForm1.btn_classificados_obter_camposClick(Sender: TObject);

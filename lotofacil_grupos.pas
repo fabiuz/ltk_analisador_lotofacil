@@ -297,6 +297,56 @@ begin
                     end;
             end;
         end
+        ///
+        else if qt_bolas_no_grupo = 14 then
+        begin
+            for indice_arranjo := 0 to High(concursos) do
+                        begin
+                            concurso_atual := concursos[indice_arranjo].concurso;
+
+                            for b1 := 1 to 15 do
+                                for b2 := b1 + 1 to 15 do
+                                    for b3 := b2 + 1 to 15 do
+                                        for b4 := b3 + 1 to 15 do
+                                            for b5 := b4 + 1 to 15 do
+                                                for b6 := b5 + 1 to 15 do
+                                                    for b7 := b6 + 1 to 15 do
+                                                        for b8 := b7 + 1 to 15 do
+                                                            for b9 := b8 + 1 to 15 do
+                                                                for b10 := b9 + 1 to 15 do
+                                                                    for b11 := b10 + 1 to 15 do
+                                                                        for b12 := b11 + 1 to 15 do
+                                                                            for b13 := b12 + 1 to 15 do
+                                                                                for b14 := b13 + 1 to 15 do
+                                                                begin
+                                                                    bolas_combinadas :=
+                                                                        format('%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d',
+                                                                        [
+                                                                        concursos[indice_arranjo].b1_a_b15[b1],
+                                                                        concursos[indice_arranjo].b1_a_b15[b2],
+                                                                        concursos[indice_arranjo].b1_a_b15[b3],
+                                                                        concursos[indice_arranjo].b1_a_b15[b4],
+                                                                        concursos[indice_arranjo].b1_a_b15[b5],
+                                                                        concursos[indice_arranjo].b1_a_b15[b6],
+                                                                        concursos[indice_arranjo].b1_a_b15[b7],
+                                                                        concursos[indice_arranjo].b1_a_b15[b8],
+                                                                        concursos[indice_arranjo].b1_a_b15[b9],
+                                                                        concursos[indice_arranjo].b1_a_b15[b10],
+                                                                        concursos[indice_arranjo].b1_a_b15[b11],
+                                                                        concursos[indice_arranjo].b1_a_b15[b12],
+                                                                        concursos[indice_arranjo].b1_a_b15[b13],
+                                                                        concursos[indice_arranjo].b1_a_b15[b14]
+                                                                        ]);
+                                                                    //bolas_combinadas := QuotedStr(bolas_combinadas);
+                                                                    sql_gerado :=
+                                                                        IntToStr(concurso_atual) + ';14;' + bolas_combinadas;
+                                                                    lista_sql_a_inserir.Add(sql_gerado);
+                                                                end;
+
+                        end;
+        end
+
+
         else if qt_bolas_no_grupo = 12 then
         begin
             for indice_arranjo := 0 to High(concursos) do
