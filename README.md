@@ -2,6 +2,11 @@ Analisador Lotofacil
 ======================
 Autor: *Fábio Moura de Oliveira*
 
+*`Este programa não funciona mais, pois o baixador de resultados, utiliza json, que, de tempos em tempos, a Caixa atualiza a url.
+Eu comecei um novo programa baseado deste, onde fiz alterações no banco de dados, fiz algumas simplificações,
+o repositório do novo programa: https://github.com/fabiuz/ltf_analisador_lotofacil, entretanto, o mesmo ainda não está disponível pra
+o público, entretanto, o mesmo está completamente funcional.`*
+
 Aumente suas chances de acertar no jogo da lotofacil
 
 Este programa realiza as seguintes análises estatísticas:
